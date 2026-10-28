@@ -1,0 +1,137 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+# Basic lowercase q, vowels/aliases, ordinary adjacency, digits, and context resets.
+# Uppercase Q, remaining conjunct/reph forms, and escapes remain gaps.
+q	ক	U+0995
+qa	কা	U+0995 U+09BE
+aq	আক	U+0986 U+0995
+qaa	কাআ	U+0995 U+09BE U+0986
+qao	কাও	U+0995 U+09BE U+0993
+qi	কি	U+0995 U+09BF
+iq	ইক	U+0987 U+0995
+qia	কিয়া	U+0995 U+09BF U+09DF U+09BE
+qio	কিও	U+0995 U+09BF U+0993
+qI	কী	U+0995 U+09C0
+Iq	ঈক	U+0988 U+0995
+qIa	কীয়া	U+0995 U+09C0 U+09DF U+09BE
+qIo	কীও	U+0995 U+09C0 U+0993
+qu	কু	U+0995 U+09C1
+uq	উক	U+0989 U+0995
+qua	কুয়া	U+0995 U+09C1 U+09DF U+09BE
+quo	কুও	U+0995 U+09C1 U+0993
+qU	কূ	U+0995 U+09C2
+Uq	ঊক	U+098A U+0995
+qUa	কূয়া	U+0995 U+09C2 U+09DF U+09BE
+qUo	কূও	U+0995 U+09C2 U+0993
+qe	কে	U+0995 U+09C7
+eq	এক	U+098F U+0995
+qea	কেয়া	U+0995 U+09C7 U+09DF U+09BE
+qeo	কেও	U+0995 U+09C7 U+0993
+qee	কী	U+0995 U+09C0
+eeq	ঈক	U+0988 U+0995
+qeea	কীয়া	U+0995 U+09C0 U+09DF U+09BE
+qeeo	কীও	U+0995 U+09C0 U+0993
+qo	ক	U+0995
+oq	অক	U+0985 U+0995
+qoa	কয়া	U+0995 U+09DF U+09BE
+qO	কো	U+0995 U+09CB
+Oq	ওক	U+0993 U+0995
+qOa	কোয়া	U+0995 U+09CB U+09DF U+09BE
+qOo	কোও	U+0995 U+09CB U+0993
+qoo	কু	U+0995 U+09C1
+ooq	উক	U+0989 U+0995
+qooa	কুয়া	U+0995 U+09C1 U+09DF U+09BE
+qooo	কুঅ	U+0995 U+09C1 U+0985
+qOI	কৈ	U+0995 U+09C8
+OIq	ঐক	U+0990 U+0995
+qOIa	কৈয়া	U+0995 U+09C8 U+09DF U+09BE
+qOIo	কৈও	U+0995 U+09C8 U+0993
+qOU	কৌ	U+0995 U+09CC
+OUq	ঔক	U+0994 U+0995
+qOUa	কৌয়া	U+0995 U+09CC U+09DF U+09BE
+qOUo	কৌও	U+0995 U+09CC U+0993
+qrri	কৃ	U+0995 U+09C3
+rriq	ঋক	U+098B U+0995
+qrria	কৃয়া	U+0995 U+09C3 U+09DF U+09BE
+qrrio	কৃও	U+0995 U+09C3 U+0993
+qk	কক	U+0995 U+0995
+kq	কক	U+0995 U+0995
+qg	কগ	U+0995 U+0997
+gq	গক	U+0997 U+0995
+qh	কহ	U+0995 U+09B9
+hq	হক	U+09B9 U+0995
+qY	কয়	U+0995 U+09DF
+Yq	য়ক	U+09DF U+0995
+qq	কক	U+0995 U+0995
+qqq	ককক	U+0995 U+0995 U+0995
+qqi	ককি	U+0995 U+0995 U+09BF
+qqua	ককুয়া	U+0995 U+0995 U+09C1 U+09DF U+09BE
+qkh	কখ	U+0995 U+0996
+qha	কহা	U+0995 U+09B9 U+09BE
+yq	ইয়ক	U+0987 U+09DF U+0995
+Zq	্যক	U+09CD U+09AF U+0995
+qy	ক্য	U+0995 U+09CD U+09AF
+qya	ক্যা	U+0995 U+09CD U+09AF U+09BE
+qZ	ক্য	U+0995 U+09CD U+09AF
+qZa	ক্যা	U+0995 U+09CD U+09AF U+09BE
+qaZ	কঅ্যা	U+0995 U+0985 U+09CD U+09AF U+09BE
+qoZ	কঅ্য	U+0995 U+0985 U+09CD U+09AF
+qYri	কয়্রি	U+0995 U+09DF U+09CD U+09B0 U+09BF
+qyyy	ক্য্য্য	U+0995 U+09CD U+09AF U+09CD U+09AF U+09CD U+09AF
+qotha	কথা	U+0995 U+09A5 U+09BE
+qOtha	কোথা	U+0995 U+09CB U+09A5 U+09BE
+qanon	কানন	U+0995 U+09BE U+09A8 U+09A8
+qushi	কুশি	U+0995 U+09C1 U+09B6 U+09BF
+quya	কুয়া	U+0995 U+09C1 U+09DF U+09BE
+qchan	কছান	U+0995 U+099B U+09BE U+09A8
+qy🙂a	ক্য🙂আ	U+0995 U+09CD U+09AF U+1F642 U+0986
+কqa	ককা	U+0995 U+0995 U+09BE
+q́a	ক́আ	U+0995 U+0301 U+0986
+q a	ক আ	U+0995 U+0020 U+0986
+ qi	 কি	U+0020 U+0995 U+09BF
+qi a	কি আ	U+0995 U+09BF U+0020 U+0986
+q,a	ক,আ	U+0995 U+002C U+0986
+,qi	,কি	U+002C U+0995 U+09BF
+qi,a	কি,আ	U+0995 U+09BF U+002C U+0986
+q-a	ক-আ	U+0995 U+002D U+0986
+-qi	-কি	U+002D U+0995 U+09BF
+qi-a	কি-আ	U+0995 U+09BF U+002D U+0986
+q🙂a	ক🙂আ	U+0995 U+1F642 U+0986
+🙂qi	🙂কি	U+1F642 U+0995 U+09BF
+qi🙂a	কি🙂আ	U+0995 U+09BF U+1F642 U+0986
+qকa	ককআ	U+0995 U+0995 U+0986
+কqi	ককি	U+0995 U+0995 U+09BF
+qiকa	কিকআ	U+0995 U+09BF U+0995 U+0986
+́qi	́কি	U+0301 U+0995 U+09BF
+qía	কি́আ	U+0995 U+09BF U+0301 U+0986
+0q	০ক	U+09E6 U+0995
+q0a	ক০আ	U+0995 U+09E6 U+0986
+q0y	ক০ইয়	U+0995 U+09E6 U+0987 U+09DF
+1q	১ক	U+09E7 U+0995
+q1a	ক১আ	U+0995 U+09E7 U+0986
+q1y	ক১ইয়	U+0995 U+09E7 U+0987 U+09DF
+2q	২ক	U+09E8 U+0995
+q2a	ক২আ	U+0995 U+09E8 U+0986
+q2y	ক২ইয়	U+0995 U+09E8 U+0987 U+09DF
+3q	৩ক	U+09E9 U+0995
+q3a	ক৩আ	U+0995 U+09E9 U+0986
+q3y	ক৩ইয়	U+0995 U+09E9 U+0987 U+09DF
+4q	৪ক	U+09EA U+0995
+q4a	ক৪আ	U+0995 U+09EA U+0986
+q4y	ক৪ইয়	U+0995 U+09EA U+0987 U+09DF
+5q	৫ক	U+09EB U+0995
+q5a	ক৫আ	U+0995 U+09EB U+0986
+q5y	ক৫ইয়	U+0995 U+09EB U+0987 U+09DF
+6q	৬ক	U+09EC U+0995
+q6a	ক৬আ	U+0995 U+09EC U+0986
+q6y	ক৬ইয়	U+0995 U+09EC U+0987 U+09DF
+7q	৭ক	U+09ED U+0995
+q7a	ক৭আ	U+0995 U+09ED U+0986
+q7y	ক৭ইয়	U+0995 U+09ED U+0987 U+09DF
+8q	৮ক	U+09EE U+0995
+q8a	ক৮আ	U+0995 U+09EE U+0986
+q8y	ক৮ইয়	U+0995 U+09EE U+0987 U+09DF
+9q	৯ক	U+09EF U+0995
+q9a	ক৯আ	U+0995 U+09EF U+0986
+q9y	ক৯ইয়	U+0995 U+09EF U+0987 U+09DF

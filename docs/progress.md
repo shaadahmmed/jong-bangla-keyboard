@@ -22,16 +22,17 @@ Dates use the project's Asia/Dhaka timezone.
   including `rri`/`rry`/`rrZ` exceptions and differing `yry`/`Zry` joiners.
   Uppercase `Y` now attaches following `r`, with the same two-`r` priority
   and exceptions; single `Yr`/`Yry` forms omit the basic-`r` joiner.
-  There are 3,732 reference-checked cases.
+  Basic lowercase `q` → ক and its vowel context are implemented.
+  There are 3,864 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Principal forms for all 11 basic vowels and 38 basic consonant sequences (35 letters)
+  Principal forms for all 11 basic vowels and 39 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
   matching prefixes, contextual lowercase `y`, uppercase `Z`/`aZ`/`oZ`, and
   selected following-`r` forms after `y`/`Z`/`Y`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** check and add basic lowercase `q` and its vowel context against
+- **Next:** check and add basic lowercase `v` and its vowel context against
   the pinned reference, keeping uppercase aliases and longer forms separate.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
@@ -39,23 +40,62 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Next small implementation step
 
-1. Independently author basic lowercase `q` cases: standalone output, every
+1. Independently author basic lowercase `v` cases: standalone output, every
    supported vowel/alias, neighboring vowels, ordinary adjacency, digits,
    boundaries, copied Unicode, and case controls.
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-   Known gaps include `q` → `ক` and `qa` → `কা`.
+   Known gaps include `v` → `ভ` and `va` → `ভা`.
 3. Add the basic mapping and vowel context. Keep longer sequences, uppercase
    aliases, other conjunct/reph forms, and escapes explicit. No composition
    or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected lowercase `q` cases match the reference, existing
+**Done when:** the selected lowercase `v` cases match the reference, existing
 conversion cases still pass, limitations are documented, and this log records
 actual results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Basic lowercase q consonant
+
+- Added exact lowercase `q` → ক (U+0995) using the existing consonant matcher
+  and vowel context (`qa` → `কা`, `qOI` → `কৈ`, `qrri` → `কৃ`). The basic
+  inventory is now 39 sequences producing 35 distinct letters. Raw matching
+  stays independent of `k`: `qh` → `কহ`, `qq` → `কক`, and `qkh` → `কখ`.
+- Authored 132 [fixtures](../tests/fixtures/consonant-q.tsv), checked against
+  the SHA-256-verified pinned parser before implementation. They cover all
+  supported vowels/aliases on either side, following-vowel transitions,
+  adjacency, repetition, `y`/`Y`/`Z` distinctions, digits, boundaries,
+  copied Unicode, and words. All 3,864 reference cases match under Node.js
+  v24.21.0. No upstream source, rules, or fixtures imported.
+- The focused Rust regression failed on `q` before implementation and passed
+  afterward. Extended control-character boundaries, separate-call, and long-buffer
+  regressions; the full run passed. Updated the old unmatched-`qX` controls
+  because `q` now converts. Kept uppercase `Q`, `qr`, and escapes as explicit
+  partial-output regressions and refreshed seven reference gap probes.
+- Updated [README.md](../README.md) and
+  [v1.md](v1.md#basic-lowercase-q-consonant) with exact Unicode, examples,
+  inventory/case counts, remaining gaps, and next work. Marked earlier `q`
+  gap descriptions as historical. No dependencies or platform code added.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (29 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'q qa qi qOI qotha'`
+  printed `ক কা কি কৈ কথা`. Rechecked and reused Rust/Cargo 1.99.1 and
+  Node.js v24.21.0. No tools upgraded; the external parser stays outside the
+  repository. The pre-existing untracked `.vscode/` is untouched.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors, final
+  newlines, trailing whitespace, fixture counts/code points, distinct new inputs,
+  both runner registrations, documented conversions, and `git diff --check` passed.
+- Limitations: uppercase `Q`, `qr` and other conjunct/reph forms, remaining
+  letters and aliases, punctuation/escapes, composition, and platform integration
+  remain incomplete. No broader compatibility, performance, or platform
+  validation claimed.
+- Next: check and add basic lowercase `v` → ভ and its vowel context as a
+  separate reference-checked increment.
 
 ### 2026-10-28 — Following r after uppercase Y
 

@@ -120,6 +120,11 @@ fn uppercase_y_following_r_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/uppercase-y-following-r.tsv"));
 }
 
+#[test]
+fn lowercase_q_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consonant-q.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -143,11 +148,11 @@ fn check_fixture(fixture: &str) {
 
 #[test]
 fn empty_input_and_unmatched_unicode_are_preserved() {
-    for input in ["", "qX", "বাংলা", "é🙂\u{301}", "\t\n !`"] {
+    for input in ["", "QX", "বাংলা", "é🙂\u{301}", "\t\n !`"] {
         assert_eq!(transliterate(input), input);
     }
-    assert_eq!(transliterate("qXZ"), "qX্য");
-    assert_eq!(transliterate("qXYZ"), "qXয়্য");
+    assert_eq!(transliterate("qXZ"), "কX্য");
+    assert_eq!(transliterate("qXYZ"), "কXয়্য");
     assert_eq!(transliterate("🙂khবাংলা2é"), "🙂খবাংলা২é");
     // Only ASCII digits are converted; other scripts' digits are preserved.
     assert_eq!(transliterate("০১২৩৪৫৬৭৮৯ ١٢ １２"), "০১২৩৪৫৬৭৮৯ ١٢ １２");
@@ -157,7 +162,11 @@ fn empty_input_and_unmatched_unicode_are_preserved() {
 fn unsupported_rules_still_preserve_unmatched_characters() {
     for (input, expected) in [
         ("E", "E"),
-        ("qo", "qঅ"),
+        ("Q", "Q"),
+        ("Qa", "Qআ"),
+        ("qr", "কর"),
+        ("q`a", "ক`আ"),
+        ("q`h", "ক`হ"),
         ("kr", "কর"),
         ("rrk", "ররক"),
         ("rrr", "ররর"),
@@ -256,6 +265,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = input + &"🙂Zi1rZyNgrZa1aZ🙂oZ".repeat(4096);
     let input = input + &"🙂yrr1yrri2yrry3Zry4aZrr".repeat(4096);
     let input = input + &"🙂Yr1Yrri2Yry3Yrry4Yrrrri".repeat(4096);
+    let input = input + &"🙂qa1qia2qU3qOI4qrri5qy".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -270,6 +280,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let expected = expected + &"🙂্যি১র\u{200D}্য্যঙর্যা১অ্যা🙂অ্য".repeat(4096);
     let expected = expected + &"🙂ইয়্রর১ইয়ৃ২ইয়রর\u{200D}্য৩্য্র্য৪অ্যা্রর".repeat(4096);
     let expected = expected + &"🙂য়্র১য়ৃ২য়্র্য৩য়রর\u{200D}্য৪য়্ররৃ".repeat(4096);
+    let expected = expected + &"🙂কা১কিয়া২কূ৩কৈ৪কৃ৫ক্য".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -311,6 +322,7 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
         ] {
             for (raw, letter) in [
                 ("k", "ক"),
+                ("q", "ক"),
                 ("l", "ল"),
                 ("h", "হ"),
                 ("s", "স"),
@@ -340,6 +352,8 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
         }
     }
     assert_eq!(transliterate("k"), "ক");
+    assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("q"), "ক");
     assert_eq!(transliterate("a"), "আ");
     assert_eq!(transliterate("i"), "ই");
     assert_eq!(transliterate("a"), "আ");

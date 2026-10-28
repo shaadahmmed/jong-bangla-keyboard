@@ -21,12 +21,12 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 ## Current status
 
 A dependency-free Rust library now converts Bangla digits, 35 consonant letters
-through 38 basic sequences, lowercase `ng` with selected vowel forms, and
+through 39 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
 with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`
 and uppercase `Z` with selected `aZ`/`oZ` forms. Following-`r` matching after
 `y`/`Z`/`Y` is also implemented.
-This is a partial engine with 3,732 reference-checked examples,
+This is a partial engine with 3,864 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Remaining
 letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -53,7 +53,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [lowercase `y`](docs/v1.md#contextual-lowercase-y), then
 [uppercase `Z`](docs/v1.md#uppercase-z-with-az-and-oz-forms), then
 [following `r` after `y`/`Z`](docs/v1.md#following-r-after-lowercase-y-and-uppercase-z), then
-[following `r` after `Y`](docs/v1.md#following-r-after-uppercase-y).
+[following `r` after `Y`](docs/v1.md#following-r-after-uppercase-y), then
+[lowercase `q`](docs/v1.md#basic-lowercase-q-consonant).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -100,6 +101,7 @@ Try `'y ay ky kiya'` → `ইয় আয় ক্য কিয়া` for contextual l
 Try `'kZa aZ oZ baZ'` → `ক্যা অ্যা অ্য বঅ্যা` for uppercase `Z` and its longer forms.
 Try `'yrr yrri yry Zry'` → `ইয়্রর ইয়ৃ ইয়র‍্য ্য্র্য` for following-`r` distinctions.
 Try `'Yr Yrri Yry Yrry'` → `য়্র য়ৃ য়্র্য য়রর‍্য` for uppercase `Y` and its exceptions.
+Try `'q qa qi qOI qotha'` → `ক কা কি কৈ কথা` for lowercase `q` and vowel context.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -128,8 +130,8 @@ after consonants (`kOI` → `কৈ`, `kOU` → `কৌ`). They match before sin
 Lowercase `rri` normally produces `ঋ` independently and `ৃ` after a supported consonant
 (`krri` → `কৃ`). The principal forms for all 11 basic vowels are now implemented;
 full context, case aliases, and longer consonant sequences are still incomplete.
-Supported parts of an otherwise unsupported word still convert: `qa` currently
-produces `qআ` because `q` is not implemented yet. Basic `r` produces `র`, and `rr`
+Supported parts of an otherwise unsupported word still convert: `va` currently
+produces `vআ` because `v` is not implemented yet. Basic `r` produces `র`, and `rr`
 produces `রর`; `rri` is matched before either. This resolves `rrri` → `রররি` and
 `rrrri` → `ররৃ`. Conjunct/reph forms remain incomplete: `kr` currently produces
 `কর` instead of `ক্র`, and `rrk` produces `ররক` instead of `র্ক`.
@@ -193,8 +195,12 @@ also attaches a single following `r` (`Yr` → `য়্র`, `Yry` → `য়্র
 without a U+200D joiner. Its longer runs share the two-`r` matching priority:
 `Yrrri` → `য়্রররি`, `Yrrrri` → `য়্ররৃ`, while `Yrri` → `য়ৃ` and
 `Yrry` → `য়রর‍্য` keep their existing behavior. Remaining letters such as
-lowercase `q`, uppercase aliases such as `AZ`, reph such as `rrY` → `র্য়`,
+lowercase `v`, uppercase aliases such as `AZ`, reph such as `rrY` → `র্য়`,
 and escapes remain incomplete.
+Lowercase `q` produces ক (U+0995) and establishes consonant context for vowels:
+`qi` → `কি`, `qOI` → `কৈ`, `qrri` → `কৃ`. Raw sequences keep their own matching:
+`qh` → `কহ`, `qq` → `কক`, and existing `kh` → `খ`. Uppercase `Q`, conjuncts
+such as `qr` → `ক্র`, and escapes remain incomplete.
 
 ## Repeat the reference comparison
 
@@ -222,8 +228,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`Y` fixtures](tests/fixtures/consonant-y-uppercase.tsv),
 [`y` fixtures](tests/fixtures/consonant-y-lowercase.tsv),
 [`Z` fixtures](tests/fixtures/consonant-z-uppercase.tsv),
-[following-`r` fixtures](tests/fixtures/ya-following-r.tsv), and
-[`Y` following-`r` fixtures](tests/fixtures/uppercase-y-following-r.tsv) record the raw input,
+[following-`r` fixtures](tests/fixtures/ya-following-r.tsv),
+[`Y` following-`r` fixtures](tests/fixtures/uppercase-y-following-r.tsv), and
+[`q` fixtures](tests/fixtures/consonant-q.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -239,7 +246,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 3,732 cases used by Rust tests and prints reference outputs for
+It checks the same 3,864 cases used by Rust tests and prints reference outputs for
 seven known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
