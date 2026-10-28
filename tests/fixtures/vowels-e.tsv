@@ -1,0 +1,95 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+e	এ	U+098F
+ee	ঈ	U+0988
+ke	কে	U+0995 U+09C7
+kee	কী	U+0995 U+09C0
+khe	খে	U+0996 U+09C7
+khee	খী	U+0996 U+09C0
+ge	গে	U+0997 U+09C7
+gee	গী	U+0997 U+09C0
+ghe	ঘে	U+0998 U+09C7
+ghee	ঘী	U+0998 U+09C0
+te	তে	U+09A4 U+09C7
+tee	তী	U+09A4 U+09C0
+the	থে	U+09A5 U+09C7
+thee	থী	U+09A5 U+09C0
+Te	টে	U+099F U+09C7
+Tee	টী	U+099F U+09C0
+The	ঠে	U+09A0 U+09C7
+Thee	ঠী	U+09A0 U+09C0
+ne	নে	U+09A8 U+09C7
+nee	নী	U+09A8 U+09C0
+Ne	ণে	U+09A3 U+09C7
+Nee	ণী	U+09A3 U+09C0
+be	বে	U+09AC U+09C7
+bee	বী	U+09AC U+09C0
+bhe	ভে	U+09AD U+09C7
+bhee	ভী	U+09AD U+09C0
+me	মে	U+09AE U+09C7
+mee	মী	U+09AE U+09C0
+ae	আএ	U+0986 U+098F
+ie	ইএ	U+0987 U+098F
+Ie	ঈএ	U+0988 U+098F
+ue	উএ	U+0989 U+098F
+Ue	ঊএ	U+098A U+098F
+ea	এয়া	U+098F U+09DF U+09BE
+ei	এই	U+098F U+0987
+eI	এঈ	U+098F U+0988
+eu	এউ	U+098F U+0989
+eU	এঊ	U+098F U+098A
+kae	কাএ	U+0995 U+09BE U+098F
+kie	কিএ	U+0995 U+09BF U+098F
+kIe	কীএ	U+0995 U+09C0 U+098F
+kue	কুএ	U+0995 U+09C1 U+098F
+kUe	কূএ	U+0995 U+09C2 U+098F
+kea	কেয়া	U+0995 U+09C7 U+09DF U+09BE
+kei	কেই	U+0995 U+09C7 U+0987
+keI	কেঈ	U+0995 U+09C7 U+0988
+keu	কেউ	U+0995 U+09C7 U+0989
+keU	কেঊ	U+0995 U+09C7 U+098A
+aee	আঈ	U+0986 U+0988
+iee	ইঈ	U+0987 U+0988
+Iee	ঈঈ	U+0988 U+0988
+uee	উঈ	U+0989 U+0988
+Uee	ঊঈ	U+098A U+0988
+eee	ঈএ	U+0988 U+098F
+eea	ঈয়া	U+0988 U+09DF U+09BE
+eei	ঈই	U+0988 U+0987
+eeI	ঈঈ	U+0988 U+0988
+eeu	ঈউ	U+0988 U+0989
+eeU	ঈঊ	U+0988 U+098A
+eeee	ঈঈ	U+0988 U+0988
+eia	এইয়া	U+098F U+0987 U+09DF U+09BE
+iea	ইএয়া	U+0987 U+098F U+09DF U+09BE
+IeI	ঈএঈ	U+0988 U+098F U+0988
+uie	উইএ	U+0989 U+0987 U+098F
+uea	উএয়া	U+0989 U+098F U+09DF U+09BE
+eue	এউএ	U+098F U+0989 U+098F
+keee	কীএ	U+0995 U+09C0 U+098F
+keea	কীয়া	U+0995 U+09C0 U+09DF U+09BE
+keei	কীই	U+0995 U+09C0 U+0987
+kaee	কাঈ	U+0995 U+09BE U+0988
+kiee	কিঈ	U+0995 U+09BF U+0988
+kUee	কূঈ	U+0995 U+09C2 U+0988
+1e	১এ	U+09E7 U+098F
+k1e	ক১এ	U+0995 U+09E7 U+098F
+ke2a	কে২আ	U+0995 U+09C7 U+09E8 U+0986
+e a	এ আ	U+098F U+0020 U+0986
+e🙂a	এ🙂আ	U+098F U+1F642 U+0986
+কe	কএ	U+0995 U+098F
+k🙂e	ক🙂এ	U+0995 U+1F642 U+098F
+k-e	ক-এ	U+0995 U+002D U+098F
+k,e	ক,এ	U+0995 U+002C U+098F
+ke e	কে এ	U+0995 U+09C7 U+0020 U+098F
+1ee	১ঈ	U+09E7 U+0988
+k1ee	ক১ঈ	U+0995 U+09E7 U+0988
+কee	কঈ	U+0995 U+0988
+ee a	ঈ আ	U+0988 U+0020 U+0986
+ek	এক	U+098F U+0995
+eke	একে	U+098F U+0995 U+09C7
+nebe	নেবে	U+09A8 U+09C7 U+09AC U+09C7
+mene	মেনে	U+09AE U+09C7 U+09A8 U+09C7
+buke	বুকে	U+09AC U+09C1 U+0995 U+09C7
+ami ke	আমি কে	U+0986 U+09AE U+09BF U+0020 U+0995 U+09C7
