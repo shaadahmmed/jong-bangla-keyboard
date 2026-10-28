@@ -65,6 +65,11 @@ fn l_h_consonant_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/consonants-l-h.tsv"));
 }
 
+#[test]
+fn s_sh_consonant_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consonants-s-sh.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -132,6 +137,12 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("H", "H"),
         ("l`h", "ল`হ"),
         ("h`", "হ`"),
+        ("sk", "সক"),
+        ("st", "সত"),
+        ("ShT", "ষট"),
+        ("sH", "সH"),
+        ("SH", "শH"),
+        ("s`h", "স`হ"),
         ("kkh", "কখ"),
         ("K", "K"),
         ("k`h", "ক`হ"),
@@ -162,11 +173,13 @@ fn long_mixed_input_preserves_character_boundaries() {
         + &"phifipO".repeat(4096);
     let input =
         input + &"cichijijhi".repeat(4096) + &"didhIDuDhO".repeat(4096) + &"lihU".repeat(4096);
+    let input = input + &"sishI SuShO".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
     let expected =
         expected + &"চিছিজিঝি".repeat(4096) + &"দিধীডুঢো".repeat(4096) + &"লিহূ".repeat(4096);
+    let expected = expected + &"সিশী শুষো".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -188,7 +201,15 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
             ("OU", "ঔ"),
             ("rri", "ঋ"),
         ] {
-            for (raw, letter) in [("k", "ক"), ("l", "ল"), ("h", "হ")] {
+            for (raw, letter) in [
+                ("k", "ক"),
+                ("l", "ল"),
+                ("h", "হ"),
+                ("s", "স"),
+                ("sh", "শ"),
+                ("S", "শ"),
+                ("Sh", "ষ"),
+            ] {
                 let input = format!("{raw}{boundary}{vowel} {vowel}{boundary}a");
                 let expected = format!("{letter}{boundary}{independent} {independent}{boundary}আ");
                 assert_eq!(transliterate(&input), expected, "input: {input:?}");
@@ -240,6 +261,10 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
         assert_eq!(transliterate("a"), "আ");
     }
     for (raw, expected) in [("l", "ল"), ("h", "হ")] {
+        assert_eq!(transliterate(raw), expected);
+        assert_eq!(transliterate("a"), "আ");
+    }
+    for (raw, expected) in [("s", "স"), ("sh", "শ"), ("S", "শ"), ("Sh", "ষ")] {
         assert_eq!(transliterate(raw), expected);
         assert_eq!(transliterate("a"), "আ");
     }

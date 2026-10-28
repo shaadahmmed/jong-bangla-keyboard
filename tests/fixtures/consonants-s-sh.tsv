@@ -1,0 +1,177 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+s	স	U+09B8
+sa	সা	U+09B8 U+09BE
+as	আস	U+0986 U+09B8
+si	সি	U+09B8 U+09BF
+is	ইস	U+0987 U+09B8
+sI	সী	U+09B8 U+09C0
+Is	ঈস	U+0988 U+09B8
+su	সু	U+09B8 U+09C1
+us	উস	U+0989 U+09B8
+sU	সূ	U+09B8 U+09C2
+Us	ঊস	U+098A U+09B8
+se	সে	U+09B8 U+09C7
+es	এস	U+098F U+09B8
+see	সী	U+09B8 U+09C0
+ees	ঈস	U+0988 U+09B8
+so	স	U+09B8
+os	অস	U+0985 U+09B8
+sO	সো	U+09B8 U+09CB
+Os	ওস	U+0993 U+09B8
+soo	সু	U+09B8 U+09C1
+oos	উস	U+0989 U+09B8
+sOI	সৈ	U+09B8 U+09C8
+OIs	ঐস	U+0990 U+09B8
+sOU	সৌ	U+09B8 U+09CC
+OUs	ঔস	U+0994 U+09B8
+srri	সৃ	U+09B8 U+09C3
+rris	ঋস	U+098B U+09B8
+1s	১স	U+09E7 U+09B8
+s1a	স১আ	U+09B8 U+09E7 U+0986
+s🙂a	স🙂আ	U+09B8 U+1F642 U+0986
+কs	কস	U+0995 U+09B8
+k-s	ক-স	U+0995 U+002D U+09B8
+s a	স আ	U+09B8 U+0020 U+0986
+s,i	স,ই	U+09B8 U+002C U+0987
+sকa	সকআ	U+09B8 U+0995 U+0986
+sia	সিয়া	U+09B8 U+09BF U+09DF U+09BE
+soa	সয়া	U+09B8 U+09DF U+09BE
+sh	শ	U+09B6
+sha	শা	U+09B6 U+09BE
+ash	আশ	U+0986 U+09B6
+shi	শি	U+09B6 U+09BF
+ish	ইশ	U+0987 U+09B6
+shI	শী	U+09B6 U+09C0
+Ish	ঈশ	U+0988 U+09B6
+shu	শু	U+09B6 U+09C1
+ush	উশ	U+0989 U+09B6
+shU	শূ	U+09B6 U+09C2
+Ush	ঊশ	U+098A U+09B6
+she	শে	U+09B6 U+09C7
+esh	এশ	U+098F U+09B6
+shee	শী	U+09B6 U+09C0
+eesh	ঈশ	U+0988 U+09B6
+sho	শ	U+09B6
+osh	অশ	U+0985 U+09B6
+shO	শো	U+09B6 U+09CB
+Osh	ওশ	U+0993 U+09B6
+shoo	শু	U+09B6 U+09C1
+oosh	উশ	U+0989 U+09B6
+shOI	শৈ	U+09B6 U+09C8
+OIsh	ঐশ	U+0990 U+09B6
+shOU	শৌ	U+09B6 U+09CC
+OUsh	ঔশ	U+0994 U+09B6
+shrri	শৃ	U+09B6 U+09C3
+rrish	ঋশ	U+098B U+09B6
+1sh	১শ	U+09E7 U+09B6
+sh1a	শ১আ	U+09B6 U+09E7 U+0986
+sh🙂a	শ🙂আ	U+09B6 U+1F642 U+0986
+কsh	কশ	U+0995 U+09B6
+k-sh	ক-শ	U+0995 U+002D U+09B6
+sh a	শ আ	U+09B6 U+0020 U+0986
+sh,i	শ,ই	U+09B6 U+002C U+0987
+shকa	শকআ	U+09B6 U+0995 U+0986
+shia	শিয়া	U+09B6 U+09BF U+09DF U+09BE
+shoa	শয়া	U+09B6 U+09DF U+09BE
+S	শ	U+09B6
+Sa	শা	U+09B6 U+09BE
+aS	আশ	U+0986 U+09B6
+Si	শি	U+09B6 U+09BF
+iS	ইশ	U+0987 U+09B6
+SI	শী	U+09B6 U+09C0
+IS	ঈশ	U+0988 U+09B6
+Su	শু	U+09B6 U+09C1
+uS	উশ	U+0989 U+09B6
+SU	শূ	U+09B6 U+09C2
+US	ঊশ	U+098A U+09B6
+Se	শে	U+09B6 U+09C7
+eS	এশ	U+098F U+09B6
+See	শী	U+09B6 U+09C0
+eeS	ঈশ	U+0988 U+09B6
+So	শ	U+09B6
+oS	অশ	U+0985 U+09B6
+SO	শো	U+09B6 U+09CB
+OS	ওশ	U+0993 U+09B6
+Soo	শু	U+09B6 U+09C1
+ooS	উশ	U+0989 U+09B6
+SOI	শৈ	U+09B6 U+09C8
+OIS	ঐশ	U+0990 U+09B6
+SOU	শৌ	U+09B6 U+09CC
+OUS	ঔশ	U+0994 U+09B6
+Srri	শৃ	U+09B6 U+09C3
+rriS	ঋশ	U+098B U+09B6
+1S	১শ	U+09E7 U+09B6
+S1a	শ১আ	U+09B6 U+09E7 U+0986
+S🙂a	শ🙂আ	U+09B6 U+1F642 U+0986
+কS	কশ	U+0995 U+09B6
+k-S	ক-শ	U+0995 U+002D U+09B6
+S a	শ আ	U+09B6 U+0020 U+0986
+S,i	শ,ই	U+09B6 U+002C U+0987
+Sকa	শকআ	U+09B6 U+0995 U+0986
+Sia	শিয়া	U+09B6 U+09BF U+09DF U+09BE
+Soa	শয়া	U+09B6 U+09DF U+09BE
+Sh	ষ	U+09B7
+Sha	ষা	U+09B7 U+09BE
+aSh	আষ	U+0986 U+09B7
+Shi	ষি	U+09B7 U+09BF
+iSh	ইষ	U+0987 U+09B7
+ShI	ষী	U+09B7 U+09C0
+ISh	ঈষ	U+0988 U+09B7
+Shu	ষু	U+09B7 U+09C1
+uSh	উষ	U+0989 U+09B7
+ShU	ষূ	U+09B7 U+09C2
+USh	ঊষ	U+098A U+09B7
+She	ষে	U+09B7 U+09C7
+eSh	এষ	U+098F U+09B7
+Shee	ষী	U+09B7 U+09C0
+eeSh	ঈষ	U+0988 U+09B7
+Sho	ষ	U+09B7
+oSh	অষ	U+0985 U+09B7
+ShO	ষো	U+09B7 U+09CB
+OSh	ওষ	U+0993 U+09B7
+Shoo	ষু	U+09B7 U+09C1
+ooSh	উষ	U+0989 U+09B7
+ShOI	ষৈ	U+09B7 U+09C8
+OISh	ঐষ	U+0990 U+09B7
+ShOU	ষৌ	U+09B7 U+09CC
+OUSh	ঔষ	U+0994 U+09B7
+Shrri	ষৃ	U+09B7 U+09C3
+rriSh	ঋষ	U+098B U+09B7
+1Sh	১ষ	U+09E7 U+09B7
+Sh1a	ষ১আ	U+09B7 U+09E7 U+0986
+Sh🙂a	ষ🙂আ	U+09B7 U+1F642 U+0986
+কSh	কষ	U+0995 U+09B7
+k-Sh	ক-ষ	U+0995 U+002D U+09B7
+Sh a	ষ আ	U+09B7 U+0020 U+0986
+Sh,i	ষ,ই	U+09B7 U+002C U+0987
+Shকa	ষকআ	U+09B7 U+0995 U+0986
+Shia	ষিয়া	U+09B7 U+09BF U+09DF U+09BE
+Shoa	ষয়া	U+09B7 U+09DF U+09BE
+sokal	সকাল	U+09B8 U+0995 U+09BE U+09B2
+shokal	শকাল	U+09B6 U+0995 U+09BE U+09B2
+Sokal	শকাল	U+09B6 U+0995 U+09BE U+09B2
+Shokal	ষকাল	U+09B7 U+0995 U+09BE U+09B2
+sada	সাদা	U+09B8 U+09BE U+09A6 U+09BE
+shada	শাদা	U+09B6 U+09BE U+09A6 U+09BE
+Sada	শাদা	U+09B6 U+09BE U+09A6 U+09BE
+Shada	ষাদা	U+09B7 U+09BE U+09A6 U+09BE
+sisu	সিসু	U+09B8 U+09BF U+09B8 U+09C1
+shishu	শিশু	U+09B6 U+09BF U+09B6 U+09C1
+SiSu	শিশু	U+09B6 U+09BF U+09B6 U+09C1
+ShiShu	ষিষু	U+09B7 U+09BF U+09B7 U+09C1
+sap	সাপ	U+09B8 U+09BE U+09AA
+shap	শাপ	U+09B6 U+09BE U+09AA
+Sap	শাপ	U+09B6 U+09BE U+09AA
+Shap	ষাপ	U+09B7 U+09BE U+09AA
+bhaSha	ভাষা	U+09AD U+09BE U+09B7 U+09BE
+s sh S Sh	স শ শ ষ	U+09B8 U+0020 U+09B6 U+0020 U+09B6 U+0020 U+09B7
+si shi Si Shi	সি শি শি ষি	U+09B8 U+09BF U+0020 U+09B6 U+09BF U+0020 U+09B6 U+09BF U+0020 U+09B7 U+09BF
+s h S h	স হ শ হ	U+09B8 U+0020 U+09B9 U+0020 U+09B6 U+0020 U+09B9
+shSh	শষ	U+09B6 U+09B7
+Shsh	ষশ	U+09B7 U+09B6
+shh	শহ	U+09B6 U+09B9
+Shh	ষহ	U+09B7 U+09B9
+ss	সস	U+09B8 U+09B8
+ssh	সশ	U+09B8 U+09B6

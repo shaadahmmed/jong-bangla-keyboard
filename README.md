@@ -20,9 +20,9 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 
 ## Current status
 
-A dependency-free Rust library now converts Bangla digits, 26 consonant letters
-through 28 sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
-with context. This is a partial engine with 1,359 reference-checked examples,
+A dependency-free Rust library now converts Bangla digits, 29 consonant letters
+through 32 sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
+with context. This is a partial engine with 1,533 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Remaining
 letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -38,10 +38,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [`p`/`ph`/`f`](docs/v1.md#basic-p-ph-and-f-consonants), then
 [`c`/`ch`/`j`/`jh`](docs/v1.md#basic-c-ch-j-and-jh-consonants), followed by
 [`d`/`dh`/`D`/`Dh`](docs/v1.md#basic-d-dh-d-and-dh-consonants), then
-[`l`/`h`](docs/v1.md#basic-l-and-h-consonants).
-
-The [next confirmed group](docs/v1.md#confirmed-s-sh-s-and-sh-mapping) is
-`s` → স, `sh`/`S` → শ, and `Sh` → ষ; it is not implemented yet.
+[`l`/`h`](docs/v1.md#basic-l-and-h-consonants), and the confirmed
+[`s`/`sh`/`S`/`Sh` group](docs/v1.md#confirmed-s-sh-s-and-sh-mapping).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -76,6 +74,8 @@ Try `'pani phOn fOn'` → `পানি ফোন ফোন` for `p` and the two
 Try `'cabi chabi jani jhuri'` → `চাবি ছাবি জানি ঝুরি` for `c`/`ch`/`j`/`jh`.
 Try `'din dhan Dan Dhaka'` → `দিন ধান ডান ঢাকা` for `d`/`dh`/`D`/`Dh`.
 Try `'lal holud bhalO'` → `লাল হলুদ ভালো` for `l`/`h`.
+Try `'s sh S Sh'` → `স শ শ ষ` for the case-sensitive `s`/`sh`/`S`/`Sh` group.
+Try `'sokal shishu SiSu bhaSha'` → `সকাল শিশু শিশু ভাষা` for words using that group.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -122,6 +122,9 @@ escapes remain incomplete.
 Lowercase `l`/`h` produce `ল`/`হ` and establish vowel context (`li` → `লি`,
 `hu` → `হু`). Existing two-key matches still win: `kh` → `খ`, `khh` → `খহ`.
 Uppercase `L`/`H`, conjuncts such as `ll` → `ল্ল`, and escapes remain incomplete.
+Exact `s` → স, `sh`/`S` → শ, and `Sh` → ষ follow the confirmed mapping.
+`sh` matches before `s`, and `Sh` before `S`; all four support vowel signs.
+Conjuncts such as `sk` → `স্ক`, uppercase-`H` aliases, and escapes remain incomplete.
 
 ## Repeat the reference comparison
 
@@ -138,9 +141,10 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`r`/`rr` fixtures](tests/fixtures/consonants-r.tsv),
 [`p`/`ph`/`f` fixtures](tests/fixtures/consonants-p-ph-f.tsv),
 [`c`/`ch`/`j`/`jh` fixtures](tests/fixtures/consonants-c-ch-j-jh.tsv),
-[`d`/`dh`/`D`/`Dh` fixtures](tests/fixtures/consonants-d-dh.tsv), and
-[`l`/`h` fixtures](tests/fixtures/consonants-l-h.tsv) record the raw input, expected UTF-8
-output, and exact Unicode code points. The comparison calls
+[`d`/`dh`/`D`/`Dh` fixtures](tests/fixtures/consonants-d-dh.tsv),
+[`l`/`h` fixtures](tests/fixtures/consonants-l-h.tsv), and
+[`s`/`sh`/`S`/`Sh` fixtures](tests/fixtures/consonants-s-sh.tsv) record the raw input,
+expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
 
@@ -155,7 +159,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 1,359 cases used by Rust tests and prints reference outputs for
+It checks the same 1,533 cases used by Rust tests and prints reference outputs for
 five known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
