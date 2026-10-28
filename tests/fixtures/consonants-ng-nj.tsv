@@ -1,0 +1,92 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+# Following rri is a known context gap; rri before Ng/NG is covered below.
+Ng	ঙ	U+0999
+Nga	ঙা	U+0999 U+09BE
+aNg	আঙ	U+0986 U+0999
+Ngi	ঙি	U+0999 U+09BF
+iNg	ইঙ	U+0987 U+0999
+NgI	ঙী	U+0999 U+09C0
+INg	ঈঙ	U+0988 U+0999
+Ngu	ঙু	U+0999 U+09C1
+uNg	উঙ	U+0989 U+0999
+NgU	ঙূ	U+0999 U+09C2
+UNg	ঊঙ	U+098A U+0999
+Nge	ঙে	U+0999 U+09C7
+eNg	এঙ	U+098F U+0999
+Ngee	ঙী	U+0999 U+09C0
+eeNg	ঈঙ	U+0988 U+0999
+Ngo	ঙ	U+0999
+oNg	অঙ	U+0985 U+0999
+NgO	ঙো	U+0999 U+09CB
+ONg	ওঙ	U+0993 U+0999
+Ngoo	ঙু	U+0999 U+09C1
+ooNg	উঙ	U+0989 U+0999
+NgOI	ঙৈ	U+0999 U+09C8
+OINg	ঐঙ	U+0990 U+0999
+NgOU	ঙৌ	U+0999 U+09CC
+OUNg	ঔঙ	U+0994 U+0999
+rriNg	ঋঙ	U+098B U+0999
+1Ng	১ঙ	U+09E7 U+0999
+Ng1a	ঙ১আ	U+0999 U+09E7 U+0986
+Ng🙂a	ঙ🙂আ	U+0999 U+1F642 U+0986
+কNg	কঙ	U+0995 U+0999
+k-Ng	ক-ঙ	U+0995 U+002D U+0999
+Ng a	ঙ আ	U+0999 U+0020 U+0986
+Ng,i	ঙ,ই	U+0999 U+002C U+0987
+Ngকa	ঙকআ	U+0999 U+0995 U+0986
+Ngia	ঙিয়া	U+0999 U+09BF U+09DF U+09BE
+Ngoa	ঙয়া	U+0999 U+09DF U+09BE
+NG	ঞ	U+099E
+NGa	ঞা	U+099E U+09BE
+aNG	আঞ	U+0986 U+099E
+NGi	ঞি	U+099E U+09BF
+iNG	ইঞ	U+0987 U+099E
+NGI	ঞী	U+099E U+09C0
+ING	ঈঞ	U+0988 U+099E
+NGu	ঞু	U+099E U+09C1
+uNG	উঞ	U+0989 U+099E
+NGU	ঞূ	U+099E U+09C2
+UNG	ঊঞ	U+098A U+099E
+NGe	ঞে	U+099E U+09C7
+eNG	এঞ	U+098F U+099E
+NGee	ঞী	U+099E U+09C0
+eeNG	ঈঞ	U+0988 U+099E
+NGo	ঞ	U+099E
+oNG	অঞ	U+0985 U+099E
+NGO	ঞো	U+099E U+09CB
+ONG	ওঞ	U+0993 U+099E
+NGoo	ঞু	U+099E U+09C1
+ooNG	উঞ	U+0989 U+099E
+NGOI	ঞৈ	U+099E U+09C8
+OING	ঐঞ	U+0990 U+099E
+NGOU	ঞৌ	U+099E U+09CC
+OUNG	ঔঞ	U+0994 U+099E
+rriNG	ঋঞ	U+098B U+099E
+1NG	১ঞ	U+09E7 U+099E
+NG1a	ঞ১আ	U+099E U+09E7 U+0986
+NG🙂a	ঞ🙂আ	U+099E U+1F642 U+0986
+কNG	কঞ	U+0995 U+099E
+k-NG	ক-ঞ	U+0995 U+002D U+099E
+NG a	ঞ আ	U+099E U+0020 U+0986
+NG,i	ঞ,ই	U+099E U+002C U+0987
+NGকa	ঞকআ	U+099E U+0995 U+0986
+NGia	ঞিয়া	U+099E U+09BF U+09DF U+09BE
+NGoa	ঞয়া	U+099E U+09DF U+09BE
+aNgul	আঙুল	U+0986 U+0999 U+09C1 U+09B2
+raNga	রাঙা	U+09B0 U+09BE U+0999 U+09BE
+baNgla	বাঙলা	U+09AC U+09BE U+0999 U+09B2 U+09BE
+aNgur	আঙুর	U+0986 U+0999 U+09C1 U+09B0
+raNgi	রাঙি	U+09B0 U+09BE U+0999 U+09BF
+raNGa	রাঞা	U+09B0 U+09BE U+099E U+09BE
+n N Ng NG	ন ণ ঙ ঞ	U+09A8 U+0020 U+09A3 U+0020 U+0999 U+0020 U+099E
+Ng NG aNgul raNga	ঙ ঞ আঙুল রাঙা	U+0999 U+0020 U+099E U+0020 U+0986 U+0999 U+09C1 U+09B2 U+0020 U+09B0 U+09BE U+0999 U+09BE
+NgNG	ঙঞ	U+0999 U+099E
+NGNg	ঞঙ	U+099E U+0999
+N g	ণ গ	U+09A3 U+0020 U+0997
+NgNg	ঙঙ	U+0999 U+0999
+NGNG	ঞঞ	U+099E U+099E
+NgN	ঙণ	U+0999 U+09A3
+NGN	ঞণ	U+099E U+09A3
+NGg	ঞগ	U+099E U+0997
