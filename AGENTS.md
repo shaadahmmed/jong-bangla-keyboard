@@ -24,6 +24,8 @@ User instructions take precedence over this guide; update the docs when they cha
   actual checks and their outcomes, remaining limitations, and the next action.
   Keep planned, in-progress, and completed work distinct. Never claim a check or
   milestone is complete without evidence.
+- Commit each completed step after its checks and progress-log update, using a
+  descriptive message that explains the change. Include only that step's work.
 - Continue within the requested scope without adding routine approval gates.
   Ask concise questions when an unresolved choice materially changes behavior.
 - Keep documentation-only tasks to documentation. Do not scaffold an application
@@ -79,6 +81,8 @@ User instructions take precedence over this guide; update the docs when they cha
 
 ## Dependencies and documentation
 
+- Prefer the latest stable development tools where practical. Verify current
+  releases against official sources and record the versions actually used.
 - Prefer small, justified dependencies. Keep per-keystroke processing local;
   typing must not depend on network access or a separate service.
 - Write original project code under MIT. Check provenance and license obligations

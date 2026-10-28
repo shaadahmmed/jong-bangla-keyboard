@@ -22,6 +22,8 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 
 Requirements and contributor guidance only. There is no Rust workspace, runnable
 keyboard, installer, or validated compatibility claim yet.
+The phonetic behavior reference is now pinned to jsAvroPhonetic v1.1.4; see the
+[reference decision](docs/v1.md#phonetic-behavior-reference).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
