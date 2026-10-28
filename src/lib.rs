@@ -1,6 +1,6 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
-//! Supports ASCII digits, contextual lowercase `y`/`w`, uppercase `Z` and `aZ`/`oZ`,
+//! Supports ASCII digits, contextual lowercase `y`/`w`/`x`, exact `kx`, uppercase `Z` and `aZ`/`oZ`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -40,6 +40,7 @@
 //! assert_eq!(transliterate("v vi vU valO vUmi"), "ভ ভি ভূ ভালো ভূমি");
 //! assert_eq!(transliterate("w wa awa kw kwa"), "ও ওয়া আওা ক্ব ক্বা");
 //! assert_eq!(transliterate("wr wrri wrrri wrry"), "ওর ওৃ ও্রররি ওরর\u{200D}্য");
+//! assert_eq!(transliterate("x xa axa kx kxa"), "এক্স এক্সা আক্সা ক্ষ ক্ষা");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -147,6 +148,9 @@ enum Context {
 /// consonant context for following signs; rri does not trigger the extra য়.
 /// Following r keys share the y two-r rule and exceptions: wrr -> ও্রর,
 /// wrri -> ওৃ, wrry -> ওরর‍্য. A single wr stays separate, including before y/Z.
+/// Lowercase x produces এক্স at a boundary and ক্স after supported converted
+/// input. Exact kx matches before k and produces ক্ষ. Both establish consonant
+/// context without a joiner; longer Ngx and following-r attachments remain gaps.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -194,6 +198,10 @@ pub fn transliterate(input: &str) -> String {
             });
             context = Context::Vowel('i');
             remaining = &remaining[3..];
+        } else if let Some(after_kx) = remaining.strip_prefix("kx") {
+            output.push_str("ক্ষ");
+            remaining = after_kx;
+            context = Context::Consonant { ya_joiner: false };
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
@@ -212,6 +220,14 @@ pub fn transliterate(input: &str) -> String {
             });
             remaining = &remaining[1..];
             remaining = consume_following_r_prefix(remaining, ch, &mut output);
+            context = Context::Consonant { ya_joiner: false };
+        } else if ch == 'x' {
+            output.push_str(if matches!(context, Context::Other) {
+                "এক্স"
+            } else {
+                "ক্স"
+            });
+            remaining = &remaining[1..];
             context = Context::Consonant { ya_joiner: false };
         } else if ch == 'w' {
             remaining = &remaining[1..];

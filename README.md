@@ -23,12 +23,12 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 A dependency-free Rust library now converts Bangla digits, 35 consonant letters
 through 40 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
-with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`/`w`
+with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`/`w`/`x`
 and uppercase `Z` with selected `aZ`/`oZ` forms. Following-`r` matching after
-`y`/`Z`/`Y`/`w` is also implemented.
-This is a partial engine with 4,696 reference-checked examples,
-not a usable desktop keyboard or a full Avro compatibility claim. Remaining
-letters, conjuncts, composition, and Fcitx5 integration are still missing.
+`y`/`Z`/`Y`/`w` is also implemented, as is exact `kx` → `ক্ষ`.
+This is a partial engine with 5,088 reference-checked examples,
+not a usable desktop keyboard or a full Avro compatibility claim. Other
+letter forms, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
 [first vowel group](docs/v1.md#first-vowel-group) and
@@ -57,7 +57,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [lowercase `q`](docs/v1.md#basic-lowercase-q-consonant), then
 [lowercase `v`](docs/v1.md#basic-lowercase-v-consonant), then
 [lowercase `w`](docs/v1.md#contextual-lowercase-w), then
-[following `r` after `w`](docs/v1.md#following-r-after-lowercase-w).
+[following `r` after `w`](docs/v1.md#following-r-after-lowercase-w), then
+[lowercase `x` and `kx`](docs/v1.md#contextual-lowercase-x-and-exact-kx).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -108,6 +109,7 @@ Try `'q qa qi qOI qotha'` → `ক কা কি কৈ কথা` for lowercase
 Try `'v vi vU valO vUmi'` → `ভ ভি ভূ ভালো ভূমি` for lowercase `v` and vowel context.
 Try `'w wa awa kw kwa'` → `ও ওয়া আওা ক্ব ক্বা` for contextual lowercase `w`.
 Try `'wr wrri wrrri wrry'` → `ওর ওৃ ও্রররি ওরর‍্য` for its following-`r` priority.
+Try `'x xa axa kx kxa'` → `এক্স এক্সা আক্সা ক্ষ ক্ষা` for contextual `x` and exact `kx`.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -136,8 +138,8 @@ after consonants (`kOI` → `কৈ`, `kOU` → `কৌ`). They match before sin
 Lowercase `rri` normally produces `ঋ` independently and `ৃ` after a supported consonant
 (`krri` → `কৃ`). The principal forms for all 11 basic vowels are now implemented;
 full context, case aliases, and longer consonant sequences are still incomplete.
-Supported parts of an otherwise unsupported word still convert: `xa` currently
-produces `xআ` because `x` is not implemented yet. Basic `r` produces `র`, and `rr`
+Supported parts of an otherwise unsupported word still convert: `Qa` currently
+produces `Qআ` because uppercase `Q` is not implemented yet. Basic `r` produces `র`, and `rr`
 produces `রর`; `rri` is matched before either. This resolves `rrri` → `রররি` and
 `rrrri` → `ররৃ`. Conjunct/reph forms remain incomplete: `kr` currently produces
 `কর` instead of `ক্র`, and `rrk` produces `ররক` instead of `র্ক`.
@@ -200,8 +202,8 @@ The same rules apply after `aZ`/`oZ` (`aZrr` → `অ্যা্রর`). Upper
 also attaches a single following `r` (`Yr` → `য়্র`, `Yry` → `য়্র্য`),
 without a U+200D joiner. Its longer runs share the two-`r` matching priority:
 `Yrrri` → `য়্রররি`, `Yrrrri` → `য়্ররৃ`, while `Yrri` → `য়ৃ` and
-`Yrry` → `য়রর‍্য` keep their existing behavior. Remaining letters such as
-lowercase `x`, uppercase aliases such as `AZ`, reph such as `rrY` → `র্য়`,
+`Yrry` → `য়রর‍্য` keep their existing behavior. Uppercase aliases such as
+`AZ`, reph such as `rrY` → `র্য়`,
 and escapes remain incomplete.
 Lowercase `q` produces ক (U+0995) and establishes consonant context for vowels:
 `qi` → `কি`, `qOI` → `কৈ`, `qrri` → `কৃ`. Raw sequences keep their own matching:
@@ -222,6 +224,14 @@ and `wrrrri` → `ও্ররৃ`, while `wrri` → `ওৃ` and `wrry` → `�
 their exceptions. Single `wr` stays separate (`wr` → `ওর`, `wry` → `ওর‍্য`).
 The same rule applies after consonants/vowels (`kwrr` → `ক্ব্রর`, `awrr` → `আও্রর`).
 Uppercase `W`, reph (`rrw` → `র্্ব`), other conjuncts, and escapes remain incomplete.
+Lowercase `x` produces এক্স at the start or after a copied character/digit,
+and ক্স after supported converted input (`ax` → `আক্স`, `qx` → `কক্স`).
+Exact `kx` matches before single `k` and produces ক্ষ. Both establish consonant
+context for vowels (`xi` → `এক্সি`, `kxrri` → `ক্ষৃ`) and other supported forms
+(`xx` → `এক্সক্স`, `xy` → `এক্স্য`, `kxY` → `ক্ষয়`). Raw matching stays distinct:
+`qx` → `কক্স`, `khx` → `খক্স`, and `kx` → `ক্ষ`. Longer `Ngx`/`kkx`,
+following-`r` attachments (`xrr` → `এক্স্রর`), reph, uppercase aliases, and escapes
+remain incomplete.
 
 ## Repeat the reference comparison
 
@@ -253,8 +263,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`Y` following-`r` fixtures](tests/fixtures/uppercase-y-following-r.tsv),
 [`q` fixtures](tests/fixtures/consonant-q.tsv),
 [`v` fixtures](tests/fixtures/consonant-v.tsv),
-[`w` fixtures](tests/fixtures/consonant-w.tsv), and
-[`w` following-`r` fixtures](tests/fixtures/w-following-r.tsv) record the raw input,
+[`w` fixtures](tests/fixtures/consonant-w.tsv),
+[`w` following-`r` fixtures](tests/fixtures/w-following-r.tsv), and
+[`x` fixtures](tests/fixtures/consonant-x.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -270,7 +281,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 4,696 cases used by Rust tests and prints reference outputs for
+It checks the same 5,088 cases used by Rust tests and prints reference outputs for
 seven known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

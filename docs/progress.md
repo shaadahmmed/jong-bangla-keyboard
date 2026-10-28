@@ -28,40 +28,94 @@ Dates use the project's Asia/Dhaka timezone.
   consonant-following forms, including the independent following-vowel য়.
   Following-`r` priority after `w` now handles two-`r` attachment and preserves
   the `rri`/`rry`/`rrZ` exceptions and basic-`r` joiners.
-  There are 4,696 reference-checked cases.
+  Contextual lowercase `x` now handles boundary and following-input forms;
+  exact `kx` → ক্ষ matches before single `k`.
+  There are 5,088 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
-  matching prefixes, contextual lowercase `y`/`w`, uppercase `Z`/`aZ`/`oZ`, and
-  selected following-`r` forms after `y`/`Z`/`Y`/`w`.
+  matching prefixes, contextual lowercase `y`/`w`/`x`, uppercase `Z`/`aZ`/`oZ`,
+  exact `kx`, and selected following-`r` forms after `y`/`Z`/`Y`/`w`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** check lowercase `x` and its context-dependent forms against the
-  pinned reference, keeping uppercase aliases and longer forms separate.
+- **Next:** check following-`r` priority after lowercase `x` and exact `kx`
+  against the pinned reference, keeping reph, aliases, and longer forms separate.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author lowercase `x` cases: standalone output, supported
-   consonants/vowels before it, following vowels/aliases, repetitions, digits,
-   boundaries, copied Unicode, and case controls.
+1. Independently author following-`r` cases after lowercase `x` and exact `kx`:
+   runs of one through eight `r` keys, `rri` and `rry`/`rrZ` overlaps, following
+   vowels/aliases, differing preceding contexts, repetition, digits, boundaries,
+   and copied Unicode.
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-   Known gaps include `x` → `এক্স` and `kx` → `ক্ষ`.
-3. Add the selected `x` matching/context rules. Keep uppercase aliases, reph,
-   other conjuncts, longer matches, and escapes explicit. No composition or
-   platform work.
+   Known gaps include `xrr` → `এক্স্রর` and `kxrr` → `ক্ষ্রর`; existing
+   `xrri` → `এক্সৃ` must retain priority.
+3. Add the selected following-`r` rules. Keep `Ngx`/`kkx`, reph, uppercase
+   aliases, other conjuncts, longer matches, and escapes explicit. No composition
+   or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected lowercase `x` cases match the reference, existing
+**Done when:** the selected following-`r` cases match the reference, existing
 conversion cases still pass, limitations are documented, and this log records
 actual results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Contextual lowercase x and exact kx
+
+- Added exact lowercase `x`: এক্স (U+098F U+0995 U+09CD U+09B8) at the
+  start/after a copied character or digit, and ক্স (U+0995 U+09CD U+09B8)
+  after supported converted input (`ax` → `আক্স`, `qx` → `কক্স`). Added
+  exact `kx` → ক্ষ (U+0995 U+09CD U+09B7), matching before single `k`.
+  The 40 basic consonant sequences producing 35 letters are unchanged;
+  `kx` is an added conjunct sequence, included as an explicit planned gap.
+- Both forms establish consonant context without a joiner: supported vowel
+  signs/aliases and transitions apply (`xia` → `এক্সিয়া`, `kxrri` → `ক্ষৃ`).
+  Preserved raw spelling (`khx` → `খক্স`, distinct from `kx` → `ক্ষ`),
+  repetitions, `y`/`Y`/`Z` distinctions, and longer `aZ`/`oZ` priority.
+  No normalization, spelling correction, persistent state, dependencies, or
+  platform code added.
+- Authored 392 [fixtures](../tests/fixtures/consonant-x.tsv), checked against
+  the SHA-256-verified pinned parser before implementation. They cover all
+  basic consonants before `x` except the separate `Ngx`/`rrx` gaps, supported
+  contexts, all vowels/aliases before and after the selected forms, transitions,
+  repetition, raw-spelling/case controls, digits, boundaries, copied Unicode,
+  and words. All 5,088 reference cases match under Node.js v24.21.0.
+  No upstream source, rules, or fixtures imported.
+- The focused Rust regression failed on `x` before implementation and passed
+  afterward. Extended control-character boundaries, separate-call, and long-buffer
+  regressions; the full run passed. Kept `Ngx`/`kkx`, following-`r` attachments,
+  reph, aliases, and escapes as explicit partial-output regressions and refreshed
+  seven reference gap probes.
+- Updated [README.md](../README.md) and
+  [v1.md](v1.md#contextual-lowercase-x-and-exact-kx) with exact Unicode,
+  context, examples, case count, limitations, and next work. Marked prior
+  `x`/`kx` probes as historical and replaced obsolete unsupported-`x`
+  descriptions in the README with the remaining uppercase-`Q` gap.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (33 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'x xa axa kx kxa'`
+  printed `এক্স এক্সা আক্সা ক্ষ ক্ষা`; 14 new documented conversions also
+  passed direct CLI checks. Rechecked and reused Rust/Cargo 1.99.1 and Node.js
+  v24.21.0. No tools upgraded; the external parser stays outside the repository.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors, final
+  newlines, trailing whitespace, fixture counts/code points, distinct new inputs,
+  both runner registrations, and `git diff --check` passed. The pre-existing
+  untracked `.vscode/` is untouched.
+- Limitations: `Ngx`/`kkx`, following-`r` attachment after `x`/`kx`, reph,
+  remaining letter forms and aliases, other conjuncts, punctuation/escapes,
+  composition, and platform integration remain incomplete. No broader
+  compatibility, performance, or platform validation claimed.
+- Next: check following-`r` priority after lowercase `x` and exact `kx` as a
+  separate reference-checked increment.
 
 ### 2026-10-28 — Following r after lowercase w
 

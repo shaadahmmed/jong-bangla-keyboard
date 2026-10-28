@@ -140,6 +140,11 @@ fn w_following_r_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/w-following-r.tsv"));
 }
 
+#[test]
+fn lowercase_x_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consonant-x.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -177,6 +182,17 @@ fn empty_input_and_unmatched_unicode_are_preserved() {
 fn unsupported_rules_still_preserve_unmatched_characters() {
     for (input, expected) in [
         ("E", "E"),
+        ("X", "X"),
+        ("Xa", "Xআ"),
+        ("kX", "কX"),
+        ("xA", "এক্সA"),
+        ("Ngx", "ঙক্স"),
+        ("kkx", "কক্ষ"),
+        ("xrr", "এক্সরর"),
+        ("kxrr", "ক্ষরর"),
+        ("rrx", "ররক্স"),
+        ("x`a", "এক্স`আ"),
+        ("x`h", "এক্স`হ"),
         ("W", "W"),
         ("Wa", "Wআ"),
         ("wA", "ওA"),
@@ -297,6 +313,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = input + &"🙂va1via2vU3vOI4vrri5vy".repeat(4096);
     let input = input + &"🙂wa1awa2kwa3wwi4wrri5wy".repeat(4096);
     let input = input + &"🙂wrr1wrri2wrrri3wrry4kwrr5awrr".repeat(4096);
+    let input = input + &"🙂xa1axa2kxi3xxU4xrri5xy".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -315,6 +332,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let expected = expected + &"🙂ভা১ভিয়া২ভূ৩ভৈ৪ভৃ৫ভ্য".repeat(4096);
     let expected = expected + &"🙂ওয়া১আওা২ক্বা৩ও্বি৪ওৃ৫ও্য".repeat(4096);
     let expected = expected + &"🙂ও্রর১ওৃ২ও্রররি৩ওরর\u{200D}্য৪ক্ব্রর৫আও্রর".repeat(4096);
+    let expected = expected + &"🙂এক্সা১আক্সা২ক্ষি৩এক্সক্সূ৪এক্সৃ৫এক্স্য".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -345,6 +363,10 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
             transliterate(&format!("wrr{boundary}ry")),
             format!("ও্রর{boundary}র\u{200D}্য")
         );
+        assert_eq!(
+            transliterate(&format!("k{boundary}xa")),
+            format!("ক{boundary}এক্সা")
+        );
         for (raw, expected) in [("r", "র"), ("ay", "আয়"), ("ky", "ক্য")] {
             assert_eq!(
                 transliterate(&format!("{raw}{boundary}y")),
@@ -370,6 +392,8 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
                 ("k", "ক"),
                 ("q", "ক"),
                 ("v", "ভ"),
+                ("x", "এক্স"),
+                ("kx", "ক্ষ"),
                 ("w", "ও"),
                 ("kw", "ক্ব"),
                 ("wrr", "ও্রর"),
@@ -495,6 +519,8 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
         ("wrr", "ও্রর"),
         ("kwrr", "ক্ব্রর"),
         ("wrrwrr", "ও্রর্ব্রর"),
+        ("x", "এক্স"),
+        ("kx", "ক্ষ"),
     ] {
         assert_eq!(transliterate(raw), expected);
         assert_eq!(transliterate("r"), "র");
