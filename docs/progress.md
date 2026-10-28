@@ -11,24 +11,24 @@ Dates use the project's Asia/Dhaka timezone.
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
   `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri` vowel forms.
-  Basic `r`/`rr` consonant matching is implemented. There are 822 reference-checked
-  cases.
+  Basic `r`/`rr` and `p`/`ph`/`f` consonant matching is implemented. There are
+  937 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Principal forms for all 11 basic vowels and 15 consonant sequences (14 letters)
+  Principal forms for all 11 basic vowels and 18 consonant sequences (16 letters)
   exist.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** add the `p`/`ph`/`f` group for প/ফ, checking expected Unicode and
-  longest-sequence matching against the pinned reference.
+- **Next:** add the `c`/`ch`/`j`/`jh` group for চ/ছ/জ/ঝ, checking exact Unicode
+  and longest-sequence matching against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author `p`/`ph`/`f` cases alone, with supported vowels/aliases,
-   and around neighboring input. Verify the two spellings for ফ and `ph` priority.
+1. Independently author `c`/`ch`/`j`/`jh` cases alone, with supported vowels/aliases,
+   and around neighboring input. Verify `ch` and `jh` priority over single keys.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
 3. Add only this basic consonant group. Keep incomplete consonants, conjuncts,
@@ -36,11 +36,46 @@ Dates use the project's Asia/Dhaka timezone.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected `p`/`ph`/`f` cases match the reference, existing conversion
+**Done when:** the selected `c`/`ch`/`j`/`jh` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Basic p/ph/f consonants
+
+- Added lowercase `p` → প (U+09AA), and `ph`/`f` → ফ (U+09AB). The existing
+  longest-match rule consumes `ph` before `p`; both spellings of ফ establish
+  identical consonant context (`phi` and `fi` → `ফি`). There are now 18 consonant
+  input sequences producing 16 distinct letters.
+- Authored 115 [fixtures](../tests/fixtures/consonants-p-ph-f.tsv), checked against
+  the pinned parser before Rust changes. Cases cover the three patterns with all
+  supported vowels/aliases before and after them, digits, boundaries, copied
+  Unicode, and words. All 937 reference cases match with the SHA-256-verified
+  external parser under Node.js v24.21.0. No upstream source, rules, or fixtures
+  imported.
+- Extended long-buffer and separate-call checks and recorded temporary limits
+  for uppercase aliases, conjuncts, overlapping `pph`, and interrupted/escaped
+  input. Updated [README.md](../README.md) and
+  [v1.md](v1.md#basic-p-ph-and-f-consonants) with exact Unicode, current counts,
+  examples, and remaining gaps. No dependencies or platform code added.
+- Checks: `cargo test --offline` passed (14 regression tests and one documentation
+  example); `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, and
+  `cargo build --offline --release` passed. The reference comparison passed all
+  937 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'pani phOn fOn'` printed
+  `পানি ফোন ফোন`; 19 additional documented conversions passed direct CLI checks.
+  Reused inspected Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools were installed
+  or upgraded.
+- Documentation/tool checks: `node --check`, UTF-8 decoding, local Markdown links
+  and heading anchors, final newlines, trailing whitespace, and `git diff --check`
+  passed. The pre-existing untracked `.vscode/` directory was left untouched.
+- Limitations: `pr`, `pp`, `pph`, uppercase `P`/`F` and other aliases, standalone
+  `h`, remaining consonants, conjunct/reph forms, punctuation/escapes, composition,
+  and platform integration remain incomplete. No full compatibility or
+  performance/platform validation claimed.
+- Next: add basic `c`/`ch`/`j`/`jh` for চ/ছ/জ/ঝ as a separate consonant increment.
 
 ### 2026-10-28 — Basic r/rr consonants
 

@@ -19,10 +19,11 @@
 //! assert_eq!(transliterate("OI kOI OU kOU nOUka"), "ঐ কৈ ঔ কৌ নৌকা");
 //! assert_eq!(transliterate("rri krri krriti rriN"), "ঋ কৃ কৃতি ঋণ");
 //! assert_eq!(transliterate("ram rani rrri rrrri"), "রাম রানি রররি ররৃ");
+//! assert_eq!(transliterate("pani phOn fOn"), "পানি ফোন ফোন");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
-const CONSONANTS: [(&str, &str); 15] = [
+const CONSONANTS: [(&str, &str); 18] = [
     ("k", "ক"),
     ("kh", "খ"),
     ("g", "গ"),
@@ -38,6 +39,9 @@ const CONSONANTS: [(&str, &str); 15] = [
     ("m", "ম"),
     ("r", "র"),
     ("rr", "রর"),
+    ("p", "প"),
+    ("ph", "ফ"),
+    ("f", "ফ"),
 ];
 
 #[derive(Clone, Copy)]

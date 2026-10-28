@@ -1,0 +1,118 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+p	প	U+09AA
+pa	পা	U+09AA U+09BE
+ap	আপ	U+0986 U+09AA
+pi	পি	U+09AA U+09BF
+ip	ইপ	U+0987 U+09AA
+pI	পী	U+09AA U+09C0
+Ip	ঈপ	U+0988 U+09AA
+pu	পু	U+09AA U+09C1
+up	উপ	U+0989 U+09AA
+pU	পূ	U+09AA U+09C2
+Up	ঊপ	U+098A U+09AA
+pe	পে	U+09AA U+09C7
+ep	এপ	U+098F U+09AA
+pee	পী	U+09AA U+09C0
+eep	ঈপ	U+0988 U+09AA
+po	প	U+09AA
+op	অপ	U+0985 U+09AA
+pO	পো	U+09AA U+09CB
+Op	ওপ	U+0993 U+09AA
+poo	পু	U+09AA U+09C1
+oop	উপ	U+0989 U+09AA
+pOI	পৈ	U+09AA U+09C8
+OIp	ঐপ	U+0990 U+09AA
+pOU	পৌ	U+09AA U+09CC
+OUp	ঔপ	U+0994 U+09AA
+prri	পৃ	U+09AA U+09C3
+rrip	ঋপ	U+098B U+09AA
+1p	১প	U+09E7 U+09AA
+p1a	প১আ	U+09AA U+09E7 U+0986
+p🙂a	প🙂আ	U+09AA U+1F642 U+0986
+কp	কপ	U+0995 U+09AA
+k-p	ক-প	U+0995 U+002D U+09AA
+p a	প আ	U+09AA U+0020 U+0986
+p,i	প,ই	U+09AA U+002C U+0987
+pকa	পকআ	U+09AA U+0995 U+0986
+ph	ফ	U+09AB
+pha	ফা	U+09AB U+09BE
+aph	আফ	U+0986 U+09AB
+phi	ফি	U+09AB U+09BF
+iph	ইফ	U+0987 U+09AB
+phI	ফী	U+09AB U+09C0
+Iph	ঈফ	U+0988 U+09AB
+phu	ফু	U+09AB U+09C1
+uph	উফ	U+0989 U+09AB
+phU	ফূ	U+09AB U+09C2
+Uph	ঊফ	U+098A U+09AB
+phe	ফে	U+09AB U+09C7
+eph	এফ	U+098F U+09AB
+phee	ফী	U+09AB U+09C0
+eeph	ঈফ	U+0988 U+09AB
+pho	ফ	U+09AB
+oph	অফ	U+0985 U+09AB
+phO	ফো	U+09AB U+09CB
+Oph	ওফ	U+0993 U+09AB
+phoo	ফু	U+09AB U+09C1
+ooph	উফ	U+0989 U+09AB
+phOI	ফৈ	U+09AB U+09C8
+OIph	ঐফ	U+0990 U+09AB
+phOU	ফৌ	U+09AB U+09CC
+OUph	ঔফ	U+0994 U+09AB
+phrri	ফৃ	U+09AB U+09C3
+rriph	ঋফ	U+098B U+09AB
+1ph	১ফ	U+09E7 U+09AB
+ph1a	ফ১আ	U+09AB U+09E7 U+0986
+ph🙂a	ফ🙂আ	U+09AB U+1F642 U+0986
+কph	কফ	U+0995 U+09AB
+k-ph	ক-ফ	U+0995 U+002D U+09AB
+ph a	ফ আ	U+09AB U+0020 U+0986
+ph,i	ফ,ই	U+09AB U+002C U+0987
+phকa	ফকআ	U+09AB U+0995 U+0986
+f	ফ	U+09AB
+fa	ফা	U+09AB U+09BE
+af	আফ	U+0986 U+09AB
+fi	ফি	U+09AB U+09BF
+if	ইফ	U+0987 U+09AB
+fI	ফী	U+09AB U+09C0
+If	ঈফ	U+0988 U+09AB
+fu	ফু	U+09AB U+09C1
+uf	উফ	U+0989 U+09AB
+fU	ফূ	U+09AB U+09C2
+Uf	ঊফ	U+098A U+09AB
+fe	ফে	U+09AB U+09C7
+ef	এফ	U+098F U+09AB
+fee	ফী	U+09AB U+09C0
+eef	ঈফ	U+0988 U+09AB
+fo	ফ	U+09AB
+of	অফ	U+0985 U+09AB
+fO	ফো	U+09AB U+09CB
+Of	ওফ	U+0993 U+09AB
+foo	ফু	U+09AB U+09C1
+oof	উফ	U+0989 U+09AB
+fOI	ফৈ	U+09AB U+09C8
+OIf	ঐফ	U+0990 U+09AB
+fOU	ফৌ	U+09AB U+09CC
+OUf	ঔফ	U+0994 U+09AB
+frri	ফৃ	U+09AB U+09C3
+rrif	ঋফ	U+098B U+09AB
+1f	১ফ	U+09E7 U+09AB
+f1a	ফ১আ	U+09AB U+09E7 U+0986
+f🙂a	ফ🙂আ	U+09AB U+1F642 U+0986
+কf	কফ	U+0995 U+09AB
+k-f	ক-ফ	U+0995 U+002D U+09AB
+f a	ফ আ	U+09AB U+0020 U+0986
+f,i	ফ,ই	U+09AB U+002C U+0987
+fকa	ফকআ	U+09AB U+0995 U+0986
+phir	ফির	U+09AB U+09BF U+09B0
+fir	ফির	U+09AB U+09BF U+09B0
+phire	ফিরে	U+09AB U+09BF U+09B0 U+09C7
+fire	ফিরে	U+09AB U+09BF U+09B0 U+09C7
+pani	পানি	U+09AA U+09BE U+09A8 U+09BF
+pakhi	পাখি	U+09AA U+09BE U+0996 U+09BF
+phOn	ফোন	U+09AB U+09CB U+09A8
+fOn	ফোন	U+09AB U+09CB U+09A8
+pf	পফ	U+09AA U+09AB
+ff	ফফ	U+09AB U+09AB
