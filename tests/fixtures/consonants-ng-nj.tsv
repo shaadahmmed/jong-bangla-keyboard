@@ -1,7 +1,7 @@
 # Independently authored for Jong Bangla under MIT; not imported fixtures.
 # Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
 # Columns: raw input, expected output, exact Unicode code points (tab-separated).
-# Following rri is a known context gap; rri before Ng/NG is covered below.
+# Following rri and longer r runs are covered in nasal-rri.tsv.
 Ng	ঙ	U+0999
 Nga	ঙা	U+0999 U+09BE
 aNg	আঙ	U+0986 U+0999

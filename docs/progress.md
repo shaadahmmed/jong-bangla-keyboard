@@ -14,39 +14,83 @@ Dates use the project's Asia/Dhaka timezone.
   Basic `r`/`rr`, `p`/`ph`/`f`, `c`/`ch`/`j`/`jh`, `d`/`dh`/`D`/`Dh`, `l`/`h`,
   `s`/`sh`/`S`/`Sh`, `R`/`Rh`, lowercase `z`, and `Ng`/`NG` consonant matching is
   implemented. Lowercase `ng` → ং and selected ng-vowel forms are implemented.
-  There are 1,876 reference-checked cases.
+  Following `rri` and longer `r` runs after `Ng`/`NG`/`ng` now match the reference.
+  There are 2,150 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 37 consonant sequences (34 letters)
-  exist, plus lowercase `ng` and its selected vowel forms.
+  exist, plus lowercase `ng`, its selected vowel forms, and three nasal-plus-`r`
+  matching prefixes.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
-  compatibility is not established; following-`rri` context after `Ng`/`NG`/`ng` is a
-  documented gap.
-- **Next:** resolve following-`rri` context after `Ng`/`NG`/`ng`, checking longer
-  `r` runs and boundaries against the pinned reference before changing matching.
+  compatibility is not established.
+- **Next:** add exact uppercase `Y` → য়, checking Unicode, case distinctions,
+  adjacent consonants, and vowel context against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author cases for `rri` following `Ng`/`NG`/`ng`, including longer
-   `r` runs, vowel transitions, and boundaries. The reference already confirms
-   `Ngrri` → `ঙররি`, `NGrri` → `ঞররি`, and `ngrri` → `ংররি`; do not infer a
-   general rule for other multi-key consonants without probing them.
+1. Independently author exact uppercase `Y` cases with supported vowels/aliases,
+   adjacent consonants, digits, boundaries, and copied Unicode. Standalone
+   `Y` → য় (U+09DF) is already reference-verified; lowercase `y` has different
+   contextual behavior and stays outside this basic-letter increment.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
-3. Fix the selected `rri` context cases. Preserve existing standalone and
-   dependent-vowel cases; keep other incomplete context, consonants, conjuncts,
-   and reph explicit. No composition/platform work.
+3. Add only basic uppercase `Y`. Keep other incomplete letters, context,
+   conjuncts, reph, and escapes explicit. No composition/platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected following-`rri` cases match the reference, existing conversion
+**Done when:** the selected uppercase-`Y` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Following rri after Ng/NG/ng
+
+- Fixed matching order with three independently authored prefixes:
+  `Ngr` → `ঙর`, `NGr` → `ঞর`, and `ngr` → `ংর`. Each consumes the first `r`
+  with its nasal form before matching the remainder. This fixes `Ngrri` → `ঙররি`,
+  `NGrri` → `ঞররি`, and `ngrri` → `ংররি`, plus longer runs such as
+  `Ngrrri` → `ঙরৃ` and `Ngrrrri` → `ঙররররি`. The basic inventory remains 37
+  consonant sequences (34 letters), with these three additional matching forms.
+- Probed other multi-key consonants before selecting the exception: `khrri`,
+  `phrri`, and `Rhrri` still require `খৃ`, `ফৃ`, and `ঢ়ৃ`. Their existing matching
+  is preserved. Digits, copied Unicode, and intervening vowels separate the
+  matches; nothing is retained between conversion calls.
+- Authored 274 [fixtures](../tests/fixtures/nasal-rri.tsv), verified against the
+  SHA-256-checked pinned parser before implementation. They cover all three
+  prefixes, one through ten `r` keys before `i` and subsequent `a`/`o`, shorter
+  runs without `i`, vowels/aliases, repetition, case distinctions, boundaries,
+  digits, copied Unicode, and other-consonant controls. All 2,150 reference cases
+  match under Node.js v24.21.0. No upstream source, rules, or fixtures imported.
+- The focused Rust regression failed on `Ngrri` before the fix, reproducing the
+  known `ঙৃ` output; it and all existing tests pass after the fix. Extended
+  long-buffer and separate-call checks, removed resolved gap expectations, and
+  refreshed seven reference gap probes. Updated [README.md](../README.md),
+  [v1.md](v1.md#following-rri-after-ng-ng-and-ng), and older fixture comments so
+  they no longer describe these three cases as unsupported.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (23 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'Ngrri NGrrri ngrrrri'`
+  printed `ঙররি ঞরৃ ংররররি`. Rechecked and reused Rust/Cargo 1.99.1 and
+  Node.js v24.21.0; no tools installed or upgraded. The external reference remains
+  outside the repository; the pre-existing untracked `.vscode/` directory is untouched.
+- Documentation/fixture checks: UTF-8 decoding, 154 local Markdown links/anchors
+  across four documents, final newlines, trailing whitespace, fixture counts,
+  exact code points, both runner registrations, distinct new inputs, and
+  `git diff --check` passed.
+- Limitations: remaining letters, other conjunct/reph forms, aliases,
+  punctuation/escapes, composition, and platform integration remain incomplete.
+  No full compatibility, performance, or platform validation claimed; no
+  dependencies or platform code added.
+- Next: add basic uppercase `Y` → য় in a separate increment. Preliminary probes
+  confirm U+09DF, `Yi` → `য়ি`, `Yrri` → `য়ৃ`, and ordinary adjacency `kY` → `কয়`;
+  lowercase `y` remains distinct. Full vowel/context fixtures still need checking.
 
 ### 2026-10-28 — Lowercase ng sign and vowel forms
 

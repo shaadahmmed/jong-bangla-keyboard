@@ -29,6 +29,7 @@
 //! assert_eq!(transliterate("zai zabe zodi zokhon"), "যাই যাবে যদি যখন");
 //! assert_eq!(transliterate("Ng NG aNgul raNga"), "ঙ ঞ আঙুল রাঙা");
 //! assert_eq!(transliterate("bangla rong nga ngi"), "বাংলা রং ঙ্গা ঙ্গি");
+//! assert_eq!(transliterate("Ngrri NGrrri ngrrrri"), "ঙররি ঞরৃ ংররররি");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -87,6 +88,10 @@ const NG_VOWELS: [(&str, &str, char); 10] = [
     ("O", "ো", 'O'),
 ];
 
+// Consume the first r with these nasal forms before matching the remaining rri.
+// All three independently checked prefixes have the same ASCII length.
+const NASAL_R_FORMS: [(&str, &str); 3] = [("Ngr", "ঙর"), ("NGr", "ঞর"), ("ngr", "ংর")];
+
 #[derive(Clone, Copy)]
 enum Context {
     Consonant,
@@ -108,6 +113,8 @@ enum Context {
 /// follows raw matched tokens, not preserved Bangla. Matching is case-sensitive.
 /// Lowercase `ng` produces ং, or ঙ্গ with a vowel sign in the selected ng-vowel
 /// forms. These consume their vowel before ordinary ee/oo aliases are considered.
+/// Ngr/NGr/ngr consume their first r before the rest is matched: Ngrri -> ঙররি,
+/// Ngrrri -> ঙরৃ. Other consonants retain their existing rri matching.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -122,7 +129,15 @@ pub fn transliterate(input: &str) -> String {
             .filter(|(raw, _)| remaining.starts_with(raw))
             .max_by_key(|(raw, _)| raw.len());
 
-        if let Some(after_ng) = remaining.strip_prefix("ng") {
+        let nasal_r = NASAL_R_FORMS
+            .iter()
+            .find(|(raw, _)| remaining.starts_with(raw));
+
+        if let Some((raw, bangla)) = nasal_r {
+            output.push_str(bangla);
+            remaining = &remaining[raw.len()..];
+            context = Context::Consonant;
+        } else if let Some(after_ng) = remaining.strip_prefix("ng") {
             let vowel = NG_VOWELS
                 .iter()
                 .filter(|(raw, _, _)| after_ng.starts_with(raw))
@@ -134,7 +149,7 @@ pub fn transliterate(input: &str) -> String {
                 remaining = &after_ng[raw.len()..];
             } else {
                 output.push('ং');
-                // The raw match ends in g; following rri remains a context gap.
+                // The raw match ends in g; ngr was handled before this branch.
                 context = Context::Consonant;
                 remaining = after_ng;
             }

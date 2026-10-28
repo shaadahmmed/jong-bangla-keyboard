@@ -90,6 +90,11 @@ fn lowercase_ng_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/sign-ng.tsv"));
 }
 
+#[test]
+fn nasal_rri_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/nasal-rri.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -141,15 +146,12 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("z`h", "য`হ"),
         ("ngh", "ংহ"),
         ("nng", "নং"),
-        ("ngrri", "ংৃ"),
         ("nG", "নG"),
         ("ng`a", "ং`আ"),
         ("Ngk", "ঙক"),
         ("NGc", "ঞচ"),
         ("NGch", "ঞছ"),
         ("N`g", "ণ`গ"),
-        ("Ngrri", "ঙৃ"),
-        ("NGrri", "ঞৃ"),
         ("pr", "পর"),
         ("pp", "পপ"),
         ("pph", "পফ"),
@@ -216,6 +218,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = input + &"sishI SuShO".repeat(4096) + &"RiRhORrri".repeat(4096);
     let input = input + &"zizU".repeat(4096) + &"NgiNGU".repeat(4096);
     let input = input + &"ngang1ngoo".repeat(4096);
+    let input = input + &"Ngrri🙂NGrrri1ngrrrri".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -224,6 +227,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let expected = expected + &"সিশী শুষো".repeat(4096) + &"ড়িঢ়োড়ৃ".repeat(4096);
     let expected = expected + &"যিযূ".repeat(4096) + &"ঙিঞূ".repeat(4096);
     let expected = expected + &"ঙ্গাং১ঙ্গঅ".repeat(4096);
+    let expected = expected + &"ঙররি🙂ঞরৃ১ংররররি".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -327,7 +331,9 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     for (raw, expected) in [("Ng", "ঙ"), ("NG", "ঞ")] {
         assert_eq!(transliterate(raw), expected);
         assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("rri"), "ঋ");
     }
     assert_eq!(transliterate("ng"), "ং");
     assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("rri"), "ঋ");
 }

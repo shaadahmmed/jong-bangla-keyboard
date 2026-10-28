@@ -21,9 +21,10 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 ## Current status
 
 A dependency-free Rust library now converts Bangla digits, 34 consonant letters
-through 37 sequences, lowercase `ng` with selected vowel forms, and
+through 37 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
-with context. This is a partial engine with 1,876 reference-checked examples,
+with context, including `rri` after `Ng`/`NG`/`ng`. This is a partial engine with
+2,150 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Remaining
 letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -44,7 +45,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [basic `R`/`Rh`](docs/v1.md#basic-uppercase-r-and-rh-consonants), then
 [lowercase `z`](docs/v1.md#basic-lowercase-z-consonant), followed by
 [basic `Ng`/`NG`](docs/v1.md#basic-ng-and-ng-consonants), then
-[lowercase `ng`](docs/v1.md#lowercase-ng-sign-and-vowel-forms).
+[lowercase `ng`](docs/v1.md#lowercase-ng-sign-and-vowel-forms), followed by
+[`rri` after `Ng`/`NG`/`ng`](docs/v1.md#following-rri-after-ng-ng-and-ng).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -85,6 +87,7 @@ Try `'baRi gaRi gaRh drriRh'` → `বাড়ি গাড়ি গাঢ় দৃঢ়
 Try `'zai zabe zodi zokhon'` → `যাই যাবে যদি যখন` for lowercase `z`.
 Try `'Ng NG aNgul raNga'` → `ঙ ঞ আঙুল রাঙা` for case-sensitive `Ng`/`NG`.
 Try `'bangla rong nga ngi'` → `বাংলা রং ঙ্গা ঙ্গি` for lowercase `ng`.
+Try `'Ngrri NGrrri ngrrrri'` → `ঙররি ঞরৃ ংররররি` for their following `r` runs.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -110,7 +113,7 @@ except after a raw lowercase `o`. The sequence `oo` is matched first and acts li
 The case-sensitive pairs `OI`/`OU` produce `ঐ`/`ঔ` independently and `ৈ`/`ৌ`
 after consonants (`kOI` → `কৈ`, `kOU` → `কৌ`). They match before single `O`;
 `Oi` still produces `ওই`.
-Lowercase `rri` produces `ঋ` independently and `ৃ` after a supported consonant
+Lowercase `rri` normally produces `ঋ` independently and `ৃ` after a supported consonant
 (`krri` → `কৃ`). The principal forms for all 11 basic vowels are now implemented;
 full context, case aliases, and longer consonant sequences are still incomplete.
 Supported parts of an otherwise unsupported word still convert: `qa` currently
@@ -142,15 +145,17 @@ It remains distinct from uppercase `Z`, whose reference form is ্য; uppercas
 `Z`, related conjuncts, and escapes remain incomplete.
 Exact `Ng`/`NG` produce ঙ/ঞ (U+0999/U+099E), matching before single `N` → ণ.
 They support vowel signs (`Ngi` → `ঙি`, `NGU` → `ঞূ`). Conjuncts such as
-`Ngk` → `ঙ্ক` and escapes remain incomplete. Context for a
-following `rri` also remains incomplete: `Ngrri` currently produces `ঙৃ`, whereas
-the reference produces `ঙররি`; `NGrri` similarly produces `ঞৃ` instead of `ঞররি`.
+`Ngk` → `ঙ্ক` and escapes remain incomplete.
 Lowercase `ng` produces ং (U+0982), as in `bangla` → `বাংলা`. Before the supported
 single-key vowels and `OI`/`OU`, it produces ঙ্গ plus the appropriate vowel sign
 (`nga` → `ঙ্গা`, `ngOI` → `ঙ্গৈ`, `ngo` → `ঙ্গ`). These forms consume their vowel
 first: `ngee` → `ঙ্গেএ`, `ngoo` → `ঙ্গঅ`, rather than using ordinary `ee`/`oo`.
-Longer `ngh`/`nng`, following `rri`, other case variants, and escapes remain
+Longer `ngh`/`nng`, other case variants, and escapes remain
 incomplete; see the linked behavior section for exact partial outputs.
+The prefixes `Ngr`/`NGr`/`ngr` consume their first `r` before the remainder is
+matched. This gives `Ngrri` → `ঙররি`, `NGrri` → `ঞররি`, and `ngrri` → `ংররি`.
+One more `r` leaves a separate `rri` vowel (`Ngrrri` → `ঙরৃ`). This rule is
+specific to these three prefixes; `khrri` still produces `খৃ`.
 
 ## Repeat the reference comparison
 
@@ -172,8 +177,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`s`/`sh`/`S`/`Sh` fixtures](tests/fixtures/consonants-s-sh.tsv),
 [`R`/`Rh` fixtures](tests/fixtures/consonants-r-retroflex.tsv),
 [`z` fixtures](tests/fixtures/consonant-z.tsv),
-[`Ng`/`NG` fixtures](tests/fixtures/consonants-ng-nj.tsv), and
-[`ng` fixtures](tests/fixtures/sign-ng.tsv) record the raw input,
+[`Ng`/`NG` fixtures](tests/fixtures/consonants-ng-nj.tsv),
+[`ng` fixtures](tests/fixtures/sign-ng.tsv), and
+[following-`rri` fixtures](tests/fixtures/nasal-rri.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -189,7 +195,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 1,876 cases used by Rust tests and prints reference outputs for
+It checks the same 2,150 cases used by Rust tests and prints reference outputs for
 seven known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

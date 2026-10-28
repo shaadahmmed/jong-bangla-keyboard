@@ -1,7 +1,8 @@
 # Independently authored for Jong Bangla under MIT; not imported fixtures.
 # Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
 # Columns: raw input, expected output, exact Unicode code points (tab-separated).
-# Longer ngh/nng, following rri, case aliases, and escapes remain separate gaps.
+# Longer ngh/nng, case aliases, and escapes remain separate gaps.
+# Following rri and longer r runs are covered in nasal-rri.tsv.
 ng	ং	U+0982
 ang	আং	U+0986 U+0982
 nga	ঙ্গা	U+0999 U+09CD U+0997 U+09BE
