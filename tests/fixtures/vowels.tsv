@@ -1,0 +1,69 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+a	আ	U+0986
+i	ই	U+0987
+ka	কা	U+0995 U+09BE
+ki	কি	U+0995 U+09BF
+kha	খা	U+0996 U+09BE
+khi	খি	U+0996 U+09BF
+ga	গা	U+0997 U+09BE
+gi	গি	U+0997 U+09BF
+gha	ঘা	U+0998 U+09BE
+ghi	ঘি	U+0998 U+09BF
+ta	তা	U+09A4 U+09BE
+ti	তি	U+09A4 U+09BF
+tha	থা	U+09A5 U+09BE
+thi	থি	U+09A5 U+09BF
+Ta	টা	U+099F U+09BE
+Ti	টি	U+099F U+09BF
+Tha	ঠা	U+09A0 U+09BE
+Thi	ঠি	U+09A0 U+09BF
+na	না	U+09A8 U+09BE
+ni	নি	U+09A8 U+09BF
+Na	ণা	U+09A3 U+09BE
+Ni	ণি	U+09A3 U+09BF
+ba	বা	U+09AC U+09BE
+bi	বি	U+09AC U+09BF
+bha	ভা	U+09AD U+09BE
+bhi	ভি	U+09AD U+09BF
+ma	মা	U+09AE U+09BE
+mi	মি	U+09AE U+09BF
+aa	আআ	U+0986 U+0986
+ai	আই	U+0986 U+0987
+ia	ইয়া	U+0987 U+09DF U+09BE
+ii	ইই	U+0987 U+0987
+aaa	আআআ	U+0986 U+0986 U+0986
+iii	ইইই	U+0987 U+0987 U+0987
+kai	কাই	U+0995 U+09BE U+0987
+kia	কিয়া	U+0995 U+09BF U+09DF U+09BE
+kaa	কাআ	U+0995 U+09BE U+0986
+kii	কিই	U+0995 U+09BF U+0987
+aia	আইয়া	U+0986 U+0987 U+09DF U+09BE
+iai	ইয়াই	U+0987 U+09DF U+09BE U+0987
+iaa	ইয়াআ	U+0987 U+09DF U+09BE U+0986
+iia	ইইয়া	U+0987 U+0987 U+09DF U+09BE
+kaia	কাইয়া	U+0995 U+09BE U+0987 U+09DF U+09BE
+kiia	কিইয়া	U+0995 U+09BF U+0987 U+09DF U+09BE
+1a	১আ	U+09E7 U+0986
+1i	১ই	U+09E7 U+0987
+a1i	আ১ই	U+0986 U+09E7 U+0987
+k1a	ক১আ	U+0995 U+09E7 U+0986
+ka2i	কা২ই	U+0995 U+09BE U+09E8 U+0987
+ka i	কা ই	U+0995 U+09BE U+0020 U+0987
+ki a	কি আ	U+0995 U+09BF U+0020 U+0986
+k-a	ক-আ	U+0995 U+002D U+0986
+k,i	ক,ই	U+0995 U+002C U+0987
+ka,ki	কা,কি	U+0995 U+09BE U+002C U+0995 U+09BF
+a🙂i	আ🙂ই	U+0986 U+1F642 U+0987
+k🙂a	ক🙂আ	U+0995 U+1F642 U+0986
+কa	কআ	U+0995 U+0986
+কi	কই	U+0995 U+0987
+kকi	ককই	U+0995 U+0995 U+0987
+কka	ককা	U+0995 U+0995 U+09BE
+ami	আমি	U+0986 U+09AE U+09BF
+baki	বাকি	U+09AC U+09BE U+0995 U+09BF
+khani	খানি	U+0996 U+09BE U+09A8 U+09BF
+Thami	ঠামি	U+09A0 U+09BE U+09AE U+09BF
+nana	নানা	U+09A8 U+09BE U+09A8 U+09BE
+nini	নিনি	U+09A8 U+09BF U+09A8 U+09BF

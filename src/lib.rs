@@ -1,8 +1,8 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
-//! Supports ASCII digits and only the consonant sequences listed below.
+//! Supports ASCII digits, the consonant sequences below, and lowercase `a`/`i`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
-//! complete Avro-compatible engine: vowels, conjuncts, case normalization,
+//! complete Avro-compatible engine: other vowels, conjuncts, case normalization,
 //! punctuation rules, and escapes are not implemented.
 //!
 //! ```
@@ -10,6 +10,7 @@
 //!
 //! assert_eq!(transliterate("kh12T"), "খ১২ট");
 //! assert_eq!(transliterate("t T th Th n N"), "ত ট থ ঠ ন ণ");
+//! assert_eq!(transliterate("ami khani kia"), "আমি খানি কিয়া");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -29,15 +30,26 @@ const CONSONANTS: [(&str, &str); 13] = [
     ("m", "ম"),
 ];
 
+#[derive(Clone, Copy)]
+enum Context {
+    Consonant,
+    VowelI,
+    Other,
+}
+
 /// Convert the supported sequences and digits, preserving unmatched characters.
 ///
 /// At each position, the longest supported sequence wins (`kh` before `k`).
-/// Matching is case-sensitive. Unsupported larger sequences can still contain
-/// supported parts: `ka` becomes `কa`, and `kkh` becomes `কখ`, not a conjunct.
+/// Lowercase `a`/`i` become vowel signs after a supported consonant and independent
+/// vowels otherwise; `a` immediately after `i` becomes `য়া`. Context follows raw
+/// matched tokens, not preserved Bangla. Matching is case-sensitive. Unsupported
+/// larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
+/// conjunct. Other vowels and backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
 pub fn transliterate(input: &str) -> String {
     let mut remaining = input;
     let mut output = String::with_capacity(input.len());
+    let mut context = Context::Other;
 
     while let Some(ch) = remaining.chars().next() {
         let matched = CONSONANTS
@@ -48,6 +60,21 @@ pub fn transliterate(input: &str) -> String {
         if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
+            context = Context::Consonant;
+        } else if matches!(ch, 'a' | 'i') {
+            output.push_str(match (ch, context) {
+                ('a', Context::Consonant) => "া",
+                ('i', Context::Consonant) => "ি",
+                ('a', Context::VowelI) => "য়া",
+                ('a', _) => "আ",
+                _ => "ই",
+            });
+            context = if ch == 'i' {
+                Context::VowelI
+            } else {
+                Context::Other
+            };
+            remaining = &remaining[ch.len_utf8()..];
         } else {
             output.push(match ch {
                 '0' => '০',
@@ -64,6 +91,7 @@ pub fn transliterate(input: &str) -> String {
             });
             // Advance by a whole UTF-8 character, including for preserved text.
             remaining = &remaining[ch.len_utf8()..];
+            context = Context::Other;
         }
     }
 

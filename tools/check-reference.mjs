@@ -24,26 +24,31 @@ const codePoints = (text) =>
     .map((ch) => `U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4, "0")}`)
     .join(" ");
 
-const fixture = readFileSync(
-  new URL("../tests/fixtures/reference.tsv", import.meta.url),
-  "utf8",
-);
 let count = 0;
-for (const line of fixture.trimEnd().split("\n")) {
-  if (line.startsWith("#")) continue;
-  const columns = line.split("\t");
-  assert.equal(columns.length, 3, `Invalid fixture: ${line}`);
-  const [input, expected, points] = columns;
-  const actual = parse(input);
-  assert.equal(actual, expected, `Reference output for ${JSON.stringify(input)}`);
-  assert.equal(codePoints(actual), points, `Code points for ${JSON.stringify(input)}`);
-  console.log(`${JSON.stringify(input)} -> ${actual} (${points})`);
-  count += 1;
+for (const name of ["reference.tsv", "vowels.tsv"]) {
+  const fixture = readFileSync(
+    new URL(`../tests/fixtures/${name}`, import.meta.url),
+    "utf8",
+  );
+  let fileCount = 0;
+  for (const line of fixture.trimEnd().split("\n")) {
+    if (line.startsWith("#")) continue;
+    const columns = line.split("\t");
+    assert.equal(columns.length, 3, `Invalid fixture: ${line}`);
+    const [input, expected, points] = columns;
+    const actual = parse(input);
+    assert.equal(actual, expected, `Reference output for ${JSON.stringify(input)}`);
+    assert.equal(codePoints(actual), points, `Code points for ${JSON.stringify(input)}`);
+    console.log(`${JSON.stringify(input)} -> ${actual} (${points})`);
+    fileCount += 1;
+  }
+  assert.ok(fileCount > 0, `${name} must contain cases`);
+  count += fileCount;
 }
 console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
 // These probes expose missing behavior; they are not supported-slice fixtures.
-for (const input of ["a", "ka", "kkh", "K", "k`h"]) {
+for (const input of ["u", "kkh", "K", "k`h", "i`"]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);
 }

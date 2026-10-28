@@ -9,21 +9,21 @@ Dates use the project's Asia/Dhaka timezone.
 ## Current position
 
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
-  tracking documentation; pinned phonetic reference; first Rust conversion slice
-  with 27 reference-checked cases.
+  tracking documentation; pinned phonetic reference; first Rust conversion slice;
+  lowercase `a`/`i` vowels with context. There are 93 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Vowels, conjuncts, composition, Fcitx5 integration, and a usable desktop keyboard
-  are not implemented. Full Avro compatibility is not established.
-- **Next:** add a small group of independent and contextual vowel rules, with
-  exact Unicode comparisons against the pinned reference.
+  Other vowels, conjuncts, composition, Fcitx5 integration, and a usable desktop
+  keyboard are not implemented. Full Avro compatibility is not established.
+- **Next:** add the `u`/`U` vowel group, checking its independent forms, vowel
+  signs, case sensitivity, and neighboring vowels against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Choose a small vowel group and independently author cases for word-initial
-   vowels, vowels after consonants, and relevant neighboring input.
+1. Independently author `u`/`U` cases for word-initial vowels, vowels after
+   supported consonants, repeated vowels, and interaction with existing `a`/`i`.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
 3. Add the required context handling to the Rust core without platform or
@@ -31,11 +31,47 @@ Dates use the project's Asia/Dhaka timezone.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the chosen vowel cases match the reference, existing conversion
+**Done when:** the `u`/`U` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — First contextual vowel group
+
+- Added lowercase `a` and `i`: independent আ/ই, dependent া/ি after a supported
+  consonant, and য়া after `i` (`kia` → `কিয়া`). Context uses matched input tokens
+  during a single conversion; digits and unmatched characters reset it. Existing
+  Bangla and other copied Unicode do not establish consonant context.
+- Authored 66 new [vowel fixtures](../tests/fixtures/vowels.tsv) with exact Unicode
+  sequences, and checked them against the pinned parser before implementing the
+  Rust rules. The updated reference checker runs these plus the initial 27 cases:
+  all 93 pass, using the SHA-256-verified external parser with Node.js v24.21.0.
+  No upstream code, rules, or fixtures were added to the repository.
+- Added regressions for vowel adjacency, all 13 supported consonants with both
+  vowels, boundaries, mixed Unicode, and separate conversion calls. Updated
+  earlier temporary-limit tests where `a` is now supported. Fixture readers now
+  reject files with no cases, avoiding an empty fixture passing silently.
+- Updated [README.md](../README.md) examples and [v1.md](v1.md#first-vowel-group)
+  behavior/limits. Kept the original conversion-slice description as history,
+  explicitly marking `a` and `ka` gaps as resolved by this increment.
+- Checks: `cargo test --offline` passed (six regression tests and one documentation
+  example); `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, and
+  `cargo build --offline --release` passed. `node --check` passed; the reference
+  comparison passed all 93 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'ami khani kia'` printed
+  `আমি খানি কিয়া`; six additional documented conversions passed direct CLI checks.
+  Rust/Cargo 1.99.1 and Node.js v24.21.0 were inspected and reused; no dependencies
+  or tools were installed.
+- Documentation checks: UTF-8, local links/heading anchors, final newlines,
+  trailing whitespace, and `git diff --check` passed. The pre-existing untracked
+  `.vscode/` directory was left outside this step.
+- Limitations: uppercase `A`/`I`, other vowels, unsupported-consonant context,
+  conjuncts, punctuation conversion, and escapes remain incomplete. The precise
+  reference sequence for inserted `য়` is U+09DF; no normalization is performed.
+  Composition, platform support, and performance remain unvalidated.
+- Next: implement `u`/`U` as the next small vowel group after reference checks.
 
 ### 2026-10-28 — First Rust conversion slice
 

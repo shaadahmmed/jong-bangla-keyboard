@@ -20,12 +20,14 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 
 ## Current status
 
-A dependency-free Rust library now converts Bangla digits and 13 consonant
-sequences. This is a partial engine with 27 reference-checked examples, not a
-usable desktop keyboard or a full Avro compatibility claim. Vowels, conjuncts,
-composition, and Fcitx5 integration are still missing.
+A dependency-free Rust library now converts Bangla digits, 13 consonant
+sequences, and lowercase `a`/`i` with context. This is a partial engine with 93
+reference-checked examples, not a usable desktop keyboard or a full Avro
+compatibility claim. Other vowels, conjuncts, composition, and Fcitx5 integration
+are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
-[implemented slice](docs/v1.md#first-conversion-slice).
+[initial slice](docs/v1.md#first-conversion-slice) plus the
+[first vowel group](docs/v1.md#first-vowel-group).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -48,22 +50,27 @@ cargo run --offline --example convert -- 'kh12T'
 ```
 
 The last command prints `খ১২ট`. Try `'t T th Th n N'` for `ত ট থ ঠ ন ণ`, or
-`'0123456789'` for `০১২৩৪৫৬৭৮৯`. Pass the input as one quoted argument. The
-example prints the result to the terminal; the library retains no input state
+`'0123456789'` for `০১২৩৪৫৬৭৮৯`. Try `'ami khani kia'` for `আমি খানি কিয়া`.
+Pass the input as one quoted argument. The example prints the result to the
+terminal; the library retains no input state
 and performs no logging, file access, or network access.
 
 The API is `jong_bangla_core::transliterate(&str) -> String`; see
 [src/lib.rs](src/lib.rs). At each position it chooses the longest supported
 sequence, so `kh` becomes one `খ` instead of `কh`. Unmatched characters are
-copied unchanged, including Bangla and emoji. Supported parts of an otherwise
-unsupported word still convert: `ka` currently produces `কa`.
+copied unchanged, including Bangla and emoji. `a`/`i` produce independent `আ`/`ই`
+at the start or after a boundary, and vowel signs after supported consonants:
+`ka` → `কা`, `ki` → `কি`. An `a` immediately after `i` inserts `য়` (`kia` → `কিয়া`).
+Supported parts of an otherwise unsupported word still convert: `ku` currently
+produces `কu` because `u` is not implemented yet.
 
 ## Repeat the reference comparison
 
 This optional development check uses Node.js (verified with the installed
 v24.21.0 LTS-line runtime). Node is not needed to build or use the Rust library.
-Our [authored fixtures](tests/fixtures/reference.tsv) record the raw input,
-expected UTF-8 output, and exact Unicode code points. The comparison calls
+Our [initial fixtures](tests/fixtures/reference.tsv) and
+[vowel fixtures](tests/fixtures/vowels.tsv) record the raw input, expected UTF-8
+output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
 
@@ -78,7 +85,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 27 cases used by Rust tests and prints reference outputs for
+It checks the same 93 cases used by Rust tests and prints reference outputs for
 five known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
