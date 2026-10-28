@@ -24,40 +24,90 @@ Dates use the project's Asia/Dhaka timezone.
   and exceptions; single `Yr`/`Yry` forms omit the basic-`r` joiner.
   Basic lowercase `q` → ক and its vowel context are implemented.
   Basic lowercase `v` → ভ and its vowel context are implemented.
-  There are 4,000 reference-checked cases.
+  Contextual lowercase `w` now handles independent, vowel-following, and
+  consonant-following forms, including the independent following-vowel য়.
+  There are 4,311 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
-  matching prefixes, contextual lowercase `y`, uppercase `Z`/`aZ`/`oZ`, and
+  matching prefixes, contextual lowercase `y`/`w`, uppercase `Z`/`aZ`/`oZ`, and
   selected following-`r` forms after `y`/`Z`/`Y`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** check lowercase `w` and its independent/consonant-following forms
-  against the pinned reference, keeping uppercase aliases and longer forms separate.
+- **Next:** check following-`r` priority after lowercase `w` against the pinned
+  reference, keeping reph, uppercase aliases, and other longer forms separate.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author lowercase `w` cases: standalone output, every supported
-   consonant and vowel/alias before it, following vowels/aliases, repeated keys,
-   digits, boundaries, copied Unicode, and case controls.
+1. Independently author following-`r` cases after lowercase `w`: runs of one
+   through eight `r` keys, `rri` and `rry`/`rrZ` overlaps, following vowels/aliases,
+   differing preceding contexts, repetitions, digits, boundaries, and copied Unicode.
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-   Known gaps include `w` → `ও`, `wa` → `ওয়া`, and `kw` → `ক্ব`.
-3. Add the selected matching/context rules. Keep uppercase aliases, other
-   conjunct/reph forms, longer matches, and escapes explicit. No composition
-   or platform work.
+   Known gaps include `wrr` → `ও্রর` and `wrrri` → `ও্রররি`; existing
+   `wrri` → `ওৃ` must retain priority.
+3. Add the selected following-`r` rules. Keep `rrw` reph, uppercase aliases,
+   other conjuncts, longer matches, and escapes explicit. No composition or
+   platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected lowercase `w` cases match the reference, existing
+**Done when:** the selected following-`r` cases match the reference, existing
 conversion cases still pass, limitations are documented, and this log records
 actual results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Contextual lowercase w
+
+- Added exact lowercase `w`: ও (U+0993) independently/after vowels and ্ব
+  (U+09CD U+09AC) after supported consonants. At the start or after a copied
+  character/digit it adds য় (U+09DF) before a supported vowel key:
+  `wa` → `ওয়া`, versus vowel-following `awa` → `আওা` and consonant-following
+  `kwa` → `ক্বা`. Every form establishes consonant context without a joiner.
+  The 40 basic consonant sequences producing 35 letters remain unchanged.
+- Preserved following-vowel/alias matching, longer `aZ`/`oZ` priority, and
+  repetition (`wrri` → `ওৃ`, `waZ` → `ওয়অ্যা`, `ww` → `ও্ব`, `wy` → `ও্য`).
+  No normalization, spelling correction, input persistence, dependencies, or
+  platform code added.
+- Authored 311 [fixtures](../tests/fixtures/consonant-w.tsv), checked against
+  the SHA-256-verified pinned parser before implementation. They cover every
+  basic consonant before `w` except the separate `rrw` reph gap, additional
+  context forms, every supported vowel/alias on either side, following-vowel
+  transitions, repetition, `y`/`Y`/`Z` distinctions, all digits, boundaries,
+  copied Unicode, and words. All 4,311 reference cases match under Node.js
+  v24.21.0. No upstream source, rules, or fixtures imported.
+- The focused Rust regression failed on `w` before implementation and passed
+  afterward. Extended control-character boundaries, separate-call, and long-buffer
+  regressions; the full run passed. Kept uppercase aliases, `wrr`/`wrrri`,
+  `rrw`, and escapes as explicit partial-output regressions and refreshed seven
+  reference gap probes.
+- Updated [README.md](../README.md) and [v1.md](v1.md#contextual-lowercase-w)
+  with exact Unicode, matching context, examples, case count, limitations, and
+  next work. Marked the earlier `w` probe as historical and replaced obsolete
+  README descriptions of unsupported `w` with still-unsupported `x`.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (31 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'w wa awa kw kwa'`
+  printed `ও ওয়া আওা ক্ব ক্বা`; 21 new documented conversions also passed
+  direct CLI checks. Rechecked and reused Rust/Cargo 1.99.1 and Node.js v24.21.0.
+  No tools upgraded; the external parser stays outside the repository.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors, final
+  newlines, trailing whitespace, fixture counts/code points, distinct new inputs,
+  both runner registrations, and `git diff --check` passed. The pre-existing
+  untracked `.vscode/` is untouched.
+- Limitations: following-`r` attachment after `w`, `rrw` reph, remaining letters
+  and aliases, other conjuncts, punctuation/escapes, composition, and platform
+  integration remain incomplete. No broader compatibility, performance, or
+  platform validation claimed.
+- Next: check following-`r` priority after lowercase `w` as a separate
+  reference-checked increment.
 
 ### 2026-10-28 — Basic lowercase v consonant
 

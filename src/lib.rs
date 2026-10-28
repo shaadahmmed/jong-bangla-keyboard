@@ -1,6 +1,6 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
-//! Supports ASCII digits, contextual lowercase `y`, uppercase `Z` and `aZ`/`oZ`,
+//! Supports ASCII digits, contextual lowercase `y`/`w`, uppercase `Z` and `aZ`/`oZ`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -38,6 +38,7 @@
 //! assert_eq!(transliterate("Yr Yrri Yry Yrry"), "য়্র য়ৃ য়্র্য য়রর\u{200D}্য");
 //! assert_eq!(transliterate("q qa qi qOI qotha"), "ক কা কি কৈ কথা");
 //! assert_eq!(transliterate("v vi vU valO vUmi"), "ভ ভি ভূ ভালো ভূমি");
+//! assert_eq!(transliterate("w wa awa kw kwa"), "ও ওয়া আওা ক্ব ক্বা");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -139,6 +140,10 @@ enum Context {
 /// and rry/rrZ keep priority. Zry/ZrZ add ্র without a joiner; yry/yrZ retain it.
 /// Uppercase Y shares the two-r rule and exceptions; a single following r adds
 /// ্র, including before y/Z, without setting the basic-r joiner flag.
+/// Lowercase w produces ্ব after a consonant and ও otherwise. At a boundary,
+/// it adds য় before a following supported single-key vowel (including aliases
+/// beginning with that key). After a vowel it adds only ও. Every w establishes
+/// consonant context for following signs; rri does not trigger the extra য়.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -204,6 +209,18 @@ pub fn transliterate(input: &str) -> String {
             });
             remaining = &remaining[1..];
             remaining = consume_ya_r_prefix(remaining, ch, &mut output);
+            context = Context::Consonant { ya_joiner: false };
+        } else if ch == 'w' {
+            remaining = &remaining[1..];
+            output.push_str(match context {
+                Context::Consonant { .. } => "্ব",
+                Context::Other
+                    if remaining.starts_with(['a', 'i', 'I', 'u', 'U', 'e', 'o', 'O']) =>
+                {
+                    "ওয়"
+                }
+                _ => "ও",
+            });
             context = Context::Consonant { ya_joiner: false };
         } else if remaining.starts_with("aZ") || remaining.starts_with("oZ") {
             // Match both ASCII keys before contextual a/o, even after a consonant.

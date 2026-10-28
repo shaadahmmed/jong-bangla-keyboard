@@ -130,6 +130,11 @@ fn lowercase_v_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/consonant-v.tsv"));
 }
 
+#[test]
+fn lowercase_w_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consonant-w.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -167,6 +172,15 @@ fn empty_input_and_unmatched_unicode_are_preserved() {
 fn unsupported_rules_still_preserve_unmatched_characters() {
     for (input, expected) in [
         ("E", "E"),
+        ("W", "W"),
+        ("Wa", "Wআ"),
+        ("wA", "ওA"),
+        ("wE", "ওE"),
+        ("wrr", "ওরর"),
+        ("wrrri", "ওরররি"),
+        ("rrw", "রর্ব"),
+        ("w`a", "ও`আ"),
+        ("w`h", "ও`হ"),
         ("Q", "Q"),
         ("Qa", "Qআ"),
         ("V", "V"),
@@ -278,6 +292,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = input + &"🙂Yr1Yrri2Yry3Yrry4Yrrrri".repeat(4096);
     let input = input + &"🙂qa1qia2qU3qOI4qrri5qy".repeat(4096);
     let input = input + &"🙂va1via2vU3vOI4vrri5vy".repeat(4096);
+    let input = input + &"🙂wa1awa2kwa3wwi4wrri5wy".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -294,6 +309,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let expected = expected + &"🙂য়্র১য়ৃ২য়্র্য৩য়রর\u{200D}্য৪য়্ররৃ".repeat(4096);
     let expected = expected + &"🙂কা১কিয়া২কূ৩কৈ৪কৃ৫ক্য".repeat(4096);
     let expected = expected + &"🙂ভা১ভিয়া২ভূ৩ভৈ৪ভৃ৫ভ্য".repeat(4096);
+    let expected = expected + &"🙂ওয়া১আওা২ক্বা৩ও্বি৪ওৃ৫ও্য".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -311,6 +327,10 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
         assert_eq!(
             transliterate(&format!("r{boundary}Z")),
             format!("র{boundary}্য")
+        );
+        assert_eq!(
+            transliterate(&format!("k{boundary}wa")),
+            format!("ক{boundary}ওয়া")
         );
         for (raw, expected) in [("r", "র"), ("ay", "আয়"), ("ky", "ক্য")] {
             assert_eq!(
@@ -337,6 +357,8 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
                 ("k", "ক"),
                 ("q", "ক"),
                 ("v", "ভ"),
+                ("w", "ও"),
+                ("kw", "ক্ব"),
                 ("l", "ল"),
                 ("h", "হ"),
                 ("s", "স"),
@@ -371,6 +393,10 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     assert_eq!(transliterate("a"), "আ");
     assert_eq!(transliterate("v"), "ভ");
     assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("w"), "ও");
+    assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("k"), "ক");
+    assert_eq!(transliterate("wa"), "ওয়া");
     assert_eq!(transliterate("i"), "ই");
     assert_eq!(transliterate("a"), "আ");
     assert_eq!(transliterate("I"), "ঈ");
