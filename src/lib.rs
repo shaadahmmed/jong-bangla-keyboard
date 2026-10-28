@@ -1,9 +1,9 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
-//! Supports ASCII digits, the consonant sequences below, and
+//! Supports ASCII digits, lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
-//! complete Avro-compatible engine: remaining consonants, conjuncts, case
+//! complete Avro-compatible engine: remaining consonants, other conjuncts, case
 //! normalization, punctuation rules, and escapes are not implemented.
 //!
 //! ```
@@ -28,6 +28,7 @@
 //! assert_eq!(transliterate("baRi gaRi gaRh drriRh"), "বাড়ি গাড়ি গাঢ় দৃঢ়");
 //! assert_eq!(transliterate("zai zabe zodi zokhon"), "যাই যাবে যদি যখন");
 //! assert_eq!(transliterate("Ng NG aNgul raNga"), "ঙ ঞ আঙুল রাঙা");
+//! assert_eq!(transliterate("bangla rong nga ngi"), "বাংলা রং ঙ্গা ঙ্গি");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -71,6 +72,21 @@ const CONSONANTS: [(&str, &str); 37] = [
     ("z", "য"),
 ];
 
+// Independently authored ng-vowel forms checked against the pinned reference.
+// Consume only one e/o: ngee -> ঙ্গেএ and ngoo -> ঙ্গঅ, unlike ordinary ee/oo.
+const NG_VOWELS: [(&str, &str, char); 10] = [
+    ("OI", "ৈ", 'I'),
+    ("OU", "ৌ", 'U'),
+    ("a", "া", 'a'),
+    ("i", "ি", 'i'),
+    ("I", "ী", 'I'),
+    ("u", "ু", 'u'),
+    ("U", "ূ", 'U'),
+    ("e", "ে", 'e'),
+    ("o", "", 'o'),
+    ("O", "ো", 'O'),
+];
+
 #[derive(Clone, Copy)]
 enum Context {
     Consonant,
@@ -90,6 +106,8 @@ enum Context {
 /// Lowercase `o` after a supported raw vowel other than `o` becomes ও.
 /// An `a` after a supported vowel other than `a` becomes `য়া`. Context
 /// follows raw matched tokens, not preserved Bangla. Matching is case-sensitive.
+/// Lowercase `ng` produces ং, or ঙ্গ with a vowel sign in the selected ng-vowel
+/// forms. These consume their vowel before ordinary ee/oo aliases are considered.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -104,7 +122,23 @@ pub fn transliterate(input: &str) -> String {
             .filter(|(raw, _)| remaining.starts_with(raw))
             .max_by_key(|(raw, _)| raw.len());
 
-        if remaining.starts_with("rri") {
+        if let Some(after_ng) = remaining.strip_prefix("ng") {
+            let vowel = NG_VOWELS
+                .iter()
+                .filter(|(raw, _, _)| after_ng.starts_with(raw))
+                .max_by_key(|(raw, _, _)| raw.len());
+            if let Some((raw, sign, last_key)) = vowel {
+                output.push_str("ঙ্গ");
+                output.push_str(sign);
+                context = Context::Vowel(*last_key);
+                remaining = &after_ng[raw.len()..];
+            } else {
+                output.push('ং');
+                // The raw match ends in g; following rri remains a context gap.
+                context = Context::Consonant;
+                remaining = after_ng;
+            }
+        } else if remaining.starts_with("rri") {
             // Match the three ASCII keys before individual consonants.
             output.push_str(if matches!(context, Context::Consonant) {
                 "ৃ"

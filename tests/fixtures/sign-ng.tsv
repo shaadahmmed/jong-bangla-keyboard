@@ -1,0 +1,114 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+# Longer ngh/nng, following rri, case aliases, and escapes remain separate gaps.
+ng	ং	U+0982
+ang	আং	U+0986 U+0982
+nga	ঙ্গা	U+0999 U+09CD U+0997 U+09BE
+ing	ইং	U+0987 U+0982
+ngi	ঙ্গি	U+0999 U+09CD U+0997 U+09BF
+Ing	ঈং	U+0988 U+0982
+ngI	ঙ্গী	U+0999 U+09CD U+0997 U+09C0
+ung	উং	U+0989 U+0982
+ngu	ঙ্গু	U+0999 U+09CD U+0997 U+09C1
+Ung	ঊং	U+098A U+0982
+ngU	ঙ্গূ	U+0999 U+09CD U+0997 U+09C2
+eng	এং	U+098F U+0982
+nge	ঙ্গে	U+0999 U+09CD U+0997 U+09C7
+eeng	ঈং	U+0988 U+0982
+ngee	ঙ্গেএ	U+0999 U+09CD U+0997 U+09C7 U+098F
+ong	অং	U+0985 U+0982
+ngo	ঙ্গ	U+0999 U+09CD U+0997
+Ong	ওং	U+0993 U+0982
+ngO	ঙ্গো	U+0999 U+09CD U+0997 U+09CB
+oong	উং	U+0989 U+0982
+ngoo	ঙ্গঅ	U+0999 U+09CD U+0997 U+0985
+OIng	ঐং	U+0990 U+0982
+ngOI	ঙ্গৈ	U+0999 U+09CD U+0997 U+09C8
+OUng	ঔং	U+0994 U+0982
+ngOU	ঙ্গৌ	U+0999 U+09CD U+0997 U+09CC
+rring	ঋং	U+098B U+0982
+ngk	ংক	U+0982 U+0995
+ngkh	ংখ	U+0982 U+0996
+ngg	ংগ	U+0982 U+0997
+nggh	ংঘ	U+0982 U+0998
+ngt	ংত	U+0982 U+09A4
+ngth	ংথ	U+0982 U+09A5
+ngT	ংট	U+0982 U+099F
+ngTh	ংঠ	U+0982 U+09A0
+ngN	ংণ	U+0982 U+09A3
+ngb	ংব	U+0982 U+09AC
+ngbh	ংভ	U+0982 U+09AD
+ngm	ংম	U+0982 U+09AE
+ngp	ংপ	U+0982 U+09AA
+ngph	ংফ	U+0982 U+09AB
+ngf	ংফ	U+0982 U+09AB
+ngc	ংচ	U+0982 U+099A
+ngch	ংছ	U+0982 U+099B
+ngj	ংজ	U+0982 U+099C
+ngjh	ংঝ	U+0982 U+099D
+ngd	ংদ	U+0982 U+09A6
+ngdh	ংধ	U+0982 U+09A7
+ngD	ংড	U+0982 U+09A1
+ngDh	ংঢ	U+0982 U+09A2
+ngl	ংল	U+0982 U+09B2
+ngs	ংস	U+0982 U+09B8
+ngsh	ংশ	U+0982 U+09B6
+ngS	ংশ	U+0982 U+09B6
+ngSh	ংষ	U+0982 U+09B7
+ngR	ংড়	U+0982 U+09DC
+ngRh	ংঢ়	U+0982 U+09DD
+ngz	ংয	U+0982 U+09AF
+ngNg	ংঙ	U+0982 U+0999
+ngNG	ংঞ	U+0982 U+099E
+ngng	ংং	U+0982 U+0982
+ngngng	ংংং	U+0982 U+0982 U+0982
+ngnga	ংঙ্গা	U+0982 U+0999 U+09CD U+0997 U+09BE
+ngngI	ংঙ্গী	U+0982 U+0999 U+09CD U+0997 U+09C0
+n g	ন গ	U+09A8 U+0020 U+0997
+n Ng NG ng	ন ঙ ঞ ং	U+09A8 U+0020 U+0999 U+0020 U+099E U+0020 U+0982
+Ngng	ঙং	U+0999 U+0982
+NGng	ঞং	U+099E U+0982
+ngia	ঙ্গিয়া	U+0999 U+09CD U+0997 U+09BF U+09DF U+09BE
+ngIa	ঙ্গীয়া	U+0999 U+09CD U+0997 U+09C0 U+09DF U+09BE
+ngua	ঙ্গুয়া	U+0999 U+09CD U+0997 U+09C1 U+09DF U+09BE
+ngUa	ঙ্গূয়া	U+0999 U+09CD U+0997 U+09C2 U+09DF U+09BE
+ngea	ঙ্গেয়া	U+0999 U+09CD U+0997 U+09C7 U+09DF U+09BE
+ngeea	ঙ্গেএয়া	U+0999 U+09CD U+0997 U+09C7 U+098F U+09DF U+09BE
+ngoa	ঙ্গয়া	U+0999 U+09CD U+0997 U+09DF U+09BE
+ngOa	ঙ্গোয়া	U+0999 U+09CD U+0997 U+09CB U+09DF U+09BE
+ngooa	ঙ্গঅয়া	U+0999 U+09CD U+0997 U+0985 U+09DF U+09BE
+ngOIa	ঙ্গৈয়া	U+0999 U+09CD U+0997 U+09C8 U+09DF U+09BE
+ngOUa	ঙ্গৌয়া	U+0999 U+09CD U+0997 U+09CC U+09DF U+09BE
+ngaa	ঙ্গাআ	U+0999 U+09CD U+0997 U+09BE U+0986
+ngai	ঙ্গাই	U+0999 U+09CD U+0997 U+09BE U+0987
+ngiO	ঙ্গিও	U+0999 U+09CD U+0997 U+09BF U+0993
+ngeee	ঙ্গেঈ	U+0999 U+09CD U+0997 U+09C7 U+0988
+ngooo	ঙ্গউ	U+0999 U+09CD U+0997 U+0989
+ngOIo	ঙ্গৈও	U+0999 U+09CD U+0997 U+09C8 U+0993
+ngOUo	ঙ্গৌও	U+0999 U+09CD U+0997 U+09CC U+0993
+ng a	ং আ	U+0982 U+0020 U+0986
+ ng	 ং	U+0020 U+0982
+ng,a	ং,আ	U+0982 U+002C U+0986
+,ng	,ং	U+002C U+0982
+ng-a	ং-আ	U+0982 U+002D U+0986
+-ng	-ং	U+002D U+0982
+ng🙂a	ং🙂আ	U+0982 U+1F642 U+0986
+🙂ng	🙂ং	U+1F642 U+0982
+ngকa	ংকআ	U+0982 U+0995 U+0986
+কng	কং	U+0995 U+0982
+ngংa	ংংআ	U+0982 U+0982 U+0986
+ংng	ংং	U+0982 U+0982
+nǵa	ং́আ	U+0982 U+0301 U+0986
+́ng	́ং	U+0301 U+0982
+ngéa	ংéআ	U+0982 U+00E9 U+0986
+éng	éং	U+00E9 U+0982
+ng1a	ং১আ	U+0982 U+09E7 U+0986
+1ng	১ং	U+09E7 U+0982
+bangla	বাংলা	U+09AC U+09BE U+0982 U+09B2 U+09BE
+rong	রং	U+09B0 U+0982
+song	সং	U+09B8 U+0982
+sOng	সোং	U+09B8 U+09CB U+0982
+kang	কাং	U+0995 U+09BE U+0982
+bangla rong song	বাংলা রং সং	U+09AC U+09BE U+0982 U+09B2 U+09BE U+0020 U+09B0 U+0982 U+0020 U+09B8 U+0982
+ng Ng NG bangla	ং ঙ ঞ বাংলা	U+0982 U+0020 U+0999 U+0020 U+099E U+0020 U+09AC U+09BE U+0982 U+09B2 U+09BE

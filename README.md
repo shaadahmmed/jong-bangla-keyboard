@@ -21,8 +21,9 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 ## Current status
 
 A dependency-free Rust library now converts Bangla digits, 34 consonant letters
-through 37 sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
-with context. This is a partial engine with 1,766 reference-checked examples,
+through 37 sequences, lowercase `ng` with selected vowel forms, and
+`a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
+with context. This is a partial engine with 1,876 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Remaining
 letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -42,7 +43,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [`s`/`sh`/`S`/`Sh` group](docs/v1.md#confirmed-s-sh-s-and-sh-mapping), followed by
 [basic `R`/`Rh`](docs/v1.md#basic-uppercase-r-and-rh-consonants), then
 [lowercase `z`](docs/v1.md#basic-lowercase-z-consonant), followed by
-[basic `Ng`/`NG`](docs/v1.md#basic-ng-and-ng-consonants).
+[basic `Ng`/`NG`](docs/v1.md#basic-ng-and-ng-consonants), then
+[lowercase `ng`](docs/v1.md#lowercase-ng-sign-and-vowel-forms).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -82,6 +84,7 @@ Try `'sokal shishu SiSu bhaSha'` → `সকাল শিশু শিশু ভ
 Try `'baRi gaRi gaRh drriRh'` → `বাড়ি গাড়ি গাঢ় দৃঢ়` for `R`/`Rh`.
 Try `'zai zabe zodi zokhon'` → `যাই যাবে যদি যখন` for lowercase `z`.
 Try `'Ng NG aNgul raNga'` → `ঙ ঞ আঙুল রাঙা` for case-sensitive `Ng`/`NG`.
+Try `'bangla rong nga ngi'` → `বাংলা রং ঙ্গা ঙ্গি` for lowercase `ng`.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -138,10 +141,16 @@ Lowercase `z` produces য (U+09AF), with supported vowel signs (`zi` → `য�
 It remains distinct from uppercase `Z`, whose reference form is ্য; uppercase
 `Z`, related conjuncts, and escapes remain incomplete.
 Exact `Ng`/`NG` produce ঙ/ঞ (U+0999/U+099E), matching before single `N` → ণ.
-They support vowel signs (`Ngi` → `ঙি`, `NGU` → `ঞূ`). Lowercase `ng` → ং,
-conjuncts such as `Ngk` → `ঙ্ক`, and escapes remain incomplete. Context for a
+They support vowel signs (`Ngi` → `ঙি`, `NGU` → `ঞূ`). Conjuncts such as
+`Ngk` → `ঙ্ক` and escapes remain incomplete. Context for a
 following `rri` also remains incomplete: `Ngrri` currently produces `ঙৃ`, whereas
 the reference produces `ঙররি`; `NGrri` similarly produces `ঞৃ` instead of `ঞররি`.
+Lowercase `ng` produces ং (U+0982), as in `bangla` → `বাংলা`. Before the supported
+single-key vowels and `OI`/`OU`, it produces ঙ্গ plus the appropriate vowel sign
+(`nga` → `ঙ্গা`, `ngOI` → `ঙ্গৈ`, `ngo` → `ঙ্গ`). These forms consume their vowel
+first: `ngee` → `ঙ্গেএ`, `ngoo` → `ঙ্গঅ`, rather than using ordinary `ee`/`oo`.
+Longer `ngh`/`nng`, following `rri`, other case variants, and escapes remain
+incomplete; see the linked behavior section for exact partial outputs.
 
 ## Repeat the reference comparison
 
@@ -162,8 +171,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`l`/`h` fixtures](tests/fixtures/consonants-l-h.tsv),
 [`s`/`sh`/`S`/`Sh` fixtures](tests/fixtures/consonants-s-sh.tsv),
 [`R`/`Rh` fixtures](tests/fixtures/consonants-r-retroflex.tsv),
-[`z` fixtures](tests/fixtures/consonant-z.tsv), and
-[`Ng`/`NG` fixtures](tests/fixtures/consonants-ng-nj.tsv) record the raw input,
+[`z` fixtures](tests/fixtures/consonant-z.tsv),
+[`Ng`/`NG` fixtures](tests/fixtures/consonants-ng-nj.tsv), and
+[`ng` fixtures](tests/fixtures/sign-ng.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -179,7 +189,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 1,766 cases used by Rust tests and prints reference outputs for
+It checks the same 1,876 cases used by Rust tests and prints reference outputs for
 seven known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

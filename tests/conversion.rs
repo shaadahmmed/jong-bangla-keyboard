@@ -85,6 +85,11 @@ fn ng_ng_consonant_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/consonants-ng-nj.tsv"));
 }
 
+#[test]
+fn lowercase_ng_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/sign-ng.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -134,7 +139,11 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("zZ", "যZ"),
         ("zr", "যর"),
         ("z`h", "য`হ"),
-        ("ng", "নগ"),
+        ("ngh", "ংহ"),
+        ("nng", "নং"),
+        ("ngrri", "ংৃ"),
+        ("nG", "নG"),
+        ("ng`a", "ং`আ"),
         ("Ngk", "ঙক"),
         ("NGc", "ঞচ"),
         ("NGch", "ঞছ"),
@@ -206,6 +215,7 @@ fn long_mixed_input_preserves_character_boundaries() {
         input + &"cichijijhi".repeat(4096) + &"didhIDuDhO".repeat(4096) + &"lihU".repeat(4096);
     let input = input + &"sishI SuShO".repeat(4096) + &"RiRhORrri".repeat(4096);
     let input = input + &"zizU".repeat(4096) + &"NgiNGU".repeat(4096);
+    let input = input + &"ngang1ngoo".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -213,6 +223,7 @@ fn long_mixed_input_preserves_character_boundaries() {
         expected + &"চিছিজিঝি".repeat(4096) + &"দিধীডুঢো".repeat(4096) + &"লিহূ".repeat(4096);
     let expected = expected + &"সিশী শুষো".repeat(4096) + &"ড়িঢ়োড়ৃ".repeat(4096);
     let expected = expected + &"যিযূ".repeat(4096) + &"ঙিঞূ".repeat(4096);
+    let expected = expected + &"ঙ্গাং১ঙ্গঅ".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -247,6 +258,7 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
                 ("z", "য"),
                 ("Ng", "ঙ"),
                 ("NG", "ঞ"),
+                ("ng", "ং"),
             ] {
                 let input = format!("{raw}{boundary}{vowel} {vowel}{boundary}a");
                 let expected = format!("{letter}{boundary}{independent} {independent}{boundary}আ");
@@ -316,4 +328,6 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
         assert_eq!(transliterate(raw), expected);
         assert_eq!(transliterate("a"), "আ");
     }
+    assert_eq!(transliterate("ng"), "ং");
+    assert_eq!(transliterate("a"), "আ");
 }

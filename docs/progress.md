@@ -13,38 +13,81 @@ Dates use the project's Asia/Dhaka timezone.
   `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri` vowel forms.
   Basic `r`/`rr`, `p`/`ph`/`f`, `c`/`ch`/`j`/`jh`, `d`/`dh`/`D`/`Dh`, `l`/`h`,
   `s`/`sh`/`S`/`Sh`, `R`/`Rh`, lowercase `z`, and `Ng`/`NG` consonant matching is
-  implemented. There are 1,766 reference-checked cases.
+  implemented. Lowercase `ng` → ং and selected ng-vowel forms are implemented.
+  There are 1,876 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 37 consonant sequences (34 letters)
-  exist.
+  exist, plus lowercase `ng` and its selected vowel forms.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
-  compatibility is not established; following-`rri` context after `Ng`/`NG` is a
+  compatibility is not established; following-`rri` context after `Ng`/`NG`/`ng` is a
   documented gap.
-- **Next:** add lowercase `ng` → ং, checking exact Unicode, priority over `n`,
-  case distinctions, and surrounding vowel context against the pinned reference.
+- **Next:** resolve following-`rri` context after `Ng`/`NG`/`ng`, checking longer
+  `r` runs and boundaries against the pinned reference before changing matching.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author lowercase `ng` cases with neighboring vowels, consonants,
-   digits, and copied Unicode. Standalone `ng` → ং (U+0982) is already
-   reference-verified. Check priority over single `n` and keep `Ng` → ঙ and
-   `NG` → ঞ distinct; do not assume ং behaves like a consonant before vowels.
+1. Independently author cases for `rri` following `Ng`/`NG`/`ng`, including longer
+   `r` runs, vowel transitions, and boundaries. The reference already confirms
+   `Ngrri` → `ঙররি`, `NGrri` → `ঞররি`, and `ngrri` → `ংররি`; do not infer a
+   general rule for other multi-key consonants without probing them.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
-3. Add only lowercase `ng`. Keep incomplete consonants, conjuncts, reph, and other
-   context behavior explicit; no composition/platform work.
+3. Fix the selected `rri` context cases. Preserve existing standalone and
+   dependent-vowel cases; keep other incomplete context, consonants, conjuncts,
+   and reph explicit. No composition/platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected `ng` cases match the reference, existing conversion
+**Done when:** the selected following-`rri` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Lowercase ng sign and vowel forms
+
+- Added exact lowercase `ng` → ং (U+0982) before single `n`, distinct from
+  `Ng` → ঙ and `NG` → ঞ. Added the reference's selected ng-vowel forms producing
+  ঙ্গ (U+0999 U+09CD U+0997) with the corresponding vowel sign. This is a sign
+  and specific longer forms; the 37 consonant sequences (34 letters) are unchanged.
+- Reference probes established that `nga` → `ঙ্গা`, rather than attaching a sign
+  to ং. The longer forms consume their vowel keys before ordinary aliases:
+  `ngee` → `ঙ্গেএ`, `ngoo` → `ঙ্গঅ`. Matching `OI`/`OU` before `O` and retaining
+  the last raw vowel key preserves `ngOI` → `ঙ্গৈ` and `ngia` → `ঙ্গিয়া`.
+  Longer `ngh`/`nng`, following `rri`, case variants, and escapes remain gaps.
+- Authored 110 [fixtures](../tests/fixtures/sign-ng.tsv), checked against the
+  SHA-256-verified pinned external parser before Rust implementation. They cover
+  vowel prefixes/suffixes, repeated vowel keys and transitions, adjacent consonants,
+  repeated signs, case distinctions, digits, boundaries, copied Unicode, and
+  words. All 1,876 reference cases match under Node.js v24.21.0; seven gap probes
+  report remaining behavior. No upstream source, rules, or fixtures imported.
+- Extended Unicode-boundary, separate-call, and long-buffer checks. Removed the
+  old unsupported-`ng` expectation and recorded partial outputs for the new gap
+  probes. Updated [README.md](../README.md) and
+  [v1.md](v1.md#lowercase-ng-sign-and-vowel-forms) with exact Unicode, examples,
+  matching priority, counts, and limits. No dependencies or platform code added.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (22 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'bangla rong nga ngi'`
+  printed `বাংলা রং ঙ্গা ঙ্গি`. Rechecked and reused Rust/Cargo 1.99.1 and
+  Node.js v24.21.0; no tools installed or upgraded. The external reference remains
+  outside the repository; the pre-existing untracked `.vscode/` directory is untouched.
+- Documentation/fixture checks: UTF-8 decoding, 145 local Markdown links/anchors
+  across four documents, final newlines, trailing whitespace, all fixture counts
+  and code points, both runner registrations, distinct new inputs, and
+  `git diff --check` passed.
+- Limitations: following-`rri` context after `Ng`/`NG`/`ng`, other longer
+  consonant/conjunct/reph forms, aliases, punctuation/escapes, composition, and
+  platform integration remain incomplete. No full compatibility, performance,
+  or platform validation claimed.
+- Next: resolve following-`rri` context after `Ng`/`NG`/`ng` as a separate
+  increment after independently checking longer runs and boundaries.
 
 ### 2026-10-28 — Basic Ng/NG consonants
 
