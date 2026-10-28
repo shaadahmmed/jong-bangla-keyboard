@@ -11,24 +11,25 @@ Dates use the project's Asia/Dhaka timezone.
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
   `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri` vowel forms.
-  Basic `r`/`rr` and `p`/`ph`/`f` consonant matching is implemented. There are
-  937 reference-checked cases.
+  Basic `r`/`rr`, `p`/`ph`/`f`, and `c`/`ch`/`j`/`jh` consonant matching is
+  implemented. There are 1,085 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Principal forms for all 11 basic vowels and 18 consonant sequences (16 letters)
+  Principal forms for all 11 basic vowels and 22 consonant sequences (20 letters)
   exist.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** add the `c`/`ch`/`j`/`jh` group for চ/ছ/জ/ঝ, checking exact Unicode
-  and longest-sequence matching against the pinned reference.
+- **Next:** add the `d`/`dh`/`D`/`Dh` group for দ/ধ/ড/ঢ, checking exact Unicode,
+  case distinctions, and longest-sequence matching against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author `c`/`ch`/`j`/`jh` cases alone, with supported vowels/aliases,
-   and around neighboring input. Verify `ch` and `jh` priority over single keys.
+1. Independently author `d`/`dh`/`D`/`Dh` cases alone, with supported vowels/aliases,
+   and around neighboring input. Verify case distinctions and `dh`/`Dh` priority
+   over single keys.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
 3. Add only this basic consonant group. Keep incomplete consonants, conjuncts,
@@ -36,11 +37,49 @@ Dates use the project's Asia/Dhaka timezone.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected `c`/`ch`/`j`/`jh` cases match the reference, existing conversion
+**Done when:** the selected `d`/`dh`/`D`/`Dh` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Basic c/ch/j/jh consonants
+
+- Added lowercase `c` → চ (U+099A), `ch` → ছ (U+099B), `j` → জ (U+099C), and
+  `jh` → ঝ (U+099D). The existing longest-match rule handles `ch` and `jh` before
+  single keys. All four establish consonant context for supported vowel signs.
+  There are now 22 consonant input sequences producing 20 distinct letters.
+- Authored 148 [fixtures](../tests/fixtures/consonants-c-ch-j-jh.tsv), checked
+  against the pinned parser before Rust changes. Cases cover each pattern alone,
+  all supported vowels/aliases before and after it, digits, boundaries, copied
+  Unicode, and words. All 1,085 reference cases match with the SHA-256-verified
+  external parser under Node.js v24.21.0. No upstream source, rules, or fixtures
+  imported.
+- Extended long-buffer and separate-call checks and recorded temporary limits
+  for conjuncts, uppercase variants, standalone `h`, and escapes. Reference `Jh`
+  produces জহ, distinct from `jh` → ঝ; no blanket case normalization added.
+  Updated [README.md](../README.md) and
+  [v1.md](v1.md#basic-c-ch-j-and-jh-consonants) with exact Unicode, current counts,
+  examples, and remaining gaps. No dependencies or platform code added.
+- Checks: `cargo test --offline` passed (15 regression tests and one documentation
+  example); `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, and
+  `cargo build --offline --release` passed. The reference comparison passed all
+  1,085 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'cabi chabi jani jhuri'`
+  printed `চাবি ছাবি জানি ঝুরি`; 20 additional CLI checks passed for the new
+  patterns, vowel signs, boundaries, words, and documented partial outputs.
+  Reused inspected Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools were installed
+  or upgraded.
+- Documentation/tool checks: `node --check`, UTF-8 decoding, 94 local Markdown
+  links/anchors across four files, final newlines, trailing whitespace, and
+  `git diff --check` passed. The pre-existing untracked `.vscode/` directory was
+  left untouched.
+- Limitations: `cc`, `cch`, `jjh`, `cr`, uppercase variants, standalone `h`,
+  remaining consonants, conjunct/reph forms, punctuation/escapes, composition,
+  and platform integration remain incomplete. No full compatibility or
+  performance/platform validation claimed.
+- Next: add basic `d`/`dh`/`D`/`Dh` for দ/ধ/ড/ঢ as a separate consonant increment.
 
 ### 2026-10-28 — Basic p/ph/f consonants
 

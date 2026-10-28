@@ -1,0 +1,151 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+c	চ	U+099A
+ca	চা	U+099A U+09BE
+ac	আচ	U+0986 U+099A
+ci	চি	U+099A U+09BF
+ic	ইচ	U+0987 U+099A
+cI	চী	U+099A U+09C0
+Ic	ঈচ	U+0988 U+099A
+cu	চু	U+099A U+09C1
+uc	উচ	U+0989 U+099A
+cU	চূ	U+099A U+09C2
+Uc	ঊচ	U+098A U+099A
+ce	চে	U+099A U+09C7
+ec	এচ	U+098F U+099A
+cee	চী	U+099A U+09C0
+eec	ঈচ	U+0988 U+099A
+co	চ	U+099A
+oc	অচ	U+0985 U+099A
+cO	চো	U+099A U+09CB
+Oc	ওচ	U+0993 U+099A
+coo	চু	U+099A U+09C1
+ooc	উচ	U+0989 U+099A
+cOI	চৈ	U+099A U+09C8
+OIc	ঐচ	U+0990 U+099A
+cOU	চৌ	U+099A U+09CC
+OUc	ঔচ	U+0994 U+099A
+crri	চৃ	U+099A U+09C3
+rric	ঋচ	U+098B U+099A
+1c	১চ	U+09E7 U+099A
+c1a	চ১আ	U+099A U+09E7 U+0986
+c🙂a	চ🙂আ	U+099A U+1F642 U+0986
+কc	কচ	U+0995 U+099A
+k-c	ক-চ	U+0995 U+002D U+099A
+c a	চ আ	U+099A U+0020 U+0986
+c,i	চ,ই	U+099A U+002C U+0987
+cকa	চকআ	U+099A U+0995 U+0986
+ch	ছ	U+099B
+cha	ছা	U+099B U+09BE
+ach	আছ	U+0986 U+099B
+chi	ছি	U+099B U+09BF
+ich	ইছ	U+0987 U+099B
+chI	ছী	U+099B U+09C0
+Ich	ঈছ	U+0988 U+099B
+chu	ছু	U+099B U+09C1
+uch	উছ	U+0989 U+099B
+chU	ছূ	U+099B U+09C2
+Uch	ঊছ	U+098A U+099B
+che	ছে	U+099B U+09C7
+ech	এছ	U+098F U+099B
+chee	ছী	U+099B U+09C0
+eech	ঈছ	U+0988 U+099B
+cho	ছ	U+099B
+och	অছ	U+0985 U+099B
+chO	ছো	U+099B U+09CB
+Och	ওছ	U+0993 U+099B
+choo	ছু	U+099B U+09C1
+ooch	উছ	U+0989 U+099B
+chOI	ছৈ	U+099B U+09C8
+OIch	ঐছ	U+0990 U+099B
+chOU	ছৌ	U+099B U+09CC
+OUch	ঔছ	U+0994 U+099B
+chrri	ছৃ	U+099B U+09C3
+rrich	ঋছ	U+098B U+099B
+1ch	১ছ	U+09E7 U+099B
+ch1a	ছ১আ	U+099B U+09E7 U+0986
+ch🙂a	ছ🙂আ	U+099B U+1F642 U+0986
+কch	কছ	U+0995 U+099B
+k-ch	ক-ছ	U+0995 U+002D U+099B
+ch a	ছ আ	U+099B U+0020 U+0986
+ch,i	ছ,ই	U+099B U+002C U+0987
+chকa	ছকআ	U+099B U+0995 U+0986
+j	জ	U+099C
+ja	জা	U+099C U+09BE
+aj	আজ	U+0986 U+099C
+ji	জি	U+099C U+09BF
+ij	ইজ	U+0987 U+099C
+jI	জী	U+099C U+09C0
+Ij	ঈজ	U+0988 U+099C
+ju	জু	U+099C U+09C1
+uj	উজ	U+0989 U+099C
+jU	জূ	U+099C U+09C2
+Uj	ঊজ	U+098A U+099C
+je	জে	U+099C U+09C7
+ej	এজ	U+098F U+099C
+jee	জী	U+099C U+09C0
+eej	ঈজ	U+0988 U+099C
+jo	জ	U+099C
+oj	অজ	U+0985 U+099C
+jO	জো	U+099C U+09CB
+Oj	ওজ	U+0993 U+099C
+joo	জু	U+099C U+09C1
+ooj	উজ	U+0989 U+099C
+jOI	জৈ	U+099C U+09C8
+OIj	ঐজ	U+0990 U+099C
+jOU	জৌ	U+099C U+09CC
+OUj	ঔজ	U+0994 U+099C
+jrri	জৃ	U+099C U+09C3
+rrij	ঋজ	U+098B U+099C
+1j	১জ	U+09E7 U+099C
+j1a	জ১আ	U+099C U+09E7 U+0986
+j🙂a	জ🙂আ	U+099C U+1F642 U+0986
+কj	কজ	U+0995 U+099C
+k-j	ক-জ	U+0995 U+002D U+099C
+j a	জ আ	U+099C U+0020 U+0986
+j,i	জ,ই	U+099C U+002C U+0987
+jকa	জকআ	U+099C U+0995 U+0986
+jh	ঝ	U+099D
+jha	ঝা	U+099D U+09BE
+ajh	আঝ	U+0986 U+099D
+jhi	ঝি	U+099D U+09BF
+ijh	ইঝ	U+0987 U+099D
+jhI	ঝী	U+099D U+09C0
+Ijh	ঈঝ	U+0988 U+099D
+jhu	ঝু	U+099D U+09C1
+ujh	উঝ	U+0989 U+099D
+jhU	ঝূ	U+099D U+09C2
+Ujh	ঊঝ	U+098A U+099D
+jhe	ঝে	U+099D U+09C7
+ejh	এঝ	U+098F U+099D
+jhee	ঝী	U+099D U+09C0
+eejh	ঈঝ	U+0988 U+099D
+jho	ঝ	U+099D
+ojh	অঝ	U+0985 U+099D
+jhO	ঝো	U+099D U+09CB
+Ojh	ওঝ	U+0993 U+099D
+jhoo	ঝু	U+099D U+09C1
+oojh	উঝ	U+0989 U+099D
+jhOI	ঝৈ	U+099D U+09C8
+OIjh	ঐঝ	U+0990 U+099D
+jhOU	ঝৌ	U+099D U+09CC
+OUjh	ঔঝ	U+0994 U+099D
+jhrri	ঝৃ	U+099D U+09C3
+rrijh	ঋঝ	U+098B U+099D
+1jh	১ঝ	U+09E7 U+099D
+jh1a	ঝ১আ	U+099D U+09E7 U+0986
+jh🙂a	ঝ🙂আ	U+099D U+1F642 U+0986
+কjh	কঝ	U+0995 U+099D
+k-jh	ক-ঝ	U+0995 U+002D U+099D
+jh a	ঝ আ	U+099D U+0020 U+0986
+jh,i	ঝ,ই	U+099D U+002C U+0987
+jhকa	ঝকআ	U+099D U+0995 U+0986
+cabi	চাবি	U+099A U+09BE U+09AC U+09BF
+chabi	ছাবি	U+099B U+09BE U+09AC U+09BF
+jami	জামি	U+099C U+09BE U+09AE U+09BF
+jhuri	ঝুরি	U+099D U+09C1 U+09B0 U+09BF
+jhirijhiri	ঝিরিঝিরি	U+099D U+09BF U+09B0 U+09BF U+099D U+09BF U+09B0 U+09BF
+jani	জানি	U+099C U+09BE U+09A8 U+09BF
+cena	চেনা	U+099A U+09C7 U+09A8 U+09BE
+chena	ছেনা	U+099B U+09C7 U+09A8 U+09BE

@@ -50,6 +50,11 @@ fn p_ph_f_consonant_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/consonants-p-ph-f.tsv"));
 }
 
+#[test]
+fn c_ch_j_jh_consonant_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consonants-c-ch-j-jh.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -98,6 +103,15 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Ph", "Ph"),
         ("F", "F"),
         ("p`h", "প`h"),
+        ("cc", "চচ"),
+        ("cch", "চছ"),
+        ("jjh", "জঝ"),
+        ("cr", "চর"),
+        ("chh", "ছh"),
+        ("C", "C"),
+        ("J", "J"),
+        ("Jh", "Jh"),
+        ("c`h", "চ`h"),
         ("kkh", "কখ"),
         ("K", "K"),
         ("k`h", "ক`h"),
@@ -126,9 +140,11 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = "🙂kh2a\u{301}kUuakIakeeeakoooakOakOIakOUokrria".repeat(4096)
         + &"rrrirrrri".repeat(4096)
         + &"phifipO".repeat(4096);
+    let input = input + &"cichijijhi".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
+    let expected = expected + &"চিছিজিঝি".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -191,4 +207,8 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     assert_eq!(transliterate("a"), "আ");
     assert_eq!(transliterate("f"), "ফ");
     assert_eq!(transliterate("a"), "আ");
+    for (raw, expected) in [("c", "চ"), ("ch", "ছ"), ("j", "জ"), ("jh", "ঝ")] {
+        assert_eq!(transliterate(raw), expected);
+        assert_eq!(transliterate("a"), "আ");
+    }
 }

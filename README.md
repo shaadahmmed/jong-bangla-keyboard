@@ -20,9 +20,9 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 
 ## Current status
 
-A dependency-free Rust library now converts Bangla digits, 16 consonant letters
-through 18 sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
-with context. This is a partial engine with 937 reference-checked examples,
+A dependency-free Rust library now converts Bangla digits, 20 consonant letters
+through 22 sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
+with context. This is a partial engine with 1,085 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Remaining
 letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -35,7 +35,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [`OI`/`OU`](docs/v1.md#sixth-vowel-group) and
 [`rri`](docs/v1.md#seventh-vowel-group), followed by
 [basic `r`/`rr`](docs/v1.md#basic-r-and-rr-consonants) and
-[`p`/`ph`/`f`](docs/v1.md#basic-p-ph-and-f-consonants).
+[`p`/`ph`/`f`](docs/v1.md#basic-p-ph-and-f-consonants), then
+[`c`/`ch`/`j`/`jh`](docs/v1.md#basic-c-ch-j-and-jh-consonants).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -67,6 +68,7 @@ Try `'OI kOI OU kOU nOUka'` → `ঐ কৈ ঔ কৌ নৌকা` for the two
 Try `'rri krri krriti rriN'` → `ঋ কৃ কৃতি ঋণ` for the three-key vowel.
 Try `'ram rani rrri rrrri'` → `রাম রানি রররি ররৃ` for basic `r`/`rr` matching.
 Try `'pani phOn fOn'` → `পানি ফোন ফোন` for `p` and the two spellings of `ফ`.
+Try `'cabi chabi jani jhuri'` → `চাবি ছাবি জানি ঝুরি` for `c`/`ch`/`j`/`jh`.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -103,6 +105,9 @@ produces `রর`; `rri` is matched before either. This resolves `rrri` → `র
 Lowercase `p` produces `প`; `ph` and `f` both produce `ফ`. The longest supported
 match handles `ph` before `p` (`phi` → `ফি`, matching `fi` → `ফি`). Uppercase
 aliases and larger sequences such as `pph` remain incomplete.
+Lowercase `c`/`ch`/`j`/`jh` produce `চ`/`ছ`/`জ`/`ঝ`; `ch` and `jh` match before
+their single-key prefixes. Uppercase aliases, conjuncts such as `cch` → `চ্ছ`,
+standalone `h`, and escapes remain incomplete.
 
 ## Repeat the reference comparison
 
@@ -116,8 +121,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`o`/`O`/`oo` fixtures](tests/fixtures/vowels-o.tsv),
 [`OI`/`OU` fixtures](tests/fixtures/vowels-oi-ou.tsv),
 [`rri` fixtures](tests/fixtures/vowels-rri.tsv),
-[`r`/`rr` fixtures](tests/fixtures/consonants-r.tsv), and
-[`p`/`ph`/`f` fixtures](tests/fixtures/consonants-p-ph-f.tsv) record the raw input, expected UTF-8
+[`r`/`rr` fixtures](tests/fixtures/consonants-r.tsv),
+[`p`/`ph`/`f` fixtures](tests/fixtures/consonants-p-ph-f.tsv), and
+[`c`/`ch`/`j`/`jh` fixtures](tests/fixtures/consonants-c-ch-j-jh.tsv) record the raw input, expected UTF-8
 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -133,7 +139,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 937 cases used by Rust tests and prints reference outputs for
+It checks the same 1,085 cases used by Rust tests and prints reference outputs for
 five known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
