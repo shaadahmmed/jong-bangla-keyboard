@@ -17,40 +17,82 @@ Dates use the project's Asia/Dhaka timezone.
   Following `rri` and longer `r` runs after `Ng`/`NG`/`ng` now match the reference.
   Contextual lowercase `y` now handles independent, vowel-following, and
   consonant-following forms, including basic `r`/`rr` joiners.
-  There are 2,630 reference-checked cases.
+  Uppercase `Z` → ্য and selected `aZ`/`oZ` longer forms are implemented.
+  There are 3,028 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 38 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
-  matching prefixes, and contextual lowercase `y`.
+  matching prefixes, contextual lowercase `y`, and uppercase `Z`/`aZ`/`oZ`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** add uppercase `Z` → ্য, checking independent and following-vowel
-  forms and its distinction from lowercase `z`/`y` against the pinned reference.
+- **Next:** resolve longer `r` matching after lowercase `y` and uppercase `Z`,
+  including `yrr`/`Zrr` and `yry`/`Zry`, against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author uppercase `Z` cases: standalone ্য (U+09CD U+09AF),
-   after supported consonants/vowels, with following vowels/aliases, repeated
-   keys, digits, boundaries, and copied Unicode. Preserve lowercase `z`/`y`
-   and uppercase `Y` distinctions.
+1. Independently author lowercase `y` and uppercase `Z` followed by `r` cases:
+   one and longer runs, `rri` overlaps, following vowels/aliases, lowercase `y`,
+   repeated forms, digits, boundaries, and copied Unicode. Compare uppercase `Y`
+   controls to avoid extending the rule without evidence.
 2. Check expected output and exact Unicode against the
-   [pinned reference](v1.md#phonetic-behavior-reference) using the external parser
-   before implementation; identify longer overlaps that need separate work.
-3. Add the selected uppercase `Z` behavior. Keep longer `yrr`, other incomplete
-   letters, conjunct/reph forms, aliases, and escapes explicit. No composition
-   or platform work.
+   [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
+   Known gaps include `yrr`/`Zrr`, longer `r` runs, and `Zry`.
+3. Add the selected matching/context rules while preserving existing `yr`/`Zr`
+   and `yrri`/`Zrri` results. Keep other conjunct/reph forms, aliases, and escapes
+   explicit. No composition or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected uppercase-`Z` cases match the reference, existing
+**Done when:** the selected following-`r` cases match the reference, existing
 conversion cases still pass, limitations are documented, and this log records
-actual results. Fcitx5 integration and composition controls belong to later steps.
+actual results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Uppercase Z with aZ and oZ forms
+
+- Added exact uppercase `Z` → ্য (U+09CD U+09AF), including standalone output,
+  following vowel signs, repeated `Z`/lowercase `y`, and ordinary adjacency.
+  Basic `r`/`rr` shares the existing U+200D flag with lowercase `y`
+  (`rZ` → `র‍্য`); nasal-plus-`r` prefixes and copied র omit that joiner.
+  The 38 basic consonant sequences (35 letters) remain unchanged.
+- Reference probes established longer `aZ` → অ্যা and `oZ` → অ্য matches before
+  ordinary vowel handling, even after a consonant (`kaZ` → `কঅ্যা`). Both establish
+  consonant context, preserving exact sequences such as `aZa` → `অ্যাা`.
+  Existing `oo`/`ng`-vowel priority remains intact (`ooZ` → `উ্য`,
+  `ngaZ` → `ঙ্গা্য`, `ngooZ` → `ঙ্গঅ্য`). No spelling correction or normalization.
+- Authored 398 [fixtures](../tests/fixtures/consonant-z-uppercase.tsv), checked
+  against the SHA-256-verified pinned parser before implementation. They cover
+  every supported consonant, vowels/aliases on either side, longer-match priority,
+  ng-vowel overlaps, repetition, joiners, digits, boundaries, copied Unicode,
+  and case distinctions. All 3,028 reference cases match under Node.js v24.21.0.
+  No upstream code, rules, or fixtures imported.
+- The focused Rust regression first failed on `kZ`, then passed after the
+  implementation. Extended Unicode-boundary, control-character, separate-call,
+  and long-buffer checks. Removed resolved `Z`/`kZ`/`zZ`/`yZ`/`YZ` gap expectations;
+  added explicit longer `Zrr`/`Zry`, `AZ`, and escape limitations. Updated old
+  fixture comments, README, and [v1.md](v1.md#uppercase-z-with-az-and-oz-forms).
+- Checks: after applying rustfmt, `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (26 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'kZa aZ oZ baZ'` printed
+  `ক্যা অ্যা অ্য বঅ্যা`. Rechecked and reused Rust/Cargo 1.99.1 and
+  Node.js v24.21.0. No tools upgraded or dependencies added; the external parser
+  stays outside the repository. The pre-existing untracked `.vscode/` is untouched.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors, final
+  newlines, trailing whitespace, fixture counts/code points, distinct new inputs,
+  both runner registrations, and `git diff --check` passed.
+- Limitations: longer `yrr`/`Zrr`/`Zry`, other conjunct/reph forms, remaining
+  letters and aliases (including `AZ`), punctuation/escapes, composition, and
+  platform integration remain incomplete. No broader compatibility, performance,
+  or platform validation claimed.
+- Next: resolve following-`r` matching after lowercase `y` and uppercase `Z`
+  as a separate reference-checked increment.
 
 ### 2026-10-28 — Contextual lowercase y
 

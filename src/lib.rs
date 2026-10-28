@@ -1,7 +1,7 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
-//! Supports ASCII digits, contextual lowercase `y`, lowercase `ng` with selected vowel forms,
-//! the consonant sequences below, and
+//! Supports ASCII digits, contextual lowercase `y`, uppercase `Z` and `aZ`/`oZ`,
+//! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
 //! complete Avro-compatible engine: remaining consonants, other conjuncts, case
@@ -33,6 +33,7 @@
 //! assert_eq!(transliterate("Ngrri NGrrri ngrrrri"), "ঙররি ঞরৃ ংররররি");
 //! assert_eq!(transliterate("zaY hoY hoYe maYa"), "যায় হয় হয়ে মায়া");
 //! assert_eq!(transliterate("y ay ky kiya"), "ইয় আয় ক্য কিয়া");
+//! assert_eq!(transliterate("kZa aZ oZ baZ"), "ক্যা অ্যা অ্য বঅ্যা");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -99,7 +100,7 @@ const NASAL_R_FORMS: [(&str, &str); 3] = [("Ngr", "ঙর"), ("NGr", "ঞর"), 
 #[derive(Clone, Copy)]
 enum Context {
     Consonant {
-        // Only basic r/rr adds ZWJ before lowercase y; nasal-r prefixes do not.
+        // Only basic r/rr adds ZWJ before y/Z; nasal-r prefixes do not.
         ya_joiner: bool,
     },
     // Retain the raw vowel key: `ao` uses ও, but the last `o` in `ooo` uses অ.
@@ -125,6 +126,9 @@ enum Context {
 /// Lowercase `y` produces ইয় independently, য় after a supported vowel, and ্য
 /// after a supported consonant. Basic `r`/`rr` adds U+200D before ্য; nasal-r
 /// prefixes do not. Every form allows following vowel signs and repeated y.
+/// Uppercase `Z` always adds ্য, with the same basic r/rr joiner exception.
+/// Longer `aZ`/`oZ` produce অ্যা/অ্য before ordinary vowel handling; selected
+/// ng-vowel forms still consume their vowel first. All establish consonant context.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -178,14 +182,23 @@ pub fn transliterate(input: &str) -> String {
             context = Context::Consonant {
                 ya_joiner: matches!(*raw, "r" | "rr"),
             };
-        } else if ch == 'y' {
-            output.push_str(match context {
-                Context::Consonant { ya_joiner: true } => "\u{200D}্য",
-                Context::Consonant { ya_joiner: false } => "্য",
-                Context::Vowel(_) => "য়",
-                Context::Other => "ইয়",
+        } else if matches!(ch, 'y' | 'Z') {
+            output.push_str(match (ch, context) {
+                (_, Context::Consonant { ya_joiner: true }) => "\u{200D}্য",
+                ('Z', _) | (_, Context::Consonant { ya_joiner: false }) => "্য",
+                (_, Context::Vowel(_)) => "য়",
+                (_, Context::Other) => "ইয়",
             });
             remaining = &remaining[1..];
+            context = Context::Consonant { ya_joiner: false };
+        } else if remaining.starts_with("aZ") || remaining.starts_with("oZ") {
+            // Match both ASCII keys before contextual a/o, even after a consonant.
+            output.push_str(if ch == 'a' {
+                "অ্যা"
+            } else {
+                "অ্য"
+            });
+            remaining = &remaining[2..];
             context = Context::Consonant { ya_joiner: false };
         } else if remaining.starts_with("OI") || remaining.starts_with("OU") {
             // Consume both ASCII keys before single `O`; retain the final key.

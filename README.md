@@ -23,8 +23,9 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 A dependency-free Rust library now converts Bangla digits, 35 consonant letters
 through 38 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
-with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`.
-This is a partial engine with 2,630 reference-checked examples,
+with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`
+and uppercase `Z` with selected `aZ`/`oZ` forms.
+This is a partial engine with 3,028 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Remaining
 letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -48,7 +49,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [lowercase `ng`](docs/v1.md#lowercase-ng-sign-and-vowel-forms), followed by
 [`rri` after `Ng`/`NG`/`ng`](docs/v1.md#following-rri-after-ng-ng-and-ng), then
 [uppercase `Y`](docs/v1.md#basic-uppercase-y-consonant), followed by
-[lowercase `y`](docs/v1.md#contextual-lowercase-y).
+[lowercase `y`](docs/v1.md#contextual-lowercase-y), then
+[uppercase `Z`](docs/v1.md#uppercase-z-with-az-and-oz-forms).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -92,6 +94,7 @@ Try `'bangla rong nga ngi'` → `বাংলা রং ঙ্গা ঙ্গ�
 Try `'Ngrri NGrrri ngrrrri'` → `ঙররি ঞরৃ ংররররি` for their following `r` runs.
 Try `'zaY hoY hoYe maYa'` → `যায় হয় হয়ে মায়া` for uppercase `Y`.
 Try `'y ay ky kiya'` → `ইয় আয় ক্য কিয়া` for contextual lowercase `y`.
+Try `'kZa aZ oZ baZ'` → `ক্যা অ্যা অ্য বঅ্যা` for uppercase `Z` and its longer forms.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -145,8 +148,8 @@ Exact `R`/`Rh` produce ড়/ঢ় (U+09DC/U+09DD), with `Rh` matched before `R`.
 They support vowel signs, and `Rrri` → `ড়ৃ` preserves the existing `rri` vowel.
 Conjuncts such as `Rri` → `ড়্রি`, uppercase-`H` aliases, and escapes remain incomplete.
 Lowercase `z` produces য (U+09AF), with supported vowel signs (`zi` → `যি`).
-It remains distinct from uppercase `Z`, whose reference form is ্য; uppercase
-`Z`, related conjuncts, and escapes remain incomplete.
+It remains distinct from uppercase `Z` → ্য (U+09CD U+09AF).
+Related conjuncts and escapes remain incomplete.
 Exact `Ng`/`NG` produce ঙ/ঞ (U+0999/U+099E), matching before single `N` → ণ.
 They support vowel signs (`Ngi` → `ঙি`, `NGU` → `ঞূ`). Conjuncts such as
 `Ngk` → `ঙ্ক` and escapes remain incomplete.
@@ -168,8 +171,15 @@ vowel signs (`ya` → `ইয়া`, `kya` → `ক্যা`) and repeated `y` (`
 Basic `r`/`rr` adds a zero-width joiner U+200D before `্য` (`ry` → `র‍্য`),
 while nasal-plus-`r` prefixes do not (`Ngry` → `ঙর্য`). Copied Unicode and digits
 reset this context. Uppercase `Y` stays distinct: `kY` → `কয়`, `ky` → `ক্য`.
-Longer `yrr` forms, conjuncts such as `Yr` → `য়্র`, reph such as `rrY` → `র্য়`,
-uppercase `Z`, and escapes remain incomplete.
+Uppercase `Z` adds `্য` directly, even at the start or after a copied character,
+and allows vowel signs (`kZa` → `ক্যা`). It shares the basic `r`/`rr` joiner rule
+(`rZ` → `র‍্য`). Longer `aZ`/`oZ` matches produce `অ্যা`/`অ্য` before ordinary
+vowel handling, even after a consonant (`kaZ` → `কঅ্যা`, `koZ` → `কঅ্য`).
+Existing `ng`-vowel matches still consume their vowel first (`ngaZ` → `ঙ্গা্য`).
+The longer forms establish consonant context (`aZa` → `অ্যাা`); the engine
+preserves these exact reference sequences without spelling correction.
+Longer `yrr`/`Zrr`/`Zry` forms, uppercase aliases such as `AZ`, conjuncts such as
+`Yr` → `য়্র`, reph such as `rrY` → `র্য়`, and escapes remain incomplete.
 
 ## Repeat the reference comparison
 
@@ -194,8 +204,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`Ng`/`NG` fixtures](tests/fixtures/consonants-ng-nj.tsv),
 [`ng` fixtures](tests/fixtures/sign-ng.tsv),
 [following-`rri` fixtures](tests/fixtures/nasal-rri.tsv),
-[`Y` fixtures](tests/fixtures/consonant-y-uppercase.tsv), and
-[`y` fixtures](tests/fixtures/consonant-y-lowercase.tsv) record the raw input,
+[`Y` fixtures](tests/fixtures/consonant-y-uppercase.tsv),
+[`y` fixtures](tests/fixtures/consonant-y-lowercase.tsv), and
+[`Z` fixtures](tests/fixtures/consonant-z-uppercase.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -211,7 +222,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 2,630 cases used by Rust tests and prints reference outputs for
+It checks the same 3,028 cases used by Rust tests and prints reference outputs for
 seven known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
