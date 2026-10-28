@@ -25,8 +25,9 @@ through 40 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
 with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`/`w`/`x`
 and uppercase `Z` with selected `aZ`/`oZ` forms. Following-`r` matching after
-`y`/`Z`/`Y`/`w`/`x`/`kx` is also implemented, as is exact `kx` → `ক্ষ`.
-This is a partial engine with 5,843 reference-checked examples,
+`y`/`Z`/`Y`/`w`/`x`/`kx`/`Ngx` is also implemented, as are exact `kx` → `ক্ষ`
+and `Ngx` → `ঙ্ষ`.
+This is a partial engine with 6,165 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Other
 letter forms, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -59,7 +60,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [lowercase `w`](docs/v1.md#contextual-lowercase-w), then
 [following `r` after `w`](docs/v1.md#following-r-after-lowercase-w), then
 [lowercase `x` and `kx`](docs/v1.md#contextual-lowercase-x-and-exact-kx), then
-[following `r` after `x`/`kx`](docs/v1.md#following-r-after-lowercase-x-and-exact-kx).
+[following `r` after `x`/`kx`](docs/v1.md#following-r-after-lowercase-x-and-exact-kx), then
+[exact `Ngx`](docs/v1.md#exact-ngx-conjunct).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -112,6 +114,7 @@ Try `'w wa awa kw kwa'` → `ও ওয়া আওা ক্ব ক্বা` for
 Try `'wr wrri wrrri wrry'` → `ওর ওৃ ও্রররি ওরর‍্য` for its following-`r` priority.
 Try `'x xa axa kx kxa'` → `এক্স এক্সা আক্সা ক্ষ ক্ষা` for contextual `x` and exact `kx`.
 Try `'xr xrr xrri xrrri kxrr'` → `এক্সর এক্স্রর এক্সৃ এক্স্রররি ক্ষ্রর` for their following-`r` priority.
+Try `'Ngx Ngxa Ngxrri Ngxrr'` → `ঙ্ষ ঙ্ষা ঙ্ষৃ ঙ্ষ্রর` for exact `Ngx` and its following forms.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -236,7 +239,12 @@ context for vowels (`xi` → `এক্সি`, `kxrri` → `ক্ষৃ`) and 
 `xrr` → `এক্স্রর`, `xrrri` → `এক্স্রররি`, `kxrr` → `ক্ষ্রর`, with `rri` and
 `rry`/`rrZ` exceptions preserved (`xrri` → `এক্সৃ`, `xrry` → `এক্সরর‍্য`).
 Single `xr`/`kxr` stays separate and retains the basic-`r` joiner before `y`/`Z`.
-Longer `Ngx`/`kkx`, reph, uppercase aliases, and escapes remain incomplete.
+Exact `Ngx` matches before `Ng` and produces ঙ্ষ (U+0999 U+09CD U+09B7),
+with the same vowel context and following-`r` priority as `kx`:
+`Ngxi` → `ঙ্ষি`, `Ngxrri` → `ঙ্ষৃ`, `Ngxrr` → `ঙ্ষ্রর`. Existing case
+distinctions remain (`NGx` → `ঞক্স`, `ngx` → `ংক্স`). Some earlier longer
+matches still take priority in the reference (`gNgx` uses `gN` first) and remain
+gaps here. `kkx`, reph, uppercase aliases, and escapes remain incomplete.
 
 ## Repeat the reference comparison
 
@@ -270,8 +278,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`v` fixtures](tests/fixtures/consonant-v.tsv),
 [`w` fixtures](tests/fixtures/consonant-w.tsv),
 [`w` following-`r` fixtures](tests/fixtures/w-following-r.tsv),
-[`x` fixtures](tests/fixtures/consonant-x.tsv), and
-[`x`/`kx` following-`r` fixtures](tests/fixtures/x-following-r.tsv) record the raw input,
+[`x` fixtures](tests/fixtures/consonant-x.tsv),
+[`x`/`kx` following-`r` fixtures](tests/fixtures/x-following-r.tsv), and
+[`Ngx` fixtures](tests/fixtures/conjunct-ngx.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -287,7 +296,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 5,843 cases used by Rust tests and prints reference outputs for
+It checks the same 6,165 cases used by Rust tests and prints reference outputs for
 seven known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
