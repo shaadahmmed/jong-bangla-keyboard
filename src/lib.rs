@@ -1,6 +1,6 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
-//! Supports ASCII digits, contextual lowercase `y`/`w`/`x`, exact `kx`/`Ngx`, uppercase `Z` and `aZ`/`oZ`,
+//! Supports ASCII digits, contextual lowercase `y`/`w`/`x`, exact `kx`/`Ngx`/`Ngk`, uppercase `Z` and `aZ`/`oZ`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -43,6 +43,7 @@
 //! assert_eq!(transliterate("x xa axa kx kxa"), "এক্স এক্সা আক্সা ক্ষ ক্ষা");
 //! assert_eq!(transliterate("xr xrr xrri xrrri kxrr"), "এক্সর এক্স্রর এক্সৃ এক্স্রররি ক্ষ্রর");
 //! assert_eq!(transliterate("Ngx Ngxa Ngxrri Ngxrr"), "ঙ্ষ ঙ্ষা ঙ্ষৃ ঙ্ষ্রর");
+//! assert_eq!(transliterate("Ngk Ngka Ngkr Ngkrri"), "ঙ্ক ঙ্কা ঙ্ক্র ঙ্কৃ");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -155,8 +156,11 @@ enum Context {
 /// context without a joiner and share the y/w two-r rule and exceptions:
 /// xrr -> এক্স্রর, xrri -> এক্সৃ, xrry -> এক্সরর‍্য. Single xr/kxr stay separate.
 /// Exact Ngx produces ঙ্ষ before Ng matching, with the same consonant context
-/// and following-r priority as kx. Earlier longer matches (such as gN in gNgx),
-/// kkx, and reph remain gaps.
+/// and following-r priority as kx. Exact Ngk produces ঙ্ক before Ng matching,
+/// sharing Y's single-r attachment and two-r exceptions: Ngkr -> ঙ্ক্র,
+/// Ngkrri -> ঙ্কৃ, Ngkry -> ঙ্ক্র্য, Ngkrry -> ঙ্করর‍্য.
+/// Earlier longer matches (such as gN in gNgx), Ngkh/Ngkx/Ngkkh/NgkSh,
+/// kkx, and reph remain gaps; supported prefixes still convert inside them.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -207,6 +211,10 @@ pub fn transliterate(input: &str) -> String {
         } else if let Some(after_ngx) = remaining.strip_prefix("Ngx") {
             output.push_str("ঙ্ষ");
             remaining = consume_following_r_prefix(after_ngx, 'x', &mut output);
+            context = Context::Consonant { ya_joiner: false };
+        } else if let Some(after_ngk) = remaining.strip_prefix("Ngk") {
+            output.push_str("ঙ্ক");
+            remaining = consume_following_r_prefix(after_ngk, 'k', &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if let Some(after_kx) = remaining.strip_prefix("kx") {
             output.push_str("ক্ষ");
@@ -335,7 +343,8 @@ pub fn transliterate(input: &str) -> String {
 }
 
 // Independently checked following-r prefixes depend on the raw y/Z/Y/w/x key,
-// including the Z in aZ/oZ and x in kx/Ngx. Do not infer them from copied Bangla.
+// including Z in aZ/oZ, x in kx/Ngx, and k in Ngk (not basic k).
+// Do not infer them from copied Bangla.
 fn consume_following_r_prefix<'a>(
     remaining: &'a str,
     raw_key: char,
@@ -348,10 +357,12 @@ fn consume_following_r_prefix<'a>(
     {
         output.push_str("্রর");
         &remaining[2..]
-    } else if (raw_key == 'Y' && remaining.starts_with('r') && !remaining.starts_with("rr"))
+    } else if (matches!(raw_key, 'Y' | 'k')
+        && remaining.starts_with('r')
+        && !remaining.starts_with("rr"))
         || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))
     {
-        // Y attaches a single r; Z only does so before y/Z. Both omit the joiner.
+        // Y/Ngk attach a single r; Z only does so before y/Z. All omit the joiner.
         output.push_str("্র");
         &remaining[1..]
     } else {

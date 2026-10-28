@@ -34,17 +34,19 @@ Dates use the project's Asia/Dhaka timezone.
   preserving `rri`/`rry`/`rrZ` exceptions and single-`r` joiners.
   Exact `Ngx` → ঙ্ষ now matches before `Ng`, with supported vowel/context
   interactions and the existing `x`/`kx` following-`r` priority.
-  There are 6,165 reference-checked cases.
+  Exact `Ngk` → ঙ্ক now matches before `Ng`, with supported vowel/context
+  interactions, single following-`r` attachment, and `rri`/`rry`/`rrZ` priority.
+  There are 6,598 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
   matching prefixes, contextual lowercase `y`/`w`/`x`, uppercase `Z`/`aZ`/`oZ`,
-  exact `kx`/`Ngx`, and selected following-`r` forms after
-  `y`/`Z`/`Y`/`w`/`x`/`kx`/`Ngx`.
+  exact `kx`/`Ngx`/`Ngk`, and selected following-`r` forms after
+  `y`/`Z`/`Y`/`w`/`x`/`kx`/`Ngx`/`Ngk`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** check exact `Ngk` → ঙ্ক and its supported vowel/context
+- **Next:** check exact `Ngkh` → ঙ্খ and its supported vowel/context
   interactions against the pinned reference as a separate conjunct increment.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
@@ -52,24 +54,75 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Next small implementation step
 
-1. Independently author cases for exact `Ngk` → ঙ্ক, its preceding contexts,
+1. Independently author cases for exact `Ngkh` → ঙ্খ, its preceding contexts,
    supported vowels/aliases, following-`r` overlaps, repetition, digits,
-   boundaries, and copied Unicode. Include raw-spelling and `Ngkh` controls;
-   check which longer matches take priority before defining this slice.
+   boundaries, copied Unicode, and raw-spelling controls. Check earlier and
+   longer matches before defining the supported slice.
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-   Currently `Ngk` produces ঙক instead of ঙ্ক.
-3. Add the selected conjunct match, preserving existing `Ng`/`NG`/`ng`,
-   `Ngx`, `x`/`kx`, and following-`r` behavior. Keep other conjuncts, reph,
-   uppercase aliases, and escapes separate. No composition or platform work.
+   Currently `Ngkh` produces ঙ্কহ instead of ঙ্খ.
+3. Add the selected conjunct before the shorter `Ngk` match, preserving
+   `Ng`/`NG`/`ng`, `Ngk`, `Ngx`, `x`/`kx`, and following-`r` behavior.
+   Keep `Ngkx`/`Ngkkh`/`NgkSh`, other conjuncts, earlier-prefix conflicts,
+   reph, uppercase aliases, and escapes separate. No composition or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** selected `Ngk` cases match the reference, existing conversion
+**Done when:** selected `Ngkh` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records actual
 results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Exact Ngk conjunct
+
+- Added exact `Ngk` → ঙ্ক (U+0999 U+09CD U+0995), matching before basic
+  `Ng` and single `N`. The 40 basic consonant sequences producing 35 letters
+  remain unchanged; `Ngk` is an added conjunct sequence with consonant context.
+- Extended the existing following-`r` helper for matched `Ngk`: single `r`
+  attaches as ্র, including before `y`/`Z` without U+200D (`Ngkry` → `ঙ্ক্র্য`).
+  Two-`r` consumption and `rri`/`rry`/`rrZ` exceptions remain in priority
+  (`Ngkrri` → `ঙ্কৃ`, `Ngkrry` → `ঙ্করর‍্য`). Basic `k` is unchanged.
+- Authored 433 [fixtures](../tests/fixtures/conjunct-ngk.tsv), all checked
+  against the SHA-256-verified pinned parser before implementation. They cover
+  supported vowels/aliases and transitions, selected preceding contexts,
+  adjacency, one through eight following `r` keys, single-`r` attachment,
+  priority/joiner exceptions, repetition, raw-spelling controls, all digits,
+  boundaries, copied Unicode, and words. All 6,598 reference cases match
+  under Node.js v24.21.0.
+- Reference probes confirmed separate longer `Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`
+  rules and the five earlier-prefix conflicts already identified for `Ngx`.
+  Kept them outside supported fixtures and added explicit partial-output
+  regressions, along with reph, alias, and escape gaps. Documented the changed
+  partial `Ngkh` output (ঙখ → ঙ্কহ) caused by matching supported `Ngk` first.
+  Refreshed seven reference gap probes; no wider compatibility claimed.
+- The focused Rust regression failed on `Ngk` before implementation. All
+  tests passed afterward, including extended control-character, separate-call,
+  and long-buffer regressions. Removed the resolved `Ngk` gap expectation.
+- Updated [README.md](../README.md) and
+  [v1.md](v1.md#exact-ngk-conjunct) with exact Unicode, matching priority,
+  examples, counts, limitations, and next work. Marked earlier `Ngk` gap
+  descriptions as historical. No upstream source, rules, fixtures, dependencies,
+  normalization, persistent state, or platform code added.
+- Checks: after applying rustfmt, `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (36 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'Ngk Ngka Ngkr Ngkrri'`
+  printed `ঙ্ক ঙ্কা ঙ্ক্র ঙ্কৃ`. All 41 conversions and gap examples in the
+  new v1 section passed direct CLI and pinned-reference checks. Rechecked and
+  reused Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools installed or upgraded.
+  The cached reference parser and license remain outside the repository.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors, final
+  newlines, trailing whitespace, all fixture code points, 433 distinct new
+  inputs, both runner registrations, and `git diff --check` passed. The
+  pre-existing untracked `.vscode/` is untouched.
+- Limitations: longer `Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, earlier-prefix conflicts,
+  other conjuncts, reph, uppercase aliases, punctuation/escapes, composition,
+  and platform integration remain incomplete. No performance or platform
+  validation claimed.
+- Next: check exact `Ngkh` → ঙ্খ and its supported vowel/context interactions
+  as a separate reference-checked increment.
 
 ### 2026-10-28 — Exact Ngx conjunct
 
