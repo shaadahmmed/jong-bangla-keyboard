@@ -25,7 +25,12 @@ const codePoints = (text) =>
     .join(" ");
 
 let count = 0;
-for (const name of ["reference.tsv", "vowels.tsv", "vowels-u.tsv"]) {
+for (const name of [
+  "reference.tsv",
+  "vowels.tsv",
+  "vowels-u.tsv",
+  "vowels-i-long.tsv",
+]) {
   const fixture = readFileSync(
     new URL(`../tests/fixtures/${name}`, import.meta.url),
     "utf8",
@@ -48,7 +53,7 @@ for (const name of ["reference.tsv", "vowels.tsv", "vowels-u.tsv"]) {
 console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
 // These probes expose missing behavior; they are not supported-slice fixtures.
-for (const input of ["I", "kkh", "K", "k`h", "u`"]) {
+for (const input of ["e", "kkh", "K", "k`h", "I`"]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);
 }

@@ -1,6 +1,6 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
-//! Supports ASCII digits, the consonant sequences below, and `a`/`i`/`u`/`U`.
+//! Supports ASCII digits, the consonant sequences below, and `a`/`i`/`I`/`u`/`U`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
 //! complete Avro-compatible engine: other vowels, conjuncts, case normalization,
 //! punctuation rules, and escapes are not implemented.
@@ -12,6 +12,7 @@
 //! assert_eq!(transliterate("t T th Th n N"), "ত ট থ ঠ ন ণ");
 //! assert_eq!(transliterate("ami khani kia"), "আমি খানি কিয়া");
 //! assert_eq!(transliterate("tumi bhUmi kua"), "তুমি ভূমি কুয়া");
+//! assert_eq!(transliterate("ki kI nIti"), "কি কী নীতি");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -42,9 +43,9 @@ enum Context {
 ///
 /// At each position, the longest supported sequence wins (`kh` before `k`).
 /// The supported vowels become signs after a supported consonant and independent
-/// vowels otherwise; `a` immediately after `i`/`u`/`U` becomes `য়া`. Context follows
-/// raw matched tokens, not preserved Bangla. Matching is case-sensitive. Unsupported
-/// larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
+/// vowels otherwise; `a` immediately after `i`/`I`/`u`/`U` becomes `য়া`. Context
+/// follows raw matched tokens, not preserved Bangla. Matching is case-sensitive.
+/// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Other vowels and backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
 pub fn transliterate(input: &str) -> String {
@@ -62,19 +63,21 @@ pub fn transliterate(input: &str) -> String {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
             context = Context::Consonant;
-        } else if matches!(ch, 'a' | 'i' | 'u' | 'U') {
+        } else if matches!(ch, 'a' | 'i' | 'I' | 'u' | 'U') {
             output.push_str(match (ch, context) {
                 ('a', Context::Consonant) => "া",
                 ('i', Context::Consonant) => "ি",
+                ('I', Context::Consonant) => "ী",
                 ('u', Context::Consonant) => "ু",
                 ('U', Context::Consonant) => "ূ",
                 ('a', Context::VowelIOrU) => "য়া",
                 ('a', _) => "আ",
                 ('i', _) => "ই",
+                ('I', _) => "ঈ",
                 ('u', _) => "উ",
                 _ => "ঊ",
             });
-            context = if matches!(ch, 'i' | 'u' | 'U') {
+            context = if matches!(ch, 'i' | 'I' | 'u' | 'U') {
                 Context::VowelIOrU
             } else {
                 Context::Other

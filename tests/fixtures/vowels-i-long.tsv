@@ -1,0 +1,55 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+I	ঈ	U+0988
+kI	কী	U+0995 U+09C0
+khI	খী	U+0996 U+09C0
+gI	গী	U+0997 U+09C0
+ghI	ঘী	U+0998 U+09C0
+tI	তী	U+09A4 U+09C0
+thI	থী	U+09A5 U+09C0
+TI	টী	U+099F U+09C0
+ThI	ঠী	U+09A0 U+09C0
+nI	নী	U+09A8 U+09C0
+NI	ণী	U+09A3 U+09C0
+bI	বী	U+09AC U+09C0
+bhI	ভী	U+09AD U+09C0
+mI	মী	U+09AE U+09C0
+aI	আঈ	U+0986 U+0988
+iI	ইঈ	U+0987 U+0988
+uI	উঈ	U+0989 U+0988
+UI	ঊঈ	U+098A U+0988
+Ia	ঈয়া	U+0988 U+09DF U+09BE
+Ii	ঈই	U+0988 U+0987
+Iu	ঈউ	U+0988 U+0989
+IU	ঈঊ	U+0988 U+098A
+II	ঈঈ	U+0988 U+0988
+kaI	কাঈ	U+0995 U+09BE U+0988
+kiI	কিঈ	U+0995 U+09BF U+0988
+kuI	কুঈ	U+0995 U+09C1 U+0988
+kUI	কূঈ	U+0995 U+09C2 U+0988
+kIa	কীয়া	U+0995 U+09C0 U+09DF U+09BE
+kIi	কীই	U+0995 U+09C0 U+0987
+kIu	কীউ	U+0995 U+09C0 U+0989
+kIU	কীঊ	U+0995 U+09C0 U+098A
+kII	কীঈ	U+0995 U+09C0 U+0988
+IIa	ঈঈয়া	U+0988 U+0988 U+09DF U+09BE
+iIa	ইঈয়া	U+0987 U+0988 U+09DF U+09BE
+Iia	ঈইয়া	U+0988 U+0987 U+09DF U+09BE
+Iai	ঈয়াই	U+0988 U+09DF U+09BE U+0987
+Iua	ঈউয়া	U+0988 U+0989 U+09DF U+09BE
+IUa	ঈঊয়া	U+0988 U+098A U+09DF U+09BE
+1I	১ঈ	U+09E7 U+0988
+k1I	ক১ঈ	U+0995 U+09E7 U+0988
+kI2a	কী২আ	U+0995 U+09C0 U+09E8 U+0986
+I a	ঈ আ	U+0988 U+0020 U+0986
+I🙂a	ঈ🙂আ	U+0988 U+1F642 U+0986
+কI	কঈ	U+0995 U+0988
+k🙂I	ক🙂ঈ	U+0995 U+1F642 U+0988
+k-I	ক-ঈ	U+0995 U+002D U+0988
+k,I	ক,ঈ	U+0995 U+002C U+0988
+kI I	কী ঈ	U+0995 U+09C0 U+0020 U+0988
+nIti	নীতি	U+09A8 U+09C0 U+09A4 U+09BF
+gIti	গীতি	U+0997 U+09C0 U+09A4 U+09BF
+bhUmI	ভূমী	U+09AD U+09C2 U+09AE U+09C0
+ki kI	কি কী	U+0995 U+09BF U+0020 U+0995 U+09C0
