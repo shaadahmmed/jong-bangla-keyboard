@@ -1,7 +1,7 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
 //! Supports ASCII digits, the consonant sequences below, and
-//! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`.
+//! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
 //! complete Avro-compatible engine: other vowels, conjuncts, case normalization,
 //! punctuation rules, and escapes are not implemented.
@@ -16,6 +16,7 @@
 //! assert_eq!(transliterate("ki kI nIti"), "কি কী নীতি");
 //! assert_eq!(transliterate("ami ke kee"), "আমি কে কী");
 //! assert_eq!(transliterate("tumi kemon tOmake"), "তুমি কেমন তোমাকে");
+//! assert_eq!(transliterate("OI kOI OU kOU nOUka"), "ঐ কৈ ঔ কৌ নৌকা");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -48,7 +49,8 @@ enum Context {
 /// At each position, the longest supported sequence wins (`kh` before `k`).
 /// Most supported vowels become signs after a supported consonant; lowercase `o`
 /// adds no character there. `ee` and `oo` alias `I` and `u`, matched before single
-/// keys. Lowercase `o` after a supported raw vowel other than `o` becomes ও.
+/// keys. Case-sensitive `OI`/`OU` match before single `O`, producing ঐ/ঔ or ৈ/ৌ.
+/// Lowercase `o` after a supported raw vowel other than `o` becomes ও.
 /// An `a` after a supported vowel other than `a` becomes `য়া`. Context
 /// follows raw matched tokens, not preserved Bangla. Matching is case-sensitive.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
@@ -69,6 +71,20 @@ pub fn transliterate(input: &str) -> String {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
             context = Context::Consonant;
+        } else if remaining.starts_with("OI") || remaining.starts_with("OU") {
+            // Consume both ASCII keys before single `O`; retain the final key.
+            let (independent, sign, last_key) = if remaining.starts_with("OI") {
+                ("ঐ", "ৈ", 'I')
+            } else {
+                ("ঔ", "ৌ", 'U')
+            };
+            output.push_str(if matches!(context, Context::Consonant) {
+                sign
+            } else {
+                independent
+            });
+            context = Context::Vowel(last_key);
+            remaining = &remaining[2..];
         } else if matches!(ch, 'a' | 'i' | 'I' | 'u' | 'U' | 'e' | 'o' | 'O') {
             // Match repeated-key aliases before their single-key forms.
             let (vowel, width) = if remaining.starts_with("ee") {

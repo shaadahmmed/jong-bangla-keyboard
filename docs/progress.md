@@ -10,21 +10,21 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
-  `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo` vowels with context. There are 473
-  reference-checked cases.
+  `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU` vowels with context.
+  There are 623 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Other vowels, conjuncts, composition, Fcitx5 integration, and a usable desktop
   keyboard are not implemented. Full Avro compatibility is not established.
-- **Next:** add the two-key `OI`/`OU` vowels, checking independent/dependent forms,
-  case sensitivity, and neighboring vowels against the pinned reference.
+- **Next:** add `rri` for ঋ/ৃ, checking independent/dependent forms and neighboring
+  keys against the pinned reference before implementing the remaining consonants.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author `OI`/`OU` cases for word-initial vowels, vowels after
-   supported consonants, case-sensitive matching, and neighboring vowel sequences.
+1. Independently author `rri` cases for word-initial vowels, vowels after supported
+   consonants, neighboring vowels, and relevant prefixes/case variants.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
 3. Add the required context handling to the Rust core without platform or
@@ -32,11 +32,46 @@ Dates use the project's Asia/Dhaka timezone.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the `OI`/`OU` cases match the reference, existing conversion
+**Done when:** the `rri` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — OI/OU two-key vowel group
+
+- Added exact uppercase `OI`/`OU` before single `O`: independent ঐ/ঔ
+  (U+0990/U+0994), or dependent ৈ/ৌ (U+09C8/U+09CC) after a supported consonant.
+  Case variants remain distinct (`OI` → `ঐ`, `Oi` → `ওই`). Retained the final raw
+  key (`I`/`U`) in conversion context for following vowels, including `OIa` →
+  `ঐয়া` and `OIo` → `ঐও`.
+- Authored 150 [fixtures](../tests/fixtures/vowels-oi-ou.tsv) and verified expected
+  output/code points against the pinned parser before Rust implementation. They
+  cover both pairs after all 13 consonants, neighboring vowels/aliases, longer
+  transitions, case variants, digits, boundaries, copied Unicode, and words.
+  All 623 reference cases match using the SHA-256-verified external parser under
+  Node.js v24.21.0. No upstream source, rules, or fixtures imported.
+- Extended boundary, separate-call, long-buffer, and literal-backtick regressions
+  to both pairs; removed their obsolete temporary-limit expectations. Updated
+  [README.md](../README.md) and [v1.md](v1.md#sixth-vowel-group) with current
+  behavior, exact Unicode, count, examples, and remaining gaps.
+- Checks: `cargo test --offline` passed (11 regression tests and one documentation
+  example); `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, and
+  `cargo build --offline --release` passed. The reference comparison passed all
+  623 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'OI kOI OU kOU nOUka'` printed
+  `ঐ কৈ ঔ কৌ নৌকা`; 19 additional documented conversions passed direct CLI checks.
+  Reused inspected Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools or dependencies
+  were installed or upgraded.
+- Documentation/tool checks: `node --check`, UTF-8 decoding, local Markdown links
+  and heading anchors, final newlines, trailing whitespace, and `git diff --check`
+  passed. The pre-existing untracked `.vscode/` directory was left untouched.
+- Limitations: `rri`, uppercase `A`/`E`, remaining consonants, other phonetic
+  sequences, conjuncts, punctuation/escapes, composition, and platform integration
+  remain incomplete. No full compatibility, performance, or platform validation
+  claimed.
+- Next: add `rri` for the remaining basic vowel ঋ and its sign ৃ.
 
 ### 2026-10-28 — Contextual o/O and oo vowel group
 

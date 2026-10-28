@@ -21,17 +21,18 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 ## Current status
 
 A dependency-free Rust library now converts Bangla digits, 13 consonant
-sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo` with context.
-This is a partial engine with 473 reference-checked examples, not a usable desktop
-keyboard or a full Avro compatibility claim. Other vowels, conjuncts, composition,
-and Fcitx5 integration are still missing.
+sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU` with context.
+This is a partial engine with 623 reference-checked examples, not a usable desktop
+keyboard or a full Avro compatibility claim. Remaining letters, conjuncts,
+composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
 [first vowel group](docs/v1.md#first-vowel-group) and
 [`u`/`U` group](docs/v1.md#second-vowel-group), followed by
 [uppercase `I`](docs/v1.md#third-vowel-group) and
 [`e`/`ee`](docs/v1.md#fourth-vowel-group) and
-[`o`/`O`/`oo`](docs/v1.md#fifth-vowel-group).
+[`o`/`O`/`oo`](docs/v1.md#fifth-vowel-group), plus
+[`OI`/`OU`](docs/v1.md#sixth-vowel-group).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -59,6 +60,7 @@ The `u`/`U` group also supports `'tumi bhUmi kua'` → `তুমি ভূম�
 Try `'ki kI nIti'` → `কি কী নীতি` for the `i`/`I` distinction.
 Try `'ami ke kee'` → `আমি কে কী` for single `e` and double `ee`.
 Try `'tumi kemon tOmake'` → `তুমি কেমন তোমাকে` for lowercase `o` and uppercase `O`.
+Try `'OI kOI OU kOU nOUka'` → `ঐ কৈ ঔ কৌ নৌকা` for the two-key vowels.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -81,9 +83,12 @@ consonant (`ko` → `ক`). Uppercase `O` produces `ও` independently and `ো`
 consonants (`kO` → `কো`). Lowercase `o` after another vowel becomes `ও` (`ao` → `আও`),
 except after a raw lowercase `o`. The sequence `oo` is matched first and acts like
 `u` (`oo` → `উ`, `koo` → `কু`); `ooo` → `উঅ`.
+The case-sensitive pairs `OI`/`OU` produce `ঐ`/`ঔ` independently and `ৈ`/`ৌ`
+after consonants (`kOI` → `কৈ`, `kOU` → `কৌ`). They match before single `O`;
+`Oi` still produces `ওই`.
 Supported parts of an otherwise unsupported word still convert: `qa` currently
-produces `qআ` because `q` is not implemented yet. The two-key vowels `OI`/`OU`
-remain unimplemented.
+produces `qআ` because `q` is not implemented yet. The remaining basic vowel
+`rri` → `ঋ` is not implemented yet.
 
 ## Repeat the reference comparison
 
@@ -93,8 +98,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`a`/`i` fixtures](tests/fixtures/vowels.tsv),
 [`u`/`U` fixtures](tests/fixtures/vowels-u.tsv),
 [`I` fixtures](tests/fixtures/vowels-i-long.tsv),
-[`e`/`ee` fixtures](tests/fixtures/vowels-e.tsv), and
-[`o`/`O`/`oo` fixtures](tests/fixtures/vowels-o.tsv) record the raw input, expected UTF-8
+[`e`/`ee` fixtures](tests/fixtures/vowels-e.tsv),
+[`o`/`O`/`oo` fixtures](tests/fixtures/vowels-o.tsv), and
+[`OI`/`OU` fixtures](tests/fixtures/vowels-oi-ou.tsv) record the raw input, expected UTF-8
 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -110,7 +116,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 473 cases used by Rust tests and prints reference outputs for
+It checks the same 623 cases used by Rust tests and prints reference outputs for
 five known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

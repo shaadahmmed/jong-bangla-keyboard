@@ -30,6 +30,11 @@ fn o_vowel_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/vowels-o.tsv"));
 }
 
+#[test]
+fn oi_ou_vowel_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowels-oi-ou.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -66,8 +71,7 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
     for (input, expected) in [
         ("E", "E"),
         ("qo", "qঅ"),
-        ("OI", "ওঈ"),
-        ("OU", "ওঊ"),
+        ("rri", "rrই"),
         ("kkh", "কখ"),
         ("K", "K"),
         ("k`h", "ক`h"),
@@ -81,6 +85,8 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("o`", "অ`"),
         ("O`", "ও`"),
         ("oo`", "উ`"),
+        ("OI`", "ঐ`"),
+        ("OU`", "ঔ`"),
     ] {
         assert_eq!(transliterate(input), expected, "input: {input:?}");
     }
@@ -88,8 +94,8 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
 
 #[test]
 fn long_mixed_input_preserves_character_boundaries() {
-    let input = "🙂kh2a\u{301}kUuakIakeeeakoooakOa".repeat(4096);
-    let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়া".repeat(4096);
+    let input = "🙂kh2a\u{301}kUuakIakeeeakoooakOakOIakOUo".repeat(4096);
+    let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌও".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -107,6 +113,8 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
             ("o", "অ"),
             ("O", "ও"),
             ("oo", "উ"),
+            ("OI", "ঐ"),
+            ("OU", "ঔ"),
         ] {
             let input = format!("k{boundary}{vowel} {vowel}{boundary}a");
             let expected = format!("ক{boundary}{independent} {independent}{boundary}আ");
@@ -132,5 +140,9 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     assert_eq!(transliterate("O"), "ও");
     assert_eq!(transliterate("a"), "আ");
     assert_eq!(transliterate("oo"), "উ");
+    assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("OI"), "ঐ");
+    assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("OU"), "ঔ");
     assert_eq!(transliterate("a"), "আ");
 }
