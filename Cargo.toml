@@ -1,0 +1,11 @@
+[package]
+name = "jong-bangla-core"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99.1"
+license = "MIT"
+description = "Independent, partial Bangla phonetic transliteration core"
+publish = false
+
+[lints.rust]
+unsafe_code = "forbid"

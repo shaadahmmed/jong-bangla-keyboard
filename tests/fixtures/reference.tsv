@@ -1,0 +1,30 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Compare with jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+k	ক	U+0995
+kh	খ	U+0996
+g	গ	U+0997
+gh	ঘ	U+0998
+t	ত	U+09A4
+th	থ	U+09A5
+T	ট	U+099F
+Th	ঠ	U+09A0
+n	ন	U+09A8
+N	ণ	U+09A3
+b	ব	U+09AC
+bh	ভ	U+09AD
+m	ম	U+09AE
+0	০	U+09E6
+1	১	U+09E7
+2	২	U+09E8
+3	৩	U+09E9
+4	৪	U+09EA
+5	৫	U+09EB
+6	৬	U+09EC
+7	৭	U+09ED
+8	৮	U+09EE
+9	৯	U+09EF
+0123456789	০১২৩৪৫৬৭৮৯	U+09E6 U+09E7 U+09E8 U+09E9 U+09EA U+09EB U+09EC U+09ED U+09EE U+09EF
+kh12T	খ১২ট	U+0996 U+09E7 U+09E8 U+099F
+t T th Th n N	ত ট থ ঠ ন ণ	U+09A4 U+0020 U+099F U+0020 U+09A5 U+0020 U+09A0 U+0020 U+09A8 U+0020 U+09A3
+[2026]	[২০২৬]	U+005B U+09E8 U+09E6 U+09E8 U+09EC U+005D

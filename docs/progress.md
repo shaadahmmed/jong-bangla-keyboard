@@ -9,34 +9,71 @@ Dates use the project's Asia/Dhaka timezone.
 ## Current position
 
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
-  tracking documentation; phonetic behavior reference selected and pinned.
-- **Implementation:** not started. No engine code, Rust workspace, Fcitx5 addon,
-  or runnable keyboard exists yet.
-- **Next:** create the first small Rust conversion slice described below and
-  compare its independently authored cases against the pinned reference.
-- **Version history:** verified on 2026-10-28: this workspace is now a Git
-  repository, with `238b329` (`initial commit`) as its latest commit at inspection.
-  The initial documentation entries below describe the earlier workspace state.
+  tracking documentation; pinned phonetic reference; first Rust conversion slice
+  with 27 reference-checked cases.
+- **Implementation:** a dependency-free library and terminal example exist.
+  Vowels, conjuncts, composition, Fcitx5 integration, and a usable desktop keyboard
+  are not implemented. Full Avro compatibility is not established.
+- **Next:** add a small group of independent and contextual vowel rules, with
+  exact Unicode comparisons against the pinned reference.
+- **Version history:** Git is available. Each completed step is committed after
+  checks and the progress update. Initial entries below describing unavailable
+  Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Use the [pinned jsAvroPhonetic v1.1.4 reference](v1.md#phonetic-behavior-reference)
-   to check independently authored examples. Record the conversion entry point,
-   invocation, runtime version, and exact Unicode results. Do not import another
-   engine or its rule tables into the project.
-2. Create a minimal Rust library with no external runtime dependencies for this
-   first slice. Document the chosen toolchain and actual build/test commands.
-3. Implement Bangla digit conversion and a small, explicitly listed set of
-   phonetic sequences. Keep unsupported input intact in this initial slice.
-   Document that this is partial coverage, not full Avro compatibility.
-4. Add independently authored input/output regression cases, run the applicable
-   checks, and walk through how matching produces Unicode Bangla output.
+1. Choose a small vowel group and independently author cases for word-initial
+   vowels, vowels after consonants, and relevant neighboring input.
+2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
+   using the external parser, recording exact Unicode output before implementing.
+3. Add the required context handling to the Rust core without platform or
+   composition state. Keep remaining coverage gaps explicit.
+4. Extend regression fixtures, run the README checks, update documentation, and
+   commit the completed increment.
 
-**Done when:** the documented examples pass, incomplete behavior is explicit,
-the user can run the examples/tests, and this log records the results.
+**Done when:** the chosen vowel cases match the reference, existing conversion
+cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — First Rust conversion slice
+
+- Added the `jong-bangla-core` library, Rust 2024 edition, with Rust/Cargo 1.99.1
+  as the initially validated baseline. No external dependencies; unsafe code is
+  forbidden. Added a terminal example and ignored Cargo's generated `target/`.
+- Implemented all ten Bangla digits and 13 independently authored consonant
+  sequences: `k`, `kh`, `g`, `gh`, `t`, `th`, `T`, `Th`, `n`, `N`, `b`, `bh`, `m`.
+  Matching selects the longest supported sequence at each position. Unmatched
+  characters pass through at valid UTF-8 boundaries; no input is retained/logged.
+- Added 27 authored fixtures with explicit Unicode code points. All matched
+  `OmicronLab.Avro.Phonetic.parse(input)` from the pinned reference, executed with
+  Node.js v24.21.0. The parser and its license were downloaded into a temporary
+  directory outside the repository; no upstream source/table/fixture was added
+  to the project. The comparison tool verifies the parser's SHA-256 first.
+- Documented reproducible build, example, and reference-comparison commands in
+  [README.md](../README.md); recorded supported sequences and five observed gaps
+  in [v1.md](v1.md#first-conversion-slice).
+- Checks: `cargo fmt --all -- --check` passed after applying rustfmt;
+  `cargo clippy --offline --all-targets -- -D warnings` passed;
+  `cargo test --offline` passed (four regression tests and one documentation
+  example); `cargo build --offline --release` passed. Regression coverage includes
+  the 27 fixtures, empty input, mixed Unicode/combining marks, literal unsupported
+  characters, temporary coverage limits, and a repeated long input buffer.
+- Example checks: `cargo run --offline --example convert -- 'kh12T'` printed
+  `খ১২ট`; three further direct example invocations matched expected output.
+  Missing/extra arguments returned usage and exit status 2. `node --check` passed;
+  the reference comparison passed all 27 cases and rejected a mismatched source
+  file before evaluation. Five reference gap probes were recorded in v1.md.
+- Documentation checks: UTF-8, local links/heading anchors, final newlines,
+  trailing whitespace, and `git diff --check` passed. Rust 1.99.1 was rechecked
+  against the official latest stable announcement; no tool installation occurred.
+- Limitations: vowels, conjuncts, broader case handling, phonetic punctuation and
+  escapes remain absent. Passing these examples does not establish arbitrary-word
+  compatibility. The long-buffer test checks correctness, not performance.
+  No composition/controller/platform tests or resource measurements have run.
+- Next: implement the small vowel group described above, keeping this increment
+  separate from composition and platform integration.
 
 ### 2026-10-28 — Phonetic reference and development tools
 

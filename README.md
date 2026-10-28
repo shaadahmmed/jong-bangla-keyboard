@@ -20,14 +20,67 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 
 ## Current status
 
-Requirements and contributor guidance only. There is no Rust workspace, runnable
-keyboard, installer, or validated compatibility claim yet.
-The phonetic behavior reference is now pinned to jsAvroPhonetic v1.1.4; see the
-[reference decision](docs/v1.md#phonetic-behavior-reference).
+A dependency-free Rust library now converts Bangla digits and 13 consonant
+sequences. This is a partial engine with 27 reference-checked examples, not a
+usable desktop keyboard or a full Avro compatibility claim. Vowels, conjuncts,
+composition, and Fcitx5 integration are still missing.
+See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
+[implemented slice](docs/v1.md#first-conversion-slice).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
+
+## Build and try the conversion slice
+
+Use Rust/Cargo **1.99.1 or newer**, with rustfmt and Clippy. This initial baseline
+is the toolchain actually validated, not evidence that older Rust cannot work.
+The library uses the Rust 2024 edition and has no external dependencies.
+
+From the repository root:
+
+```sh
+cargo fmt --all -- --check
+cargo clippy --offline --all-targets -- -D warnings
+cargo test --offline
+cargo build --offline --release
+cargo run --offline --example convert -- 'kh12T'
+```
+
+The last command prints `খ১২ট`. Try `'t T th Th n N'` for `ত ট থ ঠ ন ণ`, or
+`'0123456789'` for `০১২৩৪৫৬৭৮৯`. Pass the input as one quoted argument. The
+example prints the result to the terminal; the library retains no input state
+and performs no logging, file access, or network access.
+
+The API is `jong_bangla_core::transliterate(&str) -> String`; see
+[src/lib.rs](src/lib.rs). At each position it chooses the longest supported
+sequence, so `kh` becomes one `খ` instead of `কh`. Unmatched characters are
+copied unchanged, including Bangla and emoji. Supported parts of an otherwise
+unsupported word still convert: `ka` currently produces `কa`.
+
+## Repeat the reference comparison
+
+This optional development check uses Node.js (verified with the installed
+v24.21.0 LTS-line runtime). Node is not needed to build or use the Rust library.
+Our [authored fixtures](tests/fixtures/reference.tsv) record the raw input,
+expected UTF-8 output, and exact Unicode code points. The comparison calls
+`OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
+or autocorrection.
+
+Download the upstream parser and its MPL-1.1 license to a temporary directory,
+outside this project. These downloads require network access; subsequent checks
+run locally. The checker verifies the parser's SHA-256 before evaluating it.
+
+```sh
+reference_dir="$(mktemp -d)"
+curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic/d3790172ebff92d43f0294bc51fed1fca7c80039/src/avro-lib.js' --output "$reference_dir/avro-lib.js"
+curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic/d3790172ebff92d43f0294bc51fed1fca7c80039/MPL-1.1.txt' --output "$reference_dir/MPL-1.1.txt"
+node tools/check-reference.mjs "$reference_dir/avro-lib.js"
+```
+
+It checks the same 27 cases used by Rust tests and prints reference outputs for
+five known coverage gaps. The original comparison and test tooling are MIT;
+the upstream parser remains external and is not shipped with the library.
 
 ## License
 
