@@ -1,0 +1,83 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+u	উ	U+0989
+U	ঊ	U+098A
+ku	কু	U+0995 U+09C1
+kU	কূ	U+0995 U+09C2
+khu	খু	U+0996 U+09C1
+khU	খূ	U+0996 U+09C2
+gu	গু	U+0997 U+09C1
+gU	গূ	U+0997 U+09C2
+ghu	ঘু	U+0998 U+09C1
+ghU	ঘূ	U+0998 U+09C2
+tu	তু	U+09A4 U+09C1
+tU	তূ	U+09A4 U+09C2
+thu	থু	U+09A5 U+09C1
+thU	থূ	U+09A5 U+09C2
+Tu	টু	U+099F U+09C1
+TU	টূ	U+099F U+09C2
+Thu	ঠু	U+09A0 U+09C1
+ThU	ঠূ	U+09A0 U+09C2
+nu	নু	U+09A8 U+09C1
+nU	নূ	U+09A8 U+09C2
+Nu	ণু	U+09A3 U+09C1
+NU	ণূ	U+09A3 U+09C2
+bu	বু	U+09AC U+09C1
+bU	বূ	U+09AC U+09C2
+bhu	ভু	U+09AD U+09C1
+bhU	ভূ	U+09AD U+09C2
+mu	মু	U+09AE U+09C1
+mU	মূ	U+09AE U+09C2
+uu	উউ	U+0989 U+0989
+uU	উঊ	U+0989 U+098A
+Uu	ঊউ	U+098A U+0989
+UU	ঊঊ	U+098A U+098A
+au	আউ	U+0986 U+0989
+aU	আঊ	U+0986 U+098A
+iu	ইউ	U+0987 U+0989
+iU	ইঊ	U+0987 U+098A
+ua	উয়া	U+0989 U+09DF U+09BE
+Ua	ঊয়া	U+098A U+09DF U+09BE
+ui	উই	U+0989 U+0987
+Ui	ঊই	U+098A U+0987
+kuu	কুউ	U+0995 U+09C1 U+0989
+kuU	কুঊ	U+0995 U+09C1 U+098A
+kUu	কূউ	U+0995 U+09C2 U+0989
+kUU	কূঊ	U+0995 U+09C2 U+098A
+kau	কাউ	U+0995 U+09BE U+0989
+kaU	কাঊ	U+0995 U+09BE U+098A
+kiu	কিউ	U+0995 U+09BF U+0989
+kiU	কিঊ	U+0995 U+09BF U+098A
+kua	কুয়া	U+0995 U+09C1 U+09DF U+09BE
+kUa	কূয়া	U+0995 U+09C2 U+09DF U+09BE
+kui	কুই	U+0995 U+09C1 U+0987
+kUi	কূই	U+0995 U+09C2 U+0987
+uia	উইয়া	U+0989 U+0987 U+09DF U+09BE
+Uia	ঊইয়া	U+098A U+0987 U+09DF U+09BE
+uai	উয়াই	U+0989 U+09DF U+09BE U+0987
+Uai	ঊয়াই	U+098A U+09DF U+09BE U+0987
+uua	উউয়া	U+0989 U+0989 U+09DF U+09BE
+uUa	উঊয়া	U+0989 U+098A U+09DF U+09BE
+Uua	ঊউয়া	U+098A U+0989 U+09DF U+09BE
+UUa	ঊঊয়া	U+098A U+098A U+09DF U+09BE
+1u	১উ	U+09E7 U+0989
+1U	১ঊ	U+09E7 U+098A
+k1u	ক১উ	U+0995 U+09E7 U+0989
+ku2U	কু২ঊ	U+0995 U+09C1 U+09E8 U+098A
+k-u	ক-উ	U+0995 U+002D U+0989
+k,U	ক,ঊ	U+0995 U+002C U+098A
+কu	কউ	U+0995 U+0989
+কU	কঊ	U+0995 U+098A
+u🙂a	উ🙂আ	U+0989 U+1F642 U+0986
+k🙂U	ক🙂ঊ	U+0995 U+1F642 U+098A
+ku U	কু ঊ	U+0995 U+09C1 U+0020 U+098A
+kU u	কূ উ	U+0995 U+09C2 U+0020 U+0989
+u a	উ আ	U+0989 U+0020 U+0986
+U a	ঊ আ	U+098A U+0020 U+0986
+guni	গুনি	U+0997 U+09C1 U+09A8 U+09BF
+muni	মুনি	U+09AE U+09C1 U+09A8 U+09BF
+bhumi	ভুমি	U+09AD U+09C1 U+09AE U+09BF
+bhUmi	ভূমি	U+09AD U+09C2 U+09AE U+09BF
+tumi	তুমি	U+09A4 U+09C1 U+09AE U+09BF
+khuki	খুকি	U+0996 U+09C1 U+0995 U+09BF

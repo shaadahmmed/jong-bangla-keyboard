@@ -10,20 +10,20 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
-  lowercase `a`/`i` vowels with context. There are 93 reference-checked cases.
+  `a`/`i`/`u`/`U` vowels with context. There are 173 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Other vowels, conjuncts, composition, Fcitx5 integration, and a usable desktop
   keyboard are not implemented. Full Avro compatibility is not established.
-- **Next:** add the `u`/`U` vowel group, checking its independent forms, vowel
-  signs, case sensitivity, and neighboring vowels against the pinned reference.
+- **Next:** add uppercase `I`, checking its independent and dependent forms,
+  the `i`/`I` distinction, and neighboring vowels against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author `u`/`U` cases for word-initial vowels, vowels after
-   supported consonants, repeated vowels, and interaction with existing `a`/`i`.
+1. Independently author `I` cases for word-initial vowels, vowels after supported
+   consonants, repeated vowels, and interaction with existing `a`/`i`/`u`/`U`.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
 3. Add the required context handling to the Rust core without platform or
@@ -31,11 +31,47 @@ Dates use the project's Asia/Dhaka timezone.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the `u`/`U` cases match the reference, existing conversion
+**Done when:** the `I` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Case-sensitive u/U vowel group
+
+- Added `u`/`U`: independent উ/ঊ (U+0989/U+098A), and dependent ু/ূ
+  (U+09C1/U+09C2) after supported consonants. Extended the existing `i` context so
+  `a` after either new vowel also produces য়া: `kua` → `কুয়া`, `kUa` → `কূয়া`.
+  Preserved case-sensitive spelling (`bhumi` → `ভুমি`, `bhUmi` → `ভূমি`).
+- Authored 80 [new fixtures](../tests/fixtures/vowels-u.tsv), including both vowels
+  after all 13 supported consonants, vowel pairs, transitions with `a`/`i`,
+  repetition, digits, boundaries, Unicode, and words. Expected output/code points
+  were checked against the pinned parser before implementing Rust changes.
+- Extended the Rust and reference fixture runners: all 173 cases match the
+  SHA-256-verified external jsAvroPhonetic parser under Node.js v24.21.0. No
+  upstream code, rules, fixtures, runtime dependencies, or platform code imported.
+- Extended boundary and per-call reset regressions to the new vowels. Updated
+  temporary-limit tests now that `u` is supported, including literal backticks;
+  the long-buffer correctness test now includes both `u`/`U` and a following `a`.
+- Updated [README.md](../README.md) usage/status and
+  [v1.md](v1.md#second-vowel-group) for the new behavior, exact Unicode, current
+  fixture count, and remaining gaps. Previous slice descriptions remain historical.
+- Checks: `cargo test --offline` passed (seven regression tests and one
+  documentation example); `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, and
+  `cargo build --offline --release` passed. The reference comparison passed all
+  173 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'tumi bhUmi kua'` printed
+  `তুমি ভূমি কুয়া`; 11 additional documented conversions passed direct CLI checks.
+  Reused inspected Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools were installed
+  or upgraded.
+- Documentation/tool checks: `node --check`, UTF-8 decoding, local Markdown links
+  and heading anchors, final newlines, trailing whitespace, and `git diff --check`
+  passed. The pre-existing untracked `.vscode/` directory was left untouched.
+- Limitations: uppercase `A`/`I`, other vowels, unsupported consonants, conjuncts,
+  phonetic punctuation/escapes, composition, and platform integration remain
+  incomplete. No full compatibility, performance, or platform validation claimed.
+- Next: add uppercase `I` with its own reference cases and case-sensitive checks.
 
 ### 2026-10-28 — First contextual vowel group
 
