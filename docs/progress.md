@@ -18,32 +18,35 @@ Dates use the project's Asia/Dhaka timezone.
   Contextual lowercase `y` now handles independent, vowel-following, and
   consonant-following forms, including basic `r`/`rr` joiners.
   Uppercase `Z` → ্য and selected `aZ`/`oZ` longer forms are implemented.
-  There are 3,028 reference-checked cases.
+  Following-`r` priority after lowercase `y` and uppercase `Z` is implemented,
+  including `rri`/`rry`/`rrZ` exceptions and differing `yry`/`Zry` joiners.
+  There are 3,446 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 38 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
-  matching prefixes, contextual lowercase `y`, and uppercase `Z`/`aZ`/`oZ`.
+  matching prefixes, contextual lowercase `y`, uppercase `Z`/`aZ`/`oZ`, and
+  selected following-`r` forms after `y`/`Z`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** resolve longer `r` matching after lowercase `y` and uppercase `Z`,
-  including `yrr`/`Zrr` and `yry`/`Zry`, against the pinned reference.
+- **Next:** resolve following-`r` matching after uppercase `Y`, including
+  `Yr`/`Yrr`/`Yry`, against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author lowercase `y` and uppercase `Z` followed by `r` cases:
-   one and longer runs, `rri` overlaps, following vowels/aliases, lowercase `y`,
-   repeated forms, digits, boundaries, and copied Unicode. Compare uppercase `Y`
-   controls to avoid extending the rule without evidence.
+1. Independently author uppercase `Y` followed by `r` cases: one and longer
+   runs, `rri` overlaps, following vowels/aliases, `y`/`Z` joiners, repeated
+   forms, digits, boundaries, and copied Unicode. Keep lowercase `y` and
+   uppercase `Z` controls to preserve their distinct behavior.
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-   Known gaps include `yrr`/`Zrr`, longer `r` runs, and `Zry`.
-3. Add the selected matching/context rules while preserving existing `yr`/`Zr`
-   and `yrri`/`Zrri` results. Keep other conjunct/reph forms, aliases, and escapes
-   explicit. No composition or platform work.
+   Known gaps include `Yr`/`Yrr`/`Yry`.
+3. Add the selected matching/context rules while preserving existing `Yrri`
+   and `Yrry`/`YrrZ` results. Keep other conjunct/reph forms (including `rrY`),
+   aliases, and escapes explicit. No composition or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
@@ -52,6 +55,52 @@ conversion cases still pass, limitations are documented, and this log records
 actual results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Following r after lowercase y and uppercase Z
+
+- Added selected following-`r` matches after lowercase `y` and uppercase `Z`,
+  including the final `Z` in `aZ`/`oZ`. Two `r` keys normally add ্রর and
+  are consumed before the rest is matched (`yrrri` → `ইয়্রররি`,
+  `yrrrri` → `ইয়্ররৃ`). Existing `rri` and `rry`/`rrZ` keep priority
+  (`yrri` → `ইয়ৃ`, `yrry` → `ইয়রর‍্য`). Basic inventory remains 38 sequences
+  producing 35 letters.
+- Preserved single `yr`/`Zr`. Only uppercase `Z` before `ry`/`rZ` adds ্র
+  without U+200D (`Zry` → `্য্র্য`); lowercase `yry` retains the joiner
+  (`ইয়র‍্য`). Context remains local to one conversion call; copied Unicode
+  is preserved without normalization. Uppercase `Y` conjuncts remain separate.
+- Authored 418 [fixtures](../tests/fixtures/ya-following-r.tsv), checked against
+  the SHA-256-verified pinned parser before implementation. They cover one to
+  eight `r` keys, vowel overlaps/aliases, joiner exceptions, preceding contexts,
+  `aZ`/`oZ`, repetition, digits, boundaries, copied Unicode, and uppercase `Y`
+  controls. All 3,446 reference cases match under Node.js v24.21.0. No upstream
+  source, rules, or fixtures imported.
+- The focused Rust regression failed on `yrr` before implementation and passed
+  afterward. Extended control-character boundaries, separate-call, and long-buffer
+  regressions. Corrected a missing র in the new long-buffer expectation after
+  the first full run; the final full run passed. Removed resolved gap expectations
+  and refreshed seven reference probes around remaining uppercase `Y`, alias,
+  reph, and escape limitations.
+- Updated [README.md](../README.md) and
+  [v1.md](v1.md#following-r-after-lowercase-y-and-uppercase-z) with exact Unicode,
+  matching priority, examples, counts, remaining gaps, and next work. Marked
+  earlier gap tables as historical and refreshed fixture comments.
+- Checks: after applying rustfmt, `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (27 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'yrr yrri yry Zry'` printed
+  `ইয়্রর ইয়ৃ ইয়র‍্য ্য্র্য`. Rechecked and reused Rust/Cargo 1.99.1 and
+  Node.js v24.21.0. No tools upgraded or dependencies added; the external parser
+  stays outside the repository. The pre-existing untracked `.vscode/` is untouched.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors, final
+  newlines, trailing whitespace, fixture counts/code points, distinct new inputs,
+  both runner registrations, documented conversions, and `git diff --check` passed.
+- Limitations: uppercase `Y` following-`r` forms, other conjunct/reph forms,
+  remaining letters and aliases, punctuation/escapes, composition, and platform
+  integration remain incomplete. No broader compatibility, performance, or
+  platform validation claimed.
+- Next: resolve following-`r` matching after uppercase `Y` as a separate
+  reference-checked increment, preserving `Yrri` and `Yrry`/`YrrZ` controls.
 
 ### 2026-10-28 — Uppercase Z with aZ and oZ forms
 

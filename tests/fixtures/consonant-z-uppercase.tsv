@@ -1,7 +1,7 @@
 # Independently authored for Jong Bangla under MIT; not imported fixtures.
 # Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
 # Columns: raw input, expected output, exact Unicode code points (tab-separated).
-# Uppercase Z, aZ/oZ matches, r joiners, and case distinctions; longer Zrr/Zry, aliases, and escapes remain gaps.
+# Uppercase Z, aZ/oZ matches, r joiners, and case distinctions; following-r priority is covered separately; aliases and escapes remain gaps.
 kZ	ক্য	U+0995 U+09CD U+09AF
 kZa	ক্যা	U+0995 U+09CD U+09AF U+09BE
 khZ	খ্য	U+0996 U+09CD U+09AF
