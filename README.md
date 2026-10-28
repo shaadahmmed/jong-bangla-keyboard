@@ -25,8 +25,8 @@ through 40 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
 with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`/`w`
 and uppercase `Z` with selected `aZ`/`oZ` forms. Following-`r` matching after
-`y`/`Z`/`Y` is also implemented.
-This is a partial engine with 4,311 reference-checked examples,
+`y`/`Z`/`Y`/`w` is also implemented.
+This is a partial engine with 4,696 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Remaining
 letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -56,7 +56,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [following `r` after `Y`](docs/v1.md#following-r-after-uppercase-y), then
 [lowercase `q`](docs/v1.md#basic-lowercase-q-consonant), then
 [lowercase `v`](docs/v1.md#basic-lowercase-v-consonant), then
-[lowercase `w`](docs/v1.md#contextual-lowercase-w).
+[lowercase `w`](docs/v1.md#contextual-lowercase-w), then
+[following `r` after `w`](docs/v1.md#following-r-after-lowercase-w).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -106,6 +107,7 @@ Try `'Yr Yrri Yry Yrry'` → `য়্র য়ৃ য়্র্য য়রর‍্�
 Try `'q qa qi qOI qotha'` → `ক কা কি কৈ কথা` for lowercase `q` and vowel context.
 Try `'v vi vU valO vUmi'` → `ভ ভি ভূ ভালো ভূমি` for lowercase `v` and vowel context.
 Try `'w wa awa kw kwa'` → `ও ওয়া আওা ক্ব ক্বা` for contextual lowercase `w`.
+Try `'wr wrri wrrri wrry'` → `ওর ওৃ ও্রররি ওরর‍্য` for its following-`r` priority.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -214,9 +216,12 @@ consonants (`kw` → `ক্ব`). At the start or after a copied character/digi
 adds য় before a following supported single-key vowel (`wa` → `ওয়া`, `wee` → `ওয়ী`).
 After a vowel it adds only ও (`awa` → `আওা`). Every form establishes consonant
 context: `wrri` → `ওৃ`, `ww` → `ও্ব`, `wy` → `ও্য`. Longer `aZ`/`oZ`
-still match separately (`waZ` → `ওয়অ্যা`, `awaZ` → `আওঅ্যা`). Uppercase `W`,
-following-`r` attachment (`wrr` → `ও্রর`), reph (`rrw` → `র্্ব`), and escapes
-remain incomplete.
+still match separately (`waZ` → `ওয়অ্যা`, `awaZ` → `আওঅ্যা`). Following `r`
+shares lowercase `y`'s two-key priority: `wrr` → `ও্রর`, `wrrri` → `ও্রররি`,
+and `wrrrri` → `ও্ররৃ`, while `wrri` → `ওৃ` and `wrry` → `ওরর‍্য` keep
+their exceptions. Single `wr` stays separate (`wr` → `ওর`, `wry` → `ওর‍্য`).
+The same rule applies after consonants/vowels (`kwrr` → `ক্ব্রর`, `awrr` → `আও্রর`).
+Uppercase `W`, reph (`rrw` → `র্্ব`), other conjuncts, and escapes remain incomplete.
 
 ## Repeat the reference comparison
 
@@ -247,8 +252,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [following-`r` fixtures](tests/fixtures/ya-following-r.tsv),
 [`Y` following-`r` fixtures](tests/fixtures/uppercase-y-following-r.tsv),
 [`q` fixtures](tests/fixtures/consonant-q.tsv),
-[`v` fixtures](tests/fixtures/consonant-v.tsv), and
-[`w` fixtures](tests/fixtures/consonant-w.tsv) record the raw input,
+[`v` fixtures](tests/fixtures/consonant-v.tsv),
+[`w` fixtures](tests/fixtures/consonant-w.tsv), and
+[`w` following-`r` fixtures](tests/fixtures/w-following-r.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -264,7 +270,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 4,311 cases used by Rust tests and prints reference outputs for
+It checks the same 4,696 cases used by Rust tests and prints reference outputs for
 seven known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

@@ -39,6 +39,7 @@
 //! assert_eq!(transliterate("q qa qi qOI qotha"), "ক কা কি কৈ কথা");
 //! assert_eq!(transliterate("v vi vU valO vUmi"), "ভ ভি ভূ ভালো ভূমি");
 //! assert_eq!(transliterate("w wa awa kw kwa"), "ও ওয়া আওা ক্ব ক্বা");
+//! assert_eq!(transliterate("wr wrri wrrri wrry"), "ওর ওৃ ও্রররি ওরর\u{200D}্য");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -144,6 +145,8 @@ enum Context {
 /// it adds য় before a following supported single-key vowel (including aliases
 /// beginning with that key). After a vowel it adds only ও. Every w establishes
 /// consonant context for following signs; rri does not trigger the extra য়.
+/// Following r keys share the y two-r rule and exceptions: wrr -> ও্রর,
+/// wrri -> ওৃ, wrry -> ওরর‍্য. A single wr stays separate, including before y/Z.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -195,7 +198,7 @@ pub fn transliterate(input: &str) -> String {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
             if *raw == "Y" {
-                remaining = consume_ya_r_prefix(remaining, 'Y', &mut output);
+                remaining = consume_following_r_prefix(remaining, 'Y', &mut output);
             }
             context = Context::Consonant {
                 ya_joiner: matches!(*raw, "r" | "rr"),
@@ -208,7 +211,7 @@ pub fn transliterate(input: &str) -> String {
                 (_, Context::Other) => "ইয়",
             });
             remaining = &remaining[1..];
-            remaining = consume_ya_r_prefix(remaining, ch, &mut output);
+            remaining = consume_following_r_prefix(remaining, ch, &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if ch == 'w' {
             remaining = &remaining[1..];
@@ -221,6 +224,7 @@ pub fn transliterate(input: &str) -> String {
                 }
                 _ => "ও",
             });
+            remaining = consume_following_r_prefix(remaining, 'w', &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if remaining.starts_with("aZ") || remaining.starts_with("oZ") {
             // Match both ASCII keys before contextual a/o, even after a consonant.
@@ -230,7 +234,7 @@ pub fn transliterate(input: &str) -> String {
                 "অ্য"
             });
             remaining = &remaining[2..];
-            remaining = consume_ya_r_prefix(remaining, 'Z', &mut output);
+            remaining = consume_following_r_prefix(remaining, 'Z', &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if remaining.starts_with("OI") || remaining.starts_with("OU") {
             // Consume both ASCII keys before single `O`; retain the final key.
@@ -303,9 +307,13 @@ pub fn transliterate(input: &str) -> String {
     output
 }
 
-// Independently checked following-r prefixes depend on the raw y/Z/Y key,
+// Independently checked following-r prefixes depend on the raw y/Z/Y/w key,
 // including the Z in aZ/oZ. Do not infer them from copied Bangla.
-fn consume_ya_r_prefix<'a>(remaining: &'a str, raw_ya: char, output: &mut String) -> &'a str {
+fn consume_following_r_prefix<'a>(
+    remaining: &'a str,
+    raw_key: char,
+    output: &mut String,
+) -> &'a str {
     if remaining.starts_with("rr")
         && !["rri", "rry", "rrZ"]
             .iter()
@@ -313,8 +321,8 @@ fn consume_ya_r_prefix<'a>(remaining: &'a str, raw_ya: char, output: &mut String
     {
         output.push_str("্রর");
         &remaining[2..]
-    } else if (raw_ya == 'Y' && remaining.starts_with('r') && !remaining.starts_with("rr"))
-        || (raw_ya == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))
+    } else if (raw_key == 'Y' && remaining.starts_with('r') && !remaining.starts_with("rr"))
+        || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))
     {
         // Y attaches a single r; Z only does so before y/Z. Both omit the joiner.
         output.push_str("্র");

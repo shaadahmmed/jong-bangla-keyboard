@@ -26,41 +26,88 @@ Dates use the project's Asia/Dhaka timezone.
   Basic lowercase `v` → ভ and its vowel context are implemented.
   Contextual lowercase `w` now handles independent, vowel-following, and
   consonant-following forms, including the independent following-vowel য়.
-  There are 4,311 reference-checked cases.
+  Following-`r` priority after `w` now handles two-`r` attachment and preserves
+  the `rri`/`rry`/`rrZ` exceptions and basic-`r` joiners.
+  There are 4,696 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
   matching prefixes, contextual lowercase `y`/`w`, uppercase `Z`/`aZ`/`oZ`, and
-  selected following-`r` forms after `y`/`Z`/`Y`.
+  selected following-`r` forms after `y`/`Z`/`Y`/`w`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** check following-`r` priority after lowercase `w` against the pinned
-  reference, keeping reph, uppercase aliases, and other longer forms separate.
+- **Next:** check lowercase `x` and its context-dependent forms against the
+  pinned reference, keeping uppercase aliases and longer forms separate.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author following-`r` cases after lowercase `w`: runs of one
-   through eight `r` keys, `rri` and `rry`/`rrZ` overlaps, following vowels/aliases,
-   differing preceding contexts, repetitions, digits, boundaries, and copied Unicode.
+1. Independently author lowercase `x` cases: standalone output, supported
+   consonants/vowels before it, following vowels/aliases, repetitions, digits,
+   boundaries, copied Unicode, and case controls.
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-   Known gaps include `wrr` → `ও্রর` and `wrrri` → `ও্রররি`; existing
-   `wrri` → `ওৃ` must retain priority.
-3. Add the selected following-`r` rules. Keep `rrw` reph, uppercase aliases,
+   Known gaps include `x` → `এক্স` and `kx` → `ক্ষ`.
+3. Add the selected `x` matching/context rules. Keep uppercase aliases, reph,
    other conjuncts, longer matches, and escapes explicit. No composition or
    platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected following-`r` cases match the reference, existing
+**Done when:** the selected lowercase `x` cases match the reference, existing
 conversion cases still pass, limitations are documented, and this log records
 actual results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Following r after lowercase w
+
+- Added selected following-`r` forms after exact lowercase `w`, reusing the
+  existing matching helper and renaming it `consume_following_r_prefix` for
+  its broader scope. Two `r` keys add ্রর (U+09CD U+09B0 U+09B0) before
+  the rest is matched: `wrrri` → `ও্রররি`, `wrrrri` → `ও্ররৃ`.
+  The 40 basic consonant sequences producing 35 letters remain unchanged.
+- Preserved existing `rri` and `rry`/`rrZ` priority (`wrri` → `ওৃ`,
+  `wrry` → `ওরর‍্য`). Single `wr` stays separate; `wry` retains U+200D.
+  The same rules apply after vowels/consonants (`awrr` → `আও্রর`,
+  `kwrr` → `ক্ব্রর`) and in repetitions (`wrrwrr` → `ও্রর্ব্রর`).
+  No normalization, spelling correction, persistent state, dependencies, or
+  platform code added.
+- Authored 385 [fixtures](../tests/fixtures/w-following-r.tsv), checked against
+  the SHA-256-verified pinned parser before implementation. They cover runs of
+  one through eight `r` keys, `rri`/`rry`/`rrZ` exceptions, vowels/aliases and
+  transitions, differing preceding contexts, repetition, case distinctions,
+  all digits, boundaries, and copied Unicode. All 4,696 reference cases match
+  under Node.js v24.21.0. No upstream source, rules, or fixtures imported.
+- The focused Rust regression failed on `wrr` before implementation and passed
+  afterward. Extended control-character boundaries, separate-call, and long-buffer
+  regressions; the full run passed. Removed the resolved `wrr`/`wrrri` gap
+  expectations and refreshed seven probes around remaining `x`, aliases, reph,
+  and escapes.
+- Updated [README.md](../README.md) and
+  [v1.md](v1.md#following-r-after-lowercase-w) with exact Unicode, matching
+  priority, examples, case count, limitations, and next work. Marked the
+  previous `wrr`/`wrrri` gap descriptions as historical.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (32 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'wr wrri wrrri wrry'`
+  printed `ওর ওৃ ও্রররি ওরর‍্য`; 13 new documented conversions also passed
+  direct CLI checks. Rechecked and reused Rust/Cargo 1.99.1 and Node.js v24.21.0.
+  No tools upgraded; the external parser stays outside the repository.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors, final
+  newlines, trailing whitespace, fixture counts/code points, distinct new inputs,
+  both runner registrations, and `git diff --check` passed. The pre-existing
+  untracked `.vscode/` is untouched.
+- Limitations: `rrw` and other reph/conjunct forms, remaining letters and
+  aliases, punctuation/escapes, composition, and platform integration remain
+  incomplete. No broader compatibility, performance, or platform validation claimed.
+- Next: check lowercase `x` and its context-dependent forms as a separate
+  reference-checked increment.
 
 ### 2026-10-28 — Contextual lowercase w
 
