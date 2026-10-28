@@ -10,21 +10,21 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
-  `a`/`i`/`I`/`u`/`U`/`e`/`ee` vowels with context. There are 317 reference-checked
-  cases.
+  `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo` vowels with context. There are 473
+  reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Other vowels, conjuncts, composition, Fcitx5 integration, and a usable desktop
   keyboard are not implemented. Full Avro compatibility is not established.
-- **Next:** add the `o`/`O` vowel group, checking its independent/dependent forms,
-  contextual behavior, and neighboring vowels against the pinned reference.
+- **Next:** add the two-key `OI`/`OU` vowels, checking independent/dependent forms,
+  case sensitivity, and neighboring vowels against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author `o`/`O` cases for word-initial vowels, vowels after
-   supported consonants, repeated sequences, and interaction with existing vowels.
+1. Independently author `OI`/`OU` cases for word-initial vowels, vowels after
+   supported consonants, case-sensitive matching, and neighboring vowel sequences.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
 3. Add the required context handling to the Rust core without platform or
@@ -32,11 +32,50 @@ Dates use the project's Asia/Dhaka timezone.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the `o`/`O` cases match the reference, existing conversion
+**Done when:** the `OI`/`OU` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Contextual o/O and oo vowel group
+
+- Added lowercase `o`: independent অ (U+0985), no added character immediately
+  after a supported consonant, and ও (U+0993) after other supported raw vowel
+  keys. Added uppercase `O`: independent ও or dependent ো (U+09CB). Added greedy
+  `oo` as short `u`: independent উ or dependent ু (U+09C1).
+- Context now keeps the raw vowel key, including `a` and the ends of repeated-key
+  aliases: `ao` → `আও`, `eeo` → `ঈও`, `ooo` → `উঅ`. Even when `o` adds no character,
+  it establishes vowel context (`koO` → `কও`, `koa` → `কয়া`). Context remains
+  conversion-local; copied characters and digits reset it.
+- Authored 156 [fixtures](../tests/fixtures/vowels-o.tsv), checked against the
+  pinned parser before Rust implementation. They cover all 13 consonants with
+  all three forms, neighboring vowels/aliases, longer runs, boundaries, Unicode,
+  and words. All 473 reference cases match with the SHA-256-verified external
+  parser under Node.js v24.21.0. No upstream source, rules, or fixtures imported.
+- Extended boundary, separate-call, long-buffer, and literal-backtick regressions.
+  Replaced the temporary `kemon` gap expectation with its reference-checked result
+  `কেমন`. Kept the two-key vowels `OI`/`OU` explicitly incomplete for the next step.
+- Updated [README.md](../README.md) and [v1.md](v1.md#fifth-vowel-group) with exact
+  Unicode, raw-context behavior, examples, current count, and remaining gaps.
+  No dependencies, composition controls, or platform code added.
+- Checks: `cargo test --offline` passed (ten regression tests and one documentation
+  example); `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, and
+  `cargo build --offline --release` passed. The reference comparison passed all
+  473 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'tumi kemon tOmake'` printed
+  `তুমি কেমন তোমাকে`; 18 additional documented conversions passed direct CLI checks.
+  Reused inspected Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools were installed
+  or upgraded.
+- Documentation/tool checks: `node --check`, UTF-8 decoding, local Markdown links
+  and heading anchors, final newlines, trailing whitespace, and `git diff --check`
+  passed. The pre-existing untracked `.vscode/` directory was left untouched.
+- Limitations: `OI`/`OU`, uppercase `A`/`E`, other phonetic sequences, unsupported
+  consonants, conjuncts, punctuation/escapes, composition, and platform integration
+  remain incomplete. No full compatibility, performance, or platform validation
+  claimed.
+- Next: add the `OI`/`OU` two-key vowels after checking their reference behavior.
 
 ### 2026-10-28 — Contextual e and ee vowel group
 

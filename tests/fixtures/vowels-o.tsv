@@ -1,0 +1,159 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+o	অ	U+0985
+O	ও	U+0993
+oo	উ	U+0989
+ko	ক	U+0995
+kO	কো	U+0995 U+09CB
+koo	কু	U+0995 U+09C1
+kho	খ	U+0996
+khO	খো	U+0996 U+09CB
+khoo	খু	U+0996 U+09C1
+go	গ	U+0997
+gO	গো	U+0997 U+09CB
+goo	গু	U+0997 U+09C1
+gho	ঘ	U+0998
+ghO	ঘো	U+0998 U+09CB
+ghoo	ঘু	U+0998 U+09C1
+to	ত	U+09A4
+tO	তো	U+09A4 U+09CB
+too	তু	U+09A4 U+09C1
+tho	থ	U+09A5
+thO	থো	U+09A5 U+09CB
+thoo	থু	U+09A5 U+09C1
+To	ট	U+099F
+TO	টো	U+099F U+09CB
+Too	টু	U+099F U+09C1
+Tho	ঠ	U+09A0
+ThO	ঠো	U+09A0 U+09CB
+Thoo	ঠু	U+09A0 U+09C1
+no	ন	U+09A8
+nO	নো	U+09A8 U+09CB
+noo	নু	U+09A8 U+09C1
+No	ণ	U+09A3
+NO	ণো	U+09A3 U+09CB
+Noo	ণু	U+09A3 U+09C1
+bo	ব	U+09AC
+bO	বো	U+09AC U+09CB
+boo	বু	U+09AC U+09C1
+bho	ভ	U+09AD
+bhO	ভো	U+09AD U+09CB
+bhoo	ভু	U+09AD U+09C1
+mo	ম	U+09AE
+mO	মো	U+09AE U+09CB
+moo	মু	U+09AE U+09C1
+ao	আও	U+0986 U+0993
+aO	আও	U+0986 U+0993
+aoo	আউ	U+0986 U+0989
+kao	কাও	U+0995 U+09BE U+0993
+kaO	কাও	U+0995 U+09BE U+0993
+kaoo	কাউ	U+0995 U+09BE U+0989
+oa	অয়া	U+0985 U+09DF U+09BE
+Oa	ওয়া	U+0993 U+09DF U+09BE
+ooa	উয়া	U+0989 U+09DF U+09BE
+io	ইও	U+0987 U+0993
+iO	ইও	U+0987 U+0993
+ioo	ইউ	U+0987 U+0989
+kio	কিও	U+0995 U+09BF U+0993
+kiO	কিও	U+0995 U+09BF U+0993
+kioo	কিউ	U+0995 U+09BF U+0989
+oi	অই	U+0985 U+0987
+Oi	ওই	U+0993 U+0987
+ooi	উই	U+0989 U+0987
+Io	ঈও	U+0988 U+0993
+IO	ঈও	U+0988 U+0993
+Ioo	ঈউ	U+0988 U+0989
+kIo	কীও	U+0995 U+09C0 U+0993
+kIO	কীও	U+0995 U+09C0 U+0993
+kIoo	কীউ	U+0995 U+09C0 U+0989
+oI	অঈ	U+0985 U+0988
+ooI	উঈ	U+0989 U+0988
+uo	উও	U+0989 U+0993
+uO	উও	U+0989 U+0993
+uoo	উউ	U+0989 U+0989
+kuo	কুও	U+0995 U+09C1 U+0993
+kuO	কুও	U+0995 U+09C1 U+0993
+kuoo	কুউ	U+0995 U+09C1 U+0989
+ou	অউ	U+0985 U+0989
+Ou	ওউ	U+0993 U+0989
+oou	উউ	U+0989 U+0989
+Uo	ঊও	U+098A U+0993
+UO	ঊও	U+098A U+0993
+Uoo	ঊউ	U+098A U+0989
+kUo	কূও	U+0995 U+09C2 U+0993
+kUO	কূও	U+0995 U+09C2 U+0993
+kUoo	কূউ	U+0995 U+09C2 U+0989
+oU	অঊ	U+0985 U+098A
+ooU	উঊ	U+0989 U+098A
+eo	এও	U+098F U+0993
+eO	এও	U+098F U+0993
+eoo	এউ	U+098F U+0989
+keo	কেও	U+0995 U+09C7 U+0993
+keO	কেও	U+0995 U+09C7 U+0993
+keoo	কেউ	U+0995 U+09C7 U+0989
+oe	অএ	U+0985 U+098F
+Oe	ওএ	U+0993 U+098F
+ooe	উএ	U+0989 U+098F
+eeo	ঈও	U+0988 U+0993
+eeO	ঈও	U+0988 U+0993
+eeoo	ঈউ	U+0988 U+0989
+keeo	কীও	U+0995 U+09C0 U+0993
+keeO	কীও	U+0995 U+09C0 U+0993
+keeoo	কীউ	U+0995 U+09C0 U+0989
+oee	অঈ	U+0985 U+0988
+Oee	ওঈ	U+0993 U+0988
+ooee	উঈ	U+0989 U+0988
+OO	ওও	U+0993 U+0993
+Oo	ওও	U+0993 U+0993
+oO	অও	U+0985 U+0993
+ooo	উঅ	U+0989 U+0985
+oooo	উউ	U+0989 U+0989
+Ooo	ওউ	U+0993 U+0989
+ooO	উও	U+0989 U+0993
+oOo	অওও	U+0985 U+0993 U+0993
+OOO	ওওও	U+0993 U+0993 U+0993
+kooo	কুঅ	U+0995 U+09C1 U+0985
+koooo	কুউ	U+0995 U+09C1 U+0989
+kOo	কোও	U+0995 U+09CB U+0993
+koO	কও	U+0995 U+0993
+kOO	কোও	U+0995 U+09CB U+0993
+aao	আআও	U+0986 U+0986 U+0993
+oao	অয়াও	U+0985 U+09DF U+09BE U+0993
+koao	কয়াও	U+0995 U+09DF U+09BE U+0993
+oooa	উঅয়া	U+0989 U+0985 U+09DF U+09BE
+koooa	কুঅয়া	U+0995 U+09C1 U+0985 U+09DF U+09BE
+oia	অইয়া	U+0985 U+0987 U+09DF U+09BE
+Oia	ওইয়া	U+0993 U+0987 U+09DF U+09BE
+ooia	উইয়া	U+0989 U+0987 U+09DF U+09BE
+koa	কয়া	U+0995 U+09DF U+09BE
+kOa	কোয়া	U+0995 U+09CB U+09DF U+09BE
+kooi	কুই	U+0995 U+09C1 U+0987
+kooO	কুও	U+0995 U+09C1 U+0993
+1o	১অ	U+09E7 U+0985
+1O	১ও	U+09E7 U+0993
+1oo	১উ	U+09E7 U+0989
+k1o	ক১অ	U+0995 U+09E7 U+0985
+ko2a	ক২আ	U+0995 U+09E8 U+0986
+o a	অ আ	U+0985 U+0020 U+0986
+O a	ও আ	U+0993 U+0020 U+0986
+oo a	উ আ	U+0989 U+0020 U+0986
+o🙂a	অ🙂আ	U+0985 U+1F642 U+0986
+কo	কঅ	U+0995 U+0985
+কO	কও	U+0995 U+0993
+কoo	কউ	U+0995 U+0989
+k🙂o	ক🙂অ	U+0995 U+1F642 U+0985
+k-o	ক-অ	U+0995 U+002D U+0985
+k,O	ক,ও	U+0995 U+002C U+0993
+ko o	ক অ	U+0995 U+0020 U+0985
+oo🙂o	উ🙂অ	U+0989 U+1F642 U+0985
+a-o	আ-অ	U+0986 U+002D U+0985
+kemon	কেমন	U+0995 U+09C7 U+09AE U+09A8
+tumi kemon	তুমি কেমন	U+09A4 U+09C1 U+09AE U+09BF U+0020 U+0995 U+09C7 U+09AE U+09A8
+onek	অনেক	U+0985 U+09A8 U+09C7 U+0995
+mon	মন	U+09AE U+09A8
+mOn	মোন	U+09AE U+09CB U+09A8
+mone	মনে	U+09AE U+09A8 U+09C7
+kOnO	কোনো	U+0995 U+09CB U+09A8 U+09CB
+tOmake	তোমাকে	U+09A4 U+09CB U+09AE U+09BE U+0995 U+09C7
+kOthao	কোথাও	U+0995 U+09CB U+09A5 U+09BE U+0993

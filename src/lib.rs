@@ -1,7 +1,7 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
 //! Supports ASCII digits, the consonant sequences below, and
-//! `a`/`i`/`I`/`u`/`U`/`e`/`ee`.
+//! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
 //! complete Avro-compatible engine: other vowels, conjuncts, case normalization,
 //! punctuation rules, and escapes are not implemented.
@@ -15,6 +15,7 @@
 //! assert_eq!(transliterate("tumi bhUmi kua"), "তুমি ভূমি কুয়া");
 //! assert_eq!(transliterate("ki kI nIti"), "কি কী নীতি");
 //! assert_eq!(transliterate("ami ke kee"), "আমি কে কী");
+//! assert_eq!(transliterate("tumi kemon tOmake"), "তুমি কেমন তোমাকে");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -37,17 +38,18 @@ const CONSONANTS: [(&str, &str); 13] = [
 #[derive(Clone, Copy)]
 enum Context {
     Consonant,
-    // A following `a` inserts য় after i/I/u/U/e/ee.
-    VowelWithYa,
+    // Retain the raw vowel key: `ao` uses ও, but the last `o` in `ooo` uses অ.
+    Vowel(char),
     Other,
 }
 
 /// Convert the supported sequences and digits, preserving unmatched characters.
 ///
 /// At each position, the longest supported sequence wins (`kh` before `k`).
-/// The supported vowels become signs after a supported consonant and independent
-/// vowels otherwise; `ee` is an alias for long `I`, matched before single `e`.
-/// An `a` immediately after `i`/`I`/`u`/`U`/`e`/`ee` becomes `য়া`. Context
+/// Most supported vowels become signs after a supported consonant; lowercase `o`
+/// adds no character there. `ee` and `oo` alias `I` and `u`, matched before single
+/// keys. Lowercase `o` after a supported raw vowel other than `o` becomes ও.
+/// An `a` after a supported vowel other than `a` becomes `য়া`. Context
 /// follows raw matched tokens, not preserved Bangla. Matching is case-sensitive.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Other vowels and backtick escapes remain unsupported.
@@ -67,10 +69,12 @@ pub fn transliterate(input: &str) -> String {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
             context = Context::Consonant;
-        } else if matches!(ch, 'a' | 'i' | 'I' | 'u' | 'U' | 'e') {
-            // Match the two ASCII keys as one long vowel before handling `e`.
+        } else if matches!(ch, 'a' | 'i' | 'I' | 'u' | 'U' | 'e' | 'o' | 'O') {
+            // Match repeated-key aliases before their single-key forms.
             let (vowel, width) = if remaining.starts_with("ee") {
                 ('I', 2)
+            } else if remaining.starts_with("oo") {
+                ('u', 2)
             } else {
                 (ch, ch.len_utf8())
             };
@@ -81,19 +85,23 @@ pub fn transliterate(input: &str) -> String {
                 ('u', Context::Consonant) => "ু",
                 ('U', Context::Consonant) => "ূ",
                 ('e', Context::Consonant) => "ে",
-                ('a', Context::VowelWithYa) => "য়া",
+                ('o', Context::Consonant) => "",
+                ('O', Context::Consonant) => "ো",
+                ('a', Context::Vowel('a')) => "আ",
+                ('a', Context::Vowel(_)) => "য়া",
+                ('o', Context::Vowel('o')) => "অ",
+                ('o', Context::Vowel(_)) => "ও",
                 ('a', _) => "আ",
                 ('i', _) => "ই",
                 ('I', _) => "ঈ",
                 ('u', _) => "উ",
                 ('e', _) => "এ",
+                ('o', _) => "অ",
+                ('O', _) => "ও",
                 _ => "ঊ",
             });
-            context = if matches!(vowel, 'i' | 'I' | 'u' | 'U' | 'e') {
-                Context::VowelWithYa
-            } else {
-                Context::Other
-            };
+            // Both aliases repeat one key, so `ch` is also their last raw key.
+            context = Context::Vowel(ch);
             remaining = &remaining[width..];
         } else {
             output.push(match ch {
