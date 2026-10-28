@@ -95,6 +95,11 @@ fn nasal_rri_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/nasal-rri.tsv"));
 }
 
+#[test]
+fn uppercase_y_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consonant-y-uppercase.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -118,9 +123,10 @@ fn check_fixture(fixture: &str) {
 
 #[test]
 fn empty_input_and_unmatched_unicode_are_preserved() {
-    for input in ["", "qXYZ", "বাংলা", "é🙂\u{301}", "\t\n !`"] {
+    for input in ["", "qXZ", "বাংলা", "é🙂\u{301}", "\t\n !`"] {
         assert_eq!(transliterate(input), input);
     }
+    assert_eq!(transliterate("qXYZ"), "qXয়Z");
     assert_eq!(transliterate("🙂khবাংলা2é"), "🙂খবাংলা২é");
     // Only ASCII digits are converted; other scripts' digits are preserved.
     assert_eq!(transliterate("০১২৩৪৫৬৭৮৯ ١٢ １２"), "০১২৩৪৫৬৭৮৯ ١٢ １２");
@@ -152,6 +158,13 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("NGc", "ঞচ"),
         ("NGch", "ঞছ"),
         ("N`g", "ণ`গ"),
+        ("y", "y"),
+        ("Yy", "য়y"),
+        ("Yr", "য়র"),
+        ("rrY", "ররয়"),
+        ("YZ", "য়Z"),
+        ("Y`a", "য়`আ"),
+        ("Y`h", "য়`হ"),
         ("pr", "পর"),
         ("pp", "পপ"),
         ("pph", "পফ"),
@@ -219,6 +232,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = input + &"zizU".repeat(4096) + &"NgiNGU".repeat(4096);
     let input = input + &"ngang1ngoo".repeat(4096);
     let input = input + &"Ngrri🙂NGrrri1ngrrrri".repeat(4096);
+    let input = input + &"YiaYrriY1a".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -228,6 +242,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let expected = expected + &"যিযূ".repeat(4096) + &"ঙিঞূ".repeat(4096);
     let expected = expected + &"ঙ্গাং১ঙ্গঅ".repeat(4096);
     let expected = expected + &"ঙররি🙂ঞরৃ১ংররররি".repeat(4096);
+    let expected = expected + &"য়িয়ায়ৃয়১আ".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -263,6 +278,7 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
                 ("Ng", "ঙ"),
                 ("NG", "ঞ"),
                 ("ng", "ং"),
+                ("Y", "য়"),
             ] {
                 let input = format!("{raw}{boundary}{vowel} {vowel}{boundary}a");
                 let expected = format!("{letter}{boundary}{independent} {independent}{boundary}আ");
@@ -336,4 +352,6 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     assert_eq!(transliterate("ng"), "ং");
     assert_eq!(transliterate("a"), "আ");
     assert_eq!(transliterate("rri"), "ঋ");
+    assert_eq!(transliterate("Y"), "য়");
+    assert_eq!(transliterate("a"), "আ");
 }

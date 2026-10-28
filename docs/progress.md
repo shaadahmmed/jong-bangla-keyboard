@@ -12,41 +12,83 @@ Dates use the project's Asia/Dhaka timezone.
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
   `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri` vowel forms.
   Basic `r`/`rr`, `p`/`ph`/`f`, `c`/`ch`/`j`/`jh`, `d`/`dh`/`D`/`Dh`, `l`/`h`,
-  `s`/`sh`/`S`/`Sh`, `R`/`Rh`, lowercase `z`, and `Ng`/`NG` consonant matching is
+  `s`/`sh`/`S`/`Sh`, `R`/`Rh`, lowercase `z`, `Ng`/`NG`, and uppercase `Y` consonant matching is
   implemented. Lowercase `ng` → ং and selected ng-vowel forms are implemented.
   Following `rri` and longer `r` runs after `Ng`/`NG`/`ng` now match the reference.
-  There are 2,150 reference-checked cases.
+  There are 2,292 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Principal forms for all 11 basic vowels and 37 consonant sequences (34 letters)
+  Principal forms for all 11 basic vowels and 38 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, and three nasal-plus-`r`
   matching prefixes.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** add exact uppercase `Y` → য়, checking Unicode, case distinctions,
-  adjacent consonants, and vowel context against the pinned reference.
+- **Next:** add lowercase `y` context behavior, checking independent, vowel-following,
+  and consonant-following forms against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author exact uppercase `Y` cases with supported vowels/aliases,
-   adjacent consonants, digits, boundaries, and copied Unicode. Standalone
-   `Y` → য় (U+09DF) is already reference-verified; lowercase `y` has different
-   contextual behavior and stays outside this basic-letter increment.
+1. Independently author lowercase `y` cases at the start and after supported
+   vowels/consonants, plus following vowels/aliases, repeated keys, digits,
+   boundaries, and copied Unicode. Preliminary reference probes distinguish
+   `y` → `ইয়`, `ay` → `আয়`, and `ky` → `ক্য`; uppercase `Y` stays distinct.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
-3. Add only basic uppercase `Y`. Keep other incomplete letters, context,
+3. Add the selected lowercase `y` context rules. Keep other incomplete letters, context,
    conjuncts, reph, and escapes explicit. No composition/platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected uppercase-`Y` cases match the reference, existing conversion
+**Done when:** the selected lowercase-`y` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Basic uppercase Y consonant
+
+- Added exact uppercase `Y` → য় (U+09DF), with consonant context for supported
+  vowels/aliases, including `Yi` → `য়ি` and `Yrri` → `য়ৃ`. The basic inventory
+  is now 38 consonant sequences producing 35 distinct letters. Lowercase `y`
+  remains a separate, incomplete context-dependent form.
+- Authored 142 [fixtures](../tests/fixtures/consonant-y-uppercase.tsv), checked
+  against the SHA-256-verified pinned parser before implementation. They cover
+  every supported vowel/alias on either side, following-vowel transitions,
+  ordinary adjacency, repeated `Y`, digits, boundaries, copied Unicode, and words.
+  All 2,292 reference cases match under Node.js v24.21.0; seven gap probes report
+  lowercase `y`, conjunct/reph, `Z`, and escape limitations. No upstream source,
+  rules, or fixtures imported.
+- Generated য় is U+09DF. A fixture preserves copied decomposed য় as U+09AF
+  U+09BC before generated U+09DF U+09BF; no normalization added. Verified
+  ordinary `kY` → `কয়`, `Yk` → `য়ক`, and `YY` → `য়য়` without automatic conjuncts.
+- The focused Rust regression failed on `Y` before implementation, then passed
+  after adding the mapping. Extended Unicode-boundary, separate-call, and
+  long-buffer checks. Updated the old unmatched-`qXYZ` check because its `Y`
+  now converts, while `q`, `X`, and `Z` remain literal.
+- Updated [README.md](../README.md) and
+  [v1.md](v1.md#basic-uppercase-y-consonant) with Unicode, counts, examples, and
+  exact remaining gaps. No dependencies, composition, or platform code added.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (24 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'zaY hoY hoYe maYa'`
+  printed `যায় হয় হয়ে মায়া`. Rechecked and reused Rust/Cargo 1.99.1 and
+  Node.js v24.21.0; no tools installed or upgraded. The external reference remains
+  outside the repository; the pre-existing untracked `.vscode/` directory is untouched.
+- Documentation/fixture checks: UTF-8 decoding, 161 local Markdown links/anchors
+  across four documents, final newlines, trailing whitespace, fixture counts,
+  exact code points, both runner registrations, distinct new inputs, and
+  `git diff --check` passed.
+- Limitations: lowercase `y`, remaining letters, conjunct/reph forms, aliases,
+  punctuation/escapes, composition, and platform integration remain incomplete.
+  No full compatibility, performance, or platform validation claimed.
+- Next: add lowercase `y` context rules in a separate increment. Preliminary
+  probes confirm `y` → `ইয়`, `ay` → `আয়`, `ky` → `ক্য`, and `kiya` → `কিয়া`;
+  full vowel/context fixtures still need independent checks.
 
 ### 2026-10-28 — Following rri after Ng/NG/ng
 

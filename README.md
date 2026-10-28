@@ -20,11 +20,11 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 
 ## Current status
 
-A dependency-free Rust library now converts Bangla digits, 34 consonant letters
-through 37 basic sequences, lowercase `ng` with selected vowel forms, and
+A dependency-free Rust library now converts Bangla digits, 35 consonant letters
+through 38 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
 with context, including `rri` after `Ng`/`NG`/`ng`. This is a partial engine with
-2,150 reference-checked examples,
+2,292 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Remaining
 letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -46,7 +46,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [lowercase `z`](docs/v1.md#basic-lowercase-z-consonant), followed by
 [basic `Ng`/`NG`](docs/v1.md#basic-ng-and-ng-consonants), then
 [lowercase `ng`](docs/v1.md#lowercase-ng-sign-and-vowel-forms), followed by
-[`rri` after `Ng`/`NG`/`ng`](docs/v1.md#following-rri-after-ng-ng-and-ng).
+[`rri` after `Ng`/`NG`/`ng`](docs/v1.md#following-rri-after-ng-ng-and-ng), then
+[uppercase `Y`](docs/v1.md#basic-uppercase-y-consonant).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -88,6 +89,7 @@ Try `'zai zabe zodi zokhon'` → `যাই যাবে যদি যখন` fo
 Try `'Ng NG aNgul raNga'` → `ঙ ঞ আঙুল রাঙা` for case-sensitive `Ng`/`NG`.
 Try `'bangla rong nga ngi'` → `বাংলা রং ঙ্গা ঙ্গি` for lowercase `ng`.
 Try `'Ngrri NGrrri ngrrrri'` → `ঙররি ঞরৃ ংররররি` for their following `r` runs.
+Try `'zaY hoY hoYe maYa'` → `যায় হয় হয়ে মায়া` for uppercase `Y`.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -156,6 +158,10 @@ The prefixes `Ngr`/`NGr`/`ngr` consume their first `r` before the remainder is
 matched. This gives `Ngrri` → `ঙররি`, `NGrri` → `ঞররি`, and `ngrri` → `ংররি`.
 One more `r` leaves a separate `rri` vowel (`Ngrrri` → `ঙরৃ`). This rule is
 specific to these three prefixes; `khrri` still produces `খৃ`.
+Exact uppercase `Y` produces য় (U+09DF), with supported vowel signs (`Yi` → `য়ি`,
+`Yrri` → `য়ৃ`). Ordinary adjacency stays separate (`kY` → `কয়`, `YY` → `য়য়`).
+Lowercase `y` has different context rules and remains incomplete, along with
+conjuncts such as `Yr` → `য়্র`, reph such as `rrY` → `র্য়`, and escapes.
 
 ## Repeat the reference comparison
 
@@ -178,8 +184,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`R`/`Rh` fixtures](tests/fixtures/consonants-r-retroflex.tsv),
 [`z` fixtures](tests/fixtures/consonant-z.tsv),
 [`Ng`/`NG` fixtures](tests/fixtures/consonants-ng-nj.tsv),
-[`ng` fixtures](tests/fixtures/sign-ng.tsv), and
-[following-`rri` fixtures](tests/fixtures/nasal-rri.tsv) record the raw input,
+[`ng` fixtures](tests/fixtures/sign-ng.tsv),
+[following-`rri` fixtures](tests/fixtures/nasal-rri.tsv), and
+[`Y` fixtures](tests/fixtures/consonant-y-uppercase.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -195,7 +202,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 2,150 cases used by Rust tests and prints reference outputs for
+It checks the same 2,292 cases used by Rust tests and prints reference outputs for
 seven known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

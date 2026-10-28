@@ -30,10 +30,11 @@
 //! assert_eq!(transliterate("Ng NG aNgul raNga"), "ঙ ঞ আঙুল রাঙা");
 //! assert_eq!(transliterate("bangla rong nga ngi"), "বাংলা রং ঙ্গা ঙ্গি");
 //! assert_eq!(transliterate("Ngrri NGrrri ngrrrri"), "ঙররি ঞরৃ ংররররি");
+//! assert_eq!(transliterate("zaY hoY hoYe maYa"), "যায় হয় হয়ে মায়া");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
-const CONSONANTS: [(&str, &str); 37] = [
+const CONSONANTS: [(&str, &str); 38] = [
     ("k", "ক"),
     ("kh", "খ"),
     ("g", "গ"),
@@ -71,6 +72,7 @@ const CONSONANTS: [(&str, &str); 37] = [
     ("R", "ড়"),
     ("Rh", "ঢ়"),
     ("z", "য"),
+    ("Y", "য়"),
 ];
 
 // Independently authored ng-vowel forms checked against the pinned reference.
