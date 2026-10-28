@@ -19,17 +19,18 @@ Dates use the project's Asia/Dhaka timezone.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** add basic `s`/`sh`/`S` for স/শ/ষ, checking exact Unicode, case
-  distinctions, and longest-sequence matching against the pinned reference.
+- **Next:** add `s` → স, `sh`/`S` → শ, and `Sh` → ষ, checking exact Unicode,
+  case distinctions, and longest-sequence matching against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author basic `s`/`sh`/`S` cases alone, with supported vowels/aliases,
-   and around neighboring input. Check case distinctions and `sh` priority over
-   single `s`, keeping conjunct and escape rules separate.
+1. Independently author basic `s`/`sh`/`S`/`Sh` cases with supported vowels/aliases
+   and neighboring input. Standalone forms are already reference-verified:
+   `s` → স, `sh`/`S` → শ, and `Sh` → ষ. Check `sh` priority over `s` and `Sh`
+   over `S`, keeping conjunct and escape rules separate.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
 3. Add only this basic consonant group. Keep incomplete consonants, conjuncts,
@@ -37,11 +38,30 @@ Dates use the project's Asia/Dhaka timezone.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected `s`/`sh`/`S` cases match the reference, existing conversion
+**Done when:** the selected `s`/`sh`/`S`/`Sh` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Correct next consonant mapping
+
+- Recorded the user's confirmed mapping: `s` → স (U+09B8), `sh`/`S` → শ
+  (U+09B6), and `Sh` → ষ (U+09B7). This supersedes the earlier incorrect
+  three-form next-task description; `S` does not produce ষ.
+- Checked all four standalone forms against the SHA-256-verified external
+  jsAvroPhonetic v1.1.4 parser with Node.js v24.21.0. All match; no deliberate
+  reference deviation is needed. No upstream source, rules, or fixtures imported.
+- Updated [v1.md](v1.md#confirmed-s-sh-s-and-sh-mapping), README, and the next-step
+  plan. This is a documentation correction; engine code and fixture counts
+  remain unchanged. No Cargo checks apply to this increment.
+- Checks: UTF-8 decoding, local Markdown links/anchors, final newlines, trailing
+  whitespace, and `git diff --check` passed. The pre-existing untracked `.vscode/`
+  directory was left untouched.
+- Limitations: the four forms remain unimplemented. Vowel combinations and
+  neighboring input have not yet been reference-checked for this group.
+- Next: implement the corrected four-form group with authored regression cases,
+  preserving case distinctions and longest-sequence matching.
 
 ### 2026-10-28 — Basic l/h consonants
 

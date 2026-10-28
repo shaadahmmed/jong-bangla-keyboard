@@ -40,6 +40,9 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [`d`/`dh`/`D`/`Dh`](docs/v1.md#basic-d-dh-d-and-dh-consonants), then
 [`l`/`h`](docs/v1.md#basic-l-and-h-consonants).
 
+The [next confirmed group](docs/v1.md#confirmed-s-sh-s-and-sh-mapping) is
+`s` → স, `sh`/`S` → শ, and `Sh` → ষ; it is not implemented yet.
+
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
