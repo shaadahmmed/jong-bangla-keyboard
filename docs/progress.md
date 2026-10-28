@@ -11,35 +11,71 @@ Dates use the project's Asia/Dhaka timezone.
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
   `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri` vowel forms.
-  There are 707 reference-checked cases.
+  Basic `r`/`rr` consonant matching is implemented. There are 822 reference-checked
+  cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Principal forms for all 11 basic vowels and 13 consonant sequences exist.
+  Principal forms for all 11 basic vowels and 15 consonant sequences (14 letters)
+  exist.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** add basic `r`/`rr` consonant matching and resolve overlapping lowercase
-  `r` runs around `rri`, checking expected Unicode against the pinned reference.
+- **Next:** add the `p`/`ph`/`f` group for প/ফ, checking expected Unicode and
+  longest-sequence matching against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author `r`/`rr` cases alone, with supported vowels, and around
-   `rri`. Include `rrri` and `rrrri`, whose matching still differs from the reference.
+1. Independently author `p`/`ph`/`f` cases alone, with supported vowels/aliases,
+   and around neighboring input. Verify the two spellings for ফ and `ph` priority.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
-3. Add basic consonant matching with `rri` precedence. Keep reph, consonant
-   clusters, and other incomplete `r` behavior explicit; no composition/platform
-   work in this increment.
+3. Add only this basic consonant group. Keep incomplete consonants, conjuncts,
+   reph, and other context behavior explicit; no composition/platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected `r`/`rr` cases match the reference, existing conversion
+**Done when:** the selected `p`/`ph`/`f` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Basic r/rr consonants
+
+- Added `r` → র (U+09B0) and basic `rr` → রর (U+09B0 U+09B0). The longest
+  consonant match selects `rr` before `r`; the existing three-key `rri` still
+  takes precedence over either. There are now 15 consonant input sequences
+  producing 14 distinct letters.
+- Resolved the prior lowercase-run gaps: `rrri` → `রররি`, `rrrri` → `ররৃ`.
+  `rrI` → `ররী` stays distinct from `rri` → `ঋ`. Added 115 independently authored
+  [fixtures](../tests/fixtures/consonants-r.tsv), verified against the pinned
+  parser before Rust changes. Cases cover vowels/aliases, overlapping/repeated
+  runs, basic `r` before supported consonants, boundaries, Unicode, and words.
+- All 822 reference cases match with the SHA-256-verified external parser under
+  Node.js v24.21.0. Updated temporary-limit tests and documented remaining conjunct,
+  reph, and uppercase-`R` gaps in [v1.md](v1.md#basic-r-and-rr-consonants).
+  Extended long-buffer and separate-call checks; updated [README.md](../README.md).
+  No upstream source, rules, fixtures, dependencies, or platform code imported.
+- Checks: `cargo test --offline` passed (13 regression tests and one documentation
+  example); `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, and
+  `cargo build --offline --release` passed. The reference comparison passed all
+  822 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'ram rani rrri rrrri'` printed
+  `রাম রানি রররি ররৃ`; 22 additional documented conversions passed direct CLI checks.
+  Reused inspected Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools were installed
+  or upgraded.
+- Documentation/tool checks: `node --check`, UTF-8 decoding, local Markdown links
+  and heading anchors, final newlines, trailing whitespace, and `git diff --check`
+  passed. The pre-existing untracked `.vscode/` directory was left untouched.
+- Limitations: `kr`, `rrk`, bare `rrr`, and other contextual/conjunct/reph forms
+  still differ from the reference. Uppercase `R`, other remaining consonants,
+  uppercase aliases, punctuation/escapes, composition, and platform integration
+  remain incomplete. No full compatibility or performance/platform validation
+  claimed.
+- Next: add basic `p`/`ph`/`f` for প/ফ as a separate consonant increment.
 
 ### 2026-10-28 — rri vowel group
 

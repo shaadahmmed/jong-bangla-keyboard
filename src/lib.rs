@@ -18,10 +18,11 @@
 //! assert_eq!(transliterate("tumi kemon tOmake"), "তুমি কেমন তোমাকে");
 //! assert_eq!(transliterate("OI kOI OU kOU nOUka"), "ঐ কৈ ঔ কৌ নৌকা");
 //! assert_eq!(transliterate("rri krri krriti rriN"), "ঋ কৃ কৃতি ঋণ");
+//! assert_eq!(transliterate("ram rani rrri rrrri"), "রাম রানি রররি ররৃ");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
-const CONSONANTS: [(&str, &str); 13] = [
+const CONSONANTS: [(&str, &str); 15] = [
     ("k", "ক"),
     ("kh", "খ"),
     ("g", "গ"),
@@ -35,6 +36,8 @@ const CONSONANTS: [(&str, &str); 13] = [
     ("b", "ব"),
     ("bh", "ভ"),
     ("m", "ম"),
+    ("r", "র"),
+    ("rr", "রর"),
 ];
 
 #[derive(Clone, Copy)]
@@ -51,7 +54,8 @@ enum Context {
 /// Most supported vowels become signs after a supported consonant; lowercase `o`
 /// adds no character there. `ee` and `oo` alias `I` and `u`, matched before single
 /// keys. Case-sensitive `OI`/`OU` match before single `O`, producing ঐ/ঔ or ৈ/ৌ.
-/// Lowercase `rri` produces ঋ or ৃ; longer `r` runs still need consonant rules.
+/// Lowercase `rri` produces ঋ or ৃ before `rr`/`r` matching; `rr` produces রর.
+/// Conjunct and reph forms involving `r` remain incomplete.
 /// Lowercase `o` after a supported raw vowel other than `o` becomes ও.
 /// An `a` after a supported vowel other than `a` becomes `য়া`. Context
 /// follows raw matched tokens, not preserved Bangla. Matching is case-sensitive.

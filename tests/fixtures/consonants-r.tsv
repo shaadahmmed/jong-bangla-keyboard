@@ -1,0 +1,118 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+r	র	U+09B0
+rr	রর	U+09B0 U+09B0
+ra	রা	U+09B0 U+09BE
+rra	ররা	U+09B0 U+09B0 U+09BE
+ar	আর	U+0986 U+09B0
+arr	আরর	U+0986 U+09B0 U+09B0
+ri	রি	U+09B0 U+09BF
+rri	ঋ	U+098B
+ir	ইর	U+0987 U+09B0
+irr	ইরর	U+0987 U+09B0 U+09B0
+rI	রী	U+09B0 U+09C0
+rrI	ররী	U+09B0 U+09B0 U+09C0
+Ir	ঈর	U+0988 U+09B0
+Irr	ঈরর	U+0988 U+09B0 U+09B0
+ru	রু	U+09B0 U+09C1
+rru	ররু	U+09B0 U+09B0 U+09C1
+ur	উর	U+0989 U+09B0
+urr	উরর	U+0989 U+09B0 U+09B0
+rU	রূ	U+09B0 U+09C2
+rrU	ররূ	U+09B0 U+09B0 U+09C2
+Ur	ঊর	U+098A U+09B0
+Urr	ঊরর	U+098A U+09B0 U+09B0
+re	রে	U+09B0 U+09C7
+rre	ররে	U+09B0 U+09B0 U+09C7
+er	এর	U+098F U+09B0
+err	এরর	U+098F U+09B0 U+09B0
+ree	রী	U+09B0 U+09C0
+rree	ররী	U+09B0 U+09B0 U+09C0
+eer	ঈর	U+0988 U+09B0
+eerr	ঈরর	U+0988 U+09B0 U+09B0
+ro	র	U+09B0
+rro	রর	U+09B0 U+09B0
+or	অর	U+0985 U+09B0
+orr	অরর	U+0985 U+09B0 U+09B0
+rO	রো	U+09B0 U+09CB
+rrO	ররো	U+09B0 U+09B0 U+09CB
+Or	ওর	U+0993 U+09B0
+Orr	ওরর	U+0993 U+09B0 U+09B0
+roo	রু	U+09B0 U+09C1
+rroo	ররু	U+09B0 U+09B0 U+09C1
+oor	উর	U+0989 U+09B0
+oorr	উরর	U+0989 U+09B0 U+09B0
+rOI	রৈ	U+09B0 U+09C8
+rrOI	ররৈ	U+09B0 U+09B0 U+09C8
+OIr	ঐর	U+0990 U+09B0
+OIrr	ঐরর	U+0990 U+09B0 U+09B0
+rOU	রৌ	U+09B0 U+09CC
+rrOU	ররৌ	U+09B0 U+09B0 U+09CC
+OUr	ঔর	U+0994 U+09B0
+OUrr	ঔরর	U+0994 U+09B0 U+09B0
+rrri	রররি	U+09B0 U+09B0 U+09B0 U+09BF
+rrrri	ররৃ	U+09B0 U+09B0 U+09C3
+rrir	ঋর	U+098B U+09B0
+rrirr	ঋরর	U+098B U+09B0 U+09B0
+rk	রক	U+09B0 U+0995
+rkh	রখ	U+09B0 U+0996
+rg	রগ	U+09B0 U+0997
+rgh	রঘ	U+09B0 U+0998
+rt	রত	U+09B0 U+09A4
+rth	রথ	U+09B0 U+09A5
+rT	রট	U+09B0 U+099F
+rTh	রঠ	U+09B0 U+09A0
+rn	রন	U+09B0 U+09A8
+rN	রণ	U+09B0 U+09A3
+rb	রব	U+09B0 U+09AC
+rbh	রভ	U+09B0 U+09AD
+rm	রম	U+09B0 U+09AE
+rrria	রররিয়া	U+09B0 U+09B0 U+09B0 U+09BF U+09DF U+09BE
+rrra	রররা	U+09B0 U+09B0 U+09B0 U+09BE
+rrrria	ররৃয়া	U+09B0 U+09B0 U+09C3 U+09DF U+09BE
+rrrra	ররররা	U+09B0 U+09B0 U+09B0 U+09B0 U+09BE
+rrrrri	রররররি	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09BF
+rrrrria	রররররিয়া	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09BF U+09DF U+09BE
+rrrrra	রররররা	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09BE
+rrrrrri	ররররৃ	U+09B0 U+09B0 U+09B0 U+09B0 U+09C3
+rrrrrria	ররররৃয়া	U+09B0 U+09B0 U+09B0 U+09B0 U+09C3 U+09DF U+09BE
+rrrrrra	ররররররা	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09BE
+rrrrrrri	রররররররি	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09BF
+rrrrrrria	রররররররিয়া	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09BF U+09DF U+09BE
+rrrrrrra	রররররররা	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09BE
+rrrrrrrri	ররররররৃ	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09C3
+rrrrrrrria	ররররররৃয়া	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09C3 U+09DF U+09BE
+rrrrrrrra	ররররররররা	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09BE
+rrrr	রররর	U+09B0 U+09B0 U+09B0 U+09B0
+rrirri	ঋঋ	U+098B U+098B
+rrirrri	ঋরররি	U+098B U+09B0 U+09B0 U+09B0 U+09BF
+rrirrrri	ঋররৃ	U+098B U+09B0 U+09B0 U+09C3
+rri r	ঋ র	U+098B U+0020 U+09B0
+r rri	র ঋ	U+09B0 U+0020 U+098B
+arri	আঋ	U+0986 U+098B
+arrrri	আররৃ	U+0986 U+09B0 U+09B0 U+09C3
+arrria	আরররিয়া	U+0986 U+09B0 U+09B0 U+09B0 U+09BF U+09DF U+09BE
+rarri	রাঋ	U+09B0 U+09BE U+098B
+rorria	রঋয়া	U+09B0 U+098B U+09DF U+09BE
+rrrrii	ররৃই	U+09B0 U+09B0 U+09C3 U+0987
+1r	১র	U+09E7 U+09B0
+r1a	র১আ	U+09B0 U+09E7 U+0986
+r🙂a	র🙂আ	U+09B0 U+1F642 U+0986
+কr	কর	U+0995 U+09B0
+rকa	রকআ	U+09B0 U+0995 U+0986
+k-r	ক-র	U+0995 U+002D U+09B0
+r,a	র,আ	U+09B0 U+002C U+0986
+rr a	রর আ	U+09B0 U+09B0 U+0020 U+0986
+r r	র র	U+09B0 U+0020 U+09B0
+r🙂rri	র🙂ঋ	U+09B0 U+1F642 U+098B
+r-rri	র-ঋ	U+09B0 U+002D U+098B
+rri🙂r	ঋ🙂র	U+098B U+1F642 U+09B0
+ram	রাম	U+09B0 U+09BE U+09AE
+rani	রানি	U+09B0 U+09BE U+09A8 U+09BF
+bari	বারি	U+09AC U+09BE U+09B0 U+09BF
+kora	করা	U+0995 U+09B0 U+09BE
+kori	করি	U+0995 U+09B0 U+09BF
+bar	বার	U+09AC U+09BE U+09B0
+rgrri	রগৃ	U+09B0 U+0997 U+09C3
+rOna	রোনা	U+09B0 U+09CB U+09A8 U+09BE

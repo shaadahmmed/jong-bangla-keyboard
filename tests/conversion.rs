@@ -40,6 +40,11 @@ fn rri_vowel_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/vowels-rri.tsv"));
 }
 
+#[test]
+fn r_consonant_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consonants-r.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -76,12 +81,10 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
     for (input, expected) in [
         ("E", "E"),
         ("qo", "qঅ"),
-        ("r", "r"),
-        ("rr", "rr"),
-        ("rrri", "rঋ"),
-        ("rrrri", "rrঋ"),
-        ("Rri", "Rrই"),
-        ("rrI", "rrঈ"),
+        ("kr", "কর"),
+        ("rrk", "ররক"),
+        ("rrr", "ররর"),
+        ("Rri", "Rরি"),
         ("kkh", "কখ"),
         ("K", "K"),
         ("k`h", "ক`h"),
@@ -98,6 +101,8 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("OI`", "ঐ`"),
         ("OU`", "ঔ`"),
         ("rri`", "ঋ`"),
+        ("r`", "র`"),
+        ("rr`", "রর`"),
     ] {
         assert_eq!(transliterate(input), expected, "input: {input:?}");
     }
@@ -105,8 +110,9 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
 
 #[test]
 fn long_mixed_input_preserves_character_boundaries() {
-    let input = "🙂kh2a\u{301}kUuakIakeeeakoooakOakOIakOUokrria".repeat(4096);
-    let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096);
+    let input =
+        "🙂kh2a\u{301}kUuakIakeeeakoooakOakOIakOUokrria".repeat(4096) + &"rrrirrrri".repeat(4096);
+    let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096) + &"রররিররৃ".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -158,5 +164,9 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     assert_eq!(transliterate("OU"), "ঔ");
     assert_eq!(transliterate("a"), "আ");
     assert_eq!(transliterate("rri"), "ঋ");
+    assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("r"), "র");
+    assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("rr"), "রর");
     assert_eq!(transliterate("a"), "আ");
 }
