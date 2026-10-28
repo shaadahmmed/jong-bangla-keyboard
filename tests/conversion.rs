@@ -55,6 +55,11 @@ fn c_ch_j_jh_consonant_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/consonants-c-ch-j-jh.tsv"));
 }
 
+#[test]
+fn d_dh_consonant_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consonants-d-dh.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -112,6 +117,14 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("J", "J"),
         ("Jh", "Jh"),
         ("c`h", "চ`h"),
+        ("ddh", "দধ"),
+        ("DDh", "ডঢ"),
+        ("dr", "দর"),
+        ("dH", "দH"),
+        ("DH", "ডH"),
+        ("dhh", "ধh"),
+        ("Dhh", "ঢh"),
+        ("d`h", "দ`h"),
         ("kkh", "কখ"),
         ("K", "K"),
         ("k`h", "ক`h"),
@@ -140,11 +153,11 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = "🙂kh2a\u{301}kUuakIakeeeakoooakOakOIakOUokrria".repeat(4096)
         + &"rrrirrrri".repeat(4096)
         + &"phifipO".repeat(4096);
-    let input = input + &"cichijijhi".repeat(4096);
+    let input = input + &"cichijijhi".repeat(4096) + &"didhIDuDhO".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
-    let expected = expected + &"চিছিজিঝি".repeat(4096);
+    let expected = expected + &"চিছিজিঝি".repeat(4096) + &"দিধীডুঢো".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -208,6 +221,10 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     assert_eq!(transliterate("f"), "ফ");
     assert_eq!(transliterate("a"), "আ");
     for (raw, expected) in [("c", "চ"), ("ch", "ছ"), ("j", "জ"), ("jh", "ঝ")] {
+        assert_eq!(transliterate(raw), expected);
+        assert_eq!(transliterate("a"), "আ");
+    }
+    for (raw, expected) in [("d", "দ"), ("dh", "ধ"), ("D", "ড"), ("Dh", "ঢ")] {
         assert_eq!(transliterate(raw), expected);
         assert_eq!(transliterate("a"), "আ");
     }

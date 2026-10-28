@@ -1,0 +1,167 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+d	দ	U+09A6
+da	দা	U+09A6 U+09BE
+ad	আদ	U+0986 U+09A6
+di	দি	U+09A6 U+09BF
+id	ইদ	U+0987 U+09A6
+dI	দী	U+09A6 U+09C0
+Id	ঈদ	U+0988 U+09A6
+du	দু	U+09A6 U+09C1
+ud	উদ	U+0989 U+09A6
+dU	দূ	U+09A6 U+09C2
+Ud	ঊদ	U+098A U+09A6
+de	দে	U+09A6 U+09C7
+ed	এদ	U+098F U+09A6
+dee	দী	U+09A6 U+09C0
+eed	ঈদ	U+0988 U+09A6
+do	দ	U+09A6
+od	অদ	U+0985 U+09A6
+dO	দো	U+09A6 U+09CB
+Od	ওদ	U+0993 U+09A6
+doo	দু	U+09A6 U+09C1
+ood	উদ	U+0989 U+09A6
+dOI	দৈ	U+09A6 U+09C8
+OId	ঐদ	U+0990 U+09A6
+dOU	দৌ	U+09A6 U+09CC
+OUd	ঔদ	U+0994 U+09A6
+drri	দৃ	U+09A6 U+09C3
+rrid	ঋদ	U+098B U+09A6
+1d	১দ	U+09E7 U+09A6
+d1a	দ১আ	U+09A6 U+09E7 U+0986
+d🙂a	দ🙂আ	U+09A6 U+1F642 U+0986
+কd	কদ	U+0995 U+09A6
+k-d	ক-দ	U+0995 U+002D U+09A6
+d a	দ আ	U+09A6 U+0020 U+0986
+d,i	দ,ই	U+09A6 U+002C U+0987
+dকa	দকআ	U+09A6 U+0995 U+0986
+dia	দিয়া	U+09A6 U+09BF U+09DF U+09BE
+doa	দয়া	U+09A6 U+09DF U+09BE
+dh	ধ	U+09A7
+dha	ধা	U+09A7 U+09BE
+adh	আধ	U+0986 U+09A7
+dhi	ধি	U+09A7 U+09BF
+idh	ইধ	U+0987 U+09A7
+dhI	ধী	U+09A7 U+09C0
+Idh	ঈধ	U+0988 U+09A7
+dhu	ধু	U+09A7 U+09C1
+udh	উধ	U+0989 U+09A7
+dhU	ধূ	U+09A7 U+09C2
+Udh	ঊধ	U+098A U+09A7
+dhe	ধে	U+09A7 U+09C7
+edh	এধ	U+098F U+09A7
+dhee	ধী	U+09A7 U+09C0
+eedh	ঈধ	U+0988 U+09A7
+dho	ধ	U+09A7
+odh	অধ	U+0985 U+09A7
+dhO	ধো	U+09A7 U+09CB
+Odh	ওধ	U+0993 U+09A7
+dhoo	ধু	U+09A7 U+09C1
+oodh	উধ	U+0989 U+09A7
+dhOI	ধৈ	U+09A7 U+09C8
+OIdh	ঐধ	U+0990 U+09A7
+dhOU	ধৌ	U+09A7 U+09CC
+OUdh	ঔধ	U+0994 U+09A7
+dhrri	ধৃ	U+09A7 U+09C3
+rridh	ঋধ	U+098B U+09A7
+1dh	১ধ	U+09E7 U+09A7
+dh1a	ধ১আ	U+09A7 U+09E7 U+0986
+dh🙂a	ধ🙂আ	U+09A7 U+1F642 U+0986
+কdh	কধ	U+0995 U+09A7
+k-dh	ক-ধ	U+0995 U+002D U+09A7
+dh a	ধ আ	U+09A7 U+0020 U+0986
+dh,i	ধ,ই	U+09A7 U+002C U+0987
+dhকa	ধকআ	U+09A7 U+0995 U+0986
+dhia	ধিয়া	U+09A7 U+09BF U+09DF U+09BE
+dhoa	ধয়া	U+09A7 U+09DF U+09BE
+D	ড	U+09A1
+Da	ডা	U+09A1 U+09BE
+aD	আড	U+0986 U+09A1
+Di	ডি	U+09A1 U+09BF
+iD	ইড	U+0987 U+09A1
+DI	ডী	U+09A1 U+09C0
+ID	ঈড	U+0988 U+09A1
+Du	ডু	U+09A1 U+09C1
+uD	উড	U+0989 U+09A1
+DU	ডূ	U+09A1 U+09C2
+UD	ঊড	U+098A U+09A1
+De	ডে	U+09A1 U+09C7
+eD	এড	U+098F U+09A1
+Dee	ডী	U+09A1 U+09C0
+eeD	ঈড	U+0988 U+09A1
+Do	ড	U+09A1
+oD	অড	U+0985 U+09A1
+DO	ডো	U+09A1 U+09CB
+OD	ওড	U+0993 U+09A1
+Doo	ডু	U+09A1 U+09C1
+ooD	উড	U+0989 U+09A1
+DOI	ডৈ	U+09A1 U+09C8
+OID	ঐড	U+0990 U+09A1
+DOU	ডৌ	U+09A1 U+09CC
+OUD	ঔড	U+0994 U+09A1
+Drri	ডৃ	U+09A1 U+09C3
+rriD	ঋড	U+098B U+09A1
+1D	১ড	U+09E7 U+09A1
+D1a	ড১আ	U+09A1 U+09E7 U+0986
+D🙂a	ড🙂আ	U+09A1 U+1F642 U+0986
+কD	কড	U+0995 U+09A1
+k-D	ক-ড	U+0995 U+002D U+09A1
+D a	ড আ	U+09A1 U+0020 U+0986
+D,i	ড,ই	U+09A1 U+002C U+0987
+Dকa	ডকআ	U+09A1 U+0995 U+0986
+Dia	ডিয়া	U+09A1 U+09BF U+09DF U+09BE
+Doa	ডয়া	U+09A1 U+09DF U+09BE
+Dh	ঢ	U+09A2
+Dha	ঢা	U+09A2 U+09BE
+aDh	আঢ	U+0986 U+09A2
+Dhi	ঢি	U+09A2 U+09BF
+iDh	ইঢ	U+0987 U+09A2
+DhI	ঢী	U+09A2 U+09C0
+IDh	ঈঢ	U+0988 U+09A2
+Dhu	ঢু	U+09A2 U+09C1
+uDh	উঢ	U+0989 U+09A2
+DhU	ঢূ	U+09A2 U+09C2
+UDh	ঊঢ	U+098A U+09A2
+Dhe	ঢে	U+09A2 U+09C7
+eDh	এঢ	U+098F U+09A2
+Dhee	ঢী	U+09A2 U+09C0
+eeDh	ঈঢ	U+0988 U+09A2
+Dho	ঢ	U+09A2
+oDh	অঢ	U+0985 U+09A2
+DhO	ঢো	U+09A2 U+09CB
+ODh	ওঢ	U+0993 U+09A2
+Dhoo	ঢু	U+09A2 U+09C1
+ooDh	উঢ	U+0989 U+09A2
+DhOI	ঢৈ	U+09A2 U+09C8
+OIDh	ঐঢ	U+0990 U+09A2
+DhOU	ঢৌ	U+09A2 U+09CC
+OUDh	ঔঢ	U+0994 U+09A2
+Dhrri	ঢৃ	U+09A2 U+09C3
+rriDh	ঋঢ	U+098B U+09A2
+1Dh	১ঢ	U+09E7 U+09A2
+Dh1a	ঢ১আ	U+09A2 U+09E7 U+0986
+Dh🙂a	ঢ🙂আ	U+09A2 U+1F642 U+0986
+কDh	কঢ	U+0995 U+09A2
+k-Dh	ক-ঢ	U+0995 U+002D U+09A2
+Dh a	ঢ আ	U+09A2 U+0020 U+0986
+Dh,i	ঢ,ই	U+09A2 U+002C U+0987
+Dhকa	ঢকআ	U+09A2 U+0995 U+0986
+Dhia	ঢিয়া	U+09A2 U+09BF U+09DF U+09BE
+Dhoa	ঢয়া	U+09A2 U+09DF U+09BE
+din	দিন	U+09A6 U+09BF U+09A8
+dIn	দীন	U+09A6 U+09C0 U+09A8
+dudh	দুধ	U+09A6 U+09C1 U+09A7
+dhan	ধান	U+09A7 U+09BE U+09A8
+dhani	ধানি	U+09A7 U+09BE U+09A8 U+09BF
+Dan	ডান	U+09A1 U+09BE U+09A8
+Dab	ডাব	U+09A1 U+09BE U+09AC
+Dhaka	ঢাকা	U+09A2 U+09BE U+0995 U+09BE
+DhOka	ঢোকা	U+09A2 U+09CB U+0995 U+09BE
+dOkan	দোকান	U+09A6 U+09CB U+0995 U+09BE U+09A8
+dhamaka	ধামাকা	U+09A7 U+09BE U+09AE U+09BE U+0995 U+09BE
+Damaru	ডামারু	U+09A1 U+09BE U+09AE U+09BE U+09B0 U+09C1
+d dh D Dh	দ ধ ড ঢ	U+09A6 U+0020 U+09A7 U+0020 U+09A1 U+0020 U+09A2
+da dha Da Dha	দা ধা ডা ঢা	U+09A6 U+09BE U+0020 U+09A7 U+09BE U+0020 U+09A1 U+09BE U+0020 U+09A2 U+09BE
+di dhi Di Dhi	দি ধি ডি ঢি	U+09A6 U+09BF U+0020 U+09A7 U+09BF U+0020 U+09A1 U+09BF U+0020 U+09A2 U+09BF
+dO dhO DO DhO	দো ধো ডো ঢো	U+09A6 U+09CB U+0020 U+09A7 U+09CB U+0020 U+09A1 U+09CB U+0020 U+09A2 U+09CB
