@@ -41,6 +41,7 @@
 //! assert_eq!(transliterate("w wa awa kw kwa"), "ও ওয়া আওা ক্ব ক্বা");
 //! assert_eq!(transliterate("wr wrri wrrri wrry"), "ওর ওৃ ও্রররি ওরর\u{200D}্য");
 //! assert_eq!(transliterate("x xa axa kx kxa"), "এক্স এক্সা আক্সা ক্ষ ক্ষা");
+//! assert_eq!(transliterate("xr xrr xrri xrrri kxrr"), "এক্সর এক্স্রর এক্সৃ এক্স্রররি ক্ষ্রর");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -150,7 +151,9 @@ enum Context {
 /// wrri -> ওৃ, wrry -> ওরর‍্য. A single wr stays separate, including before y/Z.
 /// Lowercase x produces এক্স at a boundary and ক্স after supported converted
 /// input. Exact kx matches before k and produces ক্ষ. Both establish consonant
-/// context without a joiner; longer Ngx and following-r attachments remain gaps.
+/// context without a joiner and share the y/w two-r rule and exceptions:
+/// xrr -> এক্স্রর, xrri -> এক্সৃ, xrry -> এক্সরর‍্য. Single xr/kxr stay separate.
+/// Longer Ngx/kkx and reph remain gaps.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -200,7 +203,7 @@ pub fn transliterate(input: &str) -> String {
             remaining = &remaining[3..];
         } else if let Some(after_kx) = remaining.strip_prefix("kx") {
             output.push_str("ক্ষ");
-            remaining = after_kx;
+            remaining = consume_following_r_prefix(after_kx, 'x', &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
@@ -228,6 +231,7 @@ pub fn transliterate(input: &str) -> String {
                 "ক্স"
             });
             remaining = &remaining[1..];
+            remaining = consume_following_r_prefix(remaining, 'x', &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if ch == 'w' {
             remaining = &remaining[1..];
@@ -323,8 +327,8 @@ pub fn transliterate(input: &str) -> String {
     output
 }
 
-// Independently checked following-r prefixes depend on the raw y/Z/Y/w key,
-// including the Z in aZ/oZ. Do not infer them from copied Bangla.
+// Independently checked following-r prefixes depend on the raw y/Z/Y/w/x key,
+// including the Z in aZ/oZ and x in kx. Do not infer them from copied Bangla.
 fn consume_following_r_prefix<'a>(
     remaining: &'a str,
     raw_key: char,

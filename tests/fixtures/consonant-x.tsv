@@ -3,7 +3,7 @@
 # Columns: raw input, expected output, exact Unicode code points (tab-separated).
 # Contextual lowercase x and exact kx; vowels/aliases, adjacency, repeats,
 # y/Y/Z controls, digits, boundaries, and copied Unicode.
-# Ngx, kkx, following-r attachments, reph, uppercase aliases, and escapes remain gaps.
+# Ngx, kkx, reph, uppercase aliases, and escapes remain gaps; following-r has its own fixture.
 x	এক্স	U+098F U+0995 U+09CD U+09B8
 kx	ক্ষ	U+0995 U+09CD U+09B7
 ax	আক্স	U+0986 U+0995 U+09CD U+09B8

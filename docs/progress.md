@@ -30,42 +30,85 @@ Dates use the project's Asia/Dhaka timezone.
   the `rri`/`rry`/`rrZ` exceptions and basic-`r` joiners.
   Contextual lowercase `x` now handles boundary and following-input forms;
   exact `kx` → ক্ষ matches before single `k`.
-  There are 5,088 reference-checked cases.
+  Following-`r` priority after `x`/`kx` now handles two-`r` attachment,
+  preserving `rri`/`rry`/`rrZ` exceptions and single-`r` joiners.
+  There are 5,843 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
   matching prefixes, contextual lowercase `y`/`w`/`x`, uppercase `Z`/`aZ`/`oZ`,
-  exact `kx`, and selected following-`r` forms after `y`/`Z`/`Y`/`w`.
+  exact `kx`, and selected following-`r` forms after `y`/`Z`/`Y`/`w`/`x`/`kx`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** check following-`r` priority after lowercase `x` and exact `kx`
-  against the pinned reference, keeping reph, aliases, and longer forms separate.
+- **Next:** check exact `Ngx` → ঙ্ষ and its supported vowel/context
+  interactions against the pinned reference as a separate longer-match increment.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author following-`r` cases after lowercase `x` and exact `kx`:
-   runs of one through eight `r` keys, `rri` and `rry`/`rrZ` overlaps, following
-   vowels/aliases, differing preceding contexts, repetition, digits, boundaries,
-   and copied Unicode.
+1. Independently author cases for exact `Ngx` → ঙ্ষ, its preceding contexts,
+   supported vowels/aliases, following-`r` overlaps, repetition, digits,
+   boundaries, and copied Unicode. Include case and raw-spelling controls.
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-   Known gaps include `xrr` → `এক্স্রর` and `kxrr` → `ক্ষ্রর`; existing
-   `xrri` → `এক্সৃ` must retain priority.
-3. Add the selected following-`r` rules. Keep `Ngx`/`kkx`, reph, uppercase
-   aliases, other conjuncts, longer matches, and escapes explicit. No composition
-   or platform work.
+   Currently `Ngx` produces ঙক্স instead of ঙ্ষ.
+3. Add the selected longer match, preserving existing `Ng`/`NG`/`ng`, `x`/`kx`,
+   and following-`r` behavior. Keep `kkx`, reph, uppercase aliases, other
+   conjuncts, and escapes separate. No composition or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected following-`r` cases match the reference, existing
-conversion cases still pass, limitations are documented, and this log records
-actual results. Composition and Fcitx5 integration remain later steps.
+**Done when:** selected `Ngx` cases match the reference, existing conversion
+cases still pass, limitations are documented, and this log records actual
+results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Following r after lowercase x and exact kx
+
+- Added selected following-`r` forms after lowercase `x` and exact `kx`,
+  reusing the existing helper. Two `r` keys add ্রর before the rest is
+  matched: `xrrri` → `এক্স্রররি`, `kxrr` → `ক্ষ্রর`.
+  Preserved `rri` and `rry`/`rrZ` priority (`xrri` → `এক্সৃ`,
+  `xrry` → `এক্সরর‍্য`). Single `xr`/`kxr` stays separate and retains
+  U+200D before `y`/`Z`. The basic inventory and `kx` conjunct are unchanged.
+- Authored 755 [fixtures](../tests/fixtures/x-following-r.tsv), checked against
+  the SHA-256-verified pinned parser before implementation. They cover one
+  through eight `r` keys, vowel/alias overlaps and transitions, joiner
+  exceptions, preceding contexts, repetition, all digits, boundaries, and
+  copied Unicode. All 5,843 reference cases match under Node.js v24.21.0.
+  Reused the external parser and license in a temporary directory; no upstream
+  source, rules, fixtures, dependencies, or platform code imported.
+- The focused Rust regression failed on `xrr` before implementation. After
+  implementation all tests passed, including extended control-character,
+  separate-call, and long-buffer regressions. Removed resolved `xrr`/`kxrr`
+  gap expectations, retained `Ngx`/`kkx`/`rrx`, added `rrkx` as an explicit
+  partial-output regression, and refreshed seven reference gap probes.
+- Updated [README.md](../README.md) and
+  [v1.md](v1.md#following-r-after-lowercase-x-and-exact-kx) with exact Unicode,
+  matching priority, examples, counts, remaining gaps, and next work. Marked
+  earlier following-`r` gap descriptions as historical.
+- Checks: after applying rustfmt, `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (34 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'xr xrr xrri xrrri kxrr'`
+  printed `এক্সর এক্স্রর এক্সৃ এক্স্রররি ক্ষ্রর`; 21 conversions documented
+  in the new v1 section also passed direct CLI checks. Rechecked and reused
+  Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools installed or upgraded.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors, final
+  newlines, trailing whitespace, fixture code points, 755 distinct new inputs,
+  both runner registrations, and `git diff --check` passed. The pre-existing
+  untracked `.vscode/` remains untouched.
+- Limitations: `Ngx`/`kkx`, reph (including `rrx`/`rrkx`), uppercase aliases,
+  other conjuncts, punctuation/escapes, composition, and platform integration
+  remain incomplete. No broader compatibility, performance, or platform
+  validation claimed.
+- Next: check exact `Ngx` → ঙ্ষ and its supported vowel/context interactions
+  as a separate reference-checked increment.
 
 ### 2026-10-28 — Contextual lowercase x and exact kx
 
