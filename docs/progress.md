@@ -11,39 +11,82 @@ Dates use the project's Asia/Dhaka timezone.
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
   `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri` vowel forms.
-  Basic `r`/`rr`, `p`/`ph`/`f`, `c`/`ch`/`j`/`jh`, `d`/`dh`/`D`/`Dh`, `l`/`h`, and
-  `s`/`sh`/`S`/`Sh` consonant matching is implemented. There are 1,533
-  reference-checked cases.
+  Basic `r`/`rr`, `p`/`ph`/`f`, `c`/`ch`/`j`/`jh`, `d`/`dh`/`D`/`Dh`, `l`/`h`,
+  `s`/`sh`/`S`/`Sh`, and `R`/`Rh` consonant matching is implemented.
+  There are 1,627 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Principal forms for all 11 basic vowels and 32 consonant sequences (29 letters)
+  Principal forms for all 11 basic vowels and 34 consonant sequences (31 letters)
   exist.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** add basic `R`/`Rh` for ড়/ঢ়, checking exact Unicode, vowel context,
-  and longest-sequence matching against the pinned reference.
+- **Next:** add lowercase `z` for য, checking exact Unicode, vowel context,
+  and neighboring input against the pinned reference. Uppercase `Z` is distinct.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author basic `R`/`Rh` cases with supported vowels/aliases and
-   neighboring input. Standalone forms are already reference-verified: `R` → ড়
-   (U+09DC), `Rh` → ঢ় (U+09DD). Check `Rh` priority over `R` and interactions
-   with existing lowercase `r`/`rr`/`rri`, keeping conjunct and escape rules separate.
+1. Independently author lowercase `z` cases with supported vowels/aliases and
+   neighboring input. Standalone `z` → য (U+09AF) is already reference-verified.
+   Keep uppercase `Z` separate: it produces ্য (U+09CD U+09AF) in the reference
+   and belongs to later conjunct work, not a blanket case alias.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
-3. Add only this basic consonant group. Keep incomplete consonants, conjuncts,
-   reph, and other context behavior explicit; no composition/platform work.
+3. Add only lowercase `z`. Keep incomplete consonants, conjuncts, reph, and other
+   context behavior explicit; no composition/platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected `R`/`Rh` cases match the reference, existing conversion
+**Done when:** the selected `z` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Basic uppercase R/Rh consonants
+
+- Added exact `R` → ড় (U+09DC) and `Rh` → ঢ় (U+09DD). The existing longest-match
+  rule consumes `Rh` before `R`; both establish consonant context for supported
+  vowels. The core now implements 34 consonant input sequences producing
+  31 distinct letters.
+- Authored 94 [fixtures](../tests/fixtures/consonants-r-retroflex.tsv), verified
+  against the pinned parser before Rust implementation. They cover every
+  supported vowel/alias on either side, following-vowel transitions, interactions
+  with lowercase `r`/`rri`, extra `h`, boundaries, digits, copied Unicode, and words.
+  All 1,627 cases match the SHA-256-verified external parser under Node.js v24.21.0.
+  No upstream source, rules, or fixtures imported.
+- Confirmed `Rrri` → `ড়ৃ` and `RrriR` → `ড়ৃড়` without changing `rri` priority.
+  Generated ড়/ঢ় remain single U+09DC/U+09DD code points. Two fixtures preserve
+  copied decomposed ড়/ঢ় (base letter plus U+09BC) alongside newly generated
+  single-code-point letters; no normalization was added.
+- Extended Unicode-boundary, separate-call, and long-buffer checks. Updated
+  the remaining `Rri` partial output to `ড়রি`; its reference conjunct `ড়্রি`
+  remains unimplemented. Updated [README.md](../README.md) and
+  [v1.md](v1.md#basic-uppercase-r-and-rh-consonants) with counts, Unicode, examples,
+  and current limitations. No dependencies, composition, or platform code added.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (19 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. The reference comparison passed all
+  1,627 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'baRi gaRi gaRh drriRh'`
+  printed `বাড়ি গাড়ি গাঢ় দৃঢ়`; 20 direct CLI checks passed for new letters,
+  vowels, longer sequences, Unicode encodings, boundaries, and documented gaps.
+  Reused inspected Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools installed or
+  upgraded. The cached external reference remained outside the repository.
+- Documentation/tool checks: `node --check`, UTF-8 decoding, 124 local Markdown
+  links/anchors across four documents, final newlines, trailing whitespace,
+  fixture counts, and `git diff --check` passed. The pre-existing untracked
+  `.vscode/` directory was left untouched.
+- Limitations: `Rri`, `Rr`, `Rhr`, `RH`, remaining consonants, conjunct/reph forms,
+  other aliases, punctuation/escapes, composition, and platform integration remain
+  incomplete. No full compatibility, performance, or platform validation claimed.
+- Next: add lowercase `z` → য as a separate increment. Preliminary reference
+  probes distinguish `z` → য (U+09AF) from `Z` → ্য (U+09CD U+09AF); uppercase
+  `Z` stays outside the basic-letter scope. Vowel/context cases still need
+  independent fixtures and reference checks before implementation.
 
 ### 2026-10-28 — Confirmed s/sh/S/Sh consonants
 

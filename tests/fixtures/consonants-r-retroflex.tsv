@@ -1,0 +1,97 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+R	ড়	U+09DC
+Ra	ড়া	U+09DC U+09BE
+aR	আড়	U+0986 U+09DC
+Ri	ড়ি	U+09DC U+09BF
+iR	ইড়	U+0987 U+09DC
+RI	ড়ী	U+09DC U+09C0
+IR	ঈড়	U+0988 U+09DC
+Ru	ড়ু	U+09DC U+09C1
+uR	উড়	U+0989 U+09DC
+RU	ড়ূ	U+09DC U+09C2
+UR	ঊড়	U+098A U+09DC
+Re	ড়ে	U+09DC U+09C7
+eR	এড়	U+098F U+09DC
+Ree	ড়ী	U+09DC U+09C0
+eeR	ঈড়	U+0988 U+09DC
+Ro	ড়	U+09DC
+oR	অড়	U+0985 U+09DC
+RO	ড়ো	U+09DC U+09CB
+OR	ওড়	U+0993 U+09DC
+Roo	ড়ু	U+09DC U+09C1
+ooR	উড়	U+0989 U+09DC
+ROI	ড়ৈ	U+09DC U+09C8
+OIR	ঐড়	U+0990 U+09DC
+ROU	ড়ৌ	U+09DC U+09CC
+OUR	ঔড়	U+0994 U+09DC
+Rrri	ড়ৃ	U+09DC U+09C3
+rriR	ঋড়	U+098B U+09DC
+1R	১ড়	U+09E7 U+09DC
+R1a	ড়১আ	U+09DC U+09E7 U+0986
+R🙂a	ড়🙂আ	U+09DC U+1F642 U+0986
+কR	কড়	U+0995 U+09DC
+k-R	ক-ড়	U+0995 U+002D U+09DC
+R a	ড় আ	U+09DC U+0020 U+0986
+R,i	ড়,ই	U+09DC U+002C U+0987
+Rকa	ড়কআ	U+09DC U+0995 U+0986
+Ria	ড়িয়া	U+09DC U+09BF U+09DF U+09BE
+Roa	ড়য়া	U+09DC U+09DF U+09BE
+Rh	ঢ়	U+09DD
+Rha	ঢ়া	U+09DD U+09BE
+aRh	আঢ়	U+0986 U+09DD
+Rhi	ঢ়ি	U+09DD U+09BF
+iRh	ইঢ়	U+0987 U+09DD
+RhI	ঢ়ী	U+09DD U+09C0
+IRh	ঈঢ়	U+0988 U+09DD
+Rhu	ঢ়ু	U+09DD U+09C1
+uRh	উঢ়	U+0989 U+09DD
+RhU	ঢ়ূ	U+09DD U+09C2
+URh	ঊঢ়	U+098A U+09DD
+Rhe	ঢ়ে	U+09DD U+09C7
+eRh	এঢ়	U+098F U+09DD
+Rhee	ঢ়ী	U+09DD U+09C0
+eeRh	ঈঢ়	U+0988 U+09DD
+Rho	ঢ়	U+09DD
+oRh	অঢ়	U+0985 U+09DD
+RhO	ঢ়ো	U+09DD U+09CB
+ORh	ওঢ়	U+0993 U+09DD
+Rhoo	ঢ়ু	U+09DD U+09C1
+ooRh	উঢ়	U+0989 U+09DD
+RhOI	ঢ়ৈ	U+09DD U+09C8
+OIRh	ঐঢ়	U+0990 U+09DD
+RhOU	ঢ়ৌ	U+09DD U+09CC
+OURh	ঔঢ়	U+0994 U+09DD
+Rhrri	ঢ়ৃ	U+09DD U+09C3
+rriRh	ঋঢ়	U+098B U+09DD
+1Rh	১ঢ়	U+09E7 U+09DD
+Rh1a	ঢ়১আ	U+09DD U+09E7 U+0986
+Rh🙂a	ঢ়🙂আ	U+09DD U+1F642 U+0986
+কRh	কঢ়	U+0995 U+09DD
+k-Rh	ক-ঢ়	U+0995 U+002D U+09DD
+Rh a	ঢ় আ	U+09DD U+0020 U+0986
+Rh,i	ঢ়,ই	U+09DD U+002C U+0987
+Rhকa	ঢ়কআ	U+09DD U+0995 U+0986
+Rhia	ঢ়িয়া	U+09DD U+09BF U+09DF U+09BE
+Rhoa	ঢ়য়া	U+09DD U+09DF U+09BE
+baRi	বাড়ি	U+09AC U+09BE U+09DC U+09BF
+gaRi	গাড়ি	U+0997 U+09BE U+09DC U+09BF
+paRa	পাড়া	U+09AA U+09BE U+09DC U+09BE
+baRa	বাড়া	U+09AC U+09BE U+09DC U+09BE
+poRa	পড়া	U+09AA U+09DC U+09BE
+boRo	বড়	U+09AC U+09DC
+drriRh	দৃঢ়	U+09A6 U+09C3 U+09DD
+gaRha	গাঢ়া	U+0997 U+09BE U+09DD U+09BE
+gaRh	গাঢ়	U+0997 U+09BE U+09DD
+mURh	মূঢ়	U+09AE U+09C2 U+09DD
+r R Rh	র ড় ঢ়	U+09B0 U+0020 U+09DC U+0020 U+09DD
+rri R Rh	ঋ ড় ঢ়	U+098B U+0020 U+09DC U+0020 U+09DD
+R h	ড় হ	U+09DC U+0020 U+09B9
+Rhh	ঢ়হ	U+09DD U+09B9
+Rhha	ঢ়হা	U+09DD U+09B9 U+09BE
+rR	রড়	U+09B0 U+09DC
+rRh	রঢ়	U+09B0 U+09DD
+RrriR	ড়ৃড়	U+09DC U+09C3 U+09DC
+ড়Ri	ড়ড়ি	U+09A1 U+09BC U+09DC U+09BF
+ঢ়Rhi	ঢ়ঢ়ি	U+09A2 U+09BC U+09DD U+09BF
