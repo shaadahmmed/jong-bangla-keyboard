@@ -24,8 +24,9 @@ A dependency-free Rust library now converts Bangla digits, 35 consonant letters
 through 38 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
 with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`
-and uppercase `Z` with selected `aZ`/`oZ` forms and following-`r` matching.
-This is a partial engine with 3,446 reference-checked examples,
+and uppercase `Z` with selected `aZ`/`oZ` forms. Following-`r` matching after
+`y`/`Z`/`Y` is also implemented.
+This is a partial engine with 3,732 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Remaining
 letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -51,7 +52,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [uppercase `Y`](docs/v1.md#basic-uppercase-y-consonant), followed by
 [lowercase `y`](docs/v1.md#contextual-lowercase-y), then
 [uppercase `Z`](docs/v1.md#uppercase-z-with-az-and-oz-forms), then
-[following `r` after `y`/`Z`](docs/v1.md#following-r-after-lowercase-y-and-uppercase-z).
+[following `r` after `y`/`Z`](docs/v1.md#following-r-after-lowercase-y-and-uppercase-z), then
+[following `r` after `Y`](docs/v1.md#following-r-after-uppercase-y).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -97,6 +99,7 @@ Try `'zaY hoY hoYe maYa'` → `যায় হয় হয়ে মায়া` for uppe
 Try `'y ay ky kiya'` → `ইয় আয় ক্য কিয়া` for contextual lowercase `y`.
 Try `'kZa aZ oZ baZ'` → `ক্যা অ্যা অ্য বঅ্যা` for uppercase `Z` and its longer forms.
 Try `'yrr yrri yry Zry'` → `ইয়্রর ইয়ৃ ইয়র‍্য ্য্র্য` for following-`r` distinctions.
+Try `'Yr Yrri Yry Yrry'` → `য়্র য়ৃ য়্র্য য়রর‍্য` for uppercase `Y` and its exceptions.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -186,8 +189,12 @@ matches keep priority (`yrri` → `ইয়ৃ`, `yrry` → `ইয়রর‍্য
 separate (`yr` → `ইয়র`), except before `y`/`Z` after uppercase `Z`:
 `Zry` → `্য্র্য` has no U+200D joiner, while `yry` → `ইয়র‍্য` retains it.
 The same rules apply after `aZ`/`oZ` (`aZrr` → `অ্যা্রর`). Uppercase `Y`
-conjuncts such as `Yr` → `য়্র`, uppercase aliases such as `AZ`, reph such as
-`rrY` → `র্য়`, and escapes remain incomplete.
+also attaches a single following `r` (`Yr` → `য়্র`, `Yry` → `য়্র্য`),
+without a U+200D joiner. Its longer runs share the two-`r` matching priority:
+`Yrrri` → `য়্রররি`, `Yrrrri` → `য়্ররৃ`, while `Yrri` → `য়ৃ` and
+`Yrry` → `য়রর‍্য` keep their existing behavior. Remaining letters such as
+lowercase `q`, uppercase aliases such as `AZ`, reph such as `rrY` → `র্য়`,
+and escapes remain incomplete.
 
 ## Repeat the reference comparison
 
@@ -214,8 +221,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [following-`rri` fixtures](tests/fixtures/nasal-rri.tsv),
 [`Y` fixtures](tests/fixtures/consonant-y-uppercase.tsv),
 [`y` fixtures](tests/fixtures/consonant-y-lowercase.tsv),
-[`Z` fixtures](tests/fixtures/consonant-z-uppercase.tsv), and
-[following-`r` fixtures](tests/fixtures/ya-following-r.tsv) record the raw input,
+[`Z` fixtures](tests/fixtures/consonant-z-uppercase.tsv),
+[following-`r` fixtures](tests/fixtures/ya-following-r.tsv), and
+[`Y` following-`r` fixtures](tests/fixtures/uppercase-y-following-r.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -231,7 +239,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 3,446 cases used by Rust tests and prints reference outputs for
+It checks the same 3,732 cases used by Rust tests and prints reference outputs for
 seven known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

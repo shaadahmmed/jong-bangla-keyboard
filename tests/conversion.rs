@@ -115,6 +115,11 @@ fn ya_following_r_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/ya-following-r.tsv"));
 }
 
+#[test]
+fn uppercase_y_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/uppercase-y-following-r.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -176,9 +181,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("N`g", "ণ`গ"),
         ("y`a", "ইয়`আ"),
         ("y`h", "ইয়`হ"),
-        ("Yr", "য়র"),
-        ("Yrr", "য়রর"),
-        ("Yry", "য়র\u{200D}্য"),
         ("rrY", "ররয়"),
         ("Y`a", "য়`আ"),
         ("Y`h", "য়`হ"),
@@ -253,6 +255,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = input + &"🙂y🙂ay🙂kya1ryyNgry".repeat(4096);
     let input = input + &"🙂Zi1rZyNgrZa1aZ🙂oZ".repeat(4096);
     let input = input + &"🙂yrr1yrri2yrry3Zry4aZrr".repeat(4096);
+    let input = input + &"🙂Yr1Yrri2Yry3Yrry4Yrrrri".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -266,12 +269,21 @@ fn long_mixed_input_preserves_character_boundaries() {
     let expected = expected + &"🙂ইয়🙂আয়🙂ক্যা১র\u{200D}্য্যঙর্য".repeat(4096);
     let expected = expected + &"🙂্যি১র\u{200D}্য্যঙর্যা১অ্যা🙂অ্য".repeat(4096);
     let expected = expected + &"🙂ইয়্রর১ইয়ৃ২ইয়রর\u{200D}্য৩্য্র্য৪অ্যা্রর".repeat(4096);
+    let expected = expected + &"🙂য়্র১য়ৃ২য়্র্য৩য়রর\u{200D}্য৪য়্ররৃ".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
 #[test]
 fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     for boundary in [' ', ',', '-', '\n', '\r', '\t', '🙂', 'ক', '\u{301}'] {
+        assert_eq!(
+            transliterate(&format!("Y{boundary}r")),
+            format!("য়{boundary}র")
+        );
+        assert_eq!(
+            transliterate(&format!("Y{boundary}ry")),
+            format!("য়{boundary}র\u{200D}্য")
+        );
         assert_eq!(
             transliterate(&format!("r{boundary}Z")),
             format!("র{boundary}্য")
@@ -317,6 +329,9 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
                 ("yr", "ইয়র"),
                 ("yrr", "ইয়্রর"),
                 ("Zry", "্য্র্য"),
+                ("Yr", "য়্র"),
+                ("Yrr", "য়্রর"),
+                ("Yry", "য়্র্য"),
             ] {
                 let input = format!("{raw}{boundary}{vowel} {vowel}{boundary}a");
                 let expected = format!("{letter}{boundary}{independent} {independent}{boundary}আ");
@@ -399,9 +414,16 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     assert_eq!(transliterate("Z"), "্য");
     assert_eq!(transliterate("a"), "আ");
     assert_eq!(transliterate("y"), "ইয়");
-    for (raw, expected) in [("yrr", "ইয়্রর"), ("Zry", "্য্র্য"), ("aZrr", "অ্যা্রর")]
-    {
+    for (raw, expected) in [
+        ("yrr", "ইয়্রর"),
+        ("Zry", "্য্র্য"),
+        ("aZrr", "অ্যা্রর"),
+        ("Yr", "য়্র"),
+        ("Yrr", "য়্রর"),
+        ("Yry", "য়্র্য"),
+    ] {
         assert_eq!(transliterate(raw), expected);
+        assert_eq!(transliterate("r"), "র");
         assert_eq!(transliterate("rr"), "রর");
         assert_eq!(transliterate("y"), "ইয়");
         assert_eq!(transliterate("a"), "আ");

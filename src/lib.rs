@@ -35,6 +35,7 @@
 //! assert_eq!(transliterate("y ay ky kiya"), "ইয় আয় ক্য কিয়া");
 //! assert_eq!(transliterate("kZa aZ oZ baZ"), "ক্যা অ্যা অ্য বঅ্যা");
 //! assert_eq!(transliterate("yrr yrri yry Zry"), "ইয়্রর ইয়ৃ ইয়র\u{200D}্য ্য্র্য");
+//! assert_eq!(transliterate("Yr Yrri Yry Yrry"), "য়্র য়ৃ য়্র্য য়রর\u{200D}্য");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -132,6 +133,8 @@ enum Context {
 /// ng-vowel forms still consume their vowel first. All establish consonant context.
 /// After y/Z, two r keys produce ্রর before matching the rest, except that rri
 /// and rry/rrZ keep priority. Zry/ZrZ add ্র without a joiner; yry/yrZ retain it.
+/// Uppercase Y shares the two-r rule and exceptions; a single following r adds
+/// ্র, including before y/Z, without setting the basic-r joiner flag.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -182,6 +185,9 @@ pub fn transliterate(input: &str) -> String {
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
+            if *raw == "Y" {
+                remaining = consume_ya_r_prefix(remaining, 'Y', &mut output);
+            }
             context = Context::Consonant {
                 ya_joiner: matches!(*raw, "r" | "rr"),
             };
@@ -193,7 +199,7 @@ pub fn transliterate(input: &str) -> String {
                 (_, Context::Other) => "ইয়",
             });
             remaining = &remaining[1..];
-            remaining = consume_ya_r_prefix(remaining, ch == 'Z', &mut output);
+            remaining = consume_ya_r_prefix(remaining, ch, &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if remaining.starts_with("aZ") || remaining.starts_with("oZ") {
             // Match both ASCII keys before contextual a/o, even after a consonant.
@@ -203,7 +209,7 @@ pub fn transliterate(input: &str) -> String {
                 "অ্য"
             });
             remaining = &remaining[2..];
-            remaining = consume_ya_r_prefix(remaining, true, &mut output);
+            remaining = consume_ya_r_prefix(remaining, 'Z', &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if remaining.starts_with("OI") || remaining.starts_with("OU") {
             // Consume both ASCII keys before single `O`; retain the final key.
@@ -276,9 +282,9 @@ pub fn transliterate(input: &str) -> String {
     output
 }
 
-// Independently checked following-r prefixes apply only immediately after y/Z,
-// including the Z in aZ/oZ. Do not infer them from copied Bangla or uppercase Y.
-fn consume_ya_r_prefix<'a>(remaining: &'a str, uppercase_z: bool, output: &mut String) -> &'a str {
+// Independently checked following-r prefixes depend on the raw y/Z/Y key,
+// including the Z in aZ/oZ. Do not infer them from copied Bangla.
+fn consume_ya_r_prefix<'a>(remaining: &'a str, raw_ya: char, output: &mut String) -> &'a str {
     if remaining.starts_with("rr")
         && !["rri", "rry", "rrZ"]
             .iter()
@@ -286,8 +292,10 @@ fn consume_ya_r_prefix<'a>(remaining: &'a str, uppercase_z: bool, output: &mut S
     {
         output.push_str("্রর");
         &remaining[2..]
-    } else if uppercase_z && (remaining.starts_with("ry") || remaining.starts_with("rZ")) {
-        // Leave y/Z to its normal branch, with no basic-r joiner flag.
+    } else if (raw_ya == 'Y' && remaining.starts_with('r') && !remaining.starts_with("rr"))
+        || (raw_ya == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))
+    {
+        // Y attaches a single r; Z only does so before y/Z. Both omit the joiner.
         output.push_str("্র");
         &remaining[1..]
     } else {

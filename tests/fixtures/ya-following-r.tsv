@@ -2,7 +2,7 @@
 # Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
 # Columns: raw input, expected output, exact Unicode code points (tab-separated).
 # Following-r priority after y/Z, rri and rry/rrZ exceptions, Zry/ZrZ, and reset controls.
-# Uppercase Y conjuncts/reph and escapes remain outside this increment.
+# Uppercase Y following-r priority is covered separately; other conjunct/reph forms and escapes remain gaps.
 yri	ইয়রি	U+0987 U+09DF U+09B0 U+09BF
 yria	ইয়রিয়া	U+0987 U+09DF U+09B0 U+09BF U+09DF U+09BE
 yrio	ইয়রিও	U+0987 U+09DF U+09B0 U+09BF U+0993
