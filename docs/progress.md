@@ -15,38 +15,85 @@ Dates use the project's Asia/Dhaka timezone.
   `s`/`sh`/`S`/`Sh`, `R`/`Rh`, lowercase `z`, `Ng`/`NG`, and uppercase `Y` consonant matching is
   implemented. Lowercase `ng` → ং and selected ng-vowel forms are implemented.
   Following `rri` and longer `r` runs after `Ng`/`NG`/`ng` now match the reference.
-  There are 2,292 reference-checked cases.
+  Contextual lowercase `y` now handles independent, vowel-following, and
+  consonant-following forms, including basic `r`/`rr` joiners.
+  There are 2,630 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 38 basic consonant sequences (35 letters)
-  exist, plus lowercase `ng`, its selected vowel forms, and three nasal-plus-`r`
-  matching prefixes.
+  exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
+  matching prefixes, and contextual lowercase `y`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** add lowercase `y` context behavior, checking independent, vowel-following,
-  and consonant-following forms against the pinned reference.
+- **Next:** add uppercase `Z` → ্য, checking independent and following-vowel
+  forms and its distinction from lowercase `z`/`y` against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author lowercase `y` cases at the start and after supported
-   vowels/consonants, plus following vowels/aliases, repeated keys, digits,
-   boundaries, and copied Unicode. Preliminary reference probes distinguish
-   `y` → `ইয়`, `ay` → `আয়`, and `ky` → `ক্য`; uppercase `Y` stays distinct.
-2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
-   using the external parser, recording exact Unicode output before implementing.
-3. Add the selected lowercase `y` context rules. Keep other incomplete letters, context,
-   conjuncts, reph, and escapes explicit. No composition/platform work.
+1. Independently author uppercase `Z` cases: standalone ্য (U+09CD U+09AF),
+   after supported consonants/vowels, with following vowels/aliases, repeated
+   keys, digits, boundaries, and copied Unicode. Preserve lowercase `z`/`y`
+   and uppercase `Y` distinctions.
+2. Check expected output and exact Unicode against the
+   [pinned reference](v1.md#phonetic-behavior-reference) using the external parser
+   before implementation; identify longer overlaps that need separate work.
+3. Add the selected uppercase `Z` behavior. Keep longer `yrr`, other incomplete
+   letters, conjunct/reph forms, aliases, and escapes explicit. No composition
+   or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected lowercase-`y` cases match the reference, existing conversion
-cases still pass, limitations are documented, and this log records the results.
-Fcitx5 integration and composition controls belong to later steps.
+**Done when:** the selected uppercase-`Z` cases match the reference, existing
+conversion cases still pass, limitations are documented, and this log records
+actual results. Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Contextual lowercase y
+
+- Added exact lowercase `y`: independent ইয় (U+0987 U+09DF), য় (U+09DF)
+  after a supported vowel, and ্য (U+09CD U+09AF) after a supported consonant.
+  Every form establishes consonant context for following vowel signs; repeated
+  `y` adds another ্য. Uppercase `Y` stays distinct (`kY` → `কয়`, `ky` → `ক্য`).
+  The 38 basic consonant sequences (35 letters) are unchanged.
+- Basic `r`/`rr` now retains a flag for U+200D before following lowercase `y`:
+  `ry` → `র‍্য`. Reference-checked `Ngr`/`NGr`/`ngr` prefixes omit that joiner
+  (`Ngry` → `ঙর্য`); a subsequent basic `r` restores it (`Ngrry` → `ঙরর‍্য`).
+  Context stays local to one conversion call. No output normalization added.
+- Authored 338 [fixtures](../tests/fixtures/consonant-y-lowercase.tsv), checked
+  against the SHA-256-verified pinned parser before implementation. They cover
+  every supported consonant, vowels/aliases before and after `y`, following-vowel
+  transitions, repeated keys, joiner distinctions, digits, boundaries, copied
+  Unicode, case controls, and words. All 2,630 reference cases match under
+  Node.js v24.21.0. No upstream source, rules, or fixtures imported.
+- The focused Rust regression first failed on `ky`, then passed after the
+  implementation. Extended boundary, separate-call, and long-buffer checks.
+  The first full run exposed a missing separator in the new repeated test input;
+  corrected that test boundary, then all tests passed. Replaced resolved `y`/`Yy`
+  gap expectations with longer `yrr`, `yZ`, and escape cases; refreshed seven
+  reference gap probes.
+- Updated [README.md](../README.md) and
+  [v1.md](v1.md#contextual-lowercase-y) with Unicode, examples, counts, and remaining
+  gaps. No dependencies, composition, platform code, or tool upgrades added.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (25 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'y ay ky kiya'` printed
+  `ইয় আয় ক্য কিয়া`. Rechecked and reused Rust/Cargo 1.99.1 and Node.js v24.21.0.
+  The external reference stays outside the repository; the pre-existing untracked
+  `.vscode/` directory is untouched.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors, final
+  newlines, trailing whitespace, fixture counts/code points, distinct new inputs,
+  both runner registrations, and `git diff --check` passed.
+- Limitations: longer `yrr`, other conjunct/reph forms, remaining letters,
+  uppercase `Z`, aliases, punctuation/escapes, composition, and platform integration
+  remain incomplete. No full compatibility, performance, or platform validation
+  claimed.
+- Next: add uppercase `Z` → ্য in a separate increment after reference checks.
 
 ### 2026-10-28 — Basic uppercase Y consonant
 

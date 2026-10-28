@@ -46,6 +46,7 @@ for (const name of [
   "sign-ng.tsv",
   "nasal-rri.tsv",
   "consonant-y-uppercase.tsv",
+  "consonant-y-lowercase.tsv",
 ]) {
   const fixture = readFileSync(
     new URL(`../tests/fixtures/${name}`, import.meta.url),
@@ -69,7 +70,7 @@ for (const name of [
 console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
 // These probes expose missing behavior; they are not supported-slice fixtures.
-for (const input of ["y", "Yy", "Yr", "rrY", "YZ", "Y`a", "Y`h"]) {
+for (const input of ["yrr", "yrrri", "Yr", "rrY", "yZ", "y`a", "y`h"]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);
 }

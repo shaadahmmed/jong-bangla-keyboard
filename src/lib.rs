@@ -1,6 +1,7 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
-//! Supports ASCII digits, lowercase `ng` with selected vowel forms, the consonant sequences below, and
+//! Supports ASCII digits, contextual lowercase `y`, lowercase `ng` with selected vowel forms,
+//! the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
 //! complete Avro-compatible engine: remaining consonants, other conjuncts, case
@@ -31,6 +32,7 @@
 //! assert_eq!(transliterate("bangla rong nga ngi"), "বাংলা রং ঙ্গা ঙ্গি");
 //! assert_eq!(transliterate("Ngrri NGrrri ngrrrri"), "ঙররি ঞরৃ ংররররি");
 //! assert_eq!(transliterate("zaY hoY hoYe maYa"), "যায় হয় হয়ে মায়া");
+//! assert_eq!(transliterate("y ay ky kiya"), "ইয় আয় ক্য কিয়া");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -96,7 +98,10 @@ const NASAL_R_FORMS: [(&str, &str); 3] = [("Ngr", "ঙর"), ("NGr", "ঞর"), 
 
 #[derive(Clone, Copy)]
 enum Context {
-    Consonant,
+    Consonant {
+        // Only basic r/rr adds ZWJ before lowercase y; nasal-r prefixes do not.
+        ya_joiner: bool,
+    },
     // Retain the raw vowel key: `ao` uses ও, but the last `o` in `ooo` uses অ.
     Vowel(char),
     Other,
@@ -117,6 +122,9 @@ enum Context {
 /// forms. These consume their vowel before ordinary ee/oo aliases are considered.
 /// Ngr/NGr/ngr consume their first r before the rest is matched: Ngrri -> ঙররি,
 /// Ngrrri -> ঙরৃ. Other consonants retain their existing rri matching.
+/// Lowercase `y` produces ইয় independently, য় after a supported vowel, and ্য
+/// after a supported consonant. Basic `r`/`rr` adds U+200D before ্য; nasal-r
+/// prefixes do not. Every form allows following vowel signs and repeated y.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
 /// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -138,7 +146,7 @@ pub fn transliterate(input: &str) -> String {
         if let Some((raw, bangla)) = nasal_r {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
-            context = Context::Consonant;
+            context = Context::Consonant { ya_joiner: false };
         } else if let Some(after_ng) = remaining.strip_prefix("ng") {
             let vowel = NG_VOWELS
                 .iter()
@@ -152,12 +160,12 @@ pub fn transliterate(input: &str) -> String {
             } else {
                 output.push('ং');
                 // The raw match ends in g; ngr was handled before this branch.
-                context = Context::Consonant;
+                context = Context::Consonant { ya_joiner: false };
                 remaining = after_ng;
             }
         } else if remaining.starts_with("rri") {
             // Match the three ASCII keys before individual consonants.
-            output.push_str(if matches!(context, Context::Consonant) {
+            output.push_str(if matches!(context, Context::Consonant { .. }) {
                 "ৃ"
             } else {
                 "ঋ"
@@ -167,7 +175,18 @@ pub fn transliterate(input: &str) -> String {
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
-            context = Context::Consonant;
+            context = Context::Consonant {
+                ya_joiner: matches!(*raw, "r" | "rr"),
+            };
+        } else if ch == 'y' {
+            output.push_str(match context {
+                Context::Consonant { ya_joiner: true } => "\u{200D}্য",
+                Context::Consonant { ya_joiner: false } => "্য",
+                Context::Vowel(_) => "য়",
+                Context::Other => "ইয়",
+            });
+            remaining = &remaining[1..];
+            context = Context::Consonant { ya_joiner: false };
         } else if remaining.starts_with("OI") || remaining.starts_with("OU") {
             // Consume both ASCII keys before single `O`; retain the final key.
             let (independent, sign, last_key) = if remaining.starts_with("OI") {
@@ -175,7 +194,7 @@ pub fn transliterate(input: &str) -> String {
             } else {
                 ("ঔ", "ৌ", 'U')
             };
-            output.push_str(if matches!(context, Context::Consonant) {
+            output.push_str(if matches!(context, Context::Consonant { .. }) {
                 sign
             } else {
                 independent
@@ -192,14 +211,14 @@ pub fn transliterate(input: &str) -> String {
                 (ch, ch.len_utf8())
             };
             output.push_str(match (vowel, context) {
-                ('a', Context::Consonant) => "া",
-                ('i', Context::Consonant) => "ি",
-                ('I', Context::Consonant) => "ী",
-                ('u', Context::Consonant) => "ু",
-                ('U', Context::Consonant) => "ূ",
-                ('e', Context::Consonant) => "ে",
-                ('o', Context::Consonant) => "",
-                ('O', Context::Consonant) => "ো",
+                ('a', Context::Consonant { .. }) => "া",
+                ('i', Context::Consonant { .. }) => "ি",
+                ('I', Context::Consonant { .. }) => "ী",
+                ('u', Context::Consonant { .. }) => "ু",
+                ('U', Context::Consonant { .. }) => "ূ",
+                ('e', Context::Consonant { .. }) => "ে",
+                ('o', Context::Consonant { .. }) => "",
+                ('O', Context::Consonant { .. }) => "ো",
                 ('a', Context::Vowel('a')) => "আ",
                 ('a', Context::Vowel(_)) => "য়া",
                 ('o', Context::Vowel('o')) => "অ",

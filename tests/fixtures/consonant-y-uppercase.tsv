@@ -1,7 +1,7 @@
 # Independently authored for Jong Bangla under MIT; not imported fixtures.
 # Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
 # Columns: raw input, expected output, exact Unicode code points (tab-separated).
-# Lowercase y, Yr/rrY conjunct forms, Z, and escapes remain separate gaps.
+# Lowercase y is covered separately; Yr/rrY conjunct forms, Z, and escapes remain gaps.
 Y	য়	U+09DF
 Ya	য়া	U+09DF U+09BE
 aY	আয়	U+0986 U+09DF

@@ -100,6 +100,11 @@ fn uppercase_y_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/consonant-y-uppercase.tsv"));
 }
 
+#[test]
+fn lowercase_y_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consonant-y-lowercase.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -158,8 +163,11 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("NGc", "ঞচ"),
         ("NGch", "ঞছ"),
         ("N`g", "ণ`গ"),
-        ("y", "y"),
-        ("Yy", "য়y"),
+        ("yrr", "ইয়রর"),
+        ("yrrri", "ইয়রররি"),
+        ("yZ", "ইয়Z"),
+        ("y`a", "ইয়`আ"),
+        ("y`h", "ইয়`হ"),
         ("Yr", "য়র"),
         ("rrY", "ররয়"),
         ("YZ", "য়Z"),
@@ -233,6 +241,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = input + &"ngang1ngoo".repeat(4096);
     let input = input + &"Ngrri🙂NGrrri1ngrrrri".repeat(4096);
     let input = input + &"YiaYrriY1a".repeat(4096);
+    let input = input + &"🙂y🙂ay🙂kya1ryyNgry".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -243,12 +252,19 @@ fn long_mixed_input_preserves_character_boundaries() {
     let expected = expected + &"ঙ্গাং১ঙ্গঅ".repeat(4096);
     let expected = expected + &"ঙররি🙂ঞরৃ১ংররররি".repeat(4096);
     let expected = expected + &"য়িয়ায়ৃয়১আ".repeat(4096);
+    let expected = expected + &"🙂ইয়🙂আয়🙂ক্যা১র\u{200D}্য্যঙর্য".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
 #[test]
 fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     for boundary in [' ', ',', '-', '\n', '\r', '\t', '🙂', 'ক', '\u{301}'] {
+        for (raw, expected) in [("r", "র"), ("ay", "আয়"), ("ky", "ক্য")] {
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}y")),
+                format!("{expected}{boundary}ইয়")
+            );
+        }
         for (vowel, independent) in [
             ("a", "আ"),
             ("i", "ই"),
@@ -279,6 +295,7 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
                 ("NG", "ঞ"),
                 ("ng", "ং"),
                 ("Y", "য়"),
+                ("y", "ইয়"),
             ] {
                 let input = format!("{raw}{boundary}{vowel} {vowel}{boundary}a");
                 let expected = format!("{letter}{boundary}{independent} {independent}{boundary}আ");
@@ -354,4 +371,8 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
     assert_eq!(transliterate("rri"), "ঋ");
     assert_eq!(transliterate("Y"), "য়");
     assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("r"), "র");
+    assert_eq!(transliterate("y"), "ইয়");
+    assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("y"), "ইয়");
 }
