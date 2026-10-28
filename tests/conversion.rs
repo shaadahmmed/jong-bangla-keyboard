@@ -160,6 +160,11 @@ fn ngk_conjunct_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/conjunct-ngk.tsv"));
 }
 
+#[test]
+fn ngkh_conjunct_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ngkh.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -235,6 +240,8 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("q`a", "ক`আ"),
         ("q`h", "ক`হ"),
         ("kr", "কর"),
+        ("hr", "হর"),
+        ("khr", "খর"),
         ("rrk", "ররক"),
         ("rrr", "ররর"),
         ("Rri", "ড়রি"),
@@ -251,7 +258,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("nng", "নং"),
         ("nG", "নG"),
         ("ng`a", "ং`আ"),
-        ("Ngkh", "ঙ্কহ"),
         ("Ngkx", "ঙ্কক্স"),
         ("Ngkkh", "ঙ্কখ"),
         ("NgkSh", "ঙ্কষ"),
@@ -266,6 +272,16 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("rrNgk", "ররঙ্ক"),
         ("Ngk`a", "ঙ্ক`আ"),
         ("Ngk`h", "ঙ্ক`হ"),
+        ("gNgkh", "গঙ্খ"),
+        ("NNgkh", "ণঙ্খ"),
+        ("hNgkh", "হঙ্খ"),
+        ("ShNgkh", "ষঙ্খ"),
+        ("kxNgkh", "ক্ষঙ্খ"),
+        ("rrNgkh", "ররঙ্খ"),
+        ("NgKh", "ঙKহ"),
+        ("NgkhA", "ঙ্খA"),
+        ("Ngkh`a", "ঙ্খ`আ"),
+        ("Ngkh`h", "ঙ্খ`হ"),
         ("NGc", "ঞচ"),
         ("NGch", "ঞছ"),
         ("N`g", "ণ`গ"),
@@ -354,6 +370,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = input + &"🙂xrr1xrri2xrrri3xrry4kxrr5axrr".repeat(4096);
     let input = input + &"🙂Ngxa1Ngxrri2Ngxrr3Ngxrry4NgxNgx".repeat(4096);
     let input = input + &"🙂Ngka1Ngkr2Ngkrri3Ngkry4Ngkrry5NgkNgk".repeat(4096);
+    let input = input + &"🙂Ngkha1Ngkhr2Ngkhrri3Ngkhry4Ngkhrry5NgkhNgkh".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -376,6 +393,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let expected = expected + &"🙂এক্স্রর১এক্সৃ২এক্স্রররি৩এক্সরর\u{200D}্য৪ক্ষ্রর৫আক্স্রর".repeat(4096);
     let expected = expected + &"🙂ঙ্ষা১ঙ্ষৃ২ঙ্ষ্রর৩ঙ্ষরর\u{200D}্য৪ঙ্ষঙ্ষ".repeat(4096);
     let expected = expected + &"🙂ঙ্কা১ঙ্ক্র২ঙ্কৃ৩ঙ্ক্র্য৪ঙ্করর\u{200D}্য৫ঙ্কঙ্ক".repeat(4096);
+    let expected = expected + &"🙂ঙ্খা১ঙ্খ্র২ঙ্খৃ৩ঙ্খ্র্য৪ঙ্খরর\u{200D}্য৫ঙ্খঙ্খ".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -410,8 +428,13 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
             transliterate(&format!("k{boundary}xa")),
             format!("ক{boundary}এক্সা")
         );
-        for (raw, letter) in [("x", "এক্স"), ("kx", "ক্ষ"), ("Ngx", "ঙ্ষ"), ("Ngk", "ঙ্ক")]
-        {
+        for (raw, letter) in [
+            ("x", "এক্স"),
+            ("kx", "ক্ষ"),
+            ("Ngx", "ঙ্ষ"),
+            ("Ngk", "ঙ্ক"),
+            ("Ngkh", "ঙ্খ"),
+        ] {
             assert_eq!(
                 transliterate(&format!("{raw}{boundary}rr")),
                 format!("{letter}{boundary}রর")
@@ -432,6 +455,18 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
         assert_eq!(
             transliterate(&format!("Ngkr{boundary}y")),
             format!("ঙ্ক্র{boundary}ইয়")
+        );
+        assert_eq!(
+            transliterate(&format!("Ngk{boundary}h")),
+            format!("ঙ্ক{boundary}হ")
+        );
+        assert_eq!(
+            transliterate(&format!("Ngkh{boundary}r")),
+            format!("ঙ্খ{boundary}র")
+        );
+        assert_eq!(
+            transliterate(&format!("Ngkhr{boundary}y")),
+            format!("ঙ্খ্র{boundary}ইয়")
         );
         for (raw, expected) in [("r", "র"), ("ay", "আয়"), ("ky", "ক্য")] {
             assert_eq!(
@@ -467,6 +502,9 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
                 ("Ngk", "ঙ্ক"),
                 ("Ngkr", "ঙ্ক্র"),
                 ("Ngkrr", "ঙ্ক্রর"),
+                ("Ngkh", "ঙ্খ"),
+                ("Ngkhr", "ঙ্খ্র"),
+                ("Ngkhrr", "ঙ্খ্রর"),
                 ("w", "ও"),
                 ("kw", "ক্ব"),
                 ("wrr", "ও্রর"),
@@ -605,6 +643,11 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
         ("Ngkrr", "ঙ্ক্রর"),
         ("Ngkry", "ঙ্ক্র্য"),
         ("NgkNgk", "ঙ্কঙ্ক"),
+        ("Ngkh", "ঙ্খ"),
+        ("Ngkhr", "ঙ্খ্র"),
+        ("Ngkhrr", "ঙ্খ্রর"),
+        ("Ngkhry", "ঙ্খ্র্য"),
+        ("NgkhNgkh", "ঙ্খঙ্খ"),
     ] {
         assert_eq!(transliterate(raw), expected);
         assert_eq!(transliterate("r"), "র");

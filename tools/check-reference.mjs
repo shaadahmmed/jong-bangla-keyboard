@@ -58,6 +58,7 @@ for (const name of [
   "x-following-r.tsv",
   "conjunct-ngx.tsv",
   "conjunct-ngk.tsv",
+  "conjunct-ngkh.tsv",
 ]) {
   const fixture = readFileSync(
     new URL(`../tests/fixtures/${name}`, import.meta.url),
@@ -81,7 +82,7 @@ for (const name of [
 console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
 // These probes expose missing behavior; they are not supported-slice fixtures.
-for (const input of ["Ngkh", "Ngkx", "Ngkkh", "NgkSh", "rrNgk", "NgK", "Ngk`a"]) {
+for (const input of ["Ngkx", "Ngkkh", "NgkSh", "gNgkh", "rrNgkh", "NgkH", "Ngkh`a"]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);
 }
