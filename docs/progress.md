@@ -23,40 +23,81 @@ Dates use the project's Asia/Dhaka timezone.
   Uppercase `Y` now attaches following `r`, with the same two-`r` priority
   and exceptions; single `Yr`/`Yry` forms omit the basic-`r` joiner.
   Basic lowercase `q` → ক and its vowel context are implemented.
-  There are 3,864 reference-checked cases.
+  Basic lowercase `v` → ভ and its vowel context are implemented.
+  There are 4,000 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Principal forms for all 11 basic vowels and 39 basic consonant sequences (35 letters)
+  Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
   matching prefixes, contextual lowercase `y`, uppercase `Z`/`aZ`/`oZ`, and
   selected following-`r` forms after `y`/`Z`/`Y`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** check and add basic lowercase `v` and its vowel context against
-  the pinned reference, keeping uppercase aliases and longer forms separate.
+- **Next:** check lowercase `w` and its independent/consonant-following forms
+  against the pinned reference, keeping uppercase aliases and longer forms separate.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author basic lowercase `v` cases: standalone output, every
-   supported vowel/alias, neighboring vowels, ordinary adjacency, digits,
-   boundaries, copied Unicode, and case controls.
+1. Independently author lowercase `w` cases: standalone output, every supported
+   consonant and vowel/alias before it, following vowels/aliases, repeated keys,
+   digits, boundaries, copied Unicode, and case controls.
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-   Known gaps include `v` → `ভ` and `va` → `ভা`.
-3. Add the basic mapping and vowel context. Keep longer sequences, uppercase
-   aliases, other conjunct/reph forms, and escapes explicit. No composition
+   Known gaps include `w` → `ও`, `wa` → `ওয়া`, and `kw` → `ক্ব`.
+3. Add the selected matching/context rules. Keep uppercase aliases, other
+   conjunct/reph forms, longer matches, and escapes explicit. No composition
    or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected lowercase `v` cases match the reference, existing
+**Done when:** the selected lowercase `w` cases match the reference, existing
 conversion cases still pass, limitations are documented, and this log records
 actual results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Basic lowercase v consonant
+
+- Added exact lowercase `v` → ভ (U+09AD) using the existing consonant matcher
+  and vowel context (`vi` → `ভি`, `vU` → `ভূ`, `vrri` → `ভৃ`). The basic
+  inventory is now 40 sequences producing 35 distinct letters. Existing `bh`
+  retains its two-key match; `vh` → `ভহ`, `vv` → `ভভ`, and `vbh` → `ভভ`.
+- Authored 136 [fixtures](../tests/fixtures/consonant-v.tsv), checked against
+  the SHA-256-verified pinned parser before implementation. They cover all
+  supported vowels/aliases on either side, following-vowel transitions,
+  adjacency and `bh` controls, repetition, `y`/`Y`/`Z` distinctions, digits,
+  boundaries, copied Unicode, and words. All 4,000 reference cases match under
+  Node.js v24.21.0. No upstream source, rules, or fixtures imported.
+- The focused Rust regression failed on `v` before implementation and passed
+  afterward. Extended control-character boundaries, separate-call, and long-buffer
+  regressions; the full run passed. Kept uppercase `V`, `vr`, uppercase-`H`
+  adjacency, and escapes as explicit partial-output regressions and refreshed
+  seven reference gap probes.
+- Updated [README.md](../README.md) and
+  [v1.md](v1.md#basic-lowercase-v-consonant) with exact Unicode, examples,
+  inventory/case counts, remaining gaps, and next work. Marked the earlier `v`
+  gap probe as historical. No dependencies, normalization, spelling correction,
+  persistent state, or platform code added.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (30 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` passed.
+- Example: `cargo run --offline --example convert -- 'v vi vU valO vUmi'`
+  printed `ভ ভি ভূ ভালো ভূমি`. Rechecked and reused Rust/Cargo 1.99.1 and
+  Node.js v24.21.0. No tools upgraded; the external parser stays outside the
+  repository. The pre-existing untracked `.vscode/` is untouched.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors, final
+  newlines, trailing whitespace, fixture counts/code points, distinct new inputs,
+  both runner registrations, documented conversions, and `git diff --check` passed.
+- Limitations: uppercase `V`, `vr` and other conjunct/reph forms, remaining
+  letters and aliases, punctuation/escapes, composition, and platform integration
+  remain incomplete. No broader compatibility, performance, or platform
+  validation claimed.
+- Next: check lowercase `w` and its context-dependent forms as a separate
+  reference-checked increment.
 
 ### 2026-10-28 — Basic lowercase q consonant
 

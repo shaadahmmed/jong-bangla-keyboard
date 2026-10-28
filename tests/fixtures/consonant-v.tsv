@@ -1,0 +1,141 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+# Basic lowercase v, vowels/aliases, adjacency and bh controls, digits, and context resets.
+# Uppercase V, remaining conjunct/reph forms, and escapes remain gaps.
+v	ভ	U+09AD
+va	ভা	U+09AD U+09BE
+av	আভ	U+0986 U+09AD
+vaa	ভাআ	U+09AD U+09BE U+0986
+vao	ভাও	U+09AD U+09BE U+0993
+vi	ভি	U+09AD U+09BF
+iv	ইভ	U+0987 U+09AD
+via	ভিয়া	U+09AD U+09BF U+09DF U+09BE
+vio	ভিও	U+09AD U+09BF U+0993
+vI	ভী	U+09AD U+09C0
+Iv	ঈভ	U+0988 U+09AD
+vIa	ভীয়া	U+09AD U+09C0 U+09DF U+09BE
+vIo	ভীও	U+09AD U+09C0 U+0993
+vu	ভু	U+09AD U+09C1
+uv	উভ	U+0989 U+09AD
+vua	ভুয়া	U+09AD U+09C1 U+09DF U+09BE
+vuo	ভুও	U+09AD U+09C1 U+0993
+vU	ভূ	U+09AD U+09C2
+Uv	ঊভ	U+098A U+09AD
+vUa	ভূয়া	U+09AD U+09C2 U+09DF U+09BE
+vUo	ভূও	U+09AD U+09C2 U+0993
+ve	ভে	U+09AD U+09C7
+ev	এভ	U+098F U+09AD
+vea	ভেয়া	U+09AD U+09C7 U+09DF U+09BE
+veo	ভেও	U+09AD U+09C7 U+0993
+vee	ভী	U+09AD U+09C0
+eev	ঈভ	U+0988 U+09AD
+veea	ভীয়া	U+09AD U+09C0 U+09DF U+09BE
+veeo	ভীও	U+09AD U+09C0 U+0993
+vo	ভ	U+09AD
+ov	অভ	U+0985 U+09AD
+voa	ভয়া	U+09AD U+09DF U+09BE
+vO	ভো	U+09AD U+09CB
+Ov	ওভ	U+0993 U+09AD
+vOa	ভোয়া	U+09AD U+09CB U+09DF U+09BE
+vOo	ভোও	U+09AD U+09CB U+0993
+voo	ভু	U+09AD U+09C1
+oov	উভ	U+0989 U+09AD
+vooa	ভুয়া	U+09AD U+09C1 U+09DF U+09BE
+vooo	ভুঅ	U+09AD U+09C1 U+0985
+vOI	ভৈ	U+09AD U+09C8
+OIv	ঐভ	U+0990 U+09AD
+vOIa	ভৈয়া	U+09AD U+09C8 U+09DF U+09BE
+vOIo	ভৈও	U+09AD U+09C8 U+0993
+vOU	ভৌ	U+09AD U+09CC
+OUv	ঔভ	U+0994 U+09AD
+vOUa	ভৌয়া	U+09AD U+09CC U+09DF U+09BE
+vOUo	ভৌও	U+09AD U+09CC U+0993
+vrri	ভৃ	U+09AD U+09C3
+rriv	ঋভ	U+098B U+09AD
+vrria	ভৃয়া	U+09AD U+09C3 U+09DF U+09BE
+vrrio	ভৃও	U+09AD U+09C3 U+0993
+vb	ভব	U+09AD U+09AC
+bv	বভ	U+09AC U+09AD
+vbh	ভভ	U+09AD U+09AD
+bhv	ভভ	U+09AD U+09AD
+vq	ভক	U+09AD U+0995
+qv	কভ	U+0995 U+09AD
+vh	ভহ	U+09AD U+09B9
+hv	হভ	U+09B9 U+09AD
+vY	ভয়	U+09AD U+09DF
+Yv	য়ভ	U+09DF U+09AD
+vv	ভভ	U+09AD U+09AD
+vvv	ভভভ	U+09AD U+09AD U+09AD
+vvi	ভভি	U+09AD U+09AD U+09BF
+vva	ভভা	U+09AD U+09AD U+09BE
+vha	ভহা	U+09AD U+09B9 U+09BE
+yv	ইয়ভ	U+0987 U+09DF U+09AD
+Zv	্যভ	U+09CD U+09AF U+09AD
+vy	ভ্য	U+09AD U+09CD U+09AF
+vya	ভ্যা	U+09AD U+09CD U+09AF U+09BE
+vZ	ভ্য	U+09AD U+09CD U+09AF
+vZa	ভ্যা	U+09AD U+09CD U+09AF U+09BE
+vaZ	ভঅ্যা	U+09AD U+0985 U+09CD U+09AF U+09BE
+voZ	ভঅ্য	U+09AD U+0985 U+09CD U+09AF
+vYri	ভয়্রি	U+09AD U+09DF U+09CD U+09B0 U+09BF
+vyyy	ভ্য্য্য	U+09AD U+09CD U+09AF U+09CD U+09AF U+09CD U+09AF
+vyry	ভ্যর‍্য	U+09AD U+09CD U+09AF U+09B0 U+200D U+09CD U+09AF
+valO	ভালো	U+09AD U+09BE U+09B2 U+09CB
+vumi	ভুমি	U+09AD U+09C1 U+09AE U+09BF
+vUmi	ভূমি	U+09AD U+09C2 U+09AE U+09BF
+vOr	ভোর	U+09AD U+09CB U+09B0
+vasha	ভাশা	U+09AD U+09BE U+09B6 U+09BE
+viya	ভিয়া	U+09AD U+09BF U+09DF U+09BE
+vie	ভিএ	U+09AD U+09BF U+098F
+v bha vi bhi	ভ ভা ভি ভি	U+09AD U+0020 U+09AD U+09BE U+0020 U+09AD U+09BF U+0020 U+09AD U+09BF
+vy🙂a	ভ্য🙂আ	U+09AD U+09CD U+09AF U+1F642 U+0986
+ভva	ভভা	U+09AD U+09AD U+09BE
+v́a	ভ́আ	U+09AD U+0301 U+0986
+v a	ভ আ	U+09AD U+0020 U+0986
+ vi	 ভি	U+0020 U+09AD U+09BF
+vi a	ভি আ	U+09AD U+09BF U+0020 U+0986
+v,a	ভ,আ	U+09AD U+002C U+0986
+,vi	,ভি	U+002C U+09AD U+09BF
+vi,a	ভি,আ	U+09AD U+09BF U+002C U+0986
+v-a	ভ-আ	U+09AD U+002D U+0986
+-vi	-ভি	U+002D U+09AD U+09BF
+vi-a	ভি-আ	U+09AD U+09BF U+002D U+0986
+v🙂a	ভ🙂আ	U+09AD U+1F642 U+0986
+🙂vi	🙂ভি	U+1F642 U+09AD U+09BF
+vi🙂a	ভি🙂আ	U+09AD U+09BF U+1F642 U+0986
+vভa	ভভআ	U+09AD U+09AD U+0986
+ভvi	ভভি	U+09AD U+09AD U+09BF
+viভa	ভিভআ	U+09AD U+09BF U+09AD U+0986
+́vi	́ভি	U+0301 U+09AD U+09BF
+vía	ভি́আ	U+09AD U+09BF U+0301 U+0986
+0v	০ভ	U+09E6 U+09AD
+v0a	ভ০আ	U+09AD U+09E6 U+0986
+v0y	ভ০ইয়	U+09AD U+09E6 U+0987 U+09DF
+1v	১ভ	U+09E7 U+09AD
+v1a	ভ১আ	U+09AD U+09E7 U+0986
+v1y	ভ১ইয়	U+09AD U+09E7 U+0987 U+09DF
+2v	২ভ	U+09E8 U+09AD
+v2a	ভ২আ	U+09AD U+09E8 U+0986
+v2y	ভ২ইয়	U+09AD U+09E8 U+0987 U+09DF
+3v	৩ভ	U+09E9 U+09AD
+v3a	ভ৩আ	U+09AD U+09E9 U+0986
+v3y	ভ৩ইয়	U+09AD U+09E9 U+0987 U+09DF
+4v	৪ভ	U+09EA U+09AD
+v4a	ভ৪আ	U+09AD U+09EA U+0986
+v4y	ভ৪ইয়	U+09AD U+09EA U+0987 U+09DF
+5v	৫ভ	U+09EB U+09AD
+v5a	ভ৫আ	U+09AD U+09EB U+0986
+v5y	ভ৫ইয়	U+09AD U+09EB U+0987 U+09DF
+6v	৬ভ	U+09EC U+09AD
+v6a	ভ৬আ	U+09AD U+09EC U+0986
+v6y	ভ৬ইয়	U+09AD U+09EC U+0987 U+09DF
+7v	৭ভ	U+09ED U+09AD
+v7a	ভ৭আ	U+09AD U+09ED U+0986
+v7y	ভ৭ইয়	U+09AD U+09ED U+0987 U+09DF
+8v	৮ভ	U+09EE U+09AD
+v8a	ভ৮আ	U+09AD U+09EE U+0986
+v8y	ভ৮ইয়	U+09AD U+09EE U+0987 U+09DF
+9v	৯ভ	U+09EF U+09AD
+v9a	ভ৯আ	U+09AD U+09EF U+0986
+v9y	ভ৯ইয়	U+09AD U+09EF U+0987 U+09DF

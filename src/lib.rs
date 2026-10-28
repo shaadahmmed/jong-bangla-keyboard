@@ -37,10 +37,11 @@
 //! assert_eq!(transliterate("yrr yrri yry Zry"), "ইয়্রর ইয়ৃ ইয়র\u{200D}্য ্য্র্য");
 //! assert_eq!(transliterate("Yr Yrri Yry Yrry"), "য়্র য়ৃ য়্র্য য়রর\u{200D}্য");
 //! assert_eq!(transliterate("q qa qi qOI qotha"), "ক কা কি কৈ কথা");
+//! assert_eq!(transliterate("v vi vU valO vUmi"), "ভ ভি ভূ ভালো ভূমি");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
-const CONSONANTS: [(&str, &str); 39] = [
+const CONSONANTS: [(&str, &str); 40] = [
     ("k", "ক"),
     ("q", "ক"),
     ("kh", "খ"),
@@ -56,6 +57,7 @@ const CONSONANTS: [(&str, &str); 39] = [
     ("NG", "ঞ"),
     ("b", "ব"),
     ("bh", "ভ"),
+    ("v", "ভ"),
     ("m", "ম"),
     ("r", "র"),
     ("rr", "রর"),
