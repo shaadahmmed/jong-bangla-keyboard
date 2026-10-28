@@ -60,6 +60,11 @@ fn d_dh_consonant_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/consonants-d-dh.tsv"));
 }
 
+#[test]
+fn l_h_consonant_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consonants-l-h.tsv"));
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -103,31 +108,33 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("pr", "পর"),
         ("pp", "পপ"),
         ("pph", "পফ"),
-        ("phh", "ফh"),
         ("P", "P"),
-        ("Ph", "Ph"),
+        ("Ph", "Pহ"),
         ("F", "F"),
-        ("p`h", "প`h"),
+        ("p`h", "প`হ"),
         ("cc", "চচ"),
         ("cch", "চছ"),
         ("jjh", "জঝ"),
         ("cr", "চর"),
-        ("chh", "ছh"),
         ("C", "C"),
         ("J", "J"),
-        ("Jh", "Jh"),
-        ("c`h", "চ`h"),
+        ("Jh", "Jহ"),
+        ("c`h", "চ`হ"),
         ("ddh", "দধ"),
         ("DDh", "ডঢ"),
         ("dr", "দর"),
         ("dH", "দH"),
         ("DH", "ডH"),
-        ("dhh", "ধh"),
-        ("Dhh", "ঢh"),
-        ("d`h", "দ`h"),
+        ("d`h", "দ`হ"),
+        ("ll", "লল"),
+        ("hl", "হল"),
+        ("L", "L"),
+        ("H", "H"),
+        ("l`h", "ল`হ"),
+        ("h`", "হ`"),
         ("kkh", "কখ"),
         ("K", "K"),
-        ("k`h", "ক`h"),
+        ("k`h", "ক`হ"),
         ("k`a", "ক`আ"),
         ("i`", "ই`"),
         ("I`", "ঈ`"),
@@ -153,11 +160,13 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = "🙂kh2a\u{301}kUuakIakeeeakoooakOakOIakOUokrria".repeat(4096)
         + &"rrrirrrri".repeat(4096)
         + &"phifipO".repeat(4096);
-    let input = input + &"cichijijhi".repeat(4096) + &"didhIDuDhO".repeat(4096);
+    let input =
+        input + &"cichijijhi".repeat(4096) + &"didhIDuDhO".repeat(4096) + &"lihU".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
-    let expected = expected + &"চিছিজিঝি".repeat(4096) + &"দিধীডুঢো".repeat(4096);
+    let expected =
+        expected + &"চিছিজিঝি".repeat(4096) + &"দিধীডুঢো".repeat(4096) + &"লিহূ".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
@@ -179,9 +188,11 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
             ("OU", "ঔ"),
             ("rri", "ঋ"),
         ] {
-            let input = format!("k{boundary}{vowel} {vowel}{boundary}a");
-            let expected = format!("ক{boundary}{independent} {independent}{boundary}আ");
-            assert_eq!(transliterate(&input), expected, "input: {input:?}");
+            for (raw, letter) in [("k", "ক"), ("l", "ল"), ("h", "হ")] {
+                let input = format!("{raw}{boundary}{vowel} {vowel}{boundary}a");
+                let expected = format!("{letter}{boundary}{independent} {independent}{boundary}আ");
+                assert_eq!(transliterate(&input), expected, "input: {input:?}");
+            }
         }
     }
     assert_eq!(transliterate("k"), "ক");
@@ -225,6 +236,10 @@ fn vowel_context_resets_at_unmatched_characters_and_between_calls() {
         assert_eq!(transliterate("a"), "আ");
     }
     for (raw, expected) in [("d", "দ"), ("dh", "ধ"), ("D", "ড"), ("Dh", "ঢ")] {
+        assert_eq!(transliterate(raw), expected);
+        assert_eq!(transliterate("a"), "আ");
+    }
+    for (raw, expected) in [("l", "ল"), ("h", "হ")] {
         assert_eq!(transliterate(raw), expected);
         assert_eq!(transliterate("a"), "আ");
     }

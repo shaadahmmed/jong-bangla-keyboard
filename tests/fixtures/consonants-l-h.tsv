@@ -1,0 +1,113 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+l	ল	U+09B2
+la	লা	U+09B2 U+09BE
+al	আল	U+0986 U+09B2
+li	লি	U+09B2 U+09BF
+il	ইল	U+0987 U+09B2
+lI	লী	U+09B2 U+09C0
+Il	ঈল	U+0988 U+09B2
+lu	লু	U+09B2 U+09C1
+ul	উল	U+0989 U+09B2
+lU	লূ	U+09B2 U+09C2
+Ul	ঊল	U+098A U+09B2
+le	লে	U+09B2 U+09C7
+el	এল	U+098F U+09B2
+lee	লী	U+09B2 U+09C0
+eel	ঈল	U+0988 U+09B2
+lo	ল	U+09B2
+ol	অল	U+0985 U+09B2
+lO	লো	U+09B2 U+09CB
+Ol	ওল	U+0993 U+09B2
+loo	লু	U+09B2 U+09C1
+ool	উল	U+0989 U+09B2
+lOI	লৈ	U+09B2 U+09C8
+OIl	ঐল	U+0990 U+09B2
+lOU	লৌ	U+09B2 U+09CC
+OUl	ঔল	U+0994 U+09B2
+lrri	লৃ	U+09B2 U+09C3
+rril	ঋল	U+098B U+09B2
+1l	১ল	U+09E7 U+09B2
+l1a	ল১আ	U+09B2 U+09E7 U+0986
+l🙂a	ল🙂আ	U+09B2 U+1F642 U+0986
+কl	কল	U+0995 U+09B2
+k-l	ক-ল	U+0995 U+002D U+09B2
+l a	ল আ	U+09B2 U+0020 U+0986
+l,i	ল,ই	U+09B2 U+002C U+0987
+lকa	লকআ	U+09B2 U+0995 U+0986
+lia	লিয়া	U+09B2 U+09BF U+09DF U+09BE
+loa	লয়া	U+09B2 U+09DF U+09BE
+h	হ	U+09B9
+ha	হা	U+09B9 U+09BE
+ah	আহ	U+0986 U+09B9
+hi	হি	U+09B9 U+09BF
+ih	ইহ	U+0987 U+09B9
+hI	হী	U+09B9 U+09C0
+Ih	ঈহ	U+0988 U+09B9
+hu	হু	U+09B9 U+09C1
+uh	উহ	U+0989 U+09B9
+hU	হূ	U+09B9 U+09C2
+Uh	ঊহ	U+098A U+09B9
+he	হে	U+09B9 U+09C7
+eh	এহ	U+098F U+09B9
+hee	হী	U+09B9 U+09C0
+eeh	ঈহ	U+0988 U+09B9
+ho	হ	U+09B9
+oh	অহ	U+0985 U+09B9
+hO	হো	U+09B9 U+09CB
+Oh	ওহ	U+0993 U+09B9
+hoo	হু	U+09B9 U+09C1
+ooh	উহ	U+0989 U+09B9
+hOI	হৈ	U+09B9 U+09C8
+OIh	ঐহ	U+0990 U+09B9
+hOU	হৌ	U+09B9 U+09CC
+OUh	ঔহ	U+0994 U+09B9
+hrri	হৃ	U+09B9 U+09C3
+rrih	ঋহ	U+098B U+09B9
+1h	১হ	U+09E7 U+09B9
+h1a	হ১আ	U+09B9 U+09E7 U+0986
+h🙂a	হ🙂আ	U+09B9 U+1F642 U+0986
+কh	কহ	U+0995 U+09B9
+k-h	ক-হ	U+0995 U+002D U+09B9
+h a	হ আ	U+09B9 U+0020 U+0986
+h,i	হ,ই	U+09B9 U+002C U+0987
+hকa	হকআ	U+09B9 U+0995 U+0986
+hia	হিয়া	U+09B9 U+09BF U+09DF U+09BE
+hoa	হয়া	U+09B9 U+09DF U+09BE
+khh	খহ	U+0996 U+09B9
+khha	খহা	U+0996 U+09B9 U+09BE
+ghh	ঘহ	U+0998 U+09B9
+ghha	ঘহা	U+0998 U+09B9 U+09BE
+thh	থহ	U+09A5 U+09B9
+thha	থহা	U+09A5 U+09B9 U+09BE
+Thh	ঠহ	U+09A0 U+09B9
+Thha	ঠহা	U+09A0 U+09B9 U+09BE
+bhh	ভহ	U+09AD U+09B9
+bhha	ভহা	U+09AD U+09B9 U+09BE
+phh	ফহ	U+09AB U+09B9
+phha	ফহা	U+09AB U+09B9 U+09BE
+chh	ছহ	U+099B U+09B9
+chha	ছহা	U+099B U+09B9 U+09BE
+jhh	ঝহ	U+099D U+09B9
+jhha	ঝহা	U+099D U+09B9 U+09BE
+dhh	ধহ	U+09A7 U+09B9
+dhha	ধহা	U+09A7 U+09B9 U+09BE
+Dhh	ঢহ	U+09A2 U+09B9
+Dhha	ঢহা	U+09A2 U+09B9 U+09BE
+lal	লাল	U+09B2 U+09BE U+09B2
+holud	হলুদ	U+09B9 U+09B2 U+09C1 U+09A6
+holo	হল	U+09B9 U+09B2
+hole	হলে	U+09B9 U+09B2 U+09C7
+hobe	হবে	U+09B9 U+09AC U+09C7
+likhi	লিখি	U+09B2 U+09BF U+0996 U+09BF
+lekha	লেখা	U+09B2 U+09C7 U+0996 U+09BE
+lila	লিলা	U+09B2 U+09BF U+09B2 U+09BE
+lathi	লাথি	U+09B2 U+09BE U+09A5 U+09BF
+hat	হাত	U+09B9 U+09BE U+09A4
+bhalO	ভালো	U+09AD U+09BE U+09B2 U+09CB
+phul	ফুল	U+09AB U+09C1 U+09B2
+DhOl	ঢোল	U+09A2 U+09CB U+09B2
+l h	ল হ	U+09B2 U+0020 U+09B9
+k h	ক হ	U+0995 U+0020 U+09B9
+d h D h	দ হ ড হ	U+09A6 U+0020 U+09B9 U+0020 U+09A1 U+0020 U+09B9

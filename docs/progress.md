@@ -11,25 +11,25 @@ Dates use the project's Asia/Dhaka timezone.
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
   `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri` vowel forms.
-  Basic `r`/`rr`, `p`/`ph`/`f`, `c`/`ch`/`j`/`jh`, and `d`/`dh`/`D`/`Dh`
-  consonant matching is implemented. There are 1,249 reference-checked cases.
+  Basic `r`/`rr`, `p`/`ph`/`f`, `c`/`ch`/`j`/`jh`, `d`/`dh`/`D`/`Dh`, and `l`/`h`
+  consonant matching is implemented. There are 1,359 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Principal forms for all 11 basic vowels and 26 consonant sequences (24 letters)
+  Principal forms for all 11 basic vowels and 28 consonant sequences (26 letters)
   exist.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** add basic `l`/`h` for ল/হ, checking exact Unicode and neighboring
-  sequence behavior against the pinned reference.
+- **Next:** add basic `s`/`sh`/`S` for স/শ/ষ, checking exact Unicode, case
+  distinctions, and longest-sequence matching against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author basic `l`/`h` cases alone, with supported vowels/aliases,
-   and around neighboring input. Check interactions with existing two-key
-   consonants without adding conjunct or escape rules.
+1. Independently author basic `s`/`sh`/`S` cases alone, with supported vowels/aliases,
+   and around neighboring input. Check case distinctions and `sh` priority over
+   single `s`, keeping conjunct and escape rules separate.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
 3. Add only this basic consonant group. Keep incomplete consonants, conjuncts,
@@ -37,11 +37,51 @@ Dates use the project's Asia/Dhaka timezone.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected `l`/`h` cases match the reference, existing conversion
+**Done when:** the selected `s`/`sh`/`S` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Basic l/h consonants
+
+- Added lowercase `l` → ল (U+09B2) and standalone `h` → হ (U+09B9). Both
+  establish consonant context for supported vowels. The core now implements
+  28 consonant input sequences producing 26 distinct letters.
+- Authored 110 [fixtures](../tests/fixtures/consonants-l-h.tsv), verified against
+  the pinned parser before Rust implementation. They cover all supported
+  vowels/aliases on either side, following-vowel transitions, digits, boundaries,
+  copied Unicode, and words. All 1,359 cases match the SHA-256-verified external
+  parser under Node.js v24.21.0. No upstream source, rules, or fixtures imported.
+- Checked all ten existing two-key consonants with an extra `h`/`ha`; longest
+  matching still consumes `kh` as খ, followed by standalone হ in `khh` → `খহ`.
+  Moved now-supported `phh`/`chh`/`dhh`/`Dhh` cases into reference fixtures and
+  updated partial uppercase/escape outputs to reflect converted `h`. Escapes
+  remain unsupported: a backtick still appears in `` d`h `` → `` দ`হ ``.
+- Extended Unicode boundary, separate-call, and long-buffer regressions. Updated
+  [README.md](../README.md) and [v1.md](v1.md#basic-l-and-h-consonants) with exact
+  Unicode, examples, current counts, and remaining gaps, including affected
+  earlier gap tables. No dependencies, composition, or platform code added.
+- Checks: `cargo fmt --all -- --check` passed after applying rustfmt;
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (17 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. The reference comparison passed all
+  1,359 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'lal holud bhalO'` printed
+  `লাল হলুদ ভালো`; 20 direct CLI checks passed for new letters, vowels,
+  two-key matching, boundaries, words, and documented partial outputs. Reused
+  inspected Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools installed or upgraded.
+  The cached external reference remained outside the repository.
+- Documentation/tool checks: `node --check`, UTF-8 decoding, 108 local Markdown
+  links/anchors across four documents, final newlines, trailing whitespace,
+  fixture counts, and `git diff --check` passed. The pre-existing untracked
+  `.vscode/` directory was left untouched.
+- Limitations: `ll`/`hl` and other conjuncts, uppercase `L`/`H` and other aliases,
+  remaining consonants, conjunct/reph forms, punctuation/escapes, composition,
+  and platform integration remain incomplete. No full compatibility,
+  performance, or platform validation claimed.
+- Next: add basic `s`/`sh`/`S` for স/শ/ষ as a separate consonant increment after
+  reference checks for case distinctions and longest-sequence matching.
 
 ### 2026-10-28 — Basic d/dh/D/Dh consonants
 
