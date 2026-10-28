@@ -20,9 +20,9 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 
 ## Current status
 
-A dependency-free Rust library now converts Bangla digits, 31 consonant letters
-through 34 sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
-with context. This is a partial engine with 1,627 reference-checked examples,
+A dependency-free Rust library now converts Bangla digits, 32 consonant letters
+through 35 sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
+with context. This is a partial engine with 1,678 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Remaining
 letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -40,7 +40,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [`d`/`dh`/`D`/`Dh`](docs/v1.md#basic-d-dh-d-and-dh-consonants), then
 [`l`/`h`](docs/v1.md#basic-l-and-h-consonants), and the confirmed
 [`s`/`sh`/`S`/`Sh` group](docs/v1.md#confirmed-s-sh-s-and-sh-mapping), followed by
-[basic `R`/`Rh`](docs/v1.md#basic-uppercase-r-and-rh-consonants).
+[basic `R`/`Rh`](docs/v1.md#basic-uppercase-r-and-rh-consonants), then
+[lowercase `z`](docs/v1.md#basic-lowercase-z-consonant).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -78,6 +79,7 @@ Try `'lal holud bhalO'` → `লাল হলুদ ভালো` for `l`/`h`.
 Try `'s sh S Sh'` → `স শ শ ষ` for the case-sensitive `s`/`sh`/`S`/`Sh` group.
 Try `'sokal shishu SiSu bhaSha'` → `সকাল শিশু শিশু ভাষা` for words using that group.
 Try `'baRi gaRi gaRh drriRh'` → `বাড়ি গাড়ি গাঢ় দৃঢ়` for `R`/`Rh`.
+Try `'zai zabe zodi zokhon'` → `যাই যাবে যদি যখন` for lowercase `z`.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -130,6 +132,9 @@ Conjuncts such as `sk` → `স্ক`, uppercase-`H` aliases, and escapes remai
 Exact `R`/`Rh` produce ড়/ঢ় (U+09DC/U+09DD), with `Rh` matched before `R`.
 They support vowel signs, and `Rrri` → `ড়ৃ` preserves the existing `rri` vowel.
 Conjuncts such as `Rri` → `ড়্রি`, uppercase-`H` aliases, and escapes remain incomplete.
+Lowercase `z` produces য (U+09AF), with supported vowel signs (`zi` → `যি`).
+It remains distinct from uppercase `Z`, whose reference form is ্য; uppercase
+`Z`, related conjuncts, and escapes remain incomplete.
 
 ## Repeat the reference comparison
 
@@ -148,8 +153,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`c`/`ch`/`j`/`jh` fixtures](tests/fixtures/consonants-c-ch-j-jh.tsv),
 [`d`/`dh`/`D`/`Dh` fixtures](tests/fixtures/consonants-d-dh.tsv),
 [`l`/`h` fixtures](tests/fixtures/consonants-l-h.tsv),
-[`s`/`sh`/`S`/`Sh` fixtures](tests/fixtures/consonants-s-sh.tsv), and
-[`R`/`Rh` fixtures](tests/fixtures/consonants-r-retroflex.tsv) record the raw input,
+[`s`/`sh`/`S`/`Sh` fixtures](tests/fixtures/consonants-s-sh.tsv),
+[`R`/`Rh` fixtures](tests/fixtures/consonants-r-retroflex.tsv), and
+[`z` fixtures](tests/fixtures/consonant-z.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -165,7 +171,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 1,627 cases used by Rust tests and prints reference outputs for
+It checks the same 1,678 cases used by Rust tests and prints reference outputs for
 five known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

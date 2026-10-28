@@ -1,0 +1,54 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+z	য	U+09AF
+za	যা	U+09AF U+09BE
+az	আয	U+0986 U+09AF
+zi	যি	U+09AF U+09BF
+iz	ইয	U+0987 U+09AF
+zI	যী	U+09AF U+09C0
+Iz	ঈয	U+0988 U+09AF
+zu	যু	U+09AF U+09C1
+uz	উয	U+0989 U+09AF
+zU	যূ	U+09AF U+09C2
+Uz	ঊয	U+098A U+09AF
+ze	যে	U+09AF U+09C7
+ez	এয	U+098F U+09AF
+zee	যী	U+09AF U+09C0
+eez	ঈয	U+0988 U+09AF
+zo	য	U+09AF
+oz	অয	U+0985 U+09AF
+zO	যো	U+09AF U+09CB
+Oz	ওয	U+0993 U+09AF
+zoo	যু	U+09AF U+09C1
+ooz	উয	U+0989 U+09AF
+zOI	যৈ	U+09AF U+09C8
+OIz	ঐয	U+0990 U+09AF
+zOU	যৌ	U+09AF U+09CC
+OUz	ঔয	U+0994 U+09AF
+zrri	যৃ	U+09AF U+09C3
+rriz	ঋয	U+098B U+09AF
+1z	১য	U+09E7 U+09AF
+z1a	য১আ	U+09AF U+09E7 U+0986
+z🙂a	য🙂আ	U+09AF U+1F642 U+0986
+কz	কয	U+0995 U+09AF
+k-z	ক-য	U+0995 U+002D U+09AF
+z a	য আ	U+09AF U+0020 U+0986
+z,i	য,ই	U+09AF U+002C U+0987
+zকa	যকআ	U+09AF U+0995 U+0986
+zia	যিয়া	U+09AF U+09BF U+09DF U+09BE
+zoa	যয়া	U+09AF U+09DF U+09BE
+zai	যাই	U+09AF U+09BE U+0987
+zabe	যাবে	U+09AF U+09BE U+09AC U+09C7
+zodi	যদি	U+09AF U+09A6 U+09BF
+zokhon	যখন	U+09AF U+0996 U+09A8
+zemon	যেমন	U+09AF U+09C7 U+09AE U+09A8
+zini	যিনি	U+09AF U+09BF U+09A8 U+09BF
+zIni	যীনি	U+09AF U+09C0 U+09A8 U+09BF
+zOg	যোগ	U+09AF U+09CB U+0997
+zug	যুগ	U+09AF U+09C1 U+0997
+zuge	যুগে	U+09AF U+09C1 U+0997 U+09C7
+kz	কয	U+0995 U+09AF
+zk	যক	U+09AF U+0995
+z z	য য	U+09AF U+0020 U+09AF
+zz	যয	U+09AF U+09AF

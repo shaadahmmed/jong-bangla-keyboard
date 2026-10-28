@@ -26,10 +26,11 @@
 //! assert_eq!(transliterate("s sh S Sh"), "স শ শ ষ");
 //! assert_eq!(transliterate("sokal shishu SiSu bhaSha"), "সকাল শিশু শিশু ভাষা");
 //! assert_eq!(transliterate("baRi gaRi gaRh drriRh"), "বাড়ি গাড়ি গাঢ় দৃঢ়");
+//! assert_eq!(transliterate("zai zabe zodi zokhon"), "যাই যাবে যদি যখন");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
-const CONSONANTS: [(&str, &str); 34] = [
+const CONSONANTS: [(&str, &str); 35] = [
     ("k", "ক"),
     ("kh", "খ"),
     ("g", "গ"),
@@ -64,6 +65,7 @@ const CONSONANTS: [(&str, &str); 34] = [
     ("Sh", "ষ"),
     ("R", "ড়"),
     ("Rh", "ঢ়"),
+    ("z", "য"),
 ];
 
 #[derive(Clone, Copy)]

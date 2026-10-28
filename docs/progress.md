@@ -12,38 +12,80 @@ Dates use the project's Asia/Dhaka timezone.
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
   `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri` vowel forms.
   Basic `r`/`rr`, `p`/`ph`/`f`, `c`/`ch`/`j`/`jh`, `d`/`dh`/`D`/`Dh`, `l`/`h`,
-  `s`/`sh`/`S`/`Sh`, and `R`/`Rh` consonant matching is implemented.
-  There are 1,627 reference-checked cases.
+  `s`/`sh`/`S`/`Sh`, `R`/`Rh`, and lowercase `z` consonant matching is implemented.
+  There are 1,678 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Principal forms for all 11 basic vowels and 34 consonant sequences (31 letters)
+  Principal forms for all 11 basic vowels and 35 consonant sequences (32 letters)
   exist.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** add lowercase `z` for য, checking exact Unicode, vowel context,
-  and neighboring input against the pinned reference. Uppercase `Z` is distinct.
+- **Next:** add basic `Ng`/`NG` for ঙ/ঞ, checking exact Unicode, case
+  distinctions, longest matching, and vowel context against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author lowercase `z` cases with supported vowels/aliases and
-   neighboring input. Standalone `z` → য (U+09AF) is already reference-verified.
-   Keep uppercase `Z` separate: it produces ্য (U+09CD U+09AF) in the reference
-   and belongs to later conjunct work, not a blanket case alias.
+1. Independently author basic `Ng`/`NG` cases with supported vowels/aliases and
+   neighboring input. Standalone `Ng` → ঙ (U+0999) and `NG` → ঞ (U+099E) are
+   already reference-verified. Check priority over existing single `N` and keep
+   lowercase `ng` → ং (U+0982) outside this basic consonant group.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
-3. Add only lowercase `z`. Keep incomplete consonants, conjuncts, reph, and other
+3. Add only basic `Ng`/`NG`. Keep incomplete consonants, conjuncts, reph, and other
    context behavior explicit; no composition/platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the selected `z` cases match the reference, existing conversion
+**Done when:** the selected `Ng`/`NG` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — Basic lowercase z consonant
+
+- Added exact lowercase `z` → য (U+09AF), establishing consonant context for
+  supported vowels. It remains distinct from `j` → জ and the still-unimplemented
+  uppercase `Z`. The core now implements 35 consonant input sequences producing
+  32 distinct letters.
+- Authored 51 [fixtures](../tests/fixtures/consonant-z.tsv), verified against the
+  pinned parser before Rust implementation. They cover every supported vowel/alias
+  on either side, following-vowel transitions, repeated and neighboring input,
+  boundaries, digits, copied Unicode, and words. All 1,678 cases match the
+  SHA-256-verified external parser under Node.js v24.21.0. No upstream source,
+  rules, or fixtures imported.
+- Verified ordinary adjacency (`kz` → `কয`, `zk` → `যক`, `zz` → `যয`) and raw
+  vowel case (`zini` → `যিনি`, `zIni` → `যীনি`), without spelling correction.
+  Extended Unicode-boundary, separate-call, and long-buffer checks. Recorded
+  partial outputs for uppercase `Z`, related conjuncts, `zr`, and escapes.
+- Updated [README.md](../README.md) and [v1.md](v1.md#basic-lowercase-z-consonant)
+  with Unicode, counts, examples, and remaining gaps. No dependencies,
+  composition, or platform code added.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (20 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. The reference comparison passed all
+  1,678 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'zai zabe zodi zokhon'`
+  printed `যাই যাবে যদি যখন`; 20 direct CLI checks passed for vowels, words,
+  adjacency, Unicode boundaries, and documented gaps. Reused inspected Rust/Cargo
+  1.99.1 and Node.js v24.21.0; no tools installed or upgraded. The cached external
+  reference remained outside the repository.
+- Documentation/tool checks: `node --check`, UTF-8 decoding, 131 local Markdown
+  links/anchors across four documents, final newlines, trailing whitespace,
+  fixture counts, and `git diff --check` passed. The pre-existing untracked
+  `.vscode/` directory was left untouched.
+- Limitations: uppercase `Z` and related conjuncts, `zr`, remaining consonants,
+  conjunct/reph forms, aliases, punctuation/escapes, composition, and platform
+  integration remain incomplete. No full compatibility, performance, or platform
+  validation claimed.
+- Next: add basic `Ng`/`NG` → ঙ/ঞ as a separate increment. Preliminary standalone
+  reference probes confirm U+0999/U+099E and distinguish lowercase `ng` → ং
+  (U+0982), which remains outside the next basic consonant group. Vowel/context
+  cases still need independent fixtures and reference checks before implementation.
 
 ### 2026-10-28 — Basic uppercase R/Rh consonants
 
