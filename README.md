@@ -21,10 +21,10 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 ## Current status
 
 A dependency-free Rust library now converts Bangla digits, 13 consonant
-sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU` with context.
-This is a partial engine with 623 reference-checked examples, not a usable desktop
-keyboard or a full Avro compatibility claim. Remaining letters, conjuncts,
-composition, and Fcitx5 integration are still missing.
+sequences, and `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
+with context. This is a partial engine with 707 reference-checked examples,
+not a usable desktop keyboard or a full Avro compatibility claim. Remaining
+letters, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
 [first vowel group](docs/v1.md#first-vowel-group) and
@@ -32,7 +32,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [uppercase `I`](docs/v1.md#third-vowel-group) and
 [`e`/`ee`](docs/v1.md#fourth-vowel-group) and
 [`o`/`O`/`oo`](docs/v1.md#fifth-vowel-group), plus
-[`OI`/`OU`](docs/v1.md#sixth-vowel-group).
+[`OI`/`OU`](docs/v1.md#sixth-vowel-group) and
+[`rri`](docs/v1.md#seventh-vowel-group).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -61,6 +62,7 @@ Try `'ki kI nIti'` → `কি কী নীতি` for the `i`/`I` distinction.
 Try `'ami ke kee'` → `আমি কে কী` for single `e` and double `ee`.
 Try `'tumi kemon tOmake'` → `তুমি কেমন তোমাকে` for lowercase `o` and uppercase `O`.
 Try `'OI kOI OU kOU nOUka'` → `ঐ কৈ ঔ কৌ নৌকা` for the two-key vowels.
+Try `'rri krri krriti rriN'` → `ঋ কৃ কৃতি ঋণ` for the three-key vowel.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -86,9 +88,12 @@ except after a raw lowercase `o`. The sequence `oo` is matched first and acts li
 The case-sensitive pairs `OI`/`OU` produce `ঐ`/`ঔ` independently and `ৈ`/`ৌ`
 after consonants (`kOI` → `কৈ`, `kOU` → `কৌ`). They match before single `O`;
 `Oi` still produces `ওই`.
+Lowercase `rri` produces `ঋ` independently and `ৃ` after a supported consonant
+(`krri` → `কৃ`). The principal forms for all 11 basic vowels are now implemented;
+full context, case aliases, and longer consonant sequences are still incomplete.
 Supported parts of an otherwise unsupported word still convert: `qa` currently
-produces `qআ` because `q` is not implemented yet. The remaining basic vowel
-`rri` → `ঋ` is not implemented yet.
+produces `qআ` because `q` is not implemented yet. Longer `r` runs need the `r`/`rr`
+consonant rules; for example, `rrri` currently produces `rঋ` rather than `রররি`.
 
 ## Repeat the reference comparison
 
@@ -99,8 +104,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`u`/`U` fixtures](tests/fixtures/vowels-u.tsv),
 [`I` fixtures](tests/fixtures/vowels-i-long.tsv),
 [`e`/`ee` fixtures](tests/fixtures/vowels-e.tsv),
-[`o`/`O`/`oo` fixtures](tests/fixtures/vowels-o.tsv), and
-[`OI`/`OU` fixtures](tests/fixtures/vowels-oi-ou.tsv) record the raw input, expected UTF-8
+[`o`/`O`/`oo` fixtures](tests/fixtures/vowels-o.tsv),
+[`OI`/`OU` fixtures](tests/fixtures/vowels-oi-ou.tsv), and
+[`rri` fixtures](tests/fixtures/vowels-rri.tsv) record the raw input, expected UTF-8
 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -116,7 +122,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 623 cases used by Rust tests and prints reference outputs for
+It checks the same 707 cases used by Rust tests and prints reference outputs for
 five known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

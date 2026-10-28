@@ -1,10 +1,10 @@
 //! A small, deterministic Bangla phonetic conversion slice.
 //!
 //! Supports ASCII digits, the consonant sequences below, and
-//! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`.
+//! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
-//! complete Avro-compatible engine: other vowels, conjuncts, case normalization,
-//! punctuation rules, and escapes are not implemented.
+//! complete Avro-compatible engine: remaining consonants, conjuncts, case
+//! normalization, punctuation rules, and escapes are not implemented.
 //!
 //! ```
 //! use jong_bangla_core::transliterate;
@@ -17,6 +17,7 @@
 //! assert_eq!(transliterate("ami ke kee"), "আমি কে কী");
 //! assert_eq!(transliterate("tumi kemon tOmake"), "তুমি কেমন তোমাকে");
 //! assert_eq!(transliterate("OI kOI OU kOU nOUka"), "ঐ কৈ ঔ কৌ নৌকা");
+//! assert_eq!(transliterate("rri krri krriti rriN"), "ঋ কৃ কৃতি ঋণ");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -50,11 +51,12 @@ enum Context {
 /// Most supported vowels become signs after a supported consonant; lowercase `o`
 /// adds no character there. `ee` and `oo` alias `I` and `u`, matched before single
 /// keys. Case-sensitive `OI`/`OU` match before single `O`, producing ঐ/ঔ or ৈ/ৌ.
+/// Lowercase `rri` produces ঋ or ৃ; longer `r` runs still need consonant rules.
 /// Lowercase `o` after a supported raw vowel other than `o` becomes ও.
 /// An `a` after a supported vowel other than `a` becomes `য়া`. Context
 /// follows raw matched tokens, not preserved Bangla. Matching is case-sensitive.
 /// Unsupported larger sequences can still contain supported parts: `kkh` becomes `কখ`, not a
-/// conjunct. Other vowels and backtick escapes remain unsupported.
+/// conjunct. Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
 pub fn transliterate(input: &str) -> String {
     let mut remaining = input;
@@ -67,7 +69,16 @@ pub fn transliterate(input: &str) -> String {
             .filter(|(raw, _)| remaining.starts_with(raw))
             .max_by_key(|(raw, _)| raw.len());
 
-        if let Some((raw, bangla)) = matched {
+        if remaining.starts_with("rri") {
+            // Match the three ASCII keys before individual consonants.
+            output.push_str(if matches!(context, Context::Consonant) {
+                "ৃ"
+            } else {
+                "ঋ"
+            });
+            context = Context::Vowel('i');
+            remaining = &remaining[3..];
+        } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
             context = Context::Consonant;

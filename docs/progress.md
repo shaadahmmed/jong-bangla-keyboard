@@ -10,33 +10,74 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Completed:** initial requirements, contributor guide, MIT license, and progress
   tracking documentation; pinned phonetic reference; first Rust conversion slice;
-  `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU` vowels with context.
-  There are 623 reference-checked cases.
+  `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri` vowel forms.
+  There are 707 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
-  Other vowels, conjuncts, composition, Fcitx5 integration, and a usable desktop
-  keyboard are not implemented. Full Avro compatibility is not established.
-- **Next:** add `rri` for ঋ/ৃ, checking independent/dependent forms and neighboring
-  keys against the pinned reference before implementing the remaining consonants.
+  Principal forms for all 11 basic vowels and 13 consonant sequences exist.
+  Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
+  integration, and a usable desktop keyboard remain incomplete. Full Avro
+  compatibility is not established.
+- **Next:** add basic `r`/`rr` consonant matching and resolve overlapping lowercase
+  `r` runs around `rri`, checking expected Unicode against the pinned reference.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author `rri` cases for word-initial vowels, vowels after supported
-   consonants, neighboring vowels, and relevant prefixes/case variants.
+1. Independently author `r`/`rr` cases alone, with supported vowels, and around
+   `rri`. Include `rrri` and `rrrri`, whose matching still differs from the reference.
 2. Run them through the [pinned reference](v1.md#phonetic-behavior-reference)
    using the external parser, recording exact Unicode output before implementing.
-3. Add the required context handling to the Rust core without platform or
-   composition state. Keep remaining coverage gaps explicit.
+3. Add basic consonant matching with `rri` precedence. Keep reph, consonant
+   clusters, and other incomplete `r` behavior explicit; no composition/platform
+   work in this increment.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** the `rri` cases match the reference, existing conversion
+**Done when:** the selected `r`/`rr` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records the results.
 Fcitx5 integration and composition controls belong to later steps.
 
 ## Completed steps
+
+### 2026-10-28 — rri vowel group
+
+- Added exact lowercase `rri` before individual consonants: independent ঋ
+  (U+098B), or dependent ৃ (U+09C3) after a supported consonant. Retained final
+  raw `i` context (`rria` → `ঋয়া`, `rrio` → `ঋও`). The principal forms for all
+  11 basic vowels now exist, with broader context/alias compatibility still partial.
+- Authored 84 [fixtures](../tests/fixtures/vowels-rri.tsv), verified against the
+  pinned parser before Rust changes. They cover all 13 supported consonants,
+  surrounding vowels/aliases, repetition, transitions, digits, boundaries, Unicode,
+  and words. All 707 reference cases match with the SHA-256-verified external
+  parser under Node.js v24.21.0. No upstream source, rules, or fixtures imported.
+- Extra reference probes exposed longer-`r`-run behavior tied to the still-missing
+  `r`/`rr` consonant matching. Documented current outputs (`rrri` → `rঋ`,
+  `rrrri` → `rrঋ`) as gaps for the next increment rather than introducing a
+  temporary vowel-boundary restriction. Added regressions that make these
+  temporary limits, case variants, and literal backticks explicit.
+- Extended boundary, separate-call, and long-buffer tests to `rri`. Updated
+  [README.md](../README.md) and [v1.md](v1.md#seventh-vowel-group) for the implemented
+  forms, exact Unicode, count, examples, and remaining gaps. No dependencies,
+  composition controls, or platform code added.
+- Checks: `cargo test --offline` passed (12 regression tests and one documentation
+  example); `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, and
+  `cargo build --offline --release` passed. The reference comparison passed all
+  707 cases and reported five remaining gap probes.
+- Example: `cargo run --offline --example convert -- 'rri krri krriti rriN'` printed
+  `ঋ কৃ কৃতি ঋণ`; 14 additional documented conversions passed direct CLI checks.
+  Reused inspected Rust/Cargo 1.99.1 and Node.js v24.21.0; no tools or dependencies
+  were installed or upgraded.
+- Documentation/tool checks: `node --check`, UTF-8 decoding, local Markdown links
+  and heading anchors, final newlines, trailing whitespace, and `git diff --check`
+  passed. The pre-existing untracked `.vscode/` directory was left untouched.
+- Limitations: standalone `r`/`rr`, their case variants, other remaining consonants,
+  uppercase `A`/`E`, contextual/conjunct rules, punctuation/escapes, composition,
+  and platform integration remain incomplete. No full compatibility, performance,
+  or platform validation claimed.
+- Next: implement basic `r`/`rr` and resolve the overlapping lowercase runs.
 
 ### 2026-10-28 — OI/OU two-key vowel group
 

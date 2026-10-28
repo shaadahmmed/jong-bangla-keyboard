@@ -1,0 +1,87 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Columns: raw input, expected output, exact Unicode code points (tab-separated).
+rri	ঋ	U+098B
+krri	কৃ	U+0995 U+09C3
+khrri	খৃ	U+0996 U+09C3
+grri	গৃ	U+0997 U+09C3
+ghrri	ঘৃ	U+0998 U+09C3
+trri	তৃ	U+09A4 U+09C3
+thrri	থৃ	U+09A5 U+09C3
+Trri	টৃ	U+099F U+09C3
+Thrri	ঠৃ	U+09A0 U+09C3
+nrri	নৃ	U+09A8 U+09C3
+Nrri	ণৃ	U+09A3 U+09C3
+brri	বৃ	U+09AC U+09C3
+bhrri	ভৃ	U+09AD U+09C3
+mrri	মৃ	U+09AE U+09C3
+arri	আঋ	U+0986 U+098B
+rria	ঋয়া	U+098B U+09DF U+09BE
+karri	কাঋ	U+0995 U+09BE U+098B
+krria	কৃয়া	U+0995 U+09C3 U+09DF U+09BE
+irri	ইঋ	U+0987 U+098B
+rrii	ঋই	U+098B U+0987
+kirri	কিঋ	U+0995 U+09BF U+098B
+krrii	কৃই	U+0995 U+09C3 U+0987
+Irri	ঈঋ	U+0988 U+098B
+rriI	ঋঈ	U+098B U+0988
+kIrri	কীঋ	U+0995 U+09C0 U+098B
+krriI	কৃঈ	U+0995 U+09C3 U+0988
+urri	উঋ	U+0989 U+098B
+rriu	ঋউ	U+098B U+0989
+kurri	কুঋ	U+0995 U+09C1 U+098B
+krriu	কৃউ	U+0995 U+09C3 U+0989
+Urri	ঊঋ	U+098A U+098B
+rriU	ঋঊ	U+098B U+098A
+kUrri	কূঋ	U+0995 U+09C2 U+098B
+krriU	কৃঊ	U+0995 U+09C3 U+098A
+erri	এঋ	U+098F U+098B
+rrie	ঋএ	U+098B U+098F
+kerri	কেঋ	U+0995 U+09C7 U+098B
+krrie	কৃএ	U+0995 U+09C3 U+098F
+eerri	ঈঋ	U+0988 U+098B
+rriee	ঋঈ	U+098B U+0988
+keerri	কীঋ	U+0995 U+09C0 U+098B
+krriee	কৃঈ	U+0995 U+09C3 U+0988
+orri	অঋ	U+0985 U+098B
+rrio	ঋও	U+098B U+0993
+korri	কঋ	U+0995 U+098B
+krrio	কৃও	U+0995 U+09C3 U+0993
+Orri	ওঋ	U+0993 U+098B
+rriO	ঋও	U+098B U+0993
+kOrri	কোঋ	U+0995 U+09CB U+098B
+krriO	কৃও	U+0995 U+09C3 U+0993
+oorri	উঋ	U+0989 U+098B
+rrioo	ঋউ	U+098B U+0989
+koorri	কুঋ	U+0995 U+09C1 U+098B
+krrioo	কৃউ	U+0995 U+09C3 U+0989
+OIrri	ঐঋ	U+0990 U+098B
+rriOI	ঋঐ	U+098B U+0990
+kOIrri	কৈঋ	U+0995 U+09C8 U+098B
+krriOI	কৃঐ	U+0995 U+09C3 U+0990
+OUrri	ঔঋ	U+0994 U+098B
+rriOU	ঋঔ	U+098B U+0994
+kOUrri	কৌঋ	U+0995 U+09CC U+098B
+krriOU	কৃঔ	U+0995 U+09C3 U+0994
+rrirri	ঋঋ	U+098B U+098B
+krrirri	কৃঋ	U+0995 U+09C3 U+098B
+rriarri	ঋয়াঋ	U+098B U+09DF U+09BE U+098B
+rrirria	ঋঋয়া	U+098B U+098B U+09DF U+09BE
+krriooa	কৃউয়া	U+0995 U+09C3 U+0989 U+09DF U+09BE
+rriaa	ঋয়াআ	U+098B U+09DF U+09BE U+0986
+1rri	১ঋ	U+09E7 U+098B
+k1rri	ক১ঋ	U+0995 U+09E7 U+098B
+krri2a	কৃ২আ	U+0995 U+09C3 U+09E8 U+0986
+rri a	ঋ আ	U+098B U+0020 U+0986
+rri🙂a	ঋ🙂আ	U+098B U+1F642 U+0986
+কrri	কঋ	U+0995 U+098B
+রrri	রঋ	U+09B0 U+098B
+k🙂rri	ক🙂ঋ	U+0995 U+1F642 U+098B
+k-rri	ক-ঋ	U+0995 U+002D U+098B
+k,rri	ক,ঋ	U+0995 U+002C U+098B
+krri rri	কৃ ঋ	U+0995 U+09C3 U+0020 U+098B
+rri🙂rri	ঋ🙂ঋ	U+098B U+1F642 U+098B
+rriN	ঋণ	U+098B U+09A3
+krriti	কৃতি	U+0995 U+09C3 U+09A4 U+09BF
+brritha	বৃথা	U+09AC U+09C3 U+09A5 U+09BE
+mrrig	মৃগ	U+09AE U+09C3 U+0997
