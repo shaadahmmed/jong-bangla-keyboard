@@ -11,80 +11,79 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Implemented:** a dependency-free Rust transliteration library and terminal
   example; principal vowels/consonants, contextual forms, selected conjuncts,
-  following-r forms, and selective ASCII case aliases. See the
+  following-r forms, selective ASCII aliases, and explicit G/J spellings. See the
   [coverage overview](../README.md#current-status).
-- **Latest coverage:** `ABCEFHKLMPQVWX` match their lowercase forms throughout
-  scanning, including AZ and uppercase H inside longer matches. Explicit G/J
-  behavior remains separate; see the [batch record](v1.md#selective-ascii-case-alias-batch).
+- **Latest coverage:** all 12 standalone G/J discrepancies are resolved by explicit
+  rules, preserving Ng/NG/ng/nG and J/j distinctions; exposed G after earlier
+  matches now converts. See the [batch record](v1.md#explicit-gj-spelling-batch).
 - **Library:** private case/scanner/rules/vowels/following-r modules remain
   independent of platforms; the public `transliterate` API is unchanged.
-- **Validation:** all 462,920 fixture rows match the pinned parser; formatting,
-  Clippy, 280 integration tests, 1 doctest, release/documentation builds,
+- **Validation:** all 469,089 fixture rows match the pinned parser; formatting,
+  Clippy, 294 integration tests, 1 doctest, release/documentation builds,
   default/batch smoke checks, and documentation consistency checks passed.
-- **Limitations:** the standalone inventory has 37 discrepancies (12 explicit
-  G/J forms and 25 punctuation/symbol/escape forms); context interactions are
-  excluded, so this is not a compatibility percentage. Reph, vowel-context edges,
-  following-r gaps after q/z/R/Rh, and reference Unicode-lowercasing differences
-  remain. Composition, Fcitx5, desktop use, and performance are unimplemented
-  or unverified.
+- **Limitations:** the standalone inventory has 25 discrepancies, all punctuation,
+  symbols or escapes; context interactions are excluded, so this is not a
+  compatibility percentage. Reph, vowel-context edges, following-r gaps after
+  q/z/R/Rh, and reference Unicode-lowercasing differences remain. Composition,
+  Fcitx5, desktop use, and performance are unimplemented or unverified.
 
 ## Latest completed step
 
-- **2026-10-29 — Implement the 14 selective ASCII case aliases together.**
-  Added normalization only for ABCEFHKLMPQVWX before matching, preserving
-  other case distinctions, input ownership, Unicode passthrough, and rule priority.
-  All 15 targeted standalone discrepancies (the 14 letters plus AZ) now match.
-- **Behavior:** `AZ` → অ্যা, `kH` → খ, `SH` → ষ, `NgK` → ঙ্ক,
-  `KSHM` → ক্ষ্ম, `mB` → ম্ব. `SPL` → শপ্ল versus `sPL` → স্প্ল.
-  No upstream source, rules, fixtures, dependencies or normalization code imported.
-- **Evidence:** 109,246 new authored rows in 16 files, including independent
-  per-letter/context coverage, mixed-case combinations, and 113 resolved cases.
-  All 353,674 earlier rows are unchanged. Migrated 107 old partial assertions;
-  retained G/J, reph and escape gaps. Rust adds every internal split of 15
-  mixed-case spellings (25 positions), separate calls, Unicode boundaries,
-  preserved case distinctions, and long repeated input.
-- **Reference checks run:** `node /tmp/jong-verify-case-aliases.mjs` — all
-  109,133 initial new rows and 86,996 ASCII pair/triple normalization probes
-  passed; the 113 resolved rows passed in the full comparison below.
-  `node /tmp/jong-verify-case-extra.mjs` — 313 extra authored boundary/case
-  expectations passed; 43 Unicode-contract cases and one G/J gap excluded from parity.
+- **2026-10-29 — Implement all 12 explicit G/J spellings together.**
+  Added G/Gh/J basic matches and Ghn/Gdh/GN/Gn/Gm/Gl/GG/Gg/gG conjuncts.
+  No blanket G/J folding; all 14 earlier ASCII aliases are unchanged.
+  No upstream source, rule tables, fixtures or dependencies imported.
+- **Behavior:** Gh → ঘ, Gg → জ্ঞ, Gdh → গ্ধ, Jh → জহ versus jh → ঝ.
+  NG → ঞ consumes G; nG → নগ keeps G fresh. ShNG → ষ্ণগ and ShNGdh → ষ্ণগ্ধ
+  now convert exposed G. The basic inventory is 43 sequences for 35 letters.
+- **Evidence:** 6,169 authored rows in 13 files; independent per-spelling Unicode,
+  vowel/context, following-r and overlap checks. All 462,920 earlier fixture rows
+  are unchanged. Migrated 17 unique partial-output assertions to fixture coverage;
+  updated separate-call G expectations and retained reph/escape/following-r gaps.
+  Rust checks all 20 internal splits of 14 spellings, separate calls, UTF-8
+  boundaries, input ownership, and 1,024 repeated mixed-input segments.
+- **Reference checks run:** `node /tmp/jong-verify-gj.mjs` — all 6,169 new rows
+  and 82 extra authored boundary/repeated-input expectations passed.
   `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 462,920 rows passed against the SHA-256-verified pinned parser;
+  — all 469,089 rows passed against the SHA-256-verified pinned parser;
   five remaining-gap probes printed exact reference outputs. Node v24.21.0.
-- **Rust checks run:** `cargo test --offline case_alias` — 18 passed;
+- **Rust checks run:** `cargo test --offline explicit_gj` — 14 passed;
   `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`;
-  `cargo test --offline` — 280 integration tests and 1 doctest passed;
+  `cargo test --offline` — 294 integration tests and 1 doctest passed;
   `cargo build --offline --release`;
   `RUSTDOCFLAGS='-D warnings' cargo doc --offline --no-deps` — passed.
-  Rust/Cargo 1.99.1 were used.
+  Rust/Cargo 1.99.1 were used. An initial targeted long-input test caught an
+  authored GHN expectation error; changing the intended n spelling to GHn
+  passed independently against the reference and in the final Rust checks.
 - **Smoke checks run:** `cargo run --offline --example convert -- 'kh12T'`
-  — খ১২ট; `cargo run --offline --example convert -- 'A AZ B C E F H K L M P Q V W X kH SH NgK KSHM SPL CH PH KX WA QX G J Jh'`
-  — matched independently checked aliases; G/J/Jh retain documented partial output.
-- **Documentation checks:** `python /tmp/jong-check-case-docs.py` — links/anchors,
+  — খ১২ট; `cargo run --offline --example convert -- 'G Gh Ghn Gdh GN Gn Gm Gl GG Gg gG J Jh jh Ng NG nG ShNG cNG jNG Gr Grr Grri Grry Jr Jry'`
+  — matched independently checked G/J, case-sensitive and following-r outputs.
+- **Documentation checks:** `python /tmp/jong-check-gj-docs.py` — links/anchors,
   manifests/counts/code points, retained older fixtures, repeated inputs,
-  14-row Unicode/evidence table, examples/gaps, bounded handoff and history passed.
-  `git diff --check` passed.
+  per-spelling Unicode/evidence table, examples/gaps, bounded handoff and history
+  passed. `git diff --check` passed.
 - **Standalone audit:** `python /tmp/jong-audit-case-aliases.py` — 302 distinct
-  inputs checked; 37 discrepancies remain. No full compatibility, performance,
-  or platform-support claim. Resolved ShM gap probe was replaced by explicit Jh.
-- **Remaining limits:** G/J cannot be folded: reference `Jh` → জহ differs
-  from `jh` → ঝ. q/Q following-r remains incomplete. Copied Unicode keeps the
-  existing passthrough contract (K stays K; reference gives ক).
-- **Next action:** investigate the explicit G/J forms below. This batch's
-  implementation and full checks are complete; G/J implementation has not started.
+  inputs checked; 25 discrepancies remain, all punctuation/symbol/escape forms.
+  No full compatibility, performance, or platform-support claim. Resolved
+  ShNG/Gdh/Jh gap probes were replaced by qr/zr/Rr.
+- **Next action:** investigate the related punctuation/symbol forms below.
+  This batch's implementation and checks are complete; symbol work has not started.
 
 ## Next small implementation step
 
-1. Independently reference-check the 12 remaining standalone G/J spellings:
-   Ghn/Gdh/GN/Gn/Gm/Gl/GG/Gg/gG/Gh/G/J. Include longer/fresh/consumed keys,
-   uppercase-H aliases, vowels/ya, following-r, and case-sensitive Ng/NG/nG behavior.
-2. Choose the largest coherent verified batch without blanket G/J folding.
-   Keep `Jh` distinct from `jh`, and investigate aliases exposed by earlier matches
-   (for example ShNG and internal splits of cNG/jNG).
+1. Independently reference-check the related symbol spellings: period/double
+   period/escaped period, colon/escaped colon, caret/escaped caret, double comma,
+   dollar, and standalone backtick. Check exact Unicode, longest/consumed-key
+   priority, repetition, context resets, digits, and interactions with vowels,
+   following-r, conjuncts, and escapes.
+2. Choose the largest coherent verified symbol batch. Investigate escape behavior
+   before deciding whether standalone backtick belongs with these forms or the
+   later vowel-escape batch; do not assume a general escape mechanism.
 3. Implement that batch with independent fixtures, run the full README checks,
    update behavioral docs and this handoff, and commit the batch together.
-   Keep reph, punctuation/escapes, composition and platform work separate.
+   Keep vowel-sign escapes, t-double-backtick, reph, composition and platform work
+   separate unless reference evidence requires a shared symbol dependency.
 
 **Done when:** every selected spelling has independent Unicode/context evidence,
 existing cases and interactions pass, actual checks and limits are recorded,

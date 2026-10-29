@@ -26,6 +26,20 @@ const codePoints = (text) =>
 
 let count = 0;
 for (const name of [
+  "explicit-gj-controls.tsv",
+  "explicit-gj-g-basic.tsv",
+  "explicit-gj-g-lower-upper.tsv",
+  "explicit-gj-g-n-retroflex.tsv",
+  "explicit-gj-g-upper-lower.tsv",
+  "explicit-gj-g-upper-pair.tsv",
+  "explicit-gj-gdh.tsv",
+  "explicit-gj-gh.tsv",
+  "explicit-gj-ghn.tsv",
+  "explicit-gj-gl.tsv",
+  "explicit-gj-gm.tsv",
+  "explicit-gj-gn.tsv",
+  "explicit-gj-j-basic.tsv",
+
   "case-alias-a.tsv",
   "case-alias-b.tsv",
   "case-alias-c.tsv",
@@ -298,7 +312,7 @@ console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
 // These probes expose missing behavior; they are not supported-slice fixtures.
 for (const input of [
-  "ShNG", "Gdh", "Jh", "rrShN", "Shm`a",
+  "qr", "zr", "Rr", "rrShN", "Shm`a",
 ]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);

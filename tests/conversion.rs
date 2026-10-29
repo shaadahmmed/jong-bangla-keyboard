@@ -1,6 +1,109 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn explicit_gj_controls_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-controls.tsv"));
+}
+
+#[test]
+fn explicit_gj_g_basic_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-g-basic.tsv"));
+}
+
+#[test]
+fn explicit_gj_g_lower_upper_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-g-lower-upper.tsv"));
+}
+
+#[test]
+fn explicit_gj_g_n_retroflex_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-g-n-retroflex.tsv"));
+}
+
+#[test]
+fn explicit_gj_g_upper_lower_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-g-upper-lower.tsv"));
+}
+
+#[test]
+fn explicit_gj_g_upper_pair_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-g-upper-pair.tsv"));
+}
+
+#[test]
+fn explicit_gj_gdh_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-gdh.tsv"));
+}
+
+#[test]
+fn explicit_gj_gh_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-gh.tsv"));
+}
+
+#[test]
+fn explicit_gj_ghn_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-ghn.tsv"));
+}
+
+#[test]
+fn explicit_gj_gl_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-gl.tsv"));
+}
+
+#[test]
+fn explicit_gj_gm_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-gm.tsv"));
+}
+
+#[test]
+fn explicit_gj_gn_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-gn.tsv"));
+}
+
+#[test]
+fn explicit_gj_j_basic_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/explicit-gj-j-basic.tsv"));
+}
+
+#[test]
+fn explicit_gj_resets_at_every_split_and_between_calls() {
+    for (raw, parts) in [
+        ("Ghn", &[("গ", "হ্ন"), ("ঘ", "ন")][..]),
+        ("Gdh", &[("গ", "ধ"), ("গদ", "হ")][..]),
+        ("GN", &[("গ", "ণ")][..]),
+        ("Gn", &[("গ", "ন")][..]),
+        ("Gm", &[("গ", "ম")][..]),
+        ("Gl", &[("গ", "ল")][..]),
+        ("GG", &[("গ", "গ")][..]),
+        ("Gg", &[("গ", "গ")][..]),
+        ("gG", &[("গ", "গ")][..]),
+        ("Gh", &[("গ", "হ")][..]),
+        ("Jh", &[("জ", "হ")][..]),
+        ("cNG", &[("চ", "ঞ"), ("চণ", "গ")][..]),
+        ("jNG", &[("জ", "ঞ"), ("জণ", "গ")][..]),
+        ("ShNG", &[("শ", "হ্ণগ"), ("ষ", "ঞ"), ("ষ্ণ", "গ")][..]),
+    ] {
+        for (offset, (head, tail)) in parts.iter().enumerate() {
+            let split = offset + 1;
+            assert_eq!(transliterate(&raw[..split]), *head);
+            assert_eq!(transliterate(&raw[split..]), *tail);
+            for boundary in [" ", "\n", "\t", "\0", "🙂", "বাংলা", "\u{301}"] {
+                assert_eq!(
+                    transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
+                    format!("{head}{boundary}{tail}"),
+                );
+            }
+        }
+    }
+    let raw = String::from("G J Jh jh GN Ng NG nG ShNG Gg gG Gdh GHn cNG jNG 🙂 ");
+    let expected = "গ জ জহ ঝ গ্ণ ঙ ঞ নগ ষ্ণগ জ্ঞ জ্ঞ গ্ধ ঘ্ন চ্ঞ জ্ঞ 🙂 ";
+    assert_eq!(transliterate(&raw.repeat(1024)), expected.repeat(1024));
+    assert_eq!(raw, "G J Jh jh GN Ng NG nG ShNG Gg gG Gdh GHn cNG jNG 🙂 ");
+    assert_eq!(transliterate("G"), "গ");
+    assert_eq!(transliterate("J"), "জ");
+}
+
+#[test]
 fn case_alias_a_matches_exact_unicode() {
     check_fixture(include_str!("fixtures/case-alias-a.tsv"));
 }
@@ -154,8 +257,8 @@ fn case_aliases_preserve_unicode_and_reset_at_boundaries() {
         }
     }
     assert_eq!(transliterate("I U O T D N R S Y Z"), "ঈ ঊ ও ট ড ণ ড় শ য় ্য");
-    // Explicit G/J rules remain gaps; do not normalize them to g/j.
-    assert_eq!(transliterate("G J Jh"), "G J Jহ");
+    // Explicit G/J rules retain case-sensitive matching, including separate Jh.
+    assert_eq!(transliterate("G J Jh"), "গ জ জহ");
     // Preserve the existing Unicode passthrough contract, including lookalikes.
     assert_eq!(transliterate("KＫİＡÉＡ🙂K"), "KＫİＡÉＡ🙂ক");
 }
@@ -180,18 +283,18 @@ fn conjunct_completion_resets_at_every_split_and_between_calls() {
         ("bdh", "ব্ধ", &[("ব", "ধ"), ("ব্দ", "হ")][..]),
         ("bd", "ব্দ", &[("ব", "দ")][..]),
         ("bj", "ব্জ", &[("ব", "জ")][..]),
-        ("cNG", "চ্ঞ", &[("চ", "ঞ"), ("চণ", "G")][..]),
+        ("cNG", "চ্ঞ", &[("চ", "ঞ"), ("চণ", "গ")][..]),
         ("cch", "চ্ছ", &[("চ", "ছ"), ("চ্চ", "হ")][..]),
         ("cc", "চ্চ", &[("চ", "চ")][..]),
         ("gdh", "গ্ধ", &[("গ", "ধ"), ("গদ", "হ")][..]),
         ("jjh", "জ্ঝ", &[("জ", "ঝ"), ("জ্জ", "হ")][..]),
-        ("jNG", "জ্ঞ", &[("জ", "ঞ"), ("জণ", "G")][..]),
+        ("jNG", "জ্ঞ", &[("জ", "ঞ"), ("জণ", "গ")][..]),
         ("jj", "জ্জ", &[("জ", "জ")][..]),
         ("mth", "ম্থ", &[("ম", "থ"), ("মত", "হ")][..]),
-        ("NGch", "ঞ্ছ", &[("ণ", "Gছ"), ("ঞ", "ছ"), ("ঞ্চ", "হ")][..]),
-        ("NGjh", "ঞ্ঝ", &[("ণ", "Gঝ"), ("ঞ", "ঝ"), ("ঞ্জ", "হ")][..]),
-        ("NGc", "ঞ্চ", &[("ণ", "Gচ"), ("ঞ", "চ")][..]),
-        ("NGj", "ঞ্জ", &[("ণ", "Gজ"), ("ঞ", "জ")][..]),
+        ("NGch", "ঞ্ছ", &[("ণ", "গছ"), ("ঞ", "ছ"), ("ঞ্চ", "হ")][..]),
+        ("NGjh", "ঞ্ঝ", &[("ণ", "গঝ"), ("ঞ", "ঝ"), ("ঞ্জ", "হ")][..]),
+        ("NGc", "ঞ্চ", &[("ণ", "গচ"), ("ঞ", "চ")][..]),
+        ("NGj", "ঞ্জ", &[("ণ", "গজ"), ("ঞ", "জ")][..]),
         ("nch", "ঞ্ছ", &[("ন", "ছ"), ("ঞ্চ", "হ")][..]),
         ("njh", "ঞ্ঝ", &[("ন", "ঝ"), ("ঞ্জ", "হ")][..]),
         ("nj", "ঞ্জ", &[("ন", "জ")][..]),
@@ -208,7 +311,7 @@ fn conjunct_completion_resets_at_every_split_and_between_calls() {
         for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "জ্ঞ", "\u{301}"] {
             for (index, (first, tail)) in parts.iter().enumerate() {
                 let split = index + 1;
-                // A split can expose standalone G, still an explicit alias gap.
+                // A split exposes a fresh G; it cannot reuse the consumed N.
                 assert_eq!(
                     transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
                     format!("{first}{boundary}{tail}")
@@ -277,15 +380,7 @@ fn conjunct_completion_consumed_and_fresh_keys_keep_their_priorities() {
 fn conjunct_completion_aliases_reph_and_escapes_remain_explicit_gaps() {
     // These are partial engine outputs, not claims of reference compatibility.
     for (raw, partial) in [
-        ("Gdh", "Gধ"),
-        ("G", "G"),
-        ("J", "J"),
         ("bDh", "বঢ"),
-        ("ShNGch", "ষ্ণGছ"),
-        ("NNGch", "ণ্ণGছ"),
-        ("gNGjh", "গ্ণGঝ"),
-        ("hNGc", "হ্ণGচ"),
-        ("kShNGj", "ক্ষ্ণGজ"),
         ("rrcch", "ররচ্ছ"),
         ("cch`a", "চ্ছ`আ"),
         ("cchqr", "চ্ছকর"),
@@ -931,8 +1026,8 @@ fn l_prefix_resets_at_every_split_boundary_and_between_calls() {
 }
 
 #[test]
-fn l_prefix_uppercase_g_remains_an_explicit_gap() {
-    assert_eq!(transliterate("lG"), "লG");
+fn l_prefix_uppercase_g_stays_separate_from_lowercase_conjunct() {
+    assert_eq!(transliterate("lG"), "লগ");
 }
 
 #[test]
@@ -2452,11 +2547,8 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
     for (input, expected) in [
         ("rrNgx", "ররঙ্ষ"),
         ("Ngx`a", "ঙ্ষ`আ"),
-        ("Gg", "Gগ"),
-        ("gNG", "গ্ণG"),
         ("rrdd", "ররদ্দ"),
         ("dd`a", "দ্দ`আ"),
-        ("Gm", "Gম"),
         ("hm`a", "হ্ম`আ"),
         ("rrhm", "ররহ্ম"),
         ("Ngx`h", "ঙ্ষ`হ"),
@@ -2482,7 +2574,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Z`h", "্য`হ"),
         ("zr", "যর"),
         ("z`h", "য`হ"),
-        ("nG", "নG"),
         ("ng`a", "ং`আ"),
         ("rrNgk", "ররঙ্ক"),
         ("Ngk`a", "ঙ্ক`আ"),
@@ -2499,7 +2590,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("rrNgkSh", "ররঙ্ক্ষ"),
         ("NgkSh`a", "ঙ্ক্ষ`আ"),
         ("NgkSh`h", "ঙ্ক্ষ`হ"),
-        ("kShNG", "ক্ষ্ণG"),
         ("rrkShN", "ররক্ষ্ণ"),
         ("kShN`a", "ক্ষ্ণ`আ"),
         ("rrkSh", "ররক্ষ"),
@@ -2514,16 +2604,11 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Y`a", "য়`আ"),
         ("Y`h", "য়`হ"),
         ("p`h", "প`হ"),
-        ("J", "J"),
-        ("Jh", "Jহ"),
         ("c`h", "চ`হ"),
         ("d`h", "দ`হ"),
         ("l`h", "ল`হ"),
         ("h`", "হ`"),
         ("s`h", "স`হ"),
-        ("kkhNG", "ক্ষ্ণG"),
-        ("kxNG", "ক্ষ্ণG"),
-        ("ShNG", "ষ্ণG"),
         ("rrShN", "ররষ্ণ"),
         ("rrShm", "ররষ্ম"),
         ("Shm`a", "ষ্ম`আ"),
@@ -2554,9 +2639,9 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
     ] {
         assert_eq!(transliterate(input), expected, "input: {input:?}");
     }
-    // Standalone uppercase G, aliases, reph and escapes remain gaps.
+    // An exposed G converts after consumed N; reph and escapes remain gaps.
     for raw in ["kkhN", "kShN", "kxN"] {
-        assert_eq!(transliterate(&format!("{raw}G")), "ক্ষ্ণG");
+        assert_eq!(transliterate(&format!("{raw}G")), "ক্ষ্ণগ");
     }
     for raw in ["kkhm", "kShm", "kxm"] {
         assert_eq!(transliterate(&format!("rr{raw}")), "ররক্ষ্ম");

@@ -21,7 +21,7 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 ## Current status
 
 A dependency-free Rust library now converts Bangla digits, 35 consonant letters
-through 40 basic sequences, lowercase `ng` with selected vowel forms, and
+through 43 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
 with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`/`w`/`x`
 and uppercase `Z` with selected `aZ`/`oZ` forms. Following-`r` matching after
@@ -88,10 +88,12 @@ Unicode, per-spelling evidence, priorities, and remaining context/alias gaps.
 The ASCII uppercase letters `ABCEFHKLMPQVWX` now behave like their lowercase
 forms throughout matching: `AZ` → `অ্যা`, `kH` → `খ`, `SH` → `ষ`, and
 `NgK` → `ঙ্ক`. Other capitals retain their case-sensitive meanings; explicit
-`G`/`J` forms remain incomplete. See the [case-alias batch](docs/v1.md#selective-ascii-case-alias-batch).
-This is a partial engine with 462,920 reference-checked examples,
-not a usable desktop keyboard or a full Avro compatibility claim. Explicit G/J forms,
-reph, punctuation/escapes, some context interactions, composition, and Fcitx5
+`G`/`J` forms now match through explicit rules: `Gh` → `ঘ`, `Gg` → `জ্ঞ`,
+`Jh` → `জহ`, while `jh` → `ঝ`. See the [case-alias batch](docs/v1.md#selective-ascii-case-alias-batch)
+and [explicit G/J batch](docs/v1.md#explicit-gj-spelling-batch).
+This is a partial engine with 469,089 reference-checked examples,
+not a usable desktop keyboard or a full Avro compatibility claim. Reph,
+punctuation/escapes, some context interactions, composition, and Fcitx5
 integration are still incomplete.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
@@ -154,7 +156,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [the consuming ns/ps batch](docs/v1.md#consuming-ns-and-ps-batch), then
 [the s/Sh stop batch](docs/v1.md#s-and-sh-stop-conjunct-batch), and
 [the remaining exact conjunct batch](docs/v1.md#remaining-exact-conjunct-batch), then
-[selective ASCII case aliases](docs/v1.md#selective-ascii-case-alias-batch).
+[selective ASCII case aliases](docs/v1.md#selective-ascii-case-alias-batch), then
+[explicit G/J spellings](docs/v1.md#explicit-gj-spelling-batch).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress handoff](docs/progress.md) for current state, the latest completed
@@ -163,10 +166,10 @@ Rule coverage favors the [largest coherent related batches](docs/v1.md#small-dev
 that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
-update, and commit per completed batch. The latest batch implements the 14
-verified ASCII case aliases.
-Next, investigate the explicit G/J spellings and their case/context rules;
-reph and punctuation/escape coverage remain separate work.
+update, and commit per completed batch. The latest batch implements the 12
+explicit G/J spellings, preserving the case-sensitive matching rules.
+Next, investigate the related punctuation and symbol forms; vowel escapes,
+reph and composition remain separate work.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
@@ -226,6 +229,7 @@ Try `'din dhan Dan Dhaka'` → `দিন ধান ডান ঢাকা` for 
 Try `'lal holud bhalO'` → `লাল হলুদ ভালো` for `l`/`h`.
 Try `'s sh S Sh'` → `স শ শ ষ` for the case-sensitive `s`/`sh`/`S`/`Sh` group.
 Try `'A AZ kH SH NgK KSHM QX'` → `আ অ্যা খ ষ ঙ্ক ক্ষ্ম কক্স` for selective case aliases.
+Try `'G Gh Ghn Gdh GN Gn Gm Gl GG Gg gG J Jh jh'` → `গ ঘ ঘ্ন গ্ধ গ্ণ গ্ন গ্ম গ্ল জ্ঞ জ্ঞ জ্ঞ জ জহ ঝ`.
 Try `'sokal shishu SiSu bhaSha'` → `সকাল শিশু শিশু ভাষা` for words using that group.
 Try `'baRi gaRi gaRh drriRh'` → `বাড়ি গাড়ি গাঢ় দৃঢ়` for `R`/`Rh`.
 Try `'zai zabe zodi zokhon'` → `যাই যাবে যদি যখন` for lowercase `z`.
@@ -294,7 +298,7 @@ now attaches: `'pr phr fr'` → `প্র ফ্র ফ্র`, with `rri`/`rry
 Lowercase `c`/`ch`/`j`/`jh` produce `চ`/`ছ`/`জ`/`ঝ`; `ch` and `jh` match before
 their single-key prefixes. Exact `cc`/`cch`/`cNG` and `jj`/`jjh`/`jNG` now
 match, including following `r`: `'cr chr jr jhr'` → `চ্র ছ্র জ্র ঝ্র`.
-Explicit G/J forms and escapes remain incomplete.
+Escapes remain incomplete.
 Exact `d`/`dh`/`D`/`Dh` produce `দ`/`ধ`/`ড`/`ঢ`; `dh` and `Dh` match before
 their single-key prefixes. Case distinguishes `da` → `দা` from `Da` → `ডা`.
 `ddh` → `দ্ধ` now matches, as described below. Uppercase-`H` aliases
@@ -318,12 +322,12 @@ They support vowel signs (`Ngi` → `ঙি`, `NGU` → `ঞূ`). Exact `Ngk` �
 now matches before `Ng` and supports vowels and aliases (`Ngki` → `ঙ্কি`).
 It attaches single following `r` without U+200D (`Ngkr` → `ঙ্ক্র`, `Ngkry` → `ঙ্ক্র্য`),
 sharing the two-`r` priority and exceptions (`Ngkrri` → `ঙ্কৃ`,
-`Ngkrry` → `ঙ্করর‍্য`). Earlier `gN` now wins in `gNgk` → `গ্ণগক`; reph,
-explicit G/J forms, and escapes remain gaps.
+`Ngkrry` → `ঙ্করর‍্য`). Earlier `gN` now wins in `gNgk` → `গ্ণগক`; reph
+and escapes remain gaps.
 Exact `Ngkh` → `ঙ্খ` now matches before `Ngk` and shares its vowel context
 and following-`r` priority (`Ngkhi` → `ঙ্খি`, `Ngkhr` → `ঙ্খ্র`,
 `Ngkhrri` → `ঙ্খৃ`, `Ngkhrry` → `ঙ্খরর‍্য`). Earlier `gN` now wins in
-`gNgkh` → `গ্ণগখ`; reph, explicit G/J forms, and escapes remain gaps.
+`gNgkh` → `গ্ণগখ`; reph and escapes remain gaps.
 Exact `Ngkx` → `ঙ্ক্ষ` also matches before `Ngk`, sharing `Ngx`/`kx`
 vowel context and following-`r` priority (`Ngkxi` → `ঙ্ক্ষি`,
 `Ngkxrri` → `ঙ্ক্ষৃ`, `Ngkxrr` → `ঙ্ক্ষ্রর`). Single `Ngkxr` → `ঙ্ক্ষর`
@@ -333,23 +337,23 @@ Exact `Ngkkh` → `ঙ্ক্ষ` matches before `Ngk`, with vowel signs/alias
 `Ngkh`'s following-`r` behavior (`Ngkkhr` → `ঙ্ক্ষ্র`, `Ngkkhrri` → `ঙ্ক্ষৃ`).
 Its single following `r` attaches without a joiner (`Ngkkhry` → `ঙ্ক্ষ্র্য`),
 while `Ngkxry` retains U+200D. Earlier `gN`/`NN`/`hN` overlaps now match;
-reph, explicit G/J forms, and escapes remain gaps.
+reph and escapes remain gaps.
 Exact `NgkSh` shares `Ngkkh`'s output and vowel/following-`r` behavior
 (`NgkShr` → `ঙ্ক্ষ্র`, `NgkShrri` → `ঙ্ক্ষৃ`, `NgkShry` → `ঙ্ক্ষ্র্য`).
 Case-distinct `Ngksh` → `ঙ্কশ` stays separate. Earlier `gN`/`NN`/`hN` overlaps
-now match; reph, explicit G/J forms, and escapes remain gaps.
+now match; reph and escapes remain gaps.
 Exact `kkh` → `ক্ষ` matches before basic `k`/`kh`, sharing `Ngkh`'s vowel
 context and following-`r` behavior (`kkhr` → `ক্ষ্র`, `kkhrri` → `ক্ষৃ`,
 `kkhry` → `ক্ষ্র্য`). Earlier exact `Ngkkh` keeps priority;
 `NGkkh` → `ঞক্ষ` and `ngkkh` → `ংক্ষ` now also match the reference.
 Earlier `nk`/`lk`/`sk`/`Shk` now consume `k` first (`nkkh` → `ঙ্কখ`,
 `lkkh` → `ল্কখ`, `skkh` → `স্কখ`, `Shkkh` → `ষ্কখ`). Other conjuncts,
-reph, explicit G/J forms, and punctuation/escapes remain gaps.
+reph, and punctuation/escapes remain gaps.
 Exact `kSh` shares `kkh`'s output, vowel context, and following-`r` behavior
 (`kShr` → `ক্ষ্র`, `kShrri` → `ক্ষৃ`, `kShry` → `ক্ষ্র্য`). Earlier exact
 `NgkSh` keeps priority; `NGkSh` → `ঞক্ষ` and `ngkSh` → `ংক্ষ` now match.
 Case-distinct `ksh` → `কশ` stays separate. Earlier-prefix conflicts,
-reph, explicit G/J forms, and punctuation/escapes remain gaps.
+reph, and punctuation/escapes remain gaps.
 Exact `kkhN`/`kShN`/`kxN` → `ক্ষ্ণ` match before their shorter forms, with
 supported vowel signs/aliases and single-`r` attachment (`kxNr` → `ক্ষ্ণ্র`,
 `kxNry` → `ক্ষ্ণ্র্য`). Two `r` keys normally add ্রর, while `rri` and
@@ -357,9 +361,9 @@ supported vowel signs/aliases and single-`r` attachment (`kxNr` → `ক্ষ�
 Earlier `Ngkkh`/`NgkSh`/`Ngkx` still win (`NgkShN` → `ঙ্ক্ষণ`). Consuming
 the final `N` prevents a following nasal match (`kShNgkSh` → `ক্ষ্ণগক্ষ`);
 this also resolves `kxNgx`, `kxNgk`, `kxNgkh`, `kxNgkx`, `kxNgkkh`, and `kxNgkSh`.
-Uppercase `G` remains unsupported after these forms (`kShNG` → `ক্ষ্ণG`,
-reference `ক্ষ্ণগ`); other explicit G/J forms, earlier-prefix conflicts,
-unrelated conjuncts, reph, and punctuation/escapes remain gaps.
+Uppercase `G` also converts after these forms (`kShNG` → `ক্ষ্ণগ`);
+earlier-prefix conflicts, unrelated conjuncts, reph, and punctuation/escapes
+remain gaps.
 Exact `kkhm`/`kShm`/`kxm` → `ক্ষ্ম` also match before their shorter forms,
 with supported vowel signs/aliases and single-`r` attachment (`kxmr` → `ক্ষ্ম্র`,
 `kxmry` → `ক্ষ্ম্র্য`). The `rri` and `rry`/`rrZ` exceptions keep priority
@@ -368,7 +372,7 @@ with supported vowel signs/aliases and single-`r` attachment (`kxmr` → `ক্
 Earlier `Ngkkh`/`NgkSh`/`Ngkx` still win (`NgkShm` → `ঙ্ক্ষম`).
 Consuming `m` prevents it joining a following nasal (`kShmng` → `ক্ষ্মং`,
 `kShmn` → `ক্ষ্মন`). Basic `mr`/`mm`/`mn` are now supported by the nasal/h
-batch below. Earlier-prefix conflicts, explicit G/J forms, reph, and
+batch below. Earlier-prefix conflicts, reph, and
 punctuation/escapes remain incomplete.
 Exact `kk` → `ক্ক` matches after longer `kkh`/`kkhN`/`kkhm` and before single `k`.
 Its vowel context and following `r` share `Ngk`'s behavior: `kki` → `ক্কি`,
@@ -378,7 +382,7 @@ Consuming both keys changes `kkkh` → `ক্কখ`, `kkSh` → `ক্কষ`
 `kkx` → `ক্কক্স`; the second key cannot begin `kkh`/`kSh`/`kx`.
 Earlier `Ngk` still wins (`Ngkk` → `ঙ্কক`). Repeated `kk` and neighboring
 supported forms work (`kkkk` → `ক্কক্ক`, `kkhkk` → `ক্ষক্ক`).
-Earlier `nk`/`lk`/`sk`/`Shk`, explicit G/J forms, reph, and escapes remain incomplete.
+Earlier `nk`/`lk`/`sk`/`Shk`, reph, and escapes remain incomplete.
 Exact `ShN` → `ষ্ণ` and `Shm` → `ষ্ম` match before basic `Sh`, with supported
 vowel signs/aliases and following-`r` attachment: `ShNi` → `ষ্ণি`, `Shmr` → `ষ্ম্র`,
 `ShNrri` → `ষ্ণৃ`, `Shmry` → `ষ্ম্র্য`, and `Shmrry` → `ষ্মরর‍্য`.
@@ -386,17 +390,16 @@ Try `'biShNu uShNo uShma'` → `বিষ্ণু উষ্ণ উষ্মা`
 Earlier `kShN`/`kShm` and `NgkSh` still win; `kkShN` → `ক্কষ্ণ` and
 `kkShm` → `ক্কষ্ম` now match. Consuming `N` prevents a following `Ng` match:
 `ShNgx` → `ষ্ণগক্স`, `ShNgkSh` → `ষ্ণগক্ষ`. Consuming `m` keeps a following
-nasal separate: `Shmng` → `ষ্মং`, `Shmn` → `ষ্মন`. Uppercase `G` remains
-unsupported after `ShN` (`ShNG` → `ষ্ণG`, reference `ষ্ণগ`). Basic
-`mr`/`mm`/`mn` now match as described below; other case aliases, reph, and escapes
-remain incomplete.
+nasal separate: `Shmng` → `ষ্মং`, `Shmn` → `ষ্মন`. Uppercase `G` now converts
+after `ShN` (`ShNG` → `ষ্ণগ`). Basic
+`mr`/`mm`/`mn` now match as described below; reph and escapes remain incomplete.
 Basic `k`/`kh`/`Sh` now attach following `r`: try `'kr khr Shr'` → `ক্র খ্র ষ্র`.
 Vowels and ya forms work (`kri` → `ক্রি`, `khry` → `খ্র্য`, `ShrZ` → `ষ্র্য`).
 The `rri` and `rry`/`rrZ` exceptions remain (`krri` → `কৃ`, `krry` → `করর‍্য`);
 `krr` → `ক্রর`. Existing longer matches retain priority, while exposed basic
 spellings now attach: `kkkhr` → `ক্কখ্র`, `kkShr` → `ক্কষ্র`, `Ngkkr` → `ঙ্কক্র`.
 Copied Bangla does not supply raw context (`কr` → `কর`); raw `qr` still gives
-`কর`. Other basic following-`r` forms, explicit G/J forms, reph, and escapes
+`কর`. Other basic following-`r` forms, reph, and escapes
 remain incomplete.
 Basic `g`/`gh` now attach following `r`: `'gr ghr'` → `গ্র ঘ্র`.
 Vowels and ya forms keep consonant context (`grI` → `গ্রী`, `ghry` → `ঘ্র্য`).
@@ -577,7 +580,7 @@ Try `'rasta astha sTeshon koShTo niShTha proshtho'`
 → `রাস্তা আস্থা স্টেশন কষ্ট নিষ্ঠা প্রশ্তহ`, without dictionary correction.
 Uppercase aliases also participate in these matches (`mB` → `ম্ব`).
 Earlier b-prefixed matches (`bd`),
-other conjuncts and following-`r` forms, explicit G/J forms, reph, and escapes
+other conjuncts and following-`r` forms, reph, and escapes
 remain incomplete.
 Lowercase `ng` produces ং (U+0982), as in `bangla` → `বাংলা`. Before the supported
 single-key vowels and `OI`/`OU`, it produces ঙ্গ plus the appropriate vowel sign
@@ -648,7 +651,7 @@ Exact `Ngx` matches before `Ng` and produces ঙ্ষ (U+0999 U+09CD U+09B7),
 with the same vowel context and following-`r` priority as `kx`:
 `Ngxi` → `ঙ্ষি`, `Ngxrri` → `ঙ্ষৃ`, `Ngxrr` → `ঙ্ষ্রর`. Existing case
 distinctions remain (`NGx` → `ঞক্স`, `ngx` → `ংক্স`). Some earlier longer
-matches still take priority (`gNgx` uses `gN` first and now yields `গ্ণগক্স`). `kkx` now converts as `ক্কক্স`; reph, explicit G/J forms, and escapes
+matches still take priority (`gNgx` uses `gN` first and now yields `গ্ণগক্স`). `kkx` now converts as `ক্কক্স`; reph, escapes
 remain incomplete.
 
 ## Repeat the reference comparison
@@ -857,7 +860,8 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`St` fixtures](tests/fixtures/conjunct-s-uppercase-t.tsv),
 [s/Sh stop controls](tests/fixtures/s-stop-controls.tsv), the 30 fixture
 files linked in the [remaining conjunct batch](docs/v1.md#remaining-exact-conjunct-batch),
-and the 16 files linked in the [case-alias batch](docs/v1.md#selective-ascii-case-alias-batch)
+the 16 files linked in the [case-alias batch](docs/v1.md#selective-ascii-case-alias-batch),
+and the 13 files linked in the [explicit G/J batch](docs/v1.md#explicit-gj-spelling-batch)
 record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
@@ -874,9 +878,9 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 462,920 cases used by Rust tests and prints reference outputs for
-five known coverage gaps: `ShNG`, `Gdh`, `Jh`, `rrShN`, and the escaped `Shm` form.
-The resolved `ShM` probe has been replaced by explicit uppercase `Jh`.
+It checks the same 469,089 cases used by Rust tests and prints reference outputs for
+five known coverage gaps: `qr`, `zr`, `Rr`, `rrShN`, and the escaped `Shm` form.
+The resolved G/J probes have been replaced by remaining following-`r` gaps.
 The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

@@ -40,6 +40,7 @@ pub(super) fn consume_following_r_prefix<'a>(
             | 'c'
             | 'j'
             | 'G'
+            | 'J'
     ) && remaining.starts_with('r')
         && !remaining.starts_with("rr"))
         || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))

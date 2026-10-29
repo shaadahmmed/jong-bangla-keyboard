@@ -11,9 +11,9 @@ mod vowels;
 use following_r::consume_following_r_prefix;
 use rules::{
     COMPLETION_CONJUNCTS, CONSONANTS, CONSUMING_K_FORMS, CONSUMING_L_FORMS, CONSUMING_M_FORMS,
-    CONSUMING_S_FORMS, D_CONJUNCTS, G_NASAL_CONJUNCTS, K_CONJUNCTS, L_CONJUNCTS, NASAL_H_CONJUNCTS,
-    NASAL_R_FORMS, NASAL_STOP_CONJUNCTS, NG_VOWELS, REPEAT_N_CONJUNCTS, S_LABIAL_CONJUNCTS,
-    S_STOP_CONJUNCTS, T_CONJUNCTS,
+    CONSUMING_S_FORMS, D_CONJUNCTS, EXPLICIT_G_CONJUNCTS, G_NASAL_CONJUNCTS, K_CONJUNCTS,
+    L_CONJUNCTS, NASAL_H_CONJUNCTS, NASAL_R_FORMS, NASAL_STOP_CONJUNCTS, NG_VOWELS,
+    REPEAT_N_CONJUNCTS, S_LABIAL_CONJUNCTS, S_STOP_CONJUNCTS, T_CONJUNCTS,
 };
 
 #[derive(Clone, Copy)]
@@ -258,6 +258,13 @@ pub fn transliterate(input: &str) -> String {
             output.push_str(bangla);
             remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
             context = Context::Consonant { ya_joiner: false };
+        } else if let Some((raw, bangla, last_key)) = EXPLICIT_G_CONJUNCTS
+            .iter()
+            .find(|(raw, _, _)| remaining.starts_with(raw))
+        {
+            output.push_str(bangla);
+            remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
+            context = Context::Consonant { ya_joiner: false };
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
@@ -266,8 +273,10 @@ pub fn transliterate(input: &str) -> String {
                 "Y" => Some('Y'),
                 "k" => Some('k'),
                 "g" => Some('g'),
-                "kh" | "Sh" | "gh" | "h" | "dh" | "Dh" | "bh" | "th" | "Th" | "sh" | "ph"
-                | "ch" | "jh" => Some('h'),
+                "G" => Some('G'),
+                "J" => Some('J'),
+                "kh" | "Sh" | "gh" | "Gh" | "h" | "dh" | "Dh" | "bh" | "th" | "Th" | "sh"
+                | "ph" | "ch" | "jh" => Some('h'),
                 "n" => Some('n'),
                 "N" => Some('N'),
                 "m" => Some('m'),

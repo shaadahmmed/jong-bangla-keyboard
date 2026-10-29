@@ -10,12 +10,14 @@ pub(super) const CONSUMING_S_FORMS: [(&str, &str, char); 4] = [
 ];
 
 // Independently authored initial mappings; not an imported upstream rule table.
-pub(super) const CONSONANTS: [(&str, &str); 40] = [
+pub(super) const CONSONANTS: [(&str, &str); 43] = [
     ("k", "ক"),
     ("q", "ক"),
     ("kh", "খ"),
     ("g", "গ"),
     ("gh", "ঘ"),
+    ("G", "গ"),
+    ("Gh", "ঘ"),
     ("t", "ত"),
     ("th", "থ"),
     ("T", "ট"),
@@ -37,6 +39,7 @@ pub(super) const CONSONANTS: [(&str, &str); 40] = [
     ("ch", "ছ"),
     ("j", "জ"),
     ("jh", "ঝ"),
+    ("J", "জ"),
     ("d", "দ"),
     ("dh", "ধ"),
     ("D", "ড"),
@@ -51,6 +54,21 @@ pub(super) const CONSONANTS: [(&str, &str); 40] = [
     ("Rh", "ঢ়"),
     ("z", "য"),
     ("Y", "য়"),
+];
+
+// Explicit uppercase-G matches, independently checked rather than case folded.
+// Fresh G can begin these matches; consumed G in NG/cNG/jNG cannot. J has only
+// a basic match: Jh/JJ stay separate consonants, unlike lowercase jh/jj.
+pub(super) const EXPLICIT_G_CONJUNCTS: [(&str, &str, char); 9] = [
+    ("Ghn", "ঘ্ন", 'n'),
+    ("Gdh", "গ্ধ", 'h'),
+    ("GN", "গ্ণ", 'N'),
+    ("Gn", "গ্ন", 'n'),
+    ("Gm", "গ্ম", 'm'),
+    ("Gl", "গ্ল", 'l'),
+    ("GG", "জ্ঞ", 'G'),
+    ("Gg", "জ্ঞ", 'g'),
+    ("gG", "জ্ঞ", 'G'),
 ];
 
 // Independently authored ng-vowel forms checked against the pinned reference.
