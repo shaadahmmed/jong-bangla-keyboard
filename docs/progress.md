@@ -13,72 +13,73 @@ Dates use the project's Asia/Dhaka timezone.
   example; principal forms for all 11 basic vowels and 40 basic consonant
   sequences (35 letters), contextual forms, selected conjuncts, and selected
   following-`r` forms. See the [coverage overview](../README.md#current-status).
-- **Latest engine change:** eleven exact nasal dental/retroflex spellings:
-  `nd`/`ndh`/`nD`/`ND`/`NDh`/`nt`/`nth`/`nT`/`NT`/`nTh`/`NTh`, plus following
-  `r` after basic `t`/`th`/`T`/`Th`. Longer forms and earlier consumed nasal
-  matches retain priority. `ndd`/`nddh` now give ন্দদ/ন্দধ; exact `nDh` gives
-  ন্ডহ, distinct from `NDh` → ণ্ঢ. Exact Unicode and scope are in the
-  [batch decision](v1.md#nasal-dental-and-retroflex-conjunct-batch).
-- **Validation:** all 62,845 authored fixture cases match the SHA-256-verified
-  pinned reference. Formatting, Clippy, 125 integration tests, 1 doctest,
+- **Latest engine change:** six exact t-family spellings:
+  `tt`/`tth`/`tn`/`tm`/`TT`/`Tm`, including vowels, ya, following `r`, and
+  consumed-key overlaps. Longer `tth` wins before `tt`; `TTh` gives ট্টহ.
+  Earlier nasal-stop matches retain priority (`ntt` → ন্তত, `nTm` → ন্টম).
+  Exact Unicode and scope are in the [batch decision](v1.md#t-family-conjunct-batch).
+- **Validation:** all 70,975 authored fixture cases match the SHA-256-verified
+  pinned reference. Formatting, Clippy, 132 integration tests, 1 doctest,
   release build, and default/batch smoke checks passed in this step.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete,
-  including other conjuncts and following-`r` forms, aliases, reph, and escapes.
-  Earlier `bd` and `shn`/`shm`/`bhl`/`phl`/`shl`/`vl` remain known gaps.
-  Composition, Fcitx5, and a usable desktop keyboard are not implemented.
-  Performance/platform support remain unverified.
+  including other conjuncts, following-`r` forms, aliases, reph, and escapes.
+  Earlier `kt`/`kT`/`lT`, `bd`, and `shn`/`shm`/`bhl`/`phl`/`shl`/`vl`
+  remain known gaps. Composition, Fcitx5, and a usable desktop keyboard are not
+  implemented. Performance/platform support remain unverified.
 - **Workflow:** prefer the largest coherent related batch that can be reliably
   reference-checked, validated, and reviewed. Independently check each spelling;
   complete one full validation/docs/commit cycle per batch. No known blocker
-  to the next batch is recorded.
+  to investigating the next batch is recorded.
 
 ## Latest completed step
 
-- **2026-10-29 — Nasal dental and retroflex conjunct batch.** Implemented all
-  eleven planned exact spellings and four basic attachments. Each spelling has
-  independent context/priority evidence. Kept transliteration independent,
-  dependency-free, and case-sensitive; no upstream source or tables imported.
-- **Evidence:** 15,555 new authored rows across 15 fixture files independently
-  check each spelling's Unicode, vowels/ya, following `r` (one through eight
-  keys), exceptions, existing matches in both orders, every ordered batch pair,
-  shared-key overlaps, adjacent basic consonants, digits, boundaries, copied
-  Unicode, every internal split, and words. Rust regressions also check controls,
-  separate calls at every split, and long mixed Unicode. Resolved `ndd` moved
-  from a partial assertion into passing fixtures; the gap probe now uses `bdd`.
+- **2026-10-29 — T-family conjunct batch.** Implemented six independently
+  checked spellings, expanding the initial four with `TT`/`Tm`. The related
+  `thn`/`thm`/`Tn`/`Thn`/`Thm` stay separate; `TTh` is `TT` plus `h`.
+  Existing basic attachments suffice. No upstream source or tables imported.
+- **Evidence:** 8,130 new authored rows across six fixture files check each
+  spelling's Unicode, vowels/ya, one through eight following `r` keys and
+  exceptions, existing matches in both orders, every ordered batch pair,
+  shared-key overlaps, adjacent supported consonants, digits, boundaries,
+  copied Unicode, every internal split, case distinctions, and words.
+  Preceding-context checks exposed earlier `kt`/`kT`/`lT` gaps; three new
+  reference probes and partial-output regressions keep them explicit.
 - **Checks run:** `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`; `cargo test --offline`
-  (125 integration tests and 1 doctest); `cargo build --offline --release` — passed.
+  (132 integration tests and 1 doctest); `cargo build --offline --release` — passed.
   `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 62,845 fixture cases passed; nine remaining gaps printed separately.
-  `node /tmp/jong-verify-nasal-stops-controls.mjs` — 473 authored control/split,
-  separate-call, and long-Unicode expectations matched the pinned reference.
+  — all 70,975 fixture cases passed; twelve remaining probes printed separately.
+  `node /tmp/jong-verify-t-batch.mjs` — all 8,130 new expectations matched
+  before implementation. `node /tmp/jong-verify-t-controls.mjs` — 242 authored
+  control/split, separate-call, long-Unicode, and gap expectations matched.
+  `cargo test --offline t_batch` — seven targeted tests passed before full checks.
   Rust/Cargo 1.99.1 and Node.js v24.21.0 were used.
 - **Smoke checks:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট.
-  `cargo run --offline --example convert -- 'nd ndh nD ND NDh nt nth nT NT nTh NTh tr thr Tr Thr ndd nddh ndhn nDh nntr kShNThr bondhu koNTho'`
-  — all eleven exact forms, four basic attachments, overlaps, and words matched.
-- **Documentation checks:** `python /tmp/jong-check-nasal-stops-docs.py` — local
+  `cargo run --offline --example convert -- 'tt tth tn tm TT Tm ttrri tthrry tnry Tmry ttth ttn tng tmn TThn ntt ntth nTm kShNTmr uttor utthan rotno zotno atma paTTa'`
+  — all six forms, exceptions, consumed-key overlaps, and words matched.
+- **Documentation checks:** `python /tmp/jong-check-t-batch-docs.py` — local
   links/anchors, fixture counts/code points/manifests, behavior table, README
   examples, bounded handoff, and preserved history passed.
   `git diff --check` — passed.
-- **Remaining limitations:** earlier b-prefixed matches, t-family conjuncts,
-  s/sh/l families, case aliases, reph, and escapes remain gaps, separate from
-  passing fixtures. No full-compatibility, performance, composition, or platform
-  milestone is claimed.
-- **Next action:** investigate related t-family conjuncts as one coherent batch,
-  preserving independent context and priority evidence.
+- **Remaining limitations:** earlier k/b/s/sh/l conjuncts, case aliases, reph,
+  and escapes remain gaps, separate from passing fixtures. No full-compatibility,
+  performance, composition, or platform milestone is claimed.
+- **Next action:** investigate remaining k-family spellings as one coherent
+  batch, checking the exposed `kt`/`kT` priority conflicts independently.
 
 ## Next small implementation step
 
-1. Define the largest coherent batch around exact `tt`/`tth`/`tn`/`tm`.
-   Investigate related t/th/T/Th spellings and exposed basic attachment before
-   editing; expand when reliable to validate and review together.
+1. Investigate a related batch around exact `kt`/`kT`/`kn`/`km`/`kl`.
+   These are candidates, not confirmed mappings. Check related spellings and
+   exposed basic attachments before editing; expand when reliable to review.
 2. Independently check each selected spelling against the
    [pinned reference](v1.md#phonetic-behavior-reference): exact Unicode,
    vowels/ya, preceding contexts, following `r`, longer `r` runs,
    `rri`/`rry`/`rrZ` exceptions, digits, boundaries, copied Unicode, and controls.
-3. Check longer forms before shorter ones, consumed-key overlaps with the nasal
-   dental/retroflex batch, earlier nasal/k/Sh matches, and the d/dh batch.
-   Keep b-prefixed and s/sh/l families separate unless deliberately included.
+3. Check longer forms before shorter ones, earlier Ng/k/Sh priorities, the new
+   t-family forms, nasal stops, and consumed-key overlaps. Resolve the `ktm`
+   and `kTm` gaps if included; keep l/b/s/sh families separate unless deliberately
+   included. `lTm` remains an independent gap.
 4. Implement the verified batch, extend fixtures, run the full README checks,
    update behavioral docs and this handoff once, and commit the batch together.
    Keep composition, platform integration, packaging, and unrelated work separate.

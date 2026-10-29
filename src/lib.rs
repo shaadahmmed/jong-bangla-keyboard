@@ -7,6 +7,7 @@
 //! `ngh`/`nn`/`Nn`/`mn`/`hm`/`hl`/`nm`/`Nm`/`mm`/`ml`/`Ngm`/`gm`,
 //! `dd`/`ddh`/`dhn`/`dhm`/`dm`/`dbh`/`dv`/`DD`,
 //! `nd`/`ndh`/`nD`/`ND`/`NDh`/`nt`/`nth`/`nT`/`NT`/`nTh`/`NTh`,
+//! `tt`/`tth`/`tn`/`tm`/`TT`/`Tm`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -67,6 +68,7 @@
 //! assert_eq!(transliterate("ngh nn Nn mn hm hl nm Nm mm ml Ngm gm mr lr"), "ঙ্ঘ ন্ন ণ্ন ম্ন হ্ম হ্ল ন্ম ণ্ম ম্ম ম্ল ঙ্ম গ্ম ম্র ল্র");
 //! assert_eq!(transliterate("dd ddh dhn dhm dm dbh dv DD dr dhr Dr Dhr br bhr vr"), "দ্দ দ্ধ ধ্ন ধ্ম দ্ম দ্ভ দ্ভ ড্ড দ্র ধ্র ড্র ঢ্র ব্র ভ্র ভ্র");
 //! assert_eq!(transliterate("nd ndh nD ND NDh nt nth nT NT nTh NTh tr thr Tr Thr"), "ন্দ ন্ধ ন্ড ণ্ড ণ্ঢ ন্ত ন্থ ন্ট ণ্ট ন্ঠ ণ্ঠ ত্র থ্র ট্র ঠ্র");
+//! assert_eq!(transliterate("tt tth tn tm TT Tm uttor utthan rotno atma"), "ত্ত ত্থ ত্ন ত্ম ট্ট ট্ম উত্তর উত্থান রত্ন আত্মা");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -195,6 +197,18 @@ const NASAL_STOP_CONJUNCTS: [(&str, &str, char); 11] = [
     ("NT", "ণ্ট", 'T'),
 ];
 
+// Original t-family spellings with independent context and priority evidence.
+// Longer tth precedes tt. There is no TTh match: TT leaves h for a later rule.
+// Earlier nasal-stop matches consume their t/T before reaching this table.
+const T_CONJUNCTS: [(&str, &str, char); 6] = [
+    ("tth", "ত্থ", 'h'),
+    ("tt", "ত্ত", 't'),
+    ("tn", "ত্ন", 'n'),
+    ("tm", "ত্ম", 'm'),
+    ("TT", "ট্ট", 'T'),
+    ("Tm", "ট্ম", 'm'),
+];
+
 #[derive(Clone, Copy)]
 enum Context {
     Consonant {
@@ -304,6 +318,10 @@ enum Context {
 /// nndh -> ন্নধ, ShNTh -> ষ্ণঠ. Consumed keys cannot start dd/dhn/dhm:
 /// nddh -> ন্দধ, ndhn -> ন্ধন. Basic t/th/T/Th also attach following r,
 /// including exposed stops in nntr -> ন্নত্র and kShNThr -> ক্ষ্ণঠ্র.
+/// Exact tt/tth/tn/tm/TT/Tm establish consonant context and attach r.
+/// Longer tth wins before tt; TT leaves a following h (TTh -> ট্টহ).
+/// Consumed keys cannot start a second conjunct: ttn -> ত্তন, tng -> ত্নগ.
+/// Earlier nasal stops keep priority: ntt -> ন্তত, nTm -> ন্টম.
 /// Earlier longer matches such as bd, shn, and reph remain gaps;
 /// supported prefixes still convert inside them.
 /// Backtick escapes remain unsupported.
@@ -445,6 +463,13 @@ pub fn transliterate(input: &str) -> String {
             remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if let Some((raw, bangla, last_key)) = NASAL_STOP_CONJUNCTS
+            .iter()
+            .find(|(raw, _, _)| remaining.starts_with(raw))
+        {
+            output.push_str(bangla);
+            remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
+            context = Context::Consonant { ya_joiner: false };
+        } else if let Some((raw, bangla, last_key)) = T_CONJUNCTS
             .iter()
             .find(|(raw, _, _)| remaining.starts_with(raw))
         {
