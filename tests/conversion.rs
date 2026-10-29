@@ -1,6 +1,150 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn nasal_h_batch_resets_at_boundaries_and_between_calls() {
+    assert_eq!(transliterate("mr mm mn mng"), "ম্র ম্ম ম্ন ম্নগ");
+    for (raw, bangla, first, tail) in [
+        ("ngh", "ঙ্ঘ", "ন", "ঘ"),
+        ("nn", "ন্ন", "ন", "ন"),
+        ("Nn", "ণ্ন", "ণ", "ন"),
+        ("mn", "ম্ন", "ম", "ন"),
+        ("hm", "হ্ম", "হ", "ম"),
+        ("hl", "হ্ল", "হ", "ল"),
+        ("nm", "ন্ম", "ন", "ম"),
+        ("Nm", "ণ্ম", "ণ", "ম"),
+        ("mm", "ম্ম", "ম", "ম"),
+        ("ml", "ম্ল", "ম", "ল"),
+        ("Ngm", "ঙ্ম", "ণ", "গ্ম"),
+        ("gm", "গ্ম", "গ", "ম"),
+    ] {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "হ্ম", "\u{301}"] {
+            assert_eq!(
+                transliterate(&format!("{}{boundary}{}", &raw[..1], &raw[1..])),
+                format!("{first}{boundary}{tail}")
+            );
+            if raw == "ngh" || raw == "Ngm" {
+                let (first, tail) = if raw == "ngh" {
+                    ("ং", "হ")
+                } else {
+                    ("ঙ", "ম")
+                };
+                assert_eq!(
+                    transliterate(&format!("{}{boundary}{}", &raw[..2], &raw[2..])),
+                    format!("{first}{boundary}{tail}")
+                );
+            }
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    for (raw, bangla) in [("m", "ম"), ("l", "ল")] {
+        for boundary in ["\n", "\r", "\t", "\0", "🙂", "ম্র"] {
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}a")),
+                format!("{bangla}্র{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("r"), "র");
+    }
+    assert_eq!(
+        transliterate(
+            &"ngh nn Nn mn hm hl nm Nm mm ml Ngm gm mr lr Shmmm ShNmng NgkShmr nghnr kShNgmr 🙂 "
+                .repeat(64)
+        ),
+        "ঙ্ঘ ন্ন ণ্ন ম্ন হ্ম হ্ল ন্ম ণ্ম ম্ম ম্ল ঙ্ম গ্ম ম্র ল্র ষ্মম্ম ষ্ণম্নগ ঙ্ক্ষম্র ঙ্ঘন্র ক্ষ্ণগ্ম্র 🙂 ".repeat(64)
+    );
+}
+
+#[test]
+fn nasal_h_conjunct_ngh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ngh.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_n_lower_pair_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-n-lower-pair.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_n_mixed_pair_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-n-mixed-pair.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_mn_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-mn.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_hm_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-hm.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_hl_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-hl.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_nm_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-nm.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_n_retroflex_m_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-n-retroflex-m.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_mm_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-mm.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_ml_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ml.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_ng_m_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ng-m.tsv"));
+}
+
+#[test]
+fn nasal_h_conjunct_gm_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-gm.tsv"));
+}
+
+#[test]
+fn nasal_h_m_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/m-following-r.tsv"));
+}
+
+#[test]
+fn nasal_h_l_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/l-following-r.tsv"));
+}
+
+#[test]
 fn g_nasal_batch_resets_at_boundaries_and_between_calls() {
     for (raw, bangla, first, tail) in [
         ("gg", "জ্ঞ", "গ", "গ"),
@@ -592,9 +736,14 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Ngx`a", "ঙ্ষ`আ"),
         ("Gg", "Gগ"),
         ("gNG", "গ্ণG"),
-        ("nghnr", "ংহ্ন্র"),
+        ("Gm", "Gম"),
+        ("bhl", "ভল"),
+        ("phl", "ফল"),
+        ("shl", "শল"),
+        ("vl", "ভল"),
+        ("hm`a", "হ্ম`আ"),
+        ("rrhm", "ররহ্ম"),
         ("ddghr", "দদ্ঘ্র"),
-        ("mnry", "মন্র্য"),
         ("Ngx`h", "ঙ্ষ`হ"),
         ("rrx", "ররক্স"),
         ("rrkx", "ররক্ষ"),
@@ -630,8 +779,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Z`h", "্য`হ"),
         ("zr", "যর"),
         ("z`h", "য`হ"),
-        ("ngh", "ংহ"),
-        ("nng", "নং"),
         ("nG", "নG"),
         ("ng`a", "ং`আ"),
         ("NgK", "ঙK"),
@@ -709,7 +856,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("DH", "ডH"),
         ("d`h", "দ`হ"),
         ("ll", "লল"),
-        ("hl", "হল"),
         ("L", "L"),
         ("H", "H"),
         ("l`h", "ল`হ"),
@@ -734,8 +880,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Kk", "Kক"),
         ("KK", "KK"),
         ("ShNG", "ষ্ণG"),
-        ("Shmmm", "ষ্মমম"),
-        ("ShNmng", "ষ্ণমং"),
         ("ShM", "ষM"),
         ("SHN", "শHণ"),
         ("SHm", "শHম"),
@@ -743,8 +887,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("rrShm", "ররষ্ম"),
         ("Shm`a", "ষ্ম`আ"),
         ("ShN`a", "ষ্ণ`আ"),
-        ("ShNmr", "ষ্ণমর"),
-        ("Shmmr", "ষ্মমর"),
         ("shm", "শম"),
         ("shn", "শন"),
         ("Sm", "শম"),
@@ -792,8 +934,7 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         }
         assert_eq!(transliterate(&format!("{raw}G")), "ক্ষ্ণG");
     }
-    // The new forms do not implement remaining earlier prefixes, basic m conjuncts,
-    // uppercase aliases, reph or escapes.
+    // Earlier prefixes, uppercase aliases, reph and escapes remain incomplete.
     for raw in ["kkhm", "kShm", "kxm"] {
         for (prefix, letter) in [("n", "ন"), ("l", "ল"), ("s", "স"), ("Sh", "ষ")] {
             assert_eq!(
@@ -801,14 +942,10 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
                 format!("{letter}ক্ষ্ম")
             );
         }
-        assert_eq!(transliterate(&format!("Ng{raw}r")), "ঙ্ক্ষমর");
-        assert_eq!(transliterate(&format!("{raw}mm")), "ক্ষ্মমম");
-        assert_eq!(transliterate(&format!("{raw}mr")), "ক্ষ্মমর");
         assert_eq!(transliterate(&format!("rr{raw}")), "ররক্ষ্ম");
         assert_eq!(transliterate(&format!("{}M", &raw[..raw.len() - 1])), "ক্ষM");
         assert_eq!(transliterate(&format!("{raw}`a")), "ক্ষ্ম`আ");
     }
-    assert_eq!(transliterate("mr mm mn mng"), "মর মম মন মং");
 }
 
 #[test]
