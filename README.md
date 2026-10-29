@@ -109,8 +109,9 @@ see the [reph behavior and evidence](docs/v1.md#reph-batch).
 This is a partial engine with 522,933 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Further
 context auditing and a decision about reference Unicode lowercasing remain;
-the platform-independent composition controller is implemented, while Fcitx5
-integration is unimplemented.
+the platform-independent composition controller is implemented. A minimal Fcitx5
+addon now builds and passes a synthetic dispatcher harness; desktop typing has
+not been tested. See the [local experiment](#build-and-check-the-fcitx5-experiment).
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
 [first vowel group](docs/v1.md#first-vowel-group) and
@@ -194,9 +195,10 @@ The [adapter interaction contract](docs/v1.md#adapter-interaction-contract) now
 settles Escape, navigation, shortcuts and focus/switching: Escape cancels active
 input; navigation and shortcuts commit before forwarding; focus/switching finalize
 to the original context when permitted, then clear state. Modifier-only presses
-preserve composition. This is a specification with planned acceptance cases;
-adapter implementation and desktop validation remain future work, along with
-Unicode case policy.
+preserve composition. The experimental addon now exercises this policy through
+Fcitx5's dispatcher with synthetic input. Frontend AltGr/compose handling, mouse
+relocation, actual desktop typing and Unicode case policy remain unverified or
+unsettled; see the [feasibility evidence](docs/v1.md#fcitx5-local-feasibility-result).
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
@@ -227,8 +229,10 @@ The transliterator lives in private modules under `src/transliteration/`:
   attachment and exceptions based on raw keys.
 
 The existing `transliterate` API and conversion behavior are unchanged.
-Composition adds a separate API; platform adapters remain future work, with
-boundaries described in [the architecture plan](docs/v1.md#proposed-architecture).
+Composition adds a separate API. The experimental Fcitx5 addon is under
+[`adapters/fcitx5`](adapters/fcitx5/CMakeLists.txt), with a separate Rust C-ABI
+crate and C++ framework code. The core still forbids unsafe code and has no
+platform dependencies. See [the architecture plan](docs/v1.md#proposed-architecture).
 
 Source comments keep the API contract and reasons for non-obvious matching
 choices close to the code. Detailed rule behavior belongs in
@@ -246,9 +250,9 @@ From the repository root:
 
 ```sh
 cargo fmt --all -- --check
-cargo clippy --offline --all-targets -- -D warnings
-cargo test --offline
-cargo build --offline --release
+cargo clippy --offline --workspace --all-targets -- -D warnings
+cargo test --offline --workspace
+cargo build --offline --workspace --release
 cargo run --offline --example convert -- 'kh12T'
 ```
 
@@ -694,6 +698,64 @@ with the same vowel context and following-`r` priority as `kx`:
 `Ngxi` → `ঙ্ষি`, `Ngxrri` → `ঙ্ষৃ`, `Ngxrr` → `ঙ্ষ্রর`. Existing case
 distinctions remain (`NGx` → `ঞক্স`, `ngx` → `ংক্স`). Some earlier longer
 matches still take priority (`gNgx` uses `gN` first and now yields `গ্ণগক্স`). `kkx` now converts as `ক্কক্স`.
+
+## Build and check the Fcitx5 experiment
+
+This builds an experimental addon and runs synthetic input through the installed
+Fcitx5 dispatcher. It does not install the addon, connect a desktop frontend, or
+change input-method settings. No application has been smoke-tested yet.
+
+In addition to Rust, use Fcitx5 Core/Utils development headers **5.1.23 or newer**,
+a C++20 compiler, CMake **3.25 or newer**, and Ninja. These are build requirements;
+only the versions in the [environment record](docs/v1.md#fcitx5-local-feasibility-result)
+have been validated. Cargo remains offline and adds no registry dependencies.
+
+```sh
+cmake -S adapters/fcitx5 -B target/fcitx5 -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake --build target/fcitx5
+ctest --test-dir target/fcitx5 --output-on-failure
+```
+
+The build produces `target/fcitx5/libjong-bangla.so` and
+`target/fcitx5/jong-fcitx5-harness`. The harness loads that actual shared addon,
+allows only it and a test passthrough engine, and uses temporary XDG configuration,
+cache and runtime directories. Build-local metadata contains the absolute library
+path and is unsuitable for installation. There is deliberately no install target.
+Only synthetic strings are recorded by the harness; the addon has no input logger.
+
+Ten suites check editing, boundaries/shortcuts, releases/modifiers/repeats, resolved
+text, invisible buffers, switching/focus/reset, context isolation, fallback preedit
+and explicit preedit clicks. They verify UTF-8 cursor offsets and ordered
+preedit/commit/application-key effects, including framework-owned shortcuts and
+both focus-out commit owners. A simulated frontend commit is not evidence that a
+real toolkit honors that path. Actual AltGr/compose completion, document relocation,
+Wayland/XWayland delivery and desktop UI still need smoke tests. The precise
+[boundary contract and limits](docs/v1.md#fcitx5-local-feasibility-result) are recorded
+alongside the product specification.
+
+For C++ formatting (validated with clang-format 23.1.4):
+
+```sh
+clang-format --dry-run --Werror adapters/fcitx5/addon.cpp adapters/fcitx5/jong.h adapters/fcitx5/tests/harness.cpp
+```
+
+The Rust checks above include the C-ABI crate through `--workspace`. To repeat
+the C++ AddressSanitizer/UndefinedBehaviorSanitizer check as well:
+
+```sh
+cmake -S adapters/fcitx5 -B target/fcitx5-sanitized -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_CXX_FLAGS='-fsanitize=address,undefined -fno-omit-frame-pointer' \
+  -DCMAKE_SHARED_LINKER_FLAGS='-fsanitize=address,undefined' \
+  -DCMAKE_EXE_LINKER_FLAGS='-fsanitize=address,undefined'
+cmake --build target/fcitx5-sanitized
+ASAN_OPTIONS=detect_leaks=0 ctest --test-dir target/fcitx5-sanitized --output-on-failure
+```
+
+These sanitizers instrument the C++ addon and harness, not the Rust static library
+or the system Fcitx5 libraries. LeakSanitizer fails under this execution sandbox's
+ptrace environment, so this command disables leak detection; it is not a leak
+check. Rust boundary tests separately check invalid scalar arguments, UTF-8 spans
+and recovery after a caught panic.
 
 ## Repeat the reference comparison
 

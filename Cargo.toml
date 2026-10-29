@@ -7,5 +7,9 @@ license = "MIT"
 description = "Independent, partial Bangla phonetic transliteration core"
 publish = false
 
+[workspace]
+members = ["adapters/fcitx5/ffi"]
+resolver = "3"
+
 [lints.rust]
 unsafe_code = "forbid"

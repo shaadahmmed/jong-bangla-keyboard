@@ -1,0 +1,16 @@
+[package]
+name = "jong-bangla-fcitx5-ffi"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99.1"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["staticlib", "rlib"]
+
+[dependencies]
+jong-bangla-core = { path = "../../.." }
+
+[lints.rust]
+unsafe_op_in_unsafe_fn = "deny"

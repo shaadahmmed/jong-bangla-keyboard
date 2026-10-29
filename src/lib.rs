@@ -3,7 +3,8 @@
 //! Converts supported phonetic sequences and ASCII digits, preserving unmatched
 //! Unicode characters. A platform-independent composition controller supports
 //! editable preedit and normalized editing keys. Compatibility with Avro is
-//! partial; framework event translation and platform integration are not implemented.
+//! partial. Experimental Fcitx5 event translation lives in a separate adapter;
+//! desktop integration has not been smoke-tested.
 //!
 //! See the repository's [coverage overview] and [behavior notes] for supported
 //! rules, compatibility evidence, and limitations.

@@ -9,76 +9,88 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Current position
 
-- **Implemented:** dependency-free Rust transliteration and composition APIs.
-  The controller owns editable raw input and converted preedit, with Backspace,
-  whole-word deletion, commit/cancel/reset, and normalized editing-key effects.
-  See the [controller contract](v1.md#composition-controller-api) and
-  [conversion coverage](../README.md#current-status). Fcitx5 is unimplemented.
-- **Confirmed v1 behavior:** no Bangla/Latin choices; Ctrl+Backspace clears active
-  raw input and otherwise reaches the application. Space/Enter commit first,
-  then forward that same key. Punctuation/escapes remain editable until a boundary.
-  Activity follows raw input, including escapes with empty converted output.
-- **Newly settled:** Escape cancels active input and consumes; navigation and
-  application shortcuts commit before forwarding. Modifier-only presses preserve
-  composition. Focus loss/switching finalize to the original context when allowed,
-  then clear; explicit reset/destruction discard. See the
-  [adapter contract](v1.md#adapter-interaction-contract) for routing and ordering.
-- **Validation for this step:** documentation links, contract consistency,
-  documentation-only scope and unchanged historical handoff entries checked.
-- **Prior evidence, not rerun:** 20 composition and 352 conversion integration
-  tests, two doctests, all 522,933 fixture rows, format/lint/build checks passed
-  in the controller step. The 83,353-input mixed-context audit found no new gaps
-  and three known Unicode case differences. Earlier 1,350-input vowel-pair and
-  302-input standalone audits remain bounded evidence, not full compatibility.
-- **Remaining limits:** adapter cases are specified, not executed. Fcitx5 callback
-  ordering, frontend behavior, Unicode case policy, performance and actual
-  desktop use remain unresolved or unverified.
+- **Implemented:** dependency-free Rust transliteration/composition APIs plus a
+  minimal build-local Fcitx5 addon. The C++ addon owns framework events/UI; a
+  separate Rust C-ABI crate wraps the existing controller. Core rules and
+  composition logic are unchanged and still forbid unsafe code.
+- **Behavior:** editable Bangla without a choice list; raw-key Backspace;
+  Ctrl+Backspace clears active input; Escape cancels; Space/Enter, navigation and
+  application shortcuts finalize before the original action. Releases and
+  modifiers preserve composition unless Fcitx handles a configured shortcut.
+- **Lifecycle:** one non-copying Rust handle per context. Ordinary focused
+  switching commits once; focus-out defers to Fcitx/frontend ownership and only
+  clears Rust state. Reset, destruction and capability restrictions discard.
+  See the [contract and evidence](v1.md#fcitx5-local-feasibility-result).
+- **Validation:** real local addon loader and Fcitx5 dispatcher with a synthetic
+  frontend, ten suites, three FFI tests, 20 composition/352 conversion tests,
+  two doctests and 522,933 unchanged fixture rows pass. Format/lint/release builds
+  and C++ ASan/UBSan pass; leak detection could not run under sandbox ptrace.
+- **Environment:** CachyOS x86_64; session reports KDE/Wayland; Plasma 6.8.2,
+  Fcitx5 5.1.23, Rust/Cargo 1.99.1, GCC 16.2.1, CMake 4.4.5, Ninja 1.13.2.
+  Installed toolkit versions are recorded in the evidence; no actual app tested.
+- **Remaining limits:** desktop/AltGr/compose/mouse delivery, frontend-owned
+  commits, visible fallback UI, Unicode case policy and performance remain
+  unverified or unresolved. No installation, settings changes or packaging.
 
 ## Latest completed step
 
-- **2026-10-29 — Adapter interaction and lifecycle specification.** Updated
-  docs/v1.md and README.md with the user's Escape, navigation/shortcut and
-  focus/switching decisions. The existing composition implementation is unchanged;
-  its completion and checks are recorded in commit `fe6cfd8` as prior evidence.
-- **Routing:** exact Ctrl+Backspace retains whole-buffer deletion; modified
-  variants commit and forward. Specified plain/keypad boundaries, case-sensitive
-  text, lock states, AltGr/dead-key handling, modifier-only events and release/
-  repeat behavior. Framework shortcuts remain Fcitx5's responsibility.
-- **Lifecycle:** one original target and one commit owner; account for frontend-
-  committed preedit before clearing local state. Never replay into a newly focused
-  field. Reset, destruction and unavailable delivery discard. Documented limits
-  on observing mouse/selection movement and restricted-context transitions.
-- **Evidence:** consulted official Fcitx5 tutorial and upstream engine/event/
-  input-context headers. Sources are linked in the specification; no upstream
-  code imported, installed version validated or desktop support claimed.
-- **Acceptance cases:** 15 documented scenario groups cover ordering, shortcuts,
-  release/repeat, invisible buffers, focus/reset/switch, duplicate callbacks and
-  mouse behavior. These are planned adapter regressions, not passing tests.
-- **Checks:** `python /tmp/jong-check-adapter-contract-docs.py` — 930 local links
-  and anchors, table structure, confirmed-policy consistency, existing controller
-  action coverage, unchanged source/tests/fixtures/history and handoff passed.
-  `git diff --check` passed. No Cargo or reference checks rerun for docs-only work.
-- **Next action:** investigate the minimal Fcitx5 addon/Rust boundary and validate
-  callback/commit ownership in a synthetic harness before desktop smoke tests.
+- **2026-10-29 — Minimal Fcitx5 addon, Rust boundary and dispatcher harness.**
+  Added `adapters/fcitx5`, CMake/build-local metadata and a Cargo workspace member
+  with no registry dependencies. The `.so` loads through the installed Fcitx5
+  loader in an isolated Instance; only it and a harness passthrough engine load.
+- **Boundary:** Rust allocates/frees opaque handles; Unicode scalar input and
+  borrowed UTF-8 pointer/length output; C++ copies spans before framework calls.
+  Documented lifetimes, thread/exclusive access, errors, panic containment and
+  process-failure limits. Unsafe operations stay outside the reusable core.
+- **Results:** ordered clear-preedit/commit/one-key delivery; active/invisible/idle
+  editing; case/keypad text; modifiers/releases/repeats; framework switching keys;
+  ordinary switching; server/frontend-owned focus-out; repeated callbacks; reset,
+  destruction/restriction; independent fields; fallback preedit and preedit click.
+  Frontend ownership is simulated, not established in a real toolkit.
+- **Investigation:** inspected matching installed headers and upstream 5.1.23
+  dispatcher/delivery/loader/default-shortcut sources. Fcitx commits before the
+  addon focus-out callback; default Shift release is a framework toggle. Sources,
+  license provenance and exact environment versions are linked in the spec.
+- **Rust checks:** `cargo fmt --all -- --check`;
+  `cargo clippy --offline --workspace --all-targets -- -D warnings`;
+  `cargo test --offline --workspace`; `cargo build --offline --workspace --release`
+  — all passed: 20 composition, 352 conversion, three FFI tests, two doctests,
+  all unchanged fixture rows. No external reference parser/audit rerun.
+- **C++ checks:** `clang-format --dry-run --Werror adapters/fcitx5/addon.cpp
+  adapters/fcitx5/jong.h adapters/fcitx5/tests/harness.cpp` passed.
+  `cmake -S adapters/fcitx5 -B target/fcitx5 -G Ninja -DCMAKE_BUILD_TYPE=Debug`;
+  `cmake --build target/fcitx5`;
+  `ctest --test-dir target/fcitx5 --output-on-failure` — passed, ten suites.
+- **Sanitizers:** configured `target/fcitx5-sanitized` with the README's actual
+  `-fsanitize=address,undefined -fno-omit-frame-pointer` compiler and sanitizer
+  linker flags; `cmake --build target/fcitx5-sanitized` passed. Default CTest hit
+  LeakSanitizer's ptrace fatal error. Repeated with `ASAN_OPTIONS=detect_leaks=0
+  ctest --test-dir target/fcitx5-sanitized --output-on-failure` — passed. C++ is
+  instrumented; Rust/system libraries and leaks are not covered by that result.
+- **Docs checks:** `python /tmp/jong-check-fcitx5-docs.py` and
+  `git diff --check` passed; local links/anchors, handoff, acceptance table,
+  fixture inventory, workspace boundary and unchanged historical entries checked.
+- **Prior evidence, not rerun:** the 83,353-input mixed-context audit found no new
+  gaps and three known Unicode case differences; the 1,350-input vowel-pair and
+  302-input standalone audits remain bounded compatibility evidence.
+- **Next action:** prepare the separate reversible desktop smoke-test increment.
 
 ## Next small implementation step
 
-1. Inventory actual environment/tool versions and matching Fcitx5 headers, then
-   investigate the [scoped feasibility experiment](v1.md#next-fcitx5-feasibility-experiment).
-   Choose and document a minimal interoperability boundary, including ownership,
-   UTF-8, error handling and panic containment; a thin C++ bridge is a candidate.
-2. Build a local synthetic harness to check ordered preedit/commit/key delivery
-   and reset/deactivate/focus-out callbacks, including frontend-owned commits.
-   Keep framework-specific code outside the Rust controller and rule engine.
-3. Map confirmed keys and lifecycle policies using existing controller actions;
-   turn the acceptance cases into adapter checks as coverage becomes available.
-   Keep installation/settings changes, desktop smoke tests and packaging separate.
+1. Prepare an isolated desktop smoke-test setup without replacing the active
+   daemon or modifying global input-method settings. Specify local addon discovery,
+   temporary profile/configuration, cleanup and the app/frontend paths to test.
+2. Test actual native Wayland Qt and GTK applications and a browser; record exact
+   application/toolkit/Fcitx integration versions and Wayland versus XWayland.
+   Validate resolved AltGr/compose text, ordinary boundaries, shortcut/release/
+   repeat handling, original-field focus-out commit ownership and reset/switching.
+3. Exercise preedit clicks and app cursor/selection moves. Record missing frontend
+   notifications and limitations; update the adapter only for observed gaps.
+   Keep packaging, general installation and performance measurements separate.
 
-**Done when:** the minimal addon/boundary builds locally, its harness demonstrates
-one commit and one key-delivery path, and environment requirements/limitations
-are reproducible. The contract is settled; Fcitx5 implementation and all 15
-adapter acceptance scenario groups remain unimplemented/unrun. No desktop
-support or typing-performance claim follows from the documentation step.
+**Done when:** reproducible app smoke-test evidence establishes which frontend
+routes work, how focus-out avoids duplicates and what remains limited. The current
+local build/harness milestone is complete; actual desktop typing is not validated.
 
 ## Completed steps
 
