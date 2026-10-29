@@ -13,17 +13,17 @@ Dates use the project's Asia/Dhaka timezone.
   example; principal forms for all 11 basic vowels and 40 basic consonant
   sequences (35 letters), contextual forms, selected conjuncts, and selected
   following-`r` forms. See the [coverage overview](../README.md#current-status).
-- **Latest engine change:** exact `kt`/`kT`/`kl` → ক্ত/ক্ট/ক্ল, including
-  vowels, ya, following `r`, and consuming overlaps with earlier k/nasal and
-  t-family rules. `kn`/`km` remain separate consonants (কন/কম). `ktm`/`kTm`
-  now match ক্তম/ক্টম. Exact Unicode and scope are in the
-  [batch decision](v1.md#k-family-conjunct-batch).
-- **Validation:** all 77,383 authored fixture cases match the SHA-256-verified
-  pinned reference. Formatting, Clippy, 137 integration tests, 1 doctest,
+- **Latest engine change:** eight exact conjuncts `nk`/`nkh`/`lk`/`sk`/`skh`/
+  `skl`/`Shk`/`ks`, longer nonconjunct exceptions `lkh`/`ksh`, and basic
+  `s`/`sh`/`S` following-`r` attachment. Earlier matches consume keys before
+  k/t-family forms: `nktm`/`lktm`/`sktm`/`Shktm` now match the reference.
+  Exact Unicode and scope are in the [batch decision](v1.md#consuming-k-family-batch).
+- **Validation:** all 99,177 authored fixture cases match the SHA-256-verified
+  pinned parser. Formatting, Clippy, 152 integration tests, 1 doctest,
   release build, and default/batch smoke checks passed in this step.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete.
-  Earlier `nk`/`lk`/`sk`/`Shk` conflicts are explicit gaps; `lT`, `ks`, `skl`,
-  b/s/sh conjuncts, other following-`r` forms, aliases, reph, and escapes remain.
+  Earlier `pn`/`sn`/`shn`, several l-ending rules, and `ns`/`ps` conflicts are
+  explicit gaps; other conjuncts, aliases, reph, and escapes remain incomplete.
   Composition, Fcitx5, and a usable desktop keyboard are not implemented.
   Performance and platform support remain unverified.
 - **Workflow:** investigate the largest coherent related batch that can be
@@ -32,55 +32,59 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Latest completed step
 
-- **2026-10-29 — K-family conjunct batch.** Implemented three independently
-  checked spellings from the five initial candidates. `kn`/`km` do not form
-  conjuncts in the reference; they are controls. `kth`/`kTh` leave a separate
-  `h`. Existing basic attachments suffice. No upstream source/tables imported.
-- **Evidence:** 6,408 new authored rows: 1,443 `kt`, 1,442 `kT`, 1,440 `kl`,
-  and 2,083 controls. Each conjunct independently checks Unicode, vowels/ya,
-  one through eight following `r` keys and exceptions, existing matches in
-  both orders, every ordered batch pair, shared-key overlaps, adjacent basics,
-  digits, copied Unicode, split boundaries, repetition, and words. Controls
-  include `kn`/`km`, related case/h forms, and their consumed-key overlaps.
-  Limited `kS`/`ksh` controls exclude unsupported basic following-`r` attachment.
+- **2026-10-29 — Consuming k-family batch.** Expanded the initial six conjuncts
+  with `nkh`/`skh`, plus longer `lkh`/`ksh` exceptions and independent basic
+  `s`/`sh`/`S` attachments. `lkh`/`ksh` preserve separate consonants; `skl`
+  wins before `sk`. No upstream source, tables, or dependencies were imported.
+- **Evidence:** 21,794 new authored rows across fourteen files: independent
+  Unicode, vowels/ya, one through eight `r` keys and exceptions, preceding
+  contexts, existing matches in both orders, every ordered batch pair,
+  shared-key overlaps, adjacent consonants, digits, every internal split,
+  boundaries, copied Unicode, repetition, words, and case controls. Earlier
+  `n/l/s/Sh` + k-family gaps moved to passing fixtures. Existing fixture files
+  are unchanged, with distinct filenames for lowercase `sh` and uppercase `Sh`.
 - **Checks run:** `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`; `cargo test --offline`
-  (137 integration tests and 1 doctest); `cargo build --offline --release` — passed.
+  (152 integration tests and 1 doctest); `cargo build --offline --release` — passed.
   `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 77,383 fixture cases passed; fourteen gap probes printed separately.
-  `node /tmp/jong-verify-k-batch.mjs` — all 6,408 new authored expectations
-  matched before implementation. `node /tmp/jong-verify-k-controls.mjs` — 124
-  boundary, separate-call, long-input, and reference-gap expectations matched.
-  `cargo test --offline k_batch` — five targeted tests passed before full checks.
+  — all 99,177 cases passed; eighteen gap probes printed separately.
+  `node /tmp/jong-verify-consuming-k.mjs` — all 21,794 new authored rows matched;
+  initial per-spelling context/priority cases were checked before implementation.
+  `node /tmp/jong-verify-consuming-k-controls.mjs` — 545 authored control,
+  separate-call, long-input, and reference-gap expectations matched.
+  `cargo test --offline consuming_k` — fifteen targeted tests passed.
+  `cargo test --offline unsupported_rules_still_preserve_unmatched_characters`
+  — passed after moving resolved assertions into fixtures. The first full test
+  run exposed those stale assertions; the subsequent full rerun passed.
   Rust/Cargo 1.99.1 and Node.js v24.21.0 were used.
 - **Smoke checks:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট.
-  `cargo run --offline --example convert -- 'kt kT kl kn km ktrri kTrry klry ktm kTm ktth kth kTh klm Ngkt kkl kShNktr rokto shokti dokTor klanto klab'`
-  — all forms, exceptions, consumed-key overlaps, and words matched.
-- **Documentation checks:** `python /tmp/jong-check-k-batch-docs.py` — local
-  links/anchors, fixture counts/code points/manifests, behavior table, README
-  examples, bounded handoff, and preserved history passed.
+  `cargo run --offline --example convert -- 'nk nkh lk lkh sk skl skh Shk ks ksh sr shr Sr nkrri lkrry skrrZ Shkry sklrri ksry kshm lkhm nktm lktm sktm Shktm skkl nkkh lkkh skkh Shkkh onko shonkho alko skhalon sklera shuShko baks shrom Srom'`
+  — all forms, exceptions, consuming priorities, and words matched.
+- **Documentation checks:** `python /tmp/jong-check-consuming-k-docs.py` — local
+  links/anchors, counts/code points, unique manifests, original fixture retention,
+  behavior table, README examples, bounded handoff, and preserved history passed.
   `git diff --check` — passed.
-- **Remaining limitations:** earlier `nk`/`lk`/`sk`/`Shk` consume `k` before
-  the new conjuncts in the reference. Four new probes and partial-output
-  regressions keep these gaps explicit; resolved `ktm`/`kTm` moved into passing
-  fixtures. Other conjuncts, aliases, reph, escapes, composition, and platform
-  work remain incomplete. No broader compatibility or performance claim is made.
-- **Next action:** investigate remaining consuming k-family matches together,
-  including the four exposed earlier-prefix conflicts and longer `skl` priority.
+- **Remaining limitations:** earlier `pn`/`sn`/`shn`, l-ending conjuncts, and
+  `ns`/`ps` consume keys before these forms in the reference. Eight probes replace
+  four resolved probes; partial-output regressions preserve the remaining gaps.
+  Other conjuncts (including `lT`), aliases, reph, escapes, composition, and
+  platform work remain incomplete. No broader compatibility/performance claim.
+- **Next action:** investigate l-ending spellings and their earlier-prefix conflicts.
 
 ## Next small implementation step
 
-1. Investigate a related batch around `nk`/`lk`/`sk`/`Shk`/`skl`/`ks`.
-   These are candidates, not confirmed implementation scope. Check related
-   spellings and any exposed basic attachments; expand when reliable to review.
-2. Independently check each selected spelling against the
-   [pinned reference](v1.md#phonetic-behavior-reference): exact Unicode,
-   vowels/ya, preceding contexts, following `r`, longer `r` runs,
-   `rri`/`rry`/`rrZ` exceptions, digits, boundaries, copied Unicode, and controls.
-3. Check longer matches before shorter ones, existing Ng/k/Sh/nasal priorities,
-   and shared-key overlaps with `kt`/`kT`/`kl` and the t-family. Investigate
-   `nktm`/`lktm`/`sktm`/`Shktm` priority conflicts independently. Keep `lT`
-   and b/s/sh families separate unless deliberately included with evidence.
+1. Investigate `gl`/`ll`/`bl`/`pl`/`sl`/`shl` as a related batch. Expand to
+   `bhl`/`phl`/`vl` when their independent evidence fits a coherent review.
+   These are candidates, not confirmed implementation scope; check related
+   spellings and any exposed basic attachments before editing.
+2. Independently check every selected spelling against the
+   [pinned reference](v1.md#phonetic-behavior-reference): Unicode, vowels/ya,
+   preceding contexts, following `r`, longer `r` runs, `rri`/`rry`/`rrZ`
+   exceptions, digits, boundaries, copied Unicode, controls, and longer priorities.
+3. Check existing Ng/k/Sh/nasal/t-family priorities and shared-key overlaps,
+   including the exposed `blk`/`glk`/`llk`/`slk` conflicts. Keep `lT`,
+   `pn`/`sn`/`shn`, `ns`/`ps`, and unrelated families separate unless
+   deliberately included with independent evidence.
 4. Implement the verified batch, extend fixtures, run the full README checks,
    update behavioral docs and this handoff once, and commit the batch together.
    Keep composition, platform integration, packaging, and unrelated work separate.

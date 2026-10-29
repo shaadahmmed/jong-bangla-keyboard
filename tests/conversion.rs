@@ -1,6 +1,130 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn consuming_k_nkh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-nkh.tsv"));
+}
+
+#[test]
+fn consuming_k_nk_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-nk.tsv"));
+}
+
+#[test]
+fn consuming_k_lkh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-lkh.tsv"));
+}
+
+#[test]
+fn consuming_k_lk_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-lk.tsv"));
+}
+
+#[test]
+fn consuming_k_skl_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-skl.tsv"));
+}
+
+#[test]
+fn consuming_k_skh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-skh.tsv"));
+}
+
+#[test]
+fn consuming_k_sk_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-sk.tsv"));
+}
+
+#[test]
+fn consuming_k_sh_k_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-sh-k.tsv"));
+}
+
+#[test]
+fn consuming_k_ksh_priority_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ksh-priority.tsv"));
+}
+
+#[test]
+fn consuming_k_ks_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ks.tsv"));
+}
+
+#[test]
+fn consuming_k_basic_s_following_r_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/s-following-r.tsv"));
+}
+
+#[test]
+fn consuming_k_basic_sh_following_r_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/sh-lowercase-following-r.tsv"));
+}
+
+#[test]
+fn consuming_k_basic_s_uppercase_following_r_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/s-uppercase-following-r.tsv"));
+}
+
+#[test]
+fn consuming_k_case_controls_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/consuming-k-controls.tsv"));
+}
+
+#[test]
+fn consuming_k_resets_at_every_split_boundary_and_between_calls() {
+    for (raw, bangla, parts) in [
+        ("nkh", "ঙ্খ", vec![("ন", "খ"), ("ঙ্ক", "হ")]),
+        ("nk", "ঙ্ক", vec![("ন", "ক")]),
+        ("lkh", "লখ", vec![("ল", "খ"), ("ল্ক", "হ")]),
+        ("lk", "ল্ক", vec![("ল", "ক")]),
+        ("skl", "স্ক্ল", vec![("স", "ক্ল"), ("স্ক", "ল")]),
+        ("skh", "স্খ", vec![("স", "খ"), ("স্ক", "হ")]),
+        ("sk", "স্ক", vec![("স", "ক")]),
+        ("Shk", "ষ্ক", vec![("শ", "হক"), ("ষ", "ক")]),
+        ("ksh", "কশ", vec![("ক", "শ"), ("ক্স", "হ")]),
+        ("ks", "ক্স", vec![("ক", "স")]),
+        ("s", "স", vec![]),
+        ("sh", "শ", vec![("স", "হ")]),
+        ("S", "শ", vec![]),
+    ] {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "স্ক্ল", "\u{301}"] {
+            for (index, (first, tail)) in parts.iter().enumerate() {
+                let split = index + 1;
+                assert_eq!(
+                    transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
+                    format!("{first}{boundary}{tail}")
+                );
+            }
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        for (index, (first, tail)) in parts.iter().enumerate() {
+            let split = index + 1;
+            assert_eq!(transliterate(&raw[..split]), *first);
+            assert_eq!(transliterate(&raw[split..]), *tail);
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    assert_eq!(
+        transliterate(&"nk nkh lk lkh sk skl skh Shk ks ksh sr shr Sr nktm lktm sktm Shktm skkl nkkh lkkh skkh Shkkh kshm 🙂 ".repeat(64)),
+        "ঙ্ক ঙ্খ ল্ক লখ স্ক স্ক্ল স্খ ষ্ক ক্স কশ স্র শ্র শ্র ঙ্কত্ম ল্কত্ম স্কত্ম ষ্কত্ম স্কক্ল ঙ্কখ ল্কখ স্কখ ষ্কখ কশম 🙂 ".repeat(64)
+    );
+}
+
+#[test]
 fn k_batch_kt_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/conjunct-kt.tsv"));
 }
@@ -1165,14 +1289,15 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("gNG", "গ্ণG"),
         ("bdd", "বদ্দ"),
         ("lTm", "লট্ম"),
-        ("nkt", "নক্ত"),
-        ("lkt", "লক্ত"),
-        ("skt", "সক্ত"),
-        ("Shkt", "ষক্ত"),
-        ("nktm", "নক্তম"),
-        ("lktm", "লক্তম"),
-        ("sktm", "সক্তম"),
-        ("Shktm", "ষক্তম"),
+        ("pnk", "পঙ্ক"),
+        ("snk", "সঙ্ক"),
+        ("shnk", "শঙ্ক"),
+        ("blk", "বল্ক"),
+        ("glk", "গল্ক"),
+        ("llk", "লল্ক"),
+        ("slk", "সল্ক"),
+        ("nsk", "নস্ক"),
+        ("psk", "পস্ক"),
         ("ddH", "দ্দH"),
         ("dHn", "দHন"),
         ("dV", "দV"),
@@ -1250,10 +1375,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("NgkShA", "ঙ্ক্ষA"),
         ("NgkSh`a", "ঙ্ক্ষ`আ"),
         ("NgkSh`h", "ঙ্ক্ষ`হ"),
-        ("nkSh", "নক্ষ"),
-        ("lkSh", "লক্ষ"),
-        ("skSh", "সক্ষ"),
-        ("ShkSh", "ষক্ষ"),
         ("kShNG", "ক্ষ্ণG"),
         ("rrkShN", "ররক্ষ্ণ"),
         ("kSHN", "কশHণ"),
@@ -1297,16 +1418,11 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("H", "H"),
         ("l`h", "ল`হ"),
         ("h`", "হ`"),
-        ("sk", "সক"),
         ("st", "সত"),
         ("ShT", "ষট"),
         ("sH", "সH"),
         ("SH", "শH"),
         ("s`h", "স`হ"),
-        ("nkkh", "নক্ষ"),
-        ("lkkh", "লক্ষ"),
-        ("skkh", "সক্ষ"),
-        ("Shkkh", "ষক্ষ"),
         ("kkhNG", "ক্ষ্ণG"),
         ("kxNG", "ক্ষ্ণG"),
         ("kkH", "ক্কH"),
@@ -1327,10 +1443,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("shm", "শম"),
         ("shn", "শন"),
         ("Sm", "শম"),
-        ("nkk", "নক্ক"),
-        ("lkk", "লক্ক"),
-        ("skk", "সক্ক"),
-        ("Shkk", "ষক্ক"),
         ("rrkk", "ররক্ক"),
         ("kk`a", "ক্ক`আ"),
         ("Kkh", "Kখ"),
@@ -1361,24 +1473,11 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
     ] {
         assert_eq!(transliterate(input), expected, "input: {input:?}");
     }
-    // Earlier n/l/s/Sh + k rules and standalone uppercase G remain gaps.
+    // Standalone uppercase G, aliases, reph and escapes remain gaps.
     for raw in ["kkhN", "kShN", "kxN"] {
-        for (prefix, letter) in [("n", "ন"), ("l", "ল"), ("s", "স"), ("Sh", "ষ")] {
-            assert_eq!(
-                transliterate(&format!("{prefix}{raw}")),
-                format!("{letter}ক্ষ্ণ")
-            );
-        }
         assert_eq!(transliterate(&format!("{raw}G")), "ক্ষ্ণG");
     }
-    // Earlier prefixes, uppercase aliases, reph and escapes remain incomplete.
     for raw in ["kkhm", "kShm", "kxm"] {
-        for (prefix, letter) in [("n", "ন"), ("l", "ল"), ("s", "স"), ("Sh", "ষ")] {
-            assert_eq!(
-                transliterate(&format!("{prefix}{raw}")),
-                format!("{letter}ক্ষ্ম")
-            );
-        }
         assert_eq!(transliterate(&format!("rr{raw}")), "ররক্ষ্ম");
         assert_eq!(transliterate(&format!("{}M", &raw[..raw.len() - 1])), "ক্ষM");
         assert_eq!(transliterate(&format!("{raw}`a")), "ক্ষ্ম`আ");
