@@ -35,18 +35,27 @@ User instructions take precedence over this guide; update the docs when they cha
 - Keep the current handoff accurate so routine work does not require reading
   the full history. These reading rules do not reduce validation requirements.
 
-## Collaborate in small steps
+## Collaborate in coherent steps
 
-- Explain the purpose and expected result of the next small step before editing.
+- Explain the purpose and expected result of the next coherent step before editing.
 - Complete one coherent, reviewable increment at a time. Avoid combining engine
   changes, platform integration, packaging, and unrelated cleanup in one change.
-- For phonetic rule coverage, prefer small batches of related conjuncts or
-  spellings that share matching or context behavior. One increment can cover a
-  batch; do not require a separate step or commit for every spelling.
+- For phonetic rule coverage, prefer the largest coherent batch of related
+  conjuncts or spellings that can be independently reference-checked, validated,
+  and reviewed together. Start by looking for 3–6 related spellings and expand
+  when the behavior remains manageable; this is a planning guide, not a cap.
+  Do not split straightforward related work merely to keep batches small.
 - Define each batch's scope before editing. Check each spelling's exact Unicode,
   vowel/context behavior, following-`r` behavior, and overlapping matches against
   the pinned reference independently; shared output alone does not establish
-  shared behavior. Split a batch if differences make it hard to review.
+  shared behavior. Include interactions between the selected spellings and
+  existing rules. Split only when behavioral differences, unresolved reference
+  results, or review complexity prevent a reliable coherent change.
+- Share fixture/check tooling where useful while preserving independent expected
+  outputs and evidence for every spelling. Use targeted reference checks during
+  investigation, then one full required validation run, documentation/handoff
+  update, and commit for the completed batch. Repeat full checks when later edits
+  or failures require them; do not repeat the full cycle for every spelling.
 - Walk the user through the result in plain language: what changed, why it matters,
   how it was checked, and what comes next. Explain unfamiliar terms when introduced.
 - Update the three handoff sections in `docs/progress.md` after each coherent

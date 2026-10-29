@@ -92,9 +92,12 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress handoff](docs/progress.md) for current state, the latest completed
 step and checks, and the next task. Detailed change history is in Git.
-Rule coverage now proceeds in [small batches of related conjuncts](docs/v1.md#small-development-steps),
-with checks, documentation, and a commit for each batch. The next planned batch is
-exact `gg`, including overlaps exposed after existing `N`-ending conjuncts.
+Rule coverage favors the [largest coherent related batches](docs/v1.md#small-development-steps)
+that remain reliable to validate and review. Look for 3–6 related spellings
+initially and expand when practical; there is no fixed upper cap. Each spelling
+needs independent reference evidence, with one full validation, documentation
+update, and commit per completed batch. The next planned batch investigates
+exact `gg`/`gN`/`NN`/`hN`, including overlaps with existing nasal conjuncts.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Build and try the conversion slice

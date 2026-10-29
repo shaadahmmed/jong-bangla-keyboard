@@ -13,64 +13,64 @@ Dates use the project's Asia/Dhaka timezone.
   example; principal forms for all 11 basic vowels and 40 basic consonant
   sequences (35 letters), contextual `ng`/`y`/`w`/`x` and uppercase `Z`, selected
   conjuncts, and selected following-`r` forms. See the
-  [coverage overview](../README.md#current-status) and linked rule sections for
-  exact supported spellings and context behavior.
+  [coverage overview](../README.md#current-status) for supported spellings.
 - **Latest engine change:** exact `Ngg` → ঙ্গ and `Nggh` → ঙ্ঘ, with supported
-  vowel/ya context and following `r`; `Nggr`/`Ngghr` now produce ঙ্গ্র/ঙ্ঘ্র
-  (2026-10-29). Earlier matches that consume `N` retain priority.
-- **Validation:** all 16,370 cases match the pinned reference; formatting,
-  Clippy, 64 integration tests, 1 doctest, release build, conversion smoke checks,
-  and documentation checks passed in this step.
+  vowel/ya context and following `r`; `Nggr`/`Ngghr` produce ঙ্গ্র/ঙ্ঘ্র.
+  Earlier matches that consume `N` retain priority (commit `a6d9591`).
+- **Prior engine validation:** all 16,370 cases matched the pinned reference;
+  formatting, Clippy, 64 integration tests, 1 doctest, release build, and smoke
+  checks passed in `a6d9591`. These checks were not rerun for this docs-only step.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete,
-  including other conjuncts, basic following-`r` forms, uppercase aliases, reph,
-  and punctuation/escapes. Composition, Fcitx5 integration, and a usable desktop
-  keyboard are not implemented. Performance/platform support remain unverified.
-- **Workflow:** implement small related rule batches, independently reference-
-  check each spelling, validate, update this handoff, and commit each step.
-  No known blocker to the next slice is recorded.
+  including other conjuncts, following-`r` forms, aliases, reph, and escapes.
+  Composition, Fcitx5, and a usable desktop keyboard are not implemented.
+  Performance/platform support remain unverified.
+- **Workflow:** prefer the largest coherent related batch that can be reliably
+  reference-checked, validated, and reviewed. Start by seeking 3–6 spellings,
+  expand when practical, and use no fixed upper cap. Independently check each
+  spelling; complete one full validation/docs/commit cycle per batch.
+  No known blocker to the next batch is recorded.
 
 ## Latest completed step
 
-- **2026-10-29 — Exact `Ngg`/`Nggh` conjuncts.** Independently authored and
-  reference-checked 1,062 new cases (531 per spelling), then added branches
-  before basic `Ng`/`g`/`gh`, matching `Nggh` before `Ngg`. Reused the existing
-  following-`r` helper after checking vowels, ya, one through eight `r` keys,
-  exceptions, adjacent matches, boundaries, and raw controls separately.
-  Updated usage, coverage, and explicit partial outputs for earlier matches.
-- **Checks:** `node tools/check-reference.mjs
-  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` — all 16,370 cases matched the
-  SHA-256-verified pinned parser. `cargo fmt --all -- --check` and
-  `cargo clippy --offline --all-targets -- -D warnings` — passed.
-  `cargo test --offline` — 64 integration tests and 1 doctest passed.
-  `cargo build --offline --release` — passed. `cargo run --offline --example
-  convert -- 'kh12T'` and the same command with
-  `'Ngg Nggh Nggr Ngghr Nggrri Ngghry bhaNgga loNgghon'` — expected outputs.
-  `python /tmp/jong-check-ngg-docs.py`,
-  `node /tmp/jong-check-ngg-doc-reference.mjs`, and `git diff --check` — passed.
-- **Limitations:** earlier `gN`/`NN`/`hN` and `gg` remain gaps. Existing `ShN`
-  and ক্ষ্ণ matches consume `N`, exposing unsupported `gg`. Nine reference
-  probes remain, replacing resolved `Nggr`/`Ngghr` with `ShNggr`/`kShNgghr`.
-  No performance/platform claim added.
-- **Next action:** independently investigate exact `gg` and exposed overlaps.
+- **2026-10-29 — Increase rule batches for efficiency (documentation only).**
+  Updated `AGENTS.md`, README, and the development decision in `v1.md` to favor
+  the largest coherent related batch, replacing the small-batch preference.
+  The 3–6-spelling guide is a starting point, not a ceiling. Split only when
+  behavior, unresolved evidence, or review complexity warrants it.
+- **Validation policy:** retain independent Unicode/context/priority evidence
+  per spelling and checks of interactions between selected spellings. Share
+  tooling and use targeted investigative checks; run the full required checks
+  for the completed batch, repeating them after later edits/failures as needed.
+- **Checks:** `python /tmp/jong-check-batch-docs.py` — local links/anchors,
+  workflow and next-batch consistency, docs-only scope, bounded handoff, and
+  historical-entry preservation passed. `git diff --check` — passed.
+  No Rust code or fixtures changed; no Cargo/reference tests rerun.
+- **Remaining limitations:** the larger-batch preference changes workflow only.
+  It does not establish shared behavior or implement any planned conjuncts.
+- **Next action:** investigate `gg`/`gN`/`NN`/`hN` together and expand the related
+  batch further if the reference evidence and review complexity allow it.
 
 ## Next small implementation step
 
-1. Independently author and check exact `gg` conjunct cases against the
-   [pinned reference](v1.md#phonetic-behavior-reference). Check exact Unicode,
+1. Define the largest coherent batch around exact `gg`/`gN`/`NN`/`hN` and their
+   overlapping matches. Investigate additional related spellings before editing
+   and include them when they can be reliably reviewed together; no fixed cap.
+2. Independently author and check every selected spelling against the
+   [pinned reference](v1.md#phonetic-behavior-reference): exact Unicode,
    vowel/ya context, preceding contexts, following `r`, longer `r` runs,
-   `rri`/`rry`/`rrZ` exceptions, digits, boundaries, copied Unicode, and raw controls.
-2. Verify priority against `Ngg`/`Nggh`, basic `g`/`gh`, `Ng`/`NG`/`ng`, and
-   k-conjuncts. Investigate `ShNggr`/`kShNgghr` and all ক্ষ্ণ spellings, where
-   an earlier match consumes `N` and leaves `gg`; distinguish earlier `gN`,
-   `NN`, `hN`, `dg`/`dgh`/`Rg`, and case aliases as separate gaps.
-3. Implement only that verified slice. Keep unrelated conjuncts, uppercase
-   aliases, reph, punctuation/escapes, composition, and platform work separate.
-4. Extend fixtures, run README checks, update behavioral documentation and this
-   handoff, and commit the completed step.
+   `rri`/`rry`/`rrZ` exceptions, digits, boundaries, copied Unicode, and controls.
+3. Verify interactions among the selected spellings and existing `Ngg`/`Nggh`,
+   basic `g`/`gh`, `Ng`/`NG`/`ng`, and k-conjuncts. Include exposed overlaps
+   such as `gNgg`, `NNgg`, `hNgg`, `ShNggr`, and all ক্ষ্ণ spellings followed
+   by `gg`/`ggh`. Track `dg`/`dgh`/`Rg` and aliases separately unless deliberately
+   included in the defined batch. Split only for concrete complexity/evidence.
+4. Implement the verified batch, extend fixtures, run the full README checks,
+   update behavioral docs and this handoff once, and commit the batch together.
+   Keep composition, platform integration, packaging, and unrelated work separate.
 
-**Done when:** selected cases match the reference, supported cases still pass
-(or verified priority corrections are documented), and actual checks and
-remaining limitations are recorded. This next slice has not started.
+**Done when:** every selected spelling has independent reference evidence,
+interactions and existing supported cases pass, actual checks and limitations
+are recorded, and the batch is committed. This implementation batch has not started.
 
 ## Completed steps
 
