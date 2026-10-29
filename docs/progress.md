@@ -11,15 +11,17 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Implemented:** Rust transliteration/composition APIs, separate C-ABI wrapper
   and experimental C++ Fcitx5 addon with a real-dispatcher harness. Core rules and
-  composition logic are unchanged and remain independent of platform APIs.
-- **Escape policy:** commit pending Bangla, clear the raw buffer and consume that
-  press; preserve the word without a space/newline. Idle Escape forwards; invisible
-  raw input clears without an empty commit. Reset/destruction/cancel still discard.
+  composition logic remain independent of platform APIs.
+- **Escape confirmed manually:** the user reports that the updated Escape behavior
+  works. It commits pending Bangla, clears the raw buffer and consumes the press,
+  preserving the word without a space/newline. Idle/repeat/invisible-input details
+  have synthetic coverage; no detailed per-app manual edge-case matrix was supplied.
+  Reset/destruction/cancel still discard.
 - **Other behavior:** Ctrl+Backspace clears active raw input and otherwise forwards;
   Space/Enter/navigation/application shortcuts commit before the original action.
   Per-context state is not copied; focus-out commit ownership stays with Fcitx/
   frontend, ordinary focused switching commits once and restrictions/reset discard.
-- **Manual smoke evidence:** user tested GTK3, Firefox, KWrite and Kate via the
+- **Manual smoke evidence:** GTK3, Firefox, KWrite and Kate were tested via the
   private-session procedure. Basic typing and field isolation worked; GTK3 and
   Firefox behaved as expected. Pending Ctrl+Backspace works in KWrite too.
 - **Deferred for v1 by user:** KWrite/Kate Bangla word navigation and committed-word
@@ -27,59 +29,52 @@ Dates use the project's Asia/Dhaka timezone.
   takes three Ctrl+Backspace presses (র, then া, then আম). English shortcuts work;
   user sees similar behavior with OpenBangla. Cause is unproven, not fixed, and
   not a release blocker. Keep adapter behavior; no application-specific workaround.
-- **Limits:** Escape's new behavior still needs manual retesting. Exact runtime/
-  protocol versions, full frontend checklist, AltGr/compose/mouse delivery, Unicode
-  case policy and performance are not fully established. No installation/global
-  settings changes. See the [evidence](v1.md#fcitx5-local-feasibility-result).
+- **Limits:** exact runtime/protocol versions, full frontend checklist, AltGr/
+  compose/mouse delivery, Unicode case policy and performance remain incompletely
+  validated. No installation/global settings changes. See the
+  [evidence](v1.md#fcitx5-local-feasibility-result).
 
 ## Latest completed step
 
-- **2026-10-29 — Clarify desktop smoke results and defer KWrite/Kate word editing.**
-  Documentation-only update to README/spec/handoff after the user's comparison.
-  Recorded all four apps and private-session launch, corrected the earlier broad
-  KWrite Ctrl+Backspace-fails summary, and distinguished active-buffer clearing
-  from application editing of committed Bangla. No source/tests/builds changed.
-- **User decision:** do not focus on this KWrite/Kate limitation for the first
-  release. Record it as a non-blocking limitation, without asserting a Qt/editor
-  root cause or treating the OpenBangla comparison as independent proof.
-- **Escape:** implementation in commit `69eea1a` is unchanged. The user has not yet
-  confirmed a manual retest of that build; previous smoke observations must not
-  be counted as evidence for the new Escape-commits behavior.
-- **Checks this step:** `python /tmp/jong-check-smoke-feedback-docs.py` — local
-  links/anchors, 15 acceptance groups, corrected smoke evidence, v1 deferral,
-  unchanged Escape/adapter policy, documentation-only scope and unchanged
+- **2026-10-29 — Record successful manual Escape retest.** The user confirmed the
+  requested Escape behavior now works. Updated README/spec/handoff to close that
+  pending retest; did not infer per-application or edge-case coverage beyond the
+  report. Implementation in `69eea1a` and v1 deferral in `7de899e` are unchanged.
+- **Scope:** documentation only. No source, tests, build artifacts, running test
+  sessions or input-method settings changed. KWrite/Kate word editing stays deferred.
+- **Checks this step:** `python /tmp/jong-check-escape-confirmation-docs.py` — local
+  links/anchors, confirmed Escape evidence, removal of stale retest requirements,
+  unchanged adapter policy/v1 deferral, documentation-only scope and unchanged
   historical entries passed. `git diff --check` passed. No Cargo, CMake, sanitizer
-  or reference checks rerun for this documentation-only clarification.
+  or reference checks rerun for this documentation-only evidence update.
 - **Prior evidence, not rerun:** commit `69eea1a` passed Rust format/Clippy/workspace
   tests/release builds: 20 composition, 352 conversion, three FFI tests, two
   doctests and 522,933 unchanged fixture rows. Ten dispatcher suites and C++
   ASan/UBSan passed with `ASAN_OPTIONS=detect_leaks=0`; LeakSanitizer cannot run
   under sandbox ptrace, and Rust/system libraries were not instrumented.
 - **Prior investigation, not continued:** matching KTextEditor/Fcitx Qt source
-  inspection located word-editing shortcut actions and the Qt forwarding path,
-  but did not establish a cause. Further investigation is deferred by the user.
+  inspection identified shortcut/forwarding layers but did not establish a cause.
+  Further work is deferred by the user and is not a routine v1 blocker.
 - **Prior compatibility audits:** 83,353 mixed-context inputs, 1,350 vowel-pair
   inputs and 302 standalone inputs remain bounded evidence; three known Unicode
   case differences remain. These audits were not rerun.
-- **Next action:** manually confirm the new Escape behavior, then finish the
-  remaining scoped frontend smoke evidence without revisiting deferred word editing.
+- **Next action:** finish the remaining scoped frontend smoke evidence without
+  revisiting confirmed Escape behavior or deferred KWrite/Kate word editing.
 
 ## Next small implementation step
 
-1. Retest updated Escape in GTK3 and a Qt editor: `ki` → Escape keeps কি; following
-   `i` starts fresh ই; Ctrl+Backspace affects only that new pending buffer.
-   Restart the private daemon with the rebuilt addon before testing.
-2. Record actual application/toolkit/Fcitx integration versions and observed
-   Wayland versus XWayland paths. Complete the remaining bounded smoke checklist
-   for focus/reset/switching, modifier/repeat behavior, AltGr/compose and mouse
-   relocation; explicitly mark unavailable routes as untested.
-3. Address new reproducible adapter issues within that scope. Keep KWrite/Kate
-   Bangla word editing deferred for v1; do not reopen it as a routine blocker.
-   Keep packaging/global installation and performance work as separate increments.
+1. Record actual application/toolkit/Fcitx integration versions and observed
+   Wayland versus XWayland paths for the private-session smoke tests.
+2. Complete the remaining bounded checklist for focus/reset/switching, modifier/
+   repeat behavior, AltGr/compose and mouse relocation. Reuse existing positive
+   observations; explicitly mark unavailable or untested routes.
+3. Address new reproducible adapter issues within that scope and document remaining
+   limitations. Keep KWrite/Kate word editing deferred for v1. Keep packaging/
+   global installation and performance work as separate increments.
 
-**Done when:** updated Escape has manual evidence and remaining frontend results/
-limitations are recorded reproducibly. The user-accepted KWrite/Kate word-editing
-limitation does not block this milestone or the first release.
+**Done when:** remaining frontend observations and limitations are recorded
+reproducibly. The updated Escape interaction has user-confirmed manual evidence;
+the accepted KWrite/Kate word-editing limitation does not block the first release.
 
 ## Completed steps
 

@@ -736,8 +736,9 @@ preedit/commit/application-key effects, including framework-owned shortcuts and
 both focus-out commit owners. A simulated frontend commit is not evidence that a
 real toolkit honors that path. Actual AltGr/compose completion, document relocation,
 Wayland/XWayland delivery and desktop UI still need systematic smoke tests.
-The changed Escape behavior needs manual retesting: `ki` then Escape should
-keep কি, and the next `i` should start a fresh ই. Restart the private test daemon
+The user has manually confirmed that the updated Escape behavior works. For
+repeat tests, `ki` then Escape should keep কি, and the next `i` should start a
+fresh ই. Restart the private test daemon
 with the rebuilt addon; an already loaded process keeps its old implementation.
 The precise
 [boundary contract and limits](docs/v1.md#fcitx5-local-feasibility-result) are recorded
