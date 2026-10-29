@@ -55,7 +55,10 @@ separate consonants (কন/কম), matching the reference.
 Exact `nk`/`nkh`/`lk`/`sk`/`skh`/`skl`/`Shk`/`ks`, their longer
 nonconjunct exceptions `lkh`/`ksh`, and following `r` after basic `s`/`sh`/`S`
 are also implemented, including consuming priority over the k/t-family forms.
-This is a partial engine with 99,177 reference-checked examples,
+Exact `gl`/`ll`/`bl`/`pl`/`sl`/`shl`/`bhl`/`phl`/`vl`/`fl`/`Sl`, their
+selected vowel/following-`r` forms, and basic `p`/`ph`/`f` following-`r`
+attachments are also implemented, including consuming priority over `lk`.
+This is a partial engine with 133,881 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Other
 letter forms, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -110,7 +113,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [the nasal dental and retroflex batch](docs/v1.md#nasal-dental-and-retroflex-conjunct-batch), then
 [the t-family batch](docs/v1.md#t-family-conjunct-batch), then
 [the k-family batch](docs/v1.md#k-family-conjunct-batch), then
-[the consuming k-family batch](docs/v1.md#consuming-k-family-batch).
+[the consuming k-family batch](docs/v1.md#consuming-k-family-batch), then
+[the l-ending batch](docs/v1.md#l-ending-conjunct-batch).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress handoff](docs/progress.md) for current state, the latest completed
@@ -120,10 +124,9 @@ that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
 update, and commit per completed batch. The next planned batch investigates
-l-ending spellings around `gl`/`ll`/`bl`/`pl`/`sl`/`shl`, expanding to
-`bhl`/`phl`/`vl` when their independent checks fit a coherent review. Check
-longer priorities and exposed basic attachments before choosing the exact scope.
-This is planned work.
+`mb`/`mbh`/`mv`/`mp`/`mph`/`mf`, including earlier-prefix conflicts and the
+longer `mpl` exception (মপ্ল). Exact implementation scope needs independent
+checks; other consuming labial families remain later work.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Build and try the conversion slice
@@ -219,7 +222,8 @@ produces `রর`; `rri` is matched before either. This resolves `rrri` → `র
 (`rrk` produces `ররক` instead of `র্ক`).
 Lowercase `p` produces `প`; `ph` and `f` both produce `ফ`. The longest supported
 match handles `ph` before `p` (`phi` → `ফি`, matching `fi` → `ফি`). Uppercase
-aliases and larger sequences such as `pph` remain incomplete.
+aliases and larger sequences such as `pph` remain incomplete. Following `r`
+now attaches: `'pr phr fr'` → `প্র ফ্র ফ্র`, with `rri`/`rry`/`rrZ` exceptions.
 Lowercase `c`/`ch`/`j`/`jh` produce `চ`/`ছ`/`জ`/`ঝ`; `ch` and `jh` match before
 their single-key prefixes. Uppercase aliases, conjuncts such as `cch` → `চ্ছ`,
 and escapes remain incomplete.
@@ -229,7 +233,8 @@ their single-key prefixes. Case distinguishes `da` → `দা` from `Da` → `�
 (`dH`/`DH`) and escapes remain incomplete.
 Lowercase `l`/`h` produce `ল`/`হ` and establish vowel context (`li` → `লি`,
 `hu` → `হু`). Existing two-key matches still win: `kh` → `খ`, `khh` → `খহ`.
-Uppercase `L`/`H`, conjuncts such as `ll` → `ল্ল`, and escapes remain incomplete.
+Exact `ll` → `ল্ল` now matches as described below. Uppercase `L`/`H` and
+escapes remain incomplete.
 Exact `s` → স, `sh`/`S` → শ, and `Sh` → ষ follow the confirmed mapping.
 `sh` matches before `s`, and `Sh` before `S`; all four support vowel signs.
 Other conjuncts, uppercase-`H` aliases, and escapes remain incomplete.
@@ -416,10 +421,22 @@ and `lkhm` → `লখম` preserve the longer exceptions. Basic `s`/`sh`/`S` no
 attach following `r`: `'sr shr Sr srri shrri Srri'` → `স্র শ্র শ্র সৃ শৃ শৃ`.
 Try `'onko shonkho alko skhalon sklera shuShko baks shrom Srom'` → `অঙ্ক শঙ্খ আল্ক স্খালন স্ক্লেরা শুষ্ক বাক্স শ্রম শ্রম`.
 Case-distinct `Nk`/`Sk`/`shk` stay separate (ণক/শক/শক); copied Bangla resets
-context (`স্ক্লr` → `স্ক্লর`). Earlier `pn`/`sn`/`shn`, `bl`/`gl`/`ll`/`sl`,
-and `ns`/`ps` remain gaps: `pnk`/`blk`/`nsk` give পঙ্ক/বল্ক/নস্ক, against
-reference প্নক/ব্লক/ন্সক. `lTm` still gives লট্ম, against reference ল্টম.
-Earlier b-prefixed matches (`bd`), `shn`/`shm`/`bhl`/`phl`/`shl`/`vl`,
+context (`স্ক্লr` → `স্ক্লর`).
+Exact `gl`/`ll`/`bl`/`pl`/`sl`/`shl`/`bhl`/`phl`/`vl`/`fl`/`Sl` now match:
+`'gl ll bl pl sl shl bhl phl vl fl Sl'` → `গ্ল ল্ল ব্ল প্ল স্ল শ্ল ভ্ল ফ্ল ভ্ল ফ্ল শ্ল`.
+`Shl` stays separate (ষল). Each supports vowels, ya, following `r`, and checked
+exceptions (`glr` → `গ্ল্র`, `blrri` → `ব্লৃ`, `llrry` → `ল্লরর‍্য`, `shlry` → `শ্ল্র্য`).
+Consumed `l` cannot start a second match: `'blk glk llk slk'` → `ব্লক গ্লক ল্লক স্লক`.
+Earlier matches still win (`ggl` → `জ্ঞল`, `Nggl` → `ঙ্গল`, `dbhl` → `দ্ভল`,
+`kshl` → `কশল`, `skll` → `স্ক্লল`); `mpl` → `মপ্ল` stays separate before `pl`.
+Try `'glani ullas blok plabon sloth shlOk phlash flash SlOk'`
+→ `গ্লানি উল্লাস ব্লক প্লাবন স্লথ শ্লোক ফ্লাশ ফ্লাশ শ্লোক`.
+Basic `p`/`ph`/`f` exposed after each new form attach following `r`:
+`'glpr glphr glfr'` → `গ্লপ্র গ্লফ্র গ্লফ্র`. Copied Bangla resets context (`গ্লr` → `গ্লর`).
+Earlier `pn`/`sn`/`shn`, `ns`/`ps`, and consuming labial rules remain gaps:
+`pnk`/`nsk`/`mbl`/`spl` give পঙ্ক/নস্ক/মব্ল/সপ্ল, against reference
+প্নক/ন্সক/ম্বল/স্প্ল. `lTm` still gives লট্ম, against reference ল্টম.
+Earlier b-prefixed matches (`bd`), `shn`/`shm`,
 other conjuncts and following-`r` forms, uppercase aliases, reph, and escapes
 remain incomplete.
 Lowercase `ng` produces ং (U+0982), as in `bangla` → `বাংলা`. Before the supported
@@ -632,8 +649,23 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`ks` fixtures](tests/fixtures/conjunct-ks.tsv),
 [`s` following-`r` fixtures](tests/fixtures/s-following-r.tsv),
 [`sh` following-`r` fixtures](tests/fixtures/sh-lowercase-following-r.tsv),
-[`S` following-`r` fixtures](tests/fixtures/s-uppercase-following-r.tsv), and
-[consuming k-family controls](tests/fixtures/consuming-k-controls.tsv) record the raw input,
+[`S` following-`r` fixtures](tests/fixtures/s-uppercase-following-r.tsv),
+[consuming k-family controls](tests/fixtures/consuming-k-controls.tsv),
+[`gl` fixtures](tests/fixtures/conjunct-gl.tsv),
+[`ll` fixtures](tests/fixtures/conjunct-ll.tsv),
+[`bl` fixtures](tests/fixtures/conjunct-bl.tsv),
+[`pl` fixtures](tests/fixtures/conjunct-pl.tsv),
+[`sl` fixtures](tests/fixtures/conjunct-sl.tsv),
+[`shl` fixtures](tests/fixtures/conjunct-sh-lowercase-l.tsv),
+[`bhl` fixtures](tests/fixtures/conjunct-bhl.tsv),
+[`phl` fixtures](tests/fixtures/conjunct-phl.tsv),
+[`vl` fixtures](tests/fixtures/conjunct-vl.tsv),
+[`fl` fixtures](tests/fixtures/conjunct-fl.tsv),
+[`Sl` fixtures](tests/fixtures/conjunct-s-uppercase-l.tsv),
+[`p` following-`r` fixtures](tests/fixtures/p-following-r.tsv),
+[`ph` following-`r` fixtures](tests/fixtures/ph-following-r.tsv),
+[`f` following-`r` fixtures](tests/fixtures/f-following-r.tsv), and
+[l-ending controls](tests/fixtures/l-ending-controls.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -649,8 +681,8 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 99,177 cases used by Rust tests and prints reference outputs for
-eighteen known coverage gaps. The original comparison and test tooling are MIT;
+It checks the same 133,881 cases used by Rust tests and prints reference outputs for
+thirty-six known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
 ## License

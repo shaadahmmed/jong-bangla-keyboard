@@ -9,6 +9,7 @@
 //! `nd`/`ndh`/`nD`/`ND`/`NDh`/`nt`/`nth`/`nT`/`NT`/`nTh`/`NTh`,
 //! `tt`/`tth`/`tn`/`tm`/`TT`/`Tm`, `kt`/`kT`/`kl`,
 //! `nk`/`nkh`/`lk`/`sk`/`skh`/`skl`/`Shk`/`ks` and longer `lkh`/`ksh`,
+//! `gl`/`ll`/`bl`/`pl`/`sl`/`shl`/`bhl`/`phl`/`vl`/`fl`/`Sl`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -72,6 +73,7 @@
 //! assert_eq!(transliterate("tt tth tn tm TT Tm uttor utthan rotno atma"), "ত্ত ত্থ ত্ন ত্ম ট্ট ট্ম উত্তর উত্থান রত্ন আত্মা");
 //! assert_eq!(transliterate("kt kT kl kn km ktm kTm rokto klanto"), "ক্ত ক্ট ক্ল কন কম ক্তম ক্টম রক্ত ক্লান্ত");
 //! assert_eq!(transliterate("nk nkh lk lkh sk skl skh Shk ks ksh sr shr Sr"), "ঙ্ক ঙ্খ ল্ক লখ স্ক স্ক্ল স্খ ষ্ক ক্স কশ স্র শ্র শ্র");
+//! assert_eq!(transliterate("gl ll bl pl sl shl bhl phl vl fl Sl pr phr fr"), "গ্ল ল্ল ব্ল প্ল স্ল শ্ল ভ্ল ফ্ল ভ্ল ফ্ল শ্ল প্র ফ্র ফ্র");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -234,6 +236,23 @@ const CONSUMING_K_FORMS: [(&str, &str, char); 10] = [
     ("ks", "ক্স", 's'),
 ];
 
+// Original exact l-ending spellings, each checked for context and priorities.
+// Earlier gg/Ng/dg/dbh/dv/ks/ksh/skl matches consume shared keys first.
+// Shl is separate consonants; Sl is an exact spelling, not case normalization.
+const L_CONJUNCTS: [(&str, &str); 11] = [
+    ("gl", "গ্ল"),
+    ("ll", "ল্ল"),
+    ("bl", "ব্ল"),
+    ("pl", "প্ল"),
+    ("sl", "স্ল"),
+    ("shl", "শ্ল"),
+    ("bhl", "ভ্ল"),
+    ("phl", "ফ্ল"),
+    ("vl", "ভ্ল"),
+    ("fl", "ফ্ল"),
+    ("Sl", "শ্ল"),
+];
+
 #[derive(Clone, Copy)]
 enum Context {
     Consonant {
@@ -355,7 +374,13 @@ enum Context {
 /// retain priority: mnk -> ম্নক, NgkShk -> ঙ্ক্ষক. Consumed k cannot start
 /// kt/kkh: nktm -> ঙ্কত্ম, nkkh -> ঙ্কখ; skl wins before sk: sklk -> স্ক্লক.
 /// Basic s/sh/S attach following r, including exposed s in nksr -> ঙ্কস্র.
-/// Earlier longer matches such as pn/sn/shn, bl/gl/ll/sl, ns/ps, bd, and reph remain gaps;
+/// Exact gl/ll/bl/pl/sl/shl/bhl/phl/vl/fl/Sl establish consonant context and
+/// attach r, retaining rri/rry/rrZ exceptions: glr -> গ্ল্র, blrri -> ব্লৃ.
+/// Shl stays separate (ষল). Earlier consuming matches retain priority:
+/// ggl -> জ্ঞল, Nggl -> ঙ্গল, dbhl -> দ্ভল, kshl -> কশল, skll -> স্ক্লল.
+/// Consumed l cannot begin lk/ll/lT: blk -> ব্লক, gll -> গ্লল, blTm -> ব্লট্ম.
+/// Basic p/ph/f also attach following r, including glpr/glphr/glfr.
+/// Earlier longer matches such as pn/sn/shn, ns/ps, labial conjuncts, bd, and reph remain gaps;
 /// supported prefixes still convert inside them.
 /// Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -523,6 +548,13 @@ pub fn transliterate(input: &str) -> String {
             output.push_str(bangla);
             remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
             context = Context::Consonant { ya_joiner: false };
+        } else if let Some((raw, bangla)) = L_CONJUNCTS
+            .iter()
+            .find(|(raw, _)| remaining.starts_with(raw))
+        {
+            output.push_str(bangla);
+            remaining = consume_following_r_prefix(&remaining[raw.len()..], 'l', &mut output);
+            context = Context::Consonant { ya_joiner: false };
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
@@ -531,7 +563,9 @@ pub fn transliterate(input: &str) -> String {
                 "Y" => Some('Y'),
                 "k" => Some('k'),
                 "g" => Some('g'),
-                "kh" | "Sh" | "gh" | "h" | "dh" | "Dh" | "bh" | "th" | "Th" | "sh" => Some('h'),
+                "kh" | "Sh" | "gh" | "h" | "dh" | "Dh" | "bh" | "th" | "Th" | "sh" | "ph" => {
+                    Some('h')
+                }
                 "n" => Some('n'),
                 "N" => Some('N'),
                 "m" => Some('m'),
@@ -544,6 +578,8 @@ pub fn transliterate(input: &str) -> String {
                 "T" => Some('T'),
                 "s" => Some('s'),
                 "S" => Some('S'),
+                "p" => Some('p'),
+                "f" => Some('f'),
                 _ => None,
             };
             if let Some(last_key) = following_r_key {
@@ -699,6 +735,8 @@ fn consume_following_r_prefix<'a>(
             | 'T'
             | 's'
             | 'S'
+            | 'p'
+            | 'f'
     ) && remaining.starts_with('r')
         && !remaining.starts_with("rr"))
         || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))

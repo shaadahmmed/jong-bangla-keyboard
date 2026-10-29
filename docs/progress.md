@@ -13,16 +13,16 @@ Dates use the project's Asia/Dhaka timezone.
   example; principal forms for all 11 basic vowels and 40 basic consonant
   sequences (35 letters), contextual forms, selected conjuncts, and selected
   following-`r` forms. See the [coverage overview](../README.md#current-status).
-- **Latest engine change:** eight exact conjuncts `nk`/`nkh`/`lk`/`sk`/`skh`/
-  `skl`/`Shk`/`ks`, longer nonconjunct exceptions `lkh`/`ksh`, and basic
-  `s`/`sh`/`S` following-`r` attachment. Earlier matches consume keys before
-  k/t-family forms: `nktm`/`lktm`/`sktm`/`Shktm` now match the reference.
-  Exact Unicode and scope are in the [batch decision](v1.md#consuming-k-family-batch).
-- **Validation:** all 99,177 authored fixture cases match the SHA-256-verified
-  pinned parser. Formatting, Clippy, 152 integration tests, 1 doctest,
-  release build, and default/batch smoke checks passed in this step.
+- **Latest engine change:** eleven exact l-ending spellings `gl`/`ll`/`bl`/`pl`/
+  `sl`/`shl`/`bhl`/`phl`/`vl`/`fl`/`Sl`, plus basic `p`/`ph`/`f` following-`r`
+  attachment. Consuming `l` fixes `blk`/`glk`/`llk`/`slk`; earlier matches
+  retain priority. `Shl` stays separate, and `mpl` stays মপ্ল. Exact Unicode
+  and scope are in the [batch decision](v1.md#l-ending-conjunct-batch).
+- **Validation:** all 133,881 authored fixture cases match the SHA-256-verified
+  pinned parser. Formatting, Clippy, 169 integration tests, 1 doctest, release
+  build, and default/batch smoke checks passed in this step.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete.
-  Earlier `pn`/`sn`/`shn`, several l-ending rules, and `ns`/`ps` conflicts are
+  Earlier consuming labial rules, `pn`/`sn`/`shn`, `ns`/`ps`, and `lT` are
   explicit gaps; other conjuncts, aliases, reph, and escapes remain incomplete.
   Composition, Fcitx5, and a usable desktop keyboard are not implemented.
   Performance and platform support remain unverified.
@@ -32,59 +32,60 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Latest completed step
 
-- **2026-10-29 — Consuming k-family batch.** Expanded the initial six conjuncts
-  with `nkh`/`skh`, plus longer `lkh`/`ksh` exceptions and independent basic
-  `s`/`sh`/`S` attachments. `lkh`/`ksh` preserve separate consonants; `skl`
-  wins before `sk`. No upstream source, tables, or dependencies were imported.
-- **Evidence:** 21,794 new authored rows across fourteen files: independent
+- **2026-10-29 — L-ending conjunct batch.** Expanded the initial nine candidates
+  with independently checked `fl`/`Sl`, plus basic `p`/`ph`/`f` attachments
+  exposed after every new conjunct. Reused the existing l-ending context/helper;
+  earlier `gg`/`Ng`/`dg`/`dbh`/`dv`/`ks`/`ksh`/`skl` keep consuming priority.
+  No upstream source, tables, fixtures, or dependencies were imported.
+- **Evidence:** 34,704 new authored rows across fifteen files: independent exact
   Unicode, vowels/ya, one through eight `r` keys and exceptions, preceding
   contexts, existing matches in both orders, every ordered batch pair,
   shared-key overlaps, adjacent consonants, digits, every internal split,
-  boundaries, copied Unicode, repetition, words, and case controls. Earlier
-  `n/l/s/Sh` + k-family gaps moved to passing fixtures. Existing fixture files
-  are unchanged, with distinct filenames for lowercase `sh` and uppercase `Sh`.
+  boundaries, copied Unicode, repetition, words, and nonconjunct controls.
+  Ten resolved partial-output assertions moved into passing fixtures. Earlier
+  fixture files remain unchanged, with distinct filenames for `shl` and `Sl`.
 - **Checks run:** `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`; `cargo test --offline`
-  (152 integration tests and 1 doctest); `cargo build --offline --release` — passed.
+  (169 integration tests and 1 doctest); `cargo build --offline --release` — passed.
   `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 99,177 cases passed; eighteen gap probes printed separately.
-  `node /tmp/jong-verify-consuming-k.mjs` — all 21,794 new authored rows matched;
-  initial per-spelling context/priority cases were checked before implementation.
-  `node /tmp/jong-verify-consuming-k-controls.mjs` — 545 authored control,
-  separate-call, long-input, and reference-gap expectations matched.
-  `cargo test --offline consuming_k` — fifteen targeted tests passed.
-  `cargo test --offline unsupported_rules_still_preserve_unmatched_characters`
-  — passed after moving resolved assertions into fixtures. The first full test
-  run exposed those stale assertions; the subsequent full rerun passed.
+  — all 133,881 cases passed; thirty-six gap probes printed separately.
+  `node /tmp/jong-verify-l-batch.mjs` — all 34,704 new authored rows matched;
+  each spelling's context/priority evidence was checked before implementation.
+  `node /tmp/jong-verify-l-extra.mjs` — 510 authored boundary, separate-call,
+  long-input, and reference-gap expectations matched. Investigation caught an
+  incorrect proposed `mpl` gap: the reference keeps মপ্ল, now a passing fixture.
+  `cargo test --offline l_batch` — eighteen targeted tests passed during
+  implementation; final fixtures also passed in the full run above.
   Rust/Cargo 1.99.1 and Node.js v24.21.0 were used.
 - **Smoke checks:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট.
-  `cargo run --offline --example convert -- 'nk nkh lk lkh sk skl skh Shk ks ksh sr shr Sr nkrri lkrry skrrZ Shkry sklrri ksry kshm lkhm nktm lktm sktm Shktm skkl nkkh lkkh skkh Shkkh onko shonkho alko skhalon sklera shuShko baks shrom Srom'`
-  — all forms, exceptions, consuming priorities, and words matched.
-- **Documentation checks:** `python /tmp/jong-check-consuming-k-docs.py` — local
-  links/anchors, counts/code points, unique manifests, original fixture retention,
-  behavior table, README examples, bounded handoff, and preserved history passed.
-  `git diff --check` — passed.
-- **Remaining limitations:** earlier `pn`/`sn`/`shn`, l-ending conjuncts, and
-  `ns`/`ps` consume keys before these forms in the reference. Eight probes replace
-  four resolved probes; partial-output regressions preserve the remaining gaps.
-  Other conjuncts (including `lT`), aliases, reph, escapes, composition, and
-  platform work remain incomplete. No broader compatibility/performance claim.
-- **Next action:** investigate l-ending spellings and their earlier-prefix conflicts.
+  `cargo run --offline --example convert -- 'gl ll bl pl sl shl bhl phl vl fl Sl Shl pr phr fr glr blrri llrry shlry bhlry phlrri vlrrZ flr Slry blk glk llk slk ggl Nggl dbhl kshl skll mpl glpr glphr glfr glani ullas blok plabon sloth shlOk phlash flash SlOk'`
+  — all new forms, exceptions, consuming priorities, and words matched.
+- **Documentation checks:** `python /tmp/jong-check-l-docs.py` — local links and
+  anchors, fixture counts/code points, unique manifests, original fixture
+  retention, behavior table, README examples, bounded handoff, and preserved
+  history passed. `git diff --check` — passed.
+- **Remaining limitations:** twenty-five earlier-prefix conflicts are partial
+  engine regressions, separate from passing compatibility fixtures. Seven gap
+  probes were resolved and twenty-five added; thirty-six remain. The decision
+  table records every conflict. Other conjuncts, aliases, reph, escapes,
+  composition, and platform work remain incomplete. No broader compatibility
+  or performance claim.
+- **Next action:** investigate the six m-prefix labial spellings and `mpl` exception.
 
 ## Next small implementation step
 
-1. Investigate `gl`/`ll`/`bl`/`pl`/`sl`/`shl` as a related batch. Expand to
-   `bhl`/`phl`/`vl` when their independent evidence fits a coherent review.
-   These are candidates, not confirmed implementation scope; check related
-   spellings and any exposed basic attachments before editing.
+1. Investigate `mb`/`mbh`/`mv`/`mp`/`mph`/`mf` as a related batch, including the
+   exposed `mbl`/`mbhl`/`mvl`/`mphl`/`mfl` conflicts. Check the longer `mpl`
+   nonconjunct exception independently; it must stay মপ্ল. These are candidates,
+   not confirmed implementation scope. Expand only when evidence stays coherent.
 2. Independently check every selected spelling against the
    [pinned reference](v1.md#phonetic-behavior-reference): Unicode, vowels/ya,
    preceding contexts, following `r`, longer `r` runs, `rri`/`rry`/`rrZ`
    exceptions, digits, boundaries, copied Unicode, controls, and longer priorities.
-3. Check existing Ng/k/Sh/nasal/t-family priorities and shared-key overlaps,
-   including the exposed `blk`/`glk`/`llk`/`slk` conflicts. Keep `lT`,
-   `pn`/`sn`/`shn`, `ns`/`ps`, and unrelated families separate unless
-   deliberately included with independent evidence.
+3. Check existing Ng/k/Sh/nasal/d/t/l-family priorities and shared-key overlaps.
+   Keep l/s/Sh labial families, `bb`/`pp`, `lT`, `pn`/`sn`/`shn`, `ns`/`ps`,
+   and unrelated families separate unless deliberately included with independent
+   evidence. Do not generalize `mpl` behavior from `mp` or its aliases.
 4. Implement the verified batch, extend fixtures, run the full README checks,
    update behavioral docs and this handoff once, and commit the batch together.
    Keep composition, platform integration, packaging, and unrelated work separate.
