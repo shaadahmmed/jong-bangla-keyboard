@@ -12,6 +12,9 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 
 - Avro-compatible phonetic typing, with an independently implemented engine.
 - An editable current word; Backspace removes the last phonetic keystroke.
+- Ctrl+Backspace clears the active word; otherwise the application handles it.
+- Space and Enter commit Bangla, then reach the application on the same press.
+  Punctuation stays editable with the word until a boundary.
 - Converted Bangla in editable preedit, without a Bangla/Latin choice list for v1.
 - Bangla digits by default.
 - Fast, lightweight, offline typing.
@@ -106,7 +109,8 @@ see the [reph behavior and evidence](docs/v1.md#reph-batch).
 This is a partial engine with 522,933 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Further
 context auditing and a decision about reference Unicode lowercasing remain;
-composition and Fcitx5 integration are unimplemented.
+the platform-independent composition controller is implemented, while Fcitx5
+integration is unimplemented.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
 [first vowel group](docs/v1.md#first-vowel-group) and
@@ -178,20 +182,29 @@ Rule coverage favors the [largest coherent related batches](docs/v1.md#small-dev
 that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
-update, and commit per completed batch. The latest step adds a reproducible
-[mixed-context audit](docs/v1.md#bounded-mixed-context-audit): 83,353 distinct
+update, and commit per completed batch. The prior transliteration step added a
+reproducible [mixed-context audit](docs/v1.md#bounded-mixed-context-audit): 83,353 distinct
 inputs, no new discrepancies, and the three known Unicode case differences.
 This is bounded evidence, not proof of complete compatibility. The earlier
 1,350-input vowel-pair audit and 302-input inventory are prior evidence.
-Next is composition contract design; interaction defaults remain proposals.
-Unicode case policy, composition implementation and platform integration remain
+The Rust composition controller now supports editable Bangla, raw-key Backspace,
+Ctrl+Backspace word deletion, and commit/cancel/reset. Space and Enter commit
+before forwarding the same key. See the [controller contract](docs/v1.md#composition-controller-api).
+Escape, navigation, focus/switching and other modifier policies still need
+settling before adapter work. Unicode case policy and desktop integration remain
 future work.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
 
-[`src/lib.rs`](src/lib.rs) exposes `jong_bangla_core::transliterate`. Its
-implementation lives in private modules under `src/transliteration/`:
+[`src/lib.rs`](src/lib.rs) exposes `jong_bangla_core::transliterate` and the
+`Composition`, `CompositionKey`, and `KeyEffect` types.
+[`src/composition.rs`](src/composition.rs) owns the editable raw buffer and
+converted preedit, plus platform-independent editing actions. It reuses the
+transliterator without retaining committed text. Regression sequences are in
+[`tests/composition.rs`](tests/composition.rs).
+
+The transliterator lives in private modules under `src/transliteration/`:
 
 - [`mod.rs`](src/transliteration/mod.rs): the scanner, per-call context, and
   explicit matching priority across rule families.
@@ -209,14 +222,15 @@ implementation lives in private modules under `src/transliteration/`:
 - [`following_r.rs`](src/transliteration/following_r.rs): shared following-`r`
   attachment and exceptions based on raw keys.
 
-This split preserves the public API and existing conversion behavior. Composition
-and platform adapters remain future work, with the boundaries described in
-[the architecture plan](docs/v1.md#proposed-architecture).
+The existing `transliterate` API and conversion behavior are unchanged.
+Composition adds a separate API; platform adapters remain future work, with
+boundaries described in [the architecture plan](docs/v1.md#proposed-architecture).
 
 Source comments keep the API contract and reasons for non-obvious matching
 choices close to the code. Detailed rule behavior belongs in
 [the behavior notes](docs/v1.md#transliteration-api); exhaustive examples live
-in tests and fixtures. The crate documentation keeps three usage examples.
+in tests and fixtures. Crate documentation keeps three transliteration examples;
+the `Composition` type includes an executable word-deletion example.
 
 ## Build and try the conversion slice
 

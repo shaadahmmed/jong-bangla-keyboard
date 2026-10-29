@@ -9,60 +9,79 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Current position
 
-- **Implemented:** dependency-free Rust transliteration library and terminal
-  example. See the [coverage overview](../README.md#current-status).
-  Composition and Fcitx5 integration have not started.
-- **V1 scope:** converted Bangla in editable preedit, without a Bangla/Latin
-  choice list or raw Latin selection. The user deferred choices on 2026-10-29.
-  Preserve the internal raw buffer for Backspace and Bangla digits by default.
-- **Prior evidence:** the bounded mixed-context audit covered 83,353 distinct
-  inputs with zero unexpected discrepancies and three known Unicode case
-  differences. All 522,933 fixture rows matched the pinned parser; formatting,
-  Clippy, 352 integration tests, one doctest, release/documentation builds and
-  converter smoke checks passed in the prior step; none were rerun here.
-- **Limitations:** the audit does not establish full compatibility. Unicode case
-  policy, typing performance and desktop integration remain unresolved or
-  unverified. See the [audit scope](v1.md#bounded-mixed-context-audit) and
-  [report](evidence/mixed-context-audit.json). Interaction defaults other than
-  confirmed requirements remain proposals.
+- **Implemented:** dependency-free Rust transliteration and composition APIs.
+  The controller owns editable raw input and converted preedit, with Backspace,
+  whole-word deletion, commit/cancel/reset, and normalized editing-key effects.
+  See the [controller contract](v1.md#composition-controller-api) and
+  [conversion coverage](../README.md#current-status). Fcitx5 is unimplemented.
+- **Confirmed v1 behavior:** no Bangla/Latin choices; Ctrl+Backspace clears active
+  raw input and otherwise reaches the application. Space/Enter commit first,
+  then forward that same key. Punctuation/escapes remain editable until a boundary.
+  Activity follows raw input, including escapes with empty converted output.
+- **Latest validation:** 20 composition and 352 conversion integration tests,
+  two doctests, all 522,933 pinned-reference fixture rows, formatting, Clippy,
+  release/documentation/example builds and converter/documentation checks passed.
+- **Prior evidence:** the 83,353-input bounded mixed-context audit found no new
+  discrepancies and three known Unicode case differences; it was not rerun here.
+  The 1,350-input vowel-pair and 302-input standalone audits also remain prior
+  evidence. These bounded audits do not establish full Avro compatibility.
+- **Remaining limits:** Escape, navigation, other modifiers/shortcuts and lifecycle
+  policies need decisions before adapter integration. Unicode case policy, typing
+  performance and actual desktop use remain unresolved or unverified.
 
 ## Latest completed step
 
-- **2026-10-29 — Defer Bangla/Latin choices beyond v1.** Updated the confirmed
-  requirements, composition model, interaction proposals, architecture and
-  development plan in v1.md, plus the README and agent guide.
-- **Result:** the planned controller exposes converted Bangla preedit and commits
-  converted output. No choice list, selected-choice state, raw Latin selection,
-  or candidate-selection keys are planned for the first release. The internal
-  raw buffer and Backspace behavior remain required. Future choices are open.
-- **Scope:** documentation only; no Rust, fixtures, tools, dependencies or system
-  settings changed. No existing choice UI or controller needed removal.
-- **Checks:** `python /tmp/jong-check-v1-scope-docs.py` — local links/anchors,
-  choice-scope consistency, unchanged code/fixtures/history and handoff structure
-  passed. `git diff --check` passed. Cargo and reference checks were not rerun
-  because this step changes documentation only.
-- **Remaining decisions:** Space/Enter, Escape, phonetic punctuation/escapes,
-  navigation and focus/input-method switching still need explicit policies.
-- **Next action:** design the platform-independent composition contract around
-  editable Bangla preedit, with no choice-selection actions for v1.
+- **2026-10-29 — Rust composition core and confirmed editing keys.** Added
+  `Composition`, `CompositionKey` and `KeyEffect` in src/composition.rs, re-exported
+  by src/lib.rs. Existing transliteration code, fixtures and dependencies are
+  unchanged. No desktop event translation or system settings were added.
+- **User-confirmed decisions:** Ctrl+Backspace clears the whole active buffer;
+  an empty buffer lets the application delete a word. Enter commits and reaches
+  the app on the same press. Punctuation stays editable until a boundary.
+  Space follows the same commit-then-forward boundary contract. The old first-
+  Enter-consumed proposal is superseded; other proposals were not adopted.
+- **Correctness:** edits pop a raw Unicode scalar and recompute, never erase
+  Bangla output bytes. Word deletion consumes invisible active escapes too.
+  Commit distinguishes inactive `None` from active empty output `Some("")`.
+  Key effects require preedit update, nonempty commit, then optional forwarding.
+- **Tests:** tests/composition.rs adds 20 regressions for contextual conversion,
+  digits, conjunct/reph/escape reversal, copied Unicode, invisible input, Ctrl+
+  Backspace, repeated/idle keys, Space/Enter forwarding, cancellation/reset,
+  independent contexts and rejected control/whitespace input. The struct doctest
+  demonstrates word deletion; existing transliteration expectations are unchanged.
+- **Rust checks:** `cargo fmt --all -- --check`;
+  `cargo clippy --offline --all-targets -- -D warnings`;
+  `cargo test --offline` — 372 integration tests and two doctests passed;
+  `cargo build --offline --release`;
+  `RUSTDOCFLAGS='-D warnings' cargo doc --offline --no-deps`;
+  `cargo build --offline --examples` — all passed with Rust/Cargo 1.99.1.
+- **Reference check:**
+  `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
+  — all 522,933 authored rows passed on Node v24.21.0; the three existing
+  Unicode case policy probes remain visible. No new parity or performance claim.
+- **Smoke/docs:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট;
+  `python /tmp/jong-check-composition-docs.py` — local links/anchors, rustdoc API,
+  README examples, documented policy/counts, unchanged engine/fixtures/history
+  and current handoff passed. `git diff --check` passed.
+- **Next action:** settle the remaining adapter interaction/lifecycle policies,
+  then investigate Fcitx5 interoperability in a separate coherent step.
 
 ## Next small implementation step
 
-1. Design the Rust composition contract using the confirmed raw-buffer, Bangla
-   preedit, digit and Backspace requirements. Specify editing, committing,
-   cancelling and resetting actions and outputs without a choice list.
-2. Resolve material interaction proposals before implementing them: Enter/Space,
-   phonetic punctuation/escapes, navigation and focus/input-method switching.
-   Present concrete behavior and ask only for unresolved user choices; the
-   proposal table is not approved by this scope change.
-3. Record settled decisions in v1.md and define the first coherent controller
-   implementation/test batch. Keep Fcitx5 adaptation and Unicode case policy
-   separate; broader parity and performance need their own evidence.
+1. Specify Escape, navigation, focus loss, input-method switching and other
+   shortcut/modifier policies. Distinguish approved policies from proposals;
+   ask for unresolved behavior that materially affects application editing.
+2. Define adapter normalization for text, exact Ctrl+Backspace, Space and Enter,
+   including modifier combinations, release events, repeat, and input-context
+   lifetime. Keep framework-specific events outside the Rust controller.
+3. After these policies are settled, investigate a minimal Fcitx5 addon and Rust
+   interoperability boundary separately from platform smoke tests and packaging.
+   Record actual environment/tool versions; do not claim desktop support yet.
 
-**Done when:** the composition contract and interaction decisions are reviewable,
-confirmed requirements are distinguished from proposals, the next code batch has
-clear regression cases, documentation checks pass, and the design is committed.
-Composition design and implementation have not started.
+**Done when:** remaining policies and lifecycle ordering are reviewable and settled,
+adapter requirements have regression cases, and the next feasibility experiment
+has a clear scope. The composition core is complete for the confirmed keys;
+Escape/focus/shortcut routing, Fcitx5 and desktop validation have not started.
 
 ## Completed steps
 

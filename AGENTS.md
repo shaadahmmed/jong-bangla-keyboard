@@ -86,6 +86,10 @@ User instructions take precedence over this guide; update the docs when they cha
   engine. Choose and document the compatibility reference before claiming parity.
 - Keep the active word in preedit: text remains editable before it is committed
   to the application. Backspace removes a raw phonetic keystroke and recomputes it.
+- Ctrl+Backspace clears the whole active raw buffer without committing; with no
+  active buffer, let the application handle word deletion.
+- Space and Enter commit active Bangla, then forward the same key to the application.
+  Keep punctuation and phonetic escapes editable until an explicit boundary.
 - For v1, show converted Bangla in editable preedit without a Bangla/Latin choice
   list or raw Latin selection. Revisit choices after the first release if needed.
 - Convert digits to Bangla by default; digit keys enter text.
@@ -114,7 +118,8 @@ User instructions take precedence over this guide; update the docs when they cha
   boundaries; deleting a raw keystroke must not delete a byte from Bangla output.
 - Add meaningful regression cases for phonetic rules and composition behavior:
   contextual vowels, conjuncts, case-sensitive sequences, punctuation/escape
-  sequences, digits, backspace, commit, cancel, and reset.
+  sequences, digits, Backspace, Ctrl+Backspace, boundary forwarding, commit,
+  cancel, and reset.
 - Track expected Unicode sequences and the source of compatibility fixtures.
   Visually similar output alone does not establish compatibility.
 - Keep platform smoke tests separate from engine tests. Record actual distro,

@@ -1,8 +1,9 @@
 //! Deterministic Bangla phonetic transliteration with no external dependencies.
 //!
 //! Converts supported phonetic sequences and ASCII digits, preserving unmatched
-//! Unicode characters. Compatibility with Avro is partial; composition controls
-//! and platform integration are not implemented.
+//! Unicode characters. A platform-independent composition controller supports
+//! editable preedit and normalized editing keys. Compatibility with Avro is
+//! partial; framework event translation and platform integration are not implemented.
 //!
 //! See the repository's [coverage overview] and [behavior notes] for supported
 //! rules, compatibility evidence, and limitations.
@@ -18,6 +19,8 @@
 //! assert_eq!(transliterate("s sh S Sh"), "স শ শ ষ");
 //! ```
 
+mod composition;
 mod transliteration;
 
+pub use composition::{Composition, CompositionKey, KeyEffect};
 pub use transliteration::transliterate;
