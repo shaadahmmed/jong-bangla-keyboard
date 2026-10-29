@@ -1,6 +1,61 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn k_batch_kt_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-kt.tsv"));
+}
+
+#[test]
+fn k_batch_k_retroflex_t_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-k-t-retroflex.tsv"));
+}
+
+#[test]
+fn k_batch_kl_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-kl.tsv"));
+}
+
+#[test]
+fn k_batch_nonconjunct_controls_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/k-family-controls.tsv"));
+}
+
+#[test]
+fn k_batch_resets_at_boundaries_and_between_calls() {
+    for (raw, bangla, tail) in [("kt", "ক্ত", "ত"), ("kT", "ক্ট", "ট"), ("kl", "ক্ল", "ল")]
+    {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "ক্ত", "\u{301}"] {
+            assert_eq!(
+                transliterate(&format!("k{boundary}{}", &raw[1..])),
+                format!("ক{boundary}{tail}")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        assert_eq!(transliterate("k"), "ক");
+        assert_eq!(transliterate(&raw[1..]), tail);
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    assert_eq!(
+        transliterate(&"kt kT kl kn km ktm kTm ktth kth kTh klm Ngkt kkl kShNktr 🙂 ".repeat(64)),
+        "ক্ত ক্ট ক্ল কন কম ক্তম ক্টম ক্তথ ক্তহ ক্টহ ক্লম ঙ্কত ক্কল ক্ষ্ণক্ত্র 🙂 ".repeat(64)
+    );
+}
+
+#[test]
 fn t_batch_resets_at_every_split_boundary_and_between_calls() {
     for (raw, bangla, parts) in [
         ("tth", "ত্থ", vec![("ত", "থ"), ("ত্ত", "হ")]),
@@ -1109,9 +1164,15 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Gg", "Gগ"),
         ("gNG", "গ্ণG"),
         ("bdd", "বদ্দ"),
-        ("ktm", "কত্ম"),
-        ("kTm", "কট্ম"),
         ("lTm", "লট্ম"),
+        ("nkt", "নক্ত"),
+        ("lkt", "লক্ত"),
+        ("skt", "সক্ত"),
+        ("Shkt", "ষক্ত"),
+        ("nktm", "নক্তম"),
+        ("lktm", "লক্তম"),
+        ("sktm", "সক্তম"),
+        ("Shktm", "ষক্তম"),
         ("ddH", "দ্দH"),
         ("dHn", "দHন"),
         ("dV", "দV"),

@@ -7,7 +7,7 @@
 //! `ngh`/`nn`/`Nn`/`mn`/`hm`/`hl`/`nm`/`Nm`/`mm`/`ml`/`Ngm`/`gm`,
 //! `dd`/`ddh`/`dhn`/`dhm`/`dm`/`dbh`/`dv`/`DD`,
 //! `nd`/`ndh`/`nD`/`ND`/`NDh`/`nt`/`nth`/`nT`/`NT`/`nTh`/`NTh`,
-//! `tt`/`tth`/`tn`/`tm`/`TT`/`Tm`,
+//! `tt`/`tth`/`tn`/`tm`/`TT`/`Tm`, `kt`/`kT`/`kl`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -69,6 +69,7 @@
 //! assert_eq!(transliterate("dd ddh dhn dhm dm dbh dv DD dr dhr Dr Dhr br bhr vr"), "দ্দ দ্ধ ধ্ন ধ্ম দ্ম দ্ভ দ্ভ ড্ড দ্র ধ্র ড্র ঢ্র ব্র ভ্র ভ্র");
 //! assert_eq!(transliterate("nd ndh nD ND NDh nt nth nT NT nTh NTh tr thr Tr Thr"), "ন্দ ন্ধ ন্ড ণ্ড ণ্ঢ ন্ত ন্থ ন্ট ণ্ট ন্ঠ ণ্ঠ ত্র থ্র ট্র ঠ্র");
 //! assert_eq!(transliterate("tt tth tn tm TT Tm uttor utthan rotno atma"), "ত্ত ত্থ ত্ন ত্ম ট্ট ট্ম উত্তর উত্থান রত্ন আত্মা");
+//! assert_eq!(transliterate("kt kT kl kn km ktm kTm rokto klanto"), "ক্ত ক্ট ক্ল কন কম ক্তম ক্টম রক্ত ক্লান্ত");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -209,6 +210,12 @@ const T_CONJUNCTS: [(&str, &str, char); 6] = [
     ("Tm", "ট্ম", 'm'),
 ];
 
+// Original k-family spellings, independently checked for context and priority.
+// Earlier Ngk/kk consume k first; kt/kT consume t/T before t-family matches.
+// kn and km stay separate basic consonants; no exact kth or kTh rule exists.
+const K_CONJUNCTS: [(&str, &str, char); 3] =
+    [("kt", "ক্ত", 't'), ("kT", "ক্ট", 'T'), ("kl", "ক্ল", 'l')];
+
 #[derive(Clone, Copy)]
 enum Context {
     Consonant {
@@ -322,7 +329,10 @@ enum Context {
 /// Longer tth wins before tt; TT leaves a following h (TTh -> ট্টহ).
 /// Consumed keys cannot start a second conjunct: ttn -> ত্তন, tng -> ত্নগ.
 /// Earlier nasal stops keep priority: ntt -> ন্তত, nTm -> ন্টম.
-/// Earlier longer matches such as bd, shn, and reph remain gaps;
+/// Exact kt/kT/kl establish consonant context and attach r. kn/km stay separate.
+/// Earlier Ngk/kk consume k first: Ngkt -> ঙ্কত, kkl -> ক্কল. kt/kT consume
+/// t/T before t-family forms: ktm -> ক্তম, kTm -> ক্টম, kth -> ক্তহ.
+/// Earlier longer matches such as nk/lk/sk/Shk, bd, shn, and reph remain gaps;
 /// supported prefixes still convert inside them.
 /// Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -439,6 +449,13 @@ pub fn transliterate(input: &str) -> String {
             // Keep kkh/kkhN/kkhm above kk; do not match again at its second k.
             output.push_str("ক্ক");
             remaining = consume_following_r_prefix(after_kk, 'k', &mut output);
+            context = Context::Consonant { ya_joiner: false };
+        } else if let Some((raw, bangla, last_key)) = K_CONJUNCTS
+            .iter()
+            .find(|(raw, _, _)| remaining.starts_with(raw))
+        {
+            output.push_str(bangla);
+            remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if let Some(after_shn) = remaining.strip_prefix("ShN") {
             output.push_str("ষ্ণ");
