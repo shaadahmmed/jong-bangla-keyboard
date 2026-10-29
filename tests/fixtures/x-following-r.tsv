@@ -2,7 +2,7 @@
 # Reference: jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
 # Columns: raw input, expected output, exact Unicode code points (tab-separated).
 # Following-r priority after x/kx, rri/rry/rrZ exceptions, vowels, and context resets.
-# Ngx has a separate fixture; kkx, reph, aliases, other conjuncts, and escapes remain gaps.
+# Ngx and kkx have separate fixtures; reph, aliases, other conjuncts, and escapes remain gaps.
 xri	এক্সরি	U+098F U+0995 U+09CD U+09B8 U+09B0 U+09BF
 xria	এক্সরিয়া	U+098F U+0995 U+09CD U+09B8 U+09B0 U+09BF U+09DF U+09BE
 xrio	এক্সরিও	U+098F U+0995 U+09CD U+09B8 U+09B0 U+09BF U+0993

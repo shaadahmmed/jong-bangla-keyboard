@@ -51,15 +51,19 @@ Dates use the project's Asia/Dhaka timezone.
   `N` before a following nasal sequence. Exact `kkhm`/`kShm`/`kxm` → ক্ষ্ম
   now share verified vowel context and single-`r` attachment, preserving earlier
   `Ngkkh`/`NgkSh`/`Ngkx` priority and consuming `m` before following nasal
-  sequences. There are 11,499 reference-checked cases.
+  sequences. Exact `kk` → ক্ক now shares verified vowel context and single-`r`
+  attachment, preserving longer `kkh`/`kkhN`/`kkhm` and earlier `Ng` priority.
+  It corrects `kkkh`/`kkSh`/`kkx` overlaps by consuming both initial keys.
+  Separate `ShN`/`Shm` and basic following-`r` gaps remain exposed in longer
+  forms. There are 12,000 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
   matching prefixes, contextual lowercase `y`/`w`/`x`, uppercase `Z`/`aZ`/`oZ`,
-  exact `kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`kkhm`/`kShm`/`kxm`,
+  exact `kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`kkhm`/`kShm`/`kxm`/`kk`,
   `Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, and selected
   following-`r` forms after
-  `y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`kkhm`/`kShm`/`kxm`
+  `y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`kkhm`/`kShm`/`kxm`/`kk`
   and `Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
@@ -67,29 +71,29 @@ Dates use the project's Asia/Dhaka timezone.
 - **Workflow:** use small batches of related conjuncts, with independent
   reference checks for each spelling and one checked, documented commit per
   completed batch. This replaces the previous one-spelling next-step plan.
-- **Next:** check exact `kk` → ক্ক, its supported vowel/following-`r` context,
-  and priority over existing k-conjuncts against the pinned reference.
+- **Next:** check exact `ShN`/`Shm` → ষ্ণ/ষ্ম independently, including
+  vowel/following-`r` context, exposed `kkShN`/`kkShm` gaps, and priority
+  against existing `kShN`/`kShm` and `Ng` forms.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author cases for exact `kk` → ক্ক (U+0995 U+09CD U+0995),
-   supported vowels/aliases, preceding contexts, following-`r` overlaps,
-   repetition, digits, boundaries, copied Unicode, and raw-spelling controls.
-   Check expected output and exact Unicode against the
+1. Independently author cases for exact `ShN` → ষ্ণ (U+09B7 U+09CD U+09A3)
+   and `Shm` → ষ্ম (U+09B7 U+09CD U+09AE), including supported vowels/aliases,
+   preceding contexts, following-`r` overlaps, repetition, nasal overlaps,
+   digits, boundaries, copied Unicode, and raw-spelling controls. Check each
+   spelling's expected output and Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-2. Define priority from reference evidence: check `kk` against `kkh`, `kkhN`,
-   `kkhm`, `kx`, `kxN`, `kxm`, `kSh`, `kShN`, `kShm`, and existing `Ng` forms.
-   Investigate the earlier-prefix gaps `kkkh`, `kkSh`, `kkx`, and their selected
-   longer forms, plus repetitions and adjacent sequences that can consume a
-   key before a previously supported match. Preserve reference behavior of
-   existing exact `kkh`/`kkhN`/`kkhm` rather than assuming a universal priority.
-3. Implement only the independently verified slice and its following-`r`
-   behavior. Keep unrelated `nk`/`lk`/`sk`/`Shk`, basic `mr`/`mm`/`mn`,
-   reph, uppercase aliases (including the `kkhNG`/`kShNG`/`kxNG` gap),
-   and punctuation/escapes separate. No composition or platform work.
+2. Define priority from reference evidence: investigate `kkShN`/`kkShm`,
+   longer/adjacent nasal forms, and earlier `kShN`/`kShm`/`NgkSh` matches.
+   Preserve existing supported forms. Share code only if independent evidence
+   confirms the same behavior; split the batch if differences make it hard to review.
+3. Implement only the verified slice and its following-`r` behavior. Keep
+   basic `kr`/`khr`/`Shr`, unrelated `nk`/`lk`/`sk`/`Shk`, basic `mr`/`mm`/`mn`,
+   reph, uppercase aliases (including `kkhNG`/`kShNG`/`kxNG`), and
+   punctuation/escapes separate. No composition or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed step.
 
@@ -99,6 +103,59 @@ limitations are documented, and this log records actual results. Composition
 and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-29 — Exact kk conjunct and k-conjunct priority
+
+**Result:** exact `kk` now produces ক্ক (U+0995 U+09CD U+0995), with supported
+vowel context and the existing following-`r` helper using final raw `k`.
+Single `r` attaches without U+200D (`kkr` → `ক্ক্র`, `kkry` → `ক্ক্র্য`);
+`rri`/`rry`/`rrZ` keep priority. Longer `kkh`/`kkhN`/`kkhm` and earlier
+`Ng` forms still win (`Ngkk` → `ঙ্কক`, `Ngkkh` → `ঙ্ক্ষ`).
+
+Consuming both keys fixes earlier partial outputs for `kkkh` → `ক্কখ`,
+`kkSh` → `ক্কষ`, `kkx` → `ক্কক্স`, and selected longer `N`/`m` forms.
+Repeated and adjacent forms now match (`kkkk` → `ক্কক্ক`, `kkhkk` → `ক্ষক্ক`).
+`kkShN`/`kkShm` instead expose separate `ShN`/`Shm` gaps, giving current
+`ক্কষণ`/`ক্কষম` versus reference `ক্কষ্ণ`/`ক্কষ্ম`. The old partial-output
+assertions were replaced by supported fixtures or updated explicit gap assertions.
+Initial test runs exposed obsolete assertions; the final full suite passes.
+Uppercase controls that the reference normalizes remain gap assertions rather
+than supported fixtures. No third-party source, tables, fixtures, or dependencies
+were imported; the existing external parser and license were reused in `/tmp`.
+
+**Checks and outcomes:**
+
+- Authored 501 `kk` fixtures and verified them against the SHA-256-checked
+  pinned parser before changing Rust. They cover exact Unicode, vowels/aliases
+  and transitions, preceding contexts, one through eight following `r` keys,
+  overlaps with existing forms, one through twelve `k` keys, repetition,
+  digits, boundaries, copied Unicode, raw spelling, and words such as
+  `Dhakka` → `ঢাক্কা` and `dhakka` → `ধাক্কা`.
+- `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
+  — all **12,000** authored cases matched; nine remaining-gap probes printed
+  exact reference output. Runtime: Node **v24.21.0**.
+- `cargo fmt --all -- --check` — passed.
+- `cargo clippy --offline --all-targets -- -D warnings` — passed.
+- `cargo test --offline` — passed: **52 integration tests** and **1 doctest**,
+  including all fixtures, control boundaries, separate calls, long mixed input,
+  unchanged supported forms, and explicit remaining-gap assertions.
+- `cargo build --offline --release` — passed.
+- `cargo run --offline --example convert -- 'kk kka kkr kkrri kkkh kkSh kkx Dhakka'`
+  — printed `ক্ক ক্কা ক্ক্র ক্কৃ ক্কখ ক্কষ ক্কক্স ঢাক্কা`.
+- Documentation links/anchors, fixture registration and totals, exact Unicode,
+  new documented examples/gaps, and `git diff --check` — passed.
+- Toolchain: Rust/Cargo **1.99.1**. No performance or platform test was run.
+
+**Limitations:** basic `k`/`kh`/`Sh` following-`r` forms, earlier
+`nk`/`lk`/`sk`/`Shk`, `ShN`/`Shm`, basic `mr`/`mm`/`mn`, uppercase aliases,
+reph, and punctuation/escapes remain incomplete. The new probes record
+`kkShN`, `kkShm`, `kkkhr`, `kkShr`, `Ngkkr`, `nkk`, `kkH`, `rrkk`, and
+`` kk`a ``. Composition and Fcitx5 remain later work; full compatibility is
+not established.
+
+**Next action:** independently check the related `ShN`/`Shm` batch, its
+vowels/following-`r` context, and priority over the exposed `kkShN`/`kkShm`
+gaps while preserving existing exact `kShN`/`kShm` behavior.
 
 ### 2026-10-29 — Related kkhm, kShm and kxm conjunct batch
 

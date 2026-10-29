@@ -2,7 +2,7 @@
 //!
 //! Supports ASCII digits, contextual lowercase `y`/`w`/`x`, exact
 //! `kx`/`kkh`/`kSh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, uppercase `Z` and `aZ`/`oZ`,
-//! exact `kkhN`/`kShN`/`kxN` and `kkhm`/`kShm`/`kxm`,
+//! exact `kkhN`/`kShN`/`kxN`, `kkhm`/`kShm`/`kxm`, and `kk`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -54,6 +54,7 @@
 //! assert_eq!(transliterate("kSh kSha kShr kShrri"), "ক্ষ ক্ষা ক্ষ্র ক্ষৃ");
 //! assert_eq!(transliterate("kkhN kShNa kxNr kxNrri"), "ক্ষ্ণ ক্ষ্ণা ক্ষ্ণ্র ক্ষ্ণৃ");
 //! assert_eq!(transliterate("kkhm kShma kxmr kxmrri"), "ক্ষ্ম ক্ষ্মা ক্ষ্ম্র ক্ষ্মৃ");
+//! assert_eq!(transliterate("kk kka kkr kkrri kkkh kkx"), "ক্ক ক্কা ক্ক্র ক্কৃ ক্কখ ক্কক্স");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -132,7 +133,8 @@ enum Context {
 
 /// Convert the supported sequences and digits, preserving unmatched characters.
 ///
-/// At each position, the longest supported sequence wins (`kh` before `k`).
+/// At each position, verified sequence priority applies (`kh` before `k`,
+/// `kkh` before `kk`, but `kk` consumes the first two keys of `kkkh`).
 /// Most supported vowels become signs after a supported consonant; lowercase `o`
 /// adds no character there. `ee` and `oo` alias `I` and `u`, matched before single
 /// keys. Case-sensitive `OI`/`OU` match before single `O`, producing ঐ/ঔ or ৈ/ৌ.
@@ -191,10 +193,14 @@ enum Context {
 /// vowel context and single-r attachment: kxmr -> ক্ষ্ম্র, kxmrri -> ক্ষ্মৃ,
 /// kxmry -> ক্ষ্ম্র্য. Earlier Ngkkh/NgkSh/Ngkx still win (NgkShm -> ঙ্ক্ষম).
 /// Consuming m prevents it joining a following nasal: kShmng -> ক্ষ্মং.
-/// Earlier longer matches (such as gN in gNgx), kkx, and reph remain gaps;
+/// Exact kk produces ক্ক after longer kkh/kkhN/kkhm, with Ngk's vowel context
+/// and following-r attachment: kkr -> ক্ক্র, kkrri -> ক্কৃ, kkry -> ক্ক্র্য.
+/// Earlier Ngk still consumes k before kk: Ngkk -> ঙ্কক. Consuming kk prevents
+/// a kkh/kSh/kx match starting at its second key: kkkh -> ক্কখ, kkx -> ক্কক্স.
+/// Following ShN/Shm and basic kh/Sh/k following-r attachment remain gaps.
+/// Earlier longer matches (such as gN in gNgx) and reph remain gaps;
 /// supported prefixes still convert inside them.
-/// Unsupported larger sequences can still contain supported parts: kkkh becomes
-/// কক্ষ while the reference matches kk first. Backtick escapes remain unsupported.
+/// Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
 pub fn transliterate(input: &str) -> String {
     let mut remaining = input;
@@ -289,6 +295,11 @@ pub fn transliterate(input: &str) -> String {
         {
             output.push_str("ক্ষ");
             remaining = consume_following_r_prefix(after_conjunct, 'h', &mut output);
+            context = Context::Consonant { ya_joiner: false };
+        } else if let Some(after_kk) = remaining.strip_prefix("kk") {
+            // Keep kkh/kkhN/kkhm above kk; do not match again at its second k.
+            output.push_str("ক্ক");
+            remaining = consume_following_r_prefix(after_kk, 'k', &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
@@ -413,7 +424,7 @@ pub fn transliterate(input: &str) -> String {
 }
 
 // Independently checked following-r prefixes depend on the final raw key,
-// including Z in aZ/oZ, x in kx/Ngx/Ngkx, k in Ngk, and h in Ngkh/Ngkkh/NgkSh/kkh/kSh.
+// including Z in aZ/oZ, x in kx/Ngx/Ngkx, k in Ngk/kk, and h in Ngkh/Ngkkh/NgkSh/kkh/kSh.
 // The N in kkhN/kShN/kxN and m in kkhm/kShm/kxm share single-r attachment.
 // Basic k/h/kh/N/m do not call this helper.
 // Do not infer them from copied Bangla.
