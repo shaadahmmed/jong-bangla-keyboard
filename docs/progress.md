@@ -15,11 +15,11 @@ Dates use the project's Asia/Dhaka timezone.
   conjuncts, and selected following-`r` forms. See the
   [coverage overview](../README.md#current-status) and linked rule sections for
   exact supported spellings and context behavior.
-- **Latest engine change:** basic `kr` → ক্র, `khr` → খ্র, and `Shr` → ষ্র,
-  including vowel/ya context, longer `r` runs, and the verified
-  `kkkhr`/`kkShr`/`Ngkkr` overlaps (2026-10-29).
-- **Validation:** 14,360 cases match the pinned reference; formatting, Clippy,
-  59 integration tests, 1 doctest, release build, and conversion smoke check
+- **Latest engine change:** basic `gr` → গ্র and `ghr` → ঘ্র, including
+  vowel/ya context, longer `r` runs, and exposed `g` after existing conjuncts
+  (`ShNgr`/`Shmgr` and the ক্ষ্ম spellings; 2026-10-29).
+- **Validation:** 15,308 cases match the pinned reference; formatting, Clippy,
+  61 integration tests, 1 doctest, release build, and conversion smoke checks
   passed in this step. Exact case coverage is recorded in fixtures.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete,
   including other basic consonant-plus-`r` forms, other conjuncts, uppercase
@@ -32,33 +32,35 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Latest completed step
 
-- **2026-10-29 — Following `r` after basic `k`/`kh`/`Sh`.** Independently authored
-  and reference-checked 1,427 new cases (475/476/476 respectively), then extended
-  the existing following-`r` helper to those three basic spellings. Kept
-  `rri`/`rry`/`rrZ` priority and longer conjunct matches; resolved the three
-  overlaps above. Updated regressions, usage, and behavioral documentation.
+- **2026-10-29 — Following `r` after basic `g`/`gh`.** Independently authored
+  and reference-checked 948 new cases (475/473 respectively), then extended
+  the existing helper for these basic spellings. Preserved `rri`/`rry`/`rrZ`
+  priority, existing `Ng` forms, and k-conjuncts. Resolved `ShNgr`, `Shmgr`,
+  and following `gr` after all three ক্ষ্ম spellings. Updated usage and coverage.
 - **Checks:** `node tools/check-reference.mjs
-  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` — all 14,360 cases matched the
+  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` — all 15,308 cases matched the
   SHA-256-verified pinned parser. `cargo fmt --all -- --check` and
   `cargo clippy --offline --all-targets -- -D warnings` — passed.
-  `cargo test --offline` — 59 integration tests and 1 doctest passed.
+  `cargo test --offline` — 61 integration tests and 1 doctest passed.
   `cargo build --offline --release` — passed. `cargo run --offline --example
-  convert -- 'kr khr Shr kry krry kkkhr kkShr Ngkkr'` — expected output.
-  `python /tmp/jong-check-basic-r-docs.py` and `git diff --check` — passed.
-- **Limitations:** other following-`r` spellings, earlier-prefix gaps, aliases,
-  reph, escapes, composition, and platform behavior remain separate. Nine
-  existing reference gap probes remain; no performance claim added.
-- **Next action:** independently investigate basic `g`/`gh` following `r`.
+  convert -- 'kh12T'` and the same command with
+  `'gr ghr gry ghrry grri ShNgr Shmgr kShmgr'` — expected outputs.
+  `python /tmp/jong-check-g-r-docs.py` and `git diff --check` — passed.
+- **Limitations:** earlier `dg`/`dgh`/`Rg`/`gg`/`gN` and `Ngg`/`Nggh`
+  matches remain gaps. Nine reference gap probes remain, replacing resolved
+  `ShNgr`/`Shmgr` with `Nggr`/`Ngghr`. No performance/platform claim added.
+- **Next action:** independently investigate exact `Ngg`/`Nggh` conjuncts.
 
 ## Next small implementation step
 
-1. Independently author and check following-`r` cases after basic `g`/`gh`
-   against the [pinned reference](v1.md#phonetic-behavior-reference). Cover exact
-   Unicode, vowel/ya context, preceding contexts, longer `r` runs,
+1. Independently author and check exact `Ngg`/`Nggh` conjunct cases against the
+   [pinned reference](v1.md#phonetic-behavior-reference). Cover exact Unicode,
+   vowel/ya context, preceding contexts, following `r`, longer `r` runs,
    `rri`/`rry`/`rrZ` exceptions, digits, boundaries, copied Unicode, and raw controls.
-2. Verify priority against existing `Ng` forms and k-conjuncts, including the
-   exposed `ShNgr`/`Shmgr` gaps. Identify earlier `gN` matches separately;
-   share helpers only when each spelling's evidence supports it.
+2. Verify priority against existing `Ng` forms, basic `g`/`gh`, `ng`/`NG`, and
+   k-conjuncts. Investigate `Nggr`/`Ngghr` and adjacent `g`/`gh`/nasal matches;
+   identify earlier `gN`/`gg` matches separately. Share helpers only when each
+   spelling's evidence supports it; split the batch if the behavior differs.
 3. Implement only that verified slice. Keep unrelated conjuncts, uppercase
    aliases, reph, punctuation/escapes, composition, and platform work separate.
 4. Extend fixtures, run README checks, update behavioral documentation and this

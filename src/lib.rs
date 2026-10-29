@@ -57,6 +57,7 @@
 //! assert_eq!(transliterate("kk kka kkr kkrri kkkh kkx"), "ক্ক ক্কা ক্ক্র ক্কৃ ক্কখ ক্কক্স");
 //! assert_eq!(transliterate("ShN Shm ShNr Shmrri kkShN ShNgx"), "ষ্ণ ষ্ম ষ্ণ্র ষ্মৃ ক্কষ্ণ ষ্ণগক্স");
 //! assert_eq!(transliterate("kr khr Shr kry krry kkkhr kkShr Ngkkr"), "ক্র খ্র ষ্র ক্র্য করর‍্য ক্কখ্র ক্কষ্র ঙ্কক্র");
+//! assert_eq!(transliterate("gr ghr gry ghrry grri ShNgr Shmgr"), "গ্র ঘ্র গ্র্য ঘরর‍্য গৃ ষ্ণগ্র ষ্মগ্র");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -206,6 +207,8 @@ enum Context {
 /// NgkSh keep priority; kkShN/kkShm now produce ক্কষ্ণ/ক্কষ্ম.
 /// Basic k/kh/Sh also attach following r: kr -> ক্র, khr -> খ্র, Shr -> ষ্র.
 /// They retain rri/rry/rrZ exceptions and resolve kkkhr/kkShr/Ngkkr overlaps.
+/// Basic g/gh share attachment and exceptions: gr -> গ্র, ghr -> ঘ্র, grri -> গৃ.
+/// ShNgr/Shmgr/kShmgr now attach the exposed g before r; earlier dg/Rg/gg/gN remain gaps.
 /// Earlier longer matches (such as gN in gNgx) and reph remain gaps;
 /// supported prefixes still convert inside them.
 /// Backtick escapes remain unsupported.
@@ -324,7 +327,8 @@ pub fn transliterate(input: &str) -> String {
             let following_r_key = match *raw {
                 "Y" => Some('Y'),
                 "k" => Some('k'),
-                "kh" | "Sh" => Some('h'),
+                "g" => Some('g'),
+                "kh" | "Sh" | "gh" => Some('h'),
                 _ => None,
             };
             if let Some(last_key) = following_r_key {
@@ -449,7 +453,7 @@ pub fn transliterate(input: &str) -> String {
 // Independently checked following-r prefixes depend on the final raw key,
 // including Z in aZ/oZ, x in kx/Ngx/Ngkx, k in Ngk/kk, and h in Ngkh/Ngkkh/NgkSh/kkh/kSh.
 // The N in kkhN/kShN/kxN/ShN and m in kkhm/kShm/kxm/Shm share single-r attachment.
-// Basic k/kh/Sh also call this helper; basic h/N/m remain separate gaps.
+// Basic k/kh/Sh/g/gh also call this helper; basic h/N/m remain separate gaps.
 // Do not infer them from copied Bangla.
 fn consume_following_r_prefix<'a>(
     remaining: &'a str,
@@ -463,7 +467,7 @@ fn consume_following_r_prefix<'a>(
     {
         output.push_str("্রর");
         &remaining[2..]
-    } else if (matches!(raw_key, 'Y' | 'k' | 'h' | 'N' | 'm')
+    } else if (matches!(raw_key, 'Y' | 'k' | 'g' | 'h' | 'N' | 'm')
         && remaining.starts_with('r')
         && !remaining.starts_with("rr"))
         || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))

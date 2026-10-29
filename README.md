@@ -25,7 +25,7 @@ through 40 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
 with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`/`w`/`x`
 and uppercase `Z` with selected `aZ`/`oZ` forms. Following-`r` matching after
-`k`/`kh`/`Sh`/`y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`
+`g`/`gh`/`k`/`kh`/`Sh`/`y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`
 is also implemented. Exact
 `kx`/`kkh`/`kSh` → `ক্ষ`, `Ngx` → `ঙ্ষ`, `Ngk` → `ঙ্ক`, `Ngkh` → `ঙ্খ`, and
 `Ngkx`/`Ngkkh`/`NgkSh` → `ঙ্ক্ষ` are implemented.
@@ -37,7 +37,7 @@ Exact `kk` → `ক্ক`, its selected vowel/following-`r` forms, and priority
 existing k-conjuncts are also implemented.
 Exact `ShN` → `ষ্ণ` and `Shm` → `ষ্ম`, including selected vowel/following-`r`
 forms and the exposed `kkShN`/`kkShm` overlaps, now match as well.
-This is a partial engine with 14,360 reference-checked examples,
+This is a partial engine with 15,308 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Other
 letter forms, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -83,14 +83,15 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [exact `kkhm`/`kShm`/`kxm`](docs/v1.md#exact-kkhm-kshm-and-kxm-conjuncts), then
 [exact `kk`](docs/v1.md#exact-kk-conjunct), then
 [exact `ShN`/`Shm`](docs/v1.md#exact-shn-and-shm-conjuncts), then
-[following `r` after `k`/`kh`/`Sh`](docs/v1.md#following-r-after-basic-k-kh-and-sh).
+[following `r` after `k`/`kh`/`Sh`](docs/v1.md#following-r-after-basic-k-kh-and-sh), then
+[following `r` after `g`/`gh`](docs/v1.md#following-r-after-basic-g-and-gh).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress handoff](docs/progress.md) for current state, the latest completed
 step and checks, and the next task. Detailed change history is in Git.
 Rule coverage now proceeds in [small batches of related conjuncts](docs/v1.md#small-development-steps),
 with checks, documentation, and a commit for each batch. The next planned batch is
-following `r` after basic `g`/`gh`, checked independently for each spelling.
+exact `Ngg`/`Nggh` conjuncts, checked independently for each spelling.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Build and try the conversion slice
@@ -278,7 +279,7 @@ Earlier `kShN`/`kShm` and `NgkSh` still win; `kkShN` → `ক্কষ্ণ` an
 `ShNgx` → `ষ্ণগক্স`, `ShNgkSh` → `ষ্ণগক্ষ`. Consuming `m` keeps a following
 nasal separate: `Shmng` → `ষ্মং`, `Shmn` → `ষ্মন`. Uppercase `G` remains
 unsupported after `ShN` (`ShNG` → `ষ্ণG`, reference `ষ্ণগ`). Basic
-`gr`/`mr`/`mm`/`mn`, other case aliases, reph, and escapes remain incomplete.
+`mr`/`mm`/`mn`, other case aliases, reph, and escapes remain incomplete.
 Basic `k`/`kh`/`Sh` now attach following `r`: try `'kr khr Shr'` → `ক্র খ্র ষ্র`.
 Vowels and ya forms work (`kri` → `ক্রি`, `khry` → `খ্র্য`, `ShrZ` → `ষ্র্য`).
 The `rri` and `rry`/`rrZ` exceptions remain (`krri` → `কৃ`, `krry` → `করর‍্য`);
@@ -287,6 +288,14 @@ spellings now attach: `kkkhr` → `ক্কখ্র`, `kkShr` → `ক্ক�
 Copied Bangla does not supply raw context (`কr` → `কর`); raw `qr` still gives
 `কর`. Other basic following-`r` forms, uppercase aliases, reph, and escapes
 remain incomplete.
+Basic `g`/`gh` now attach following `r`: `'gr ghr'` → `গ্র ঘ্র`.
+Vowels and ya forms keep consonant context (`grI` → `গ্রী`, `ghry` → `ঘ্র্য`).
+The exceptions remain (`grri` → `গৃ`, `ghrry` → `ঘরর‍্য`), while `grr` → `গ্রর`.
+Try `'grIShmo ghraN ghrriNa'` → `গ্রীষ্ম ঘ্রাণ ঘৃণা`.
+Existing conjuncts retain priority; exposed `g` now attaches in `ShNgr` → `ষ্ণগ্র`,
+`Shmgr` → `ষ্মগ্র`, and `kShmgr` → `ক্ষ্মগ্র`. Earlier `dg`/`Rg`/`gg`/`gN` and
+`Ngg`/`Nggh` matches remain gaps, as do other basic following-`r` forms, aliases,
+reph, and escapes. Copied Unicode resets context (`গr` → `গর`, `ঘr` → `ঘর`).
 Lowercase `ng` produces ং (U+0982), as in `bangla` → `বাংলা`. Before the supported
 single-key vowels and `OI`/`OU`, it produces ঙ্গ plus the appropriate vowel sign
 (`nga` → `ঙ্গা`, `ngOI` → `ঙ্গৈ`, `ngo` → `ঙ্গ`). These forms consume their vowel
@@ -413,8 +422,10 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`ShN` fixtures](tests/fixtures/conjunct-shn.tsv),
 [`Shm` fixtures](tests/fixtures/conjunct-shm.tsv),
 [`k` following-`r` fixtures](tests/fixtures/k-following-r.tsv),
-[`kh` following-`r` fixtures](tests/fixtures/kh-following-r.tsv), and
-[`Sh` following-`r` fixtures](tests/fixtures/sh-following-r.tsv) record the raw input,
+[`kh` following-`r` fixtures](tests/fixtures/kh-following-r.tsv),
+[`Sh` following-`r` fixtures](tests/fixtures/sh-following-r.tsv),
+[`g` following-`r` fixtures](tests/fixtures/g-following-r.tsv), and
+[`gh` following-`r` fixtures](tests/fixtures/gh-following-r.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -430,7 +441,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 14,360 cases used by Rust tests and prints reference outputs for
+It checks the same 15,308 cases used by Rust tests and prints reference outputs for
 nine known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
