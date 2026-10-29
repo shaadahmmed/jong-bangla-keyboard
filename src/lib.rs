@@ -10,6 +10,7 @@
 //! `tt`/`tth`/`tn`/`tm`/`TT`/`Tm`, `kt`/`kT`/`kl`,
 //! `nk`/`nkh`/`lk`/`sk`/`skh`/`skl`/`Shk`/`ks` and longer `lkh`/`ksh`,
 //! `gl`/`ll`/`bl`/`pl`/`sl`/`shl`/`bhl`/`phl`/`vl`/`fl`/`Sl`,
+//! `mb`/`mbh`/`mv`/`mp`/`mph`/`mf` and longer `mpl`, plus `lm`/`sm`/`shm`/`Sm`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -74,6 +75,7 @@
 //! assert_eq!(transliterate("kt kT kl kn km ktm kTm rokto klanto"), "ক্ত ক্ট ক্ল কন কম ক্তম ক্টম রক্ত ক্লান্ত");
 //! assert_eq!(transliterate("nk nkh lk lkh sk skl skh Shk ks ksh sr shr Sr"), "ঙ্ক ঙ্খ ল্ক লখ স্ক স্ক্ল স্খ ষ্ক ক্স কশ স্র শ্র শ্র");
 //! assert_eq!(transliterate("gl ll bl pl sl shl bhl phl vl fl Sl pr phr fr"), "গ্ল ল্ল ব্ল প্ল স্ল শ্ল ভ্ল ফ্ল ভ্ল ফ্ল শ্ল প্র ফ্র ফ্র");
+//! assert_eq!(transliterate("mb mbh mv mp mph mf mpl lm sm shm Sm mbl mplk smp"), "ম্ব ম্ভ ম্ভ ম্প ম্ফ ম্ফ মপ্ল ল্ম স্ম শ্ম শ্ম ম্বল মপ্লক স্মপ");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -253,6 +255,23 @@ const L_CONJUNCTS: [(&str, &str); 11] = [
     ("Sl", "শ্ল"),
 ];
 
+// Original exact spellings, independently checked for Unicode and context.
+// Longer mbh/mph precede mb/mp; mpl preserves মপ্ল before mp could join m+p.
+// Earlier m-ending forms consume m first, including lm/sm/shm/Sm below.
+const CONSUMING_M_FORMS: [(&str, &str, char); 11] = [
+    ("mbh", "ম্ভ", 'h'),
+    ("mb", "ম্ব", 'b'),
+    ("mv", "ম্ভ", 'v'),
+    ("mph", "ম্ফ", 'h'),
+    ("mpl", "মপ্ল", 'l'),
+    ("mp", "ম্প", 'p'),
+    ("mf", "ম্ফ", 'f'),
+    ("lm", "ল্ম", 'm'),
+    ("sm", "স্ম", 'm'),
+    ("shm", "শ্ম", 'm'),
+    ("Sm", "শ্ম", 'm'),
+];
+
 #[derive(Clone, Copy)]
 enum Context {
     Consonant {
@@ -380,6 +399,13 @@ enum Context {
 /// ggl -> জ্ঞল, Nggl -> ঙ্গল, dbhl -> দ্ভল, kshl -> কশল, skll -> স্ক্লল.
 /// Consumed l cannot begin lk/ll/lT: blk -> ব্লক, gll -> গ্লল, blTm -> ব্লট্ম.
 /// Basic p/ph/f also attach following r, including glpr/glphr/glfr.
+/// Exact mb/mbh/mv/mp/mph/mf establish consonant context and attach r.
+/// Longer mbh/mph win over mb/mp, while mpl preserves মপ্ল: mplk -> মপ্লক.
+/// Earlier lm/sm/shm/Sm consume m before these forms: smp -> স্মপ,
+/// shmpl -> শ্মপ্ল. They share the existing m-ending context and r exceptions.
+/// Other earlier matches retain priority: Ngmb -> ঙ্মব, kkhmp -> ক্ষ্মপ,
+/// sklm -> স্ক্লম, kshm -> কশম. Consumed keys cannot start a second match:
+/// mbl -> ম্বল, mphl -> ম্ফল, mbbl -> ম্বব্ল, mppl -> ম্পপ্ল.
 /// Earlier longer matches such as pn/sn/shn, ns/ps, labial conjuncts, bd, and reph remain gaps;
 /// supported prefixes still convert inside them.
 /// Backtick escapes remain unsupported.
@@ -554,6 +580,13 @@ pub fn transliterate(input: &str) -> String {
         {
             output.push_str(bangla);
             remaining = consume_following_r_prefix(&remaining[raw.len()..], 'l', &mut output);
+            context = Context::Consonant { ya_joiner: false };
+        } else if let Some((raw, bangla, last_key)) = CONSUMING_M_FORMS
+            .iter()
+            .find(|(raw, _, _)| remaining.starts_with(raw))
+        {
+            output.push_str(bangla);
+            remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);

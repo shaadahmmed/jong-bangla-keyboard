@@ -41,6 +41,18 @@ for (const name of [
   "ph-following-r.tsv",
   "f-following-r.tsv",
   "l-ending-controls.tsv",
+  "conjunct-mbh.tsv",
+  "conjunct-mb.tsv",
+  "conjunct-mv.tsv",
+  "conjunct-mph.tsv",
+  "conjunct-mpl.tsv",
+  "conjunct-mp.tsv",
+  "conjunct-mf.tsv",
+  "conjunct-lm.tsv",
+  "conjunct-sm.tsv",
+  "conjunct-sh-lowercase-m.tsv",
+  "conjunct-s-uppercase-m.tsv",
+  "m-labial-controls.tsv",
   "reference.tsv",
   "vowels.tsv",
   "vowels-u.tsv",
@@ -201,9 +213,10 @@ console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 // These probes expose missing behavior; they are not supported-slice fixtures.
 for (const input of [
   "ShNG", "bdd", "shn", "ShM", "rrShN", "Shm`a",
-  "mbl", "mbhl", "mvl", "mphl", "mfl", "lgl", "lbl", "lbhl", "lvl",
+  "lgl", "lbl", "lbhl", "lvl",
   "lpl", "lphl", "spl", "sphl", "sfl", "Shpl", "Shphl", "Shfl", "bbl", "bbhl", "ppl", "pphl",
   "nsl", "nshl", "psl", "pshl",
+  "nsm", "psm", "nshm", "pshm",
   "lTm", "pnk", "snk", "nsk", "psk",
 ]) {
   const actual = parse(input);

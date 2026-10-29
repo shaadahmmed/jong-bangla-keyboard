@@ -1,6 +1,139 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn m_labial_mbh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-mbh.tsv"));
+}
+
+#[test]
+fn m_labial_mb_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-mb.tsv"));
+}
+
+#[test]
+fn m_labial_mv_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-mv.tsv"));
+}
+
+#[test]
+fn m_labial_mph_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-mph.tsv"));
+}
+
+#[test]
+fn m_labial_mpl_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-mpl.tsv"));
+}
+
+#[test]
+fn m_labial_mp_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-mp.tsv"));
+}
+
+#[test]
+fn m_labial_mf_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-mf.tsv"));
+}
+
+#[test]
+fn m_labial_lm_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-lm.tsv"));
+}
+
+#[test]
+fn m_labial_sm_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-sm.tsv"));
+}
+
+#[test]
+fn m_labial_sh_lowercase_m_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-sh-lowercase-m.tsv"));
+}
+
+#[test]
+fn m_labial_s_uppercase_m_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-s-uppercase-m.tsv"));
+}
+
+#[test]
+fn m_labial_nonconjunct_controls_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/m-labial-controls.tsv"));
+}
+
+#[test]
+fn m_labial_resets_at_every_split_boundary_and_between_calls() {
+    for (raw, bangla, parts) in [
+        ("mbh", "ম্ভ", vec![("ম", "ভ"), ("ম্ব", "হ")]),
+        ("mb", "ম্ব", vec![("ম", "ব")]),
+        ("mv", "ম্ভ", vec![("ম", "ভ")]),
+        ("mph", "ম্ফ", vec![("ম", "ফ"), ("ম্প", "হ")]),
+        ("mpl", "মপ্ল", vec![("ম", "প্ল"), ("ম্প", "ল")]),
+        ("mp", "ম্প", vec![("ম", "প")]),
+        ("mf", "ম্ফ", vec![("ম", "ফ")]),
+        ("lm", "ল্ম", vec![("ল", "ম")]),
+        ("sm", "স্ম", vec![("স", "ম")]),
+        ("shm", "শ্ম", vec![("স", "হ্ম"), ("শ", "ম")]),
+        ("Sm", "শ্ম", vec![("শ", "ম")]),
+    ] {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "ম্প", "\u{301}"] {
+            for (index, (first, tail)) in parts.iter().enumerate() {
+                let split = index + 1;
+                assert_eq!(
+                    transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
+                    format!("{first}{boundary}{tail}")
+                );
+            }
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        for (index, (first, tail)) in parts.iter().enumerate() {
+            let split = index + 1;
+            assert_eq!(transliterate(&raw[..split]), *first);
+            assert_eq!(transliterate(&raw[split..]), *tail);
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    assert_eq!(transliterate(&"mb mbh mv mp mph mf mpl lm sm shm Sm mbl mbhl mvl mphl mfl mplk mpll mplTm smp shmpl Ngmb kkhmp sklm kshm mbbl mppl 🙂 ".repeat(64)), "ম্ব ম্ভ ম্ভ ম্প ম্ফ ম্ফ মপ্ল ল্ম স্ম শ্ম শ্ম ম্বল ম্ভল ম্ভল ম্ফল ম্ফল মপ্লক মপ্লল মপ্লট্ম স্মপ শ্মপ্ল ঙ্মব ক্ষ্মপ স্ক্লম কশম ম্বব্ল ম্পপ্ল 🙂 ".repeat(64));
+}
+
+#[test]
+fn m_labial_unimplemented_prefixes_and_aliases_remain_explicit_gaps() {
+    // Partial engine outputs, not compatibility expectations. Earlier ns/ps
+    // and their longer nsh/psh forms consume keys in the reference.
+    for (raw, partial) in [
+        ("nsm", "নস্ম"),
+        ("psm", "পস্ম"),
+        ("nshm", "নশ্ম"),
+        ("pshm", "পশ্ম"),
+        ("mB", "মB"),
+        ("mP", "মP"),
+        ("mV", "মV"),
+        ("mF", "মF"),
+        ("mbH", "ম্বH"),
+        ("mpH", "ম্পH"),
+        ("Mbh", "Mভ"),
+        ("Mph", "Mফ"),
+        ("Lm", "Lম"),
+        ("sHm", "সHম"),
+    ] {
+        assert_eq!(transliterate(raw), partial, "{raw}");
+    }
+}
+
+#[test]
 fn l_batch_gl_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/conjunct-gl.tsv"));
 }
@@ -146,11 +279,6 @@ fn l_batch_earlier_unimplemented_matches_remain_explicit_gaps() {
         ("lphl", "লফ্ল"),
         ("lpl", "লপ্ল"),
         ("lvl", "লভ্ল"),
-        ("mbhl", "মভ্ল"),
-        ("mbl", "মব্ল"),
-        ("mfl", "মফ্ল"),
-        ("mphl", "মফ্ল"),
-        ("mvl", "মভ্ল"),
         ("nshl", "নশ্ল"),
         ("nsl", "নস্ল"),
         ("pphl", "পফ্ল"),
@@ -1595,9 +1723,7 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("rrShm", "ররষ্ম"),
         ("Shm`a", "ষ্ম`আ"),
         ("ShN`a", "ষ্ণ`আ"),
-        ("shm", "শম"),
         ("shn", "শন"),
-        ("Sm", "শম"),
         ("rrkk", "ররক্ক"),
         ("kk`a", "ক্ক`আ"),
         ("Kkh", "Kখ"),
