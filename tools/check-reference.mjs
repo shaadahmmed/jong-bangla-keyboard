@@ -64,6 +64,14 @@ for (const name of [
   "conjunct-l-d-retroflex.tsv",
   "conjunct-ldh.tsv",
   "l-prefix-controls.tsv",
+  "conjunct-sph.tsv",
+  "conjunct-spl.tsv",
+  "conjunct-sp.tsv",
+  "conjunct-sf.tsv",
+  "conjunct-sh-ph.tsv",
+  "conjunct-sh-p.tsv",
+  "conjunct-sh-f.tsv",
+  "s-labial-controls.tsv",
   "reference.tsv",
   "vowels.tsv",
   "vowels-u.tsv",
@@ -224,7 +232,7 @@ console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 // These probes expose missing behavior; they are not supported-slice fixtures.
 for (const input of [
   "ShNG", "bdd", "shn", "ShM", "rrShN", "Shm`a",
-  "spl", "sphl", "sfl", "Shpl", "Shphl", "Shfl", "bbl", "bbhl", "ppl", "pphl",
+  "bbl", "bbhl", "ppl", "pphl",
   "nsl", "nshl", "psl", "pshl",
   "nsm", "psm", "nshm", "pshm",
   "pnk", "snk", "nsk", "psk",

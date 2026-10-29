@@ -64,7 +64,11 @@ selected vowel/following-`r` forms.
 Exact `lg`/`lb`/`lbh`/`lv`/`lp`/`lT`/`lD`/`ldh`, with longer
 `lgh`/`lph` nonconjunct exceptions, are also implemented, including consuming
 priority and selected vowel/following-`r` forms.
-This is a partial engine with 179,942 reference-checked examples,
+Exact `sp`/`sph`/`sf`/`spl` and `Shp`/`Shph`/`Shf` are also implemented,
+including selected vowel/following-`r` forms and consuming priority. Only `spl`
+joins and consumes the final `l`; `sphl`/`sfl`/`Shpl`/`Shphl`/`Shfl` leave
+`l` available for a fresh match.
+This is a partial engine with 197,645 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Other
 letter forms, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -122,7 +126,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [the consuming k-family batch](docs/v1.md#consuming-k-family-batch), then
 [the l-ending batch](docs/v1.md#l-ending-conjunct-batch), then
 [the m-prefix and m-ending batch](docs/v1.md#m-prefix-and-m-ending-conjunct-batch), then
-[the consuming l-prefix batch](docs/v1.md#consuming-l-prefix-batch).
+[the consuming l-prefix batch](docs/v1.md#consuming-l-prefix-batch), then
+[the s/Sh labial batch](docs/v1.md#s-and-sh-labial-conjunct-batch).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress handoff](docs/progress.md) for current state, the latest completed
@@ -132,8 +137,8 @@ that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
 update, and commit per completed batch. The next planned batch investigates
-`sp`/`sph`/`sf`/`spl` and `Shp`/`Shph`/`Shf`, including longer priorities
-and consuming labial overlaps; exact implementation scope remains unconfirmed.
+`bb`/`pp` and `pn`/`sn`/`shn`/`Sn`, including longer priorities and
+shared-key overlaps; exact implementation scope remains unconfirmed.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
@@ -490,8 +495,21 @@ Vowels and following `r` retain their checked exceptions (`lgrri` → `ল্গ
 `lphrrZ` → `লফরর‍্য`, `lTry` → `ল্ট্র্য`). Earlier l-ending rules still win
 (`blg` → `ব্লগ`, `mlg` → `ম্লগ`); copied Bangla resets context (`ল্গr` → `ল্গর`).
 Try `'golpo olpo ulTa'` → `গল্প অল্প উল্টা`.
+Exact `sp`/`sph`/`sf`/`spl` and `Shp`/`Shph`/`Shf` now match:
+`'sp sph sf spl Shp Shph Shf'` → `স্প স্ফ স্ফ স্প্ল ষ্প ষ্ফ ষ্ফ`.
+Longer `sph`/`spl` and `Shph` win over `sp`/`Shp`. Only `spl` consumes
+the final `l`: `'spll sphll sfll Shpll Shphll Shfll'`
+→ `স্প্লল স্ফল্ল স্ফল্ল ষ্পল্ল ষ্ফল্ল ষ্ফল্ল`.
+The available `l` can start another rule (`splm` → `স্প্লম`, `sphlm` → `স্ফল্ম`,
+`Shplg` → `ষ্পল্গ`). Vowels/ya and following `r` retain their checked
+exceptions (`sprri` → `স্পৃ`, `sphrry` → `স্ফরর‍্য`, `Shfry` → `ষ্ফ্র্য`).
+Earlier matches still win (`ksp` → `ক্সপ`, `kspl` → `ক্সপ্ল`, `kShp` → `ক্ষপ`,
+`NgkShp` → `ঙ্ক্ষপ`); copied Bangla resets context (`স্পr` → `স্পর`).
+`Sp`/`Sph`/`Sf` and `shp`/`shph`/`shf` stay separate consonants.
+Try `'sphulingo sfUron puShpo niShphol niShfol'` → `স্ফুলিঙ্গ স্ফূরন পুষ্প নিষ্ফল নিষ্ফল`.
 Earlier `pn`/`sn`/`shn`, `ns`/`ps`, and other consuming consonant rules remain
-gaps: `pnk`/`nsk`/`spl` give পঙ্ক/নস্ক/সপ্ল, against reference প্নক/ন্সক/স্প্ল.
+gaps: `pnk`/`nsk` give পঙ্ক/নস্ক, against reference প্নক/ন্সক.
+`nsp`/`psp` give নস্প/পস্প, against reference ন্সপ/প্সপ.
 `nsm`/`nshm` give নস্ম/নশ্ম, against reference ন্সম/নশম; uppercase aliases
 such as `mB` are still incomplete.
 Earlier b-prefixed matches (`bd`), `shn`,
@@ -745,8 +763,16 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`lp` fixtures](tests/fixtures/conjunct-lp.tsv),
 [`lT` fixtures](tests/fixtures/conjunct-l-t-retroflex.tsv),
 [`lD` fixtures](tests/fixtures/conjunct-l-d-retroflex.tsv),
-[`ldh` fixtures](tests/fixtures/conjunct-ldh.tsv), and
-[l-prefix controls](tests/fixtures/l-prefix-controls.tsv) record the raw input,
+[`ldh` fixtures](tests/fixtures/conjunct-ldh.tsv),
+[l-prefix controls](tests/fixtures/l-prefix-controls.tsv),
+[`sph` fixtures](tests/fixtures/conjunct-sph.tsv),
+[`spl` fixtures](tests/fixtures/conjunct-spl.tsv),
+[`sp` fixtures](tests/fixtures/conjunct-sp.tsv),
+[`sf` fixtures](tests/fixtures/conjunct-sf.tsv),
+[`Shph` fixtures](tests/fixtures/conjunct-sh-ph.tsv),
+[`Shp` fixtures](tests/fixtures/conjunct-sh-p.tsv),
+[`Shf` fixtures](tests/fixtures/conjunct-sh-f.tsv), and
+[s/Sh labial controls](tests/fixtures/s-labial-controls.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -762,8 +788,8 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 179,942 cases used by Rust tests and prints reference outputs for
-twenty-eight known coverage gaps. The original comparison and test tooling are MIT;
+It checks the same 197,645 cases used by Rust tests and prints reference outputs for
+twenty-two known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
 ## License

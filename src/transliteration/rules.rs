@@ -211,3 +211,17 @@ pub(super) const CONSUMING_M_FORMS: [(&str, &str, char); 11] = [
     ("shm", "শ্ম", 'm'),
     ("Sm", "শ্ম", 'm'),
 ];
+
+// Original s/Sh labial spellings, independently checked for context and priority.
+// Longer sph/spl and Shph precede sp/Shp. Only spl consumes the final l;
+// sphl/sfl/Shpl/Shphl/Shfl leave l available for a fresh l-prefix match.
+// Earlier ks/kSh/NgkSh consume shared s/Sh before reaching these forms.
+pub(super) const S_LABIAL_CONJUNCTS: [(&str, &str, char); 7] = [
+    ("sph", "স্ফ", 'h'),
+    ("spl", "স্প্ল", 'l'),
+    ("sp", "স্প", 'p'),
+    ("sf", "স্ফ", 'f'),
+    ("Shph", "ষ্ফ", 'h'),
+    ("Shp", "ষ্প", 'p'),
+    ("Shf", "ষ্ফ", 'f'),
+];
