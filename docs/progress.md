@@ -18,70 +18,67 @@ Dates use the project's Asia/Dhaka timezone.
   raw input and otherwise reaches the application. Space/Enter commit first,
   then forward that same key. Punctuation/escapes remain editable until a boundary.
   Activity follows raw input, including escapes with empty converted output.
-- **Latest validation:** 20 composition and 352 conversion integration tests,
-  two doctests, all 522,933 pinned-reference fixture rows, formatting, Clippy,
-  release/documentation/example builds and converter/documentation checks passed.
-- **Prior evidence:** the 83,353-input bounded mixed-context audit found no new
-  discrepancies and three known Unicode case differences; it was not rerun here.
-  The 1,350-input vowel-pair and 302-input standalone audits also remain prior
-  evidence. These bounded audits do not establish full Avro compatibility.
-- **Remaining limits:** Escape, navigation, other modifiers/shortcuts and lifecycle
-  policies need decisions before adapter integration. Unicode case policy, typing
-  performance and actual desktop use remain unresolved or unverified.
+- **Newly settled:** Escape cancels active input and consumes; navigation and
+  application shortcuts commit before forwarding. Modifier-only presses preserve
+  composition. Focus loss/switching finalize to the original context when allowed,
+  then clear; explicit reset/destruction discard. See the
+  [adapter contract](v1.md#adapter-interaction-contract) for routing and ordering.
+- **Validation for this step:** documentation links, contract consistency,
+  documentation-only scope and unchanged historical handoff entries checked.
+- **Prior evidence, not rerun:** 20 composition and 352 conversion integration
+  tests, two doctests, all 522,933 fixture rows, format/lint/build checks passed
+  in the controller step. The 83,353-input mixed-context audit found no new gaps
+  and three known Unicode case differences. Earlier 1,350-input vowel-pair and
+  302-input standalone audits remain bounded evidence, not full compatibility.
+- **Remaining limits:** adapter cases are specified, not executed. Fcitx5 callback
+  ordering, frontend behavior, Unicode case policy, performance and actual
+  desktop use remain unresolved or unverified.
 
 ## Latest completed step
 
-- **2026-10-29 — Rust composition core and confirmed editing keys.** Added
-  `Composition`, `CompositionKey` and `KeyEffect` in src/composition.rs, re-exported
-  by src/lib.rs. Existing transliteration code, fixtures and dependencies are
-  unchanged. No desktop event translation or system settings were added.
-- **User-confirmed decisions:** Ctrl+Backspace clears the whole active buffer;
-  an empty buffer lets the application delete a word. Enter commits and reaches
-  the app on the same press. Punctuation stays editable until a boundary.
-  Space follows the same commit-then-forward boundary contract. The old first-
-  Enter-consumed proposal is superseded; other proposals were not adopted.
-- **Correctness:** edits pop a raw Unicode scalar and recompute, never erase
-  Bangla output bytes. Word deletion consumes invisible active escapes too.
-  Commit distinguishes inactive `None` from active empty output `Some("")`.
-  Key effects require preedit update, nonempty commit, then optional forwarding.
-- **Tests:** tests/composition.rs adds 20 regressions for contextual conversion,
-  digits, conjunct/reph/escape reversal, copied Unicode, invisible input, Ctrl+
-  Backspace, repeated/idle keys, Space/Enter forwarding, cancellation/reset,
-  independent contexts and rejected control/whitespace input. The struct doctest
-  demonstrates word deletion; existing transliteration expectations are unchanged.
-- **Rust checks:** `cargo fmt --all -- --check`;
-  `cargo clippy --offline --all-targets -- -D warnings`;
-  `cargo test --offline` — 372 integration tests and two doctests passed;
-  `cargo build --offline --release`;
-  `RUSTDOCFLAGS='-D warnings' cargo doc --offline --no-deps`;
-  `cargo build --offline --examples` — all passed with Rust/Cargo 1.99.1.
-- **Reference check:**
-  `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 522,933 authored rows passed on Node v24.21.0; the three existing
-  Unicode case policy probes remain visible. No new parity or performance claim.
-- **Smoke/docs:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট;
-  `python /tmp/jong-check-composition-docs.py` — local links/anchors, rustdoc API,
-  README examples, documented policy/counts, unchanged engine/fixtures/history
-  and current handoff passed. `git diff --check` passed.
-- **Next action:** settle the remaining adapter interaction/lifecycle policies,
-  then investigate Fcitx5 interoperability in a separate coherent step.
+- **2026-10-29 — Adapter interaction and lifecycle specification.** Updated
+  docs/v1.md and README.md with the user's Escape, navigation/shortcut and
+  focus/switching decisions. The existing composition implementation is unchanged;
+  its completion and checks are recorded in commit `fe6cfd8` as prior evidence.
+- **Routing:** exact Ctrl+Backspace retains whole-buffer deletion; modified
+  variants commit and forward. Specified plain/keypad boundaries, case-sensitive
+  text, lock states, AltGr/dead-key handling, modifier-only events and release/
+  repeat behavior. Framework shortcuts remain Fcitx5's responsibility.
+- **Lifecycle:** one original target and one commit owner; account for frontend-
+  committed preedit before clearing local state. Never replay into a newly focused
+  field. Reset, destruction and unavailable delivery discard. Documented limits
+  on observing mouse/selection movement and restricted-context transitions.
+- **Evidence:** consulted official Fcitx5 tutorial and upstream engine/event/
+  input-context headers. Sources are linked in the specification; no upstream
+  code imported, installed version validated or desktop support claimed.
+- **Acceptance cases:** 15 documented scenario groups cover ordering, shortcuts,
+  release/repeat, invisible buffers, focus/reset/switch, duplicate callbacks and
+  mouse behavior. These are planned adapter regressions, not passing tests.
+- **Checks:** `python /tmp/jong-check-adapter-contract-docs.py` — 930 local links
+  and anchors, table structure, confirmed-policy consistency, existing controller
+  action coverage, unchanged source/tests/fixtures/history and handoff passed.
+  `git diff --check` passed. No Cargo or reference checks rerun for docs-only work.
+- **Next action:** investigate the minimal Fcitx5 addon/Rust boundary and validate
+  callback/commit ownership in a synthetic harness before desktop smoke tests.
 
 ## Next small implementation step
 
-1. Specify Escape, navigation, focus loss, input-method switching and other
-   shortcut/modifier policies. Distinguish approved policies from proposals;
-   ask for unresolved behavior that materially affects application editing.
-2. Define adapter normalization for text, exact Ctrl+Backspace, Space and Enter,
-   including modifier combinations, release events, repeat, and input-context
-   lifetime. Keep framework-specific events outside the Rust controller.
-3. After these policies are settled, investigate a minimal Fcitx5 addon and Rust
-   interoperability boundary separately from platform smoke tests and packaging.
-   Record actual environment/tool versions; do not claim desktop support yet.
+1. Inventory actual environment/tool versions and matching Fcitx5 headers, then
+   investigate the [scoped feasibility experiment](v1.md#next-fcitx5-feasibility-experiment).
+   Choose and document a minimal interoperability boundary, including ownership,
+   UTF-8, error handling and panic containment; a thin C++ bridge is a candidate.
+2. Build a local synthetic harness to check ordered preedit/commit/key delivery
+   and reset/deactivate/focus-out callbacks, including frontend-owned commits.
+   Keep framework-specific code outside the Rust controller and rule engine.
+3. Map confirmed keys and lifecycle policies using existing controller actions;
+   turn the acceptance cases into adapter checks as coverage becomes available.
+   Keep installation/settings changes, desktop smoke tests and packaging separate.
 
-**Done when:** remaining policies and lifecycle ordering are reviewable and settled,
-adapter requirements have regression cases, and the next feasibility experiment
-has a clear scope. The composition core is complete for the confirmed keys;
-Escape/focus/shortcut routing, Fcitx5 and desktop validation have not started.
+**Done when:** the minimal addon/boundary builds locally, its harness demonstrates
+one commit and one key-delivery path, and environment requirements/limitations
+are reproducible. The contract is settled; Fcitx5 implementation and all 15
+adapter acceptance scenario groups remain unimplemented/unrun. No desktop
+support or typing-performance claim follows from the documentation step.
 
 ## Completed steps
 

@@ -190,9 +190,13 @@ This is bounded evidence, not proof of complete compatibility. The earlier
 The Rust composition controller now supports editable Bangla, raw-key Backspace,
 Ctrl+Backspace word deletion, and commit/cancel/reset. Space and Enter commit
 before forwarding the same key. See the [controller contract](docs/v1.md#composition-controller-api).
-Escape, navigation, focus/switching and other modifier policies still need
-settling before adapter work. Unicode case policy and desktop integration remain
-future work.
+The [adapter interaction contract](docs/v1.md#adapter-interaction-contract) now
+settles Escape, navigation, shortcuts and focus/switching: Escape cancels active
+input; navigation and shortcuts commit before forwarding; focus/switching finalize
+to the original context when permitted, then clear state. Modifier-only presses
+preserve composition. This is a specification with planned acceptance cases;
+adapter implementation and desktop validation remain future work, along with
+Unicode case policy.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
