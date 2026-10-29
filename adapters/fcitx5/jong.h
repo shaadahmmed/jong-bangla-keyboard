@@ -29,6 +29,7 @@ enum JongAction {
   JongCommit = 5,
   JongCancel = 6,
   JongReset = 7,
+  JongEscape = 8, // Commit and consume only while raw input is active.
 };
 
 // Rust owns the allocation. Free exactly once; null is permitted. No concurrent

@@ -112,7 +112,7 @@ public:
                                key.sym() == FcitxKey_KP_Enter)) {
         action = JongEnter;
       } else if (mods == 0 && key.sym() == FcitxKey_Escape) {
-        action = JongCancel;
+        action = JongEscape;
       } else if ((mods & ~static_cast<uint32_t>(fcitx::KeyState::Shift)) == 0) {
         const auto scalar = fcitx::Key::keySymToUnicode(key.sym());
         if (scalar != 0 && key.sym() != FcitxKey_space &&

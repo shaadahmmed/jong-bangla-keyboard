@@ -4,7 +4,7 @@
 //! Unicode characters. A platform-independent composition controller supports
 //! editable preedit and normalized editing keys. Compatibility with Avro is
 //! partial. Experimental Fcitx5 event translation lives in a separate adapter;
-//! desktop integration has not been smoke-tested.
+//! desktop integration has limited manual smoke evidence and remains experimental.
 //!
 //! See the repository's [coverage overview] and [behavior notes] for supported
 //! rules, compatibility evidence, and limitations.

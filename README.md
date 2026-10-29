@@ -110,8 +110,9 @@ This is a partial engine with 522,933 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Further
 context auditing and a decision about reference Unicode lowercasing remain;
 the platform-independent composition controller is implemented. A minimal Fcitx5
-addon now builds and passes a synthetic dispatcher harness; desktop typing has
-not been tested. See the [local experiment](#build-and-check-the-fcitx5-experiment).
+addon now builds and passes a synthetic dispatcher harness. The user reports
+successful basic typing/field switching and GTK3 Ctrl+Backspace, with KWrite
+word-shortcut issues still under investigation. See the [local experiment](#build-and-check-the-fcitx5-experiment).
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
 [first vowel group](docs/v1.md#first-vowel-group) and
@@ -192,12 +193,13 @@ The Rust composition controller now supports editable Bangla, raw-key Backspace,
 Ctrl+Backspace word deletion, and commit/cancel/reset. Space and Enter commit
 before forwarding the same key. See the [controller contract](docs/v1.md#composition-controller-api).
 The [adapter interaction contract](docs/v1.md#adapter-interaction-contract) now
-settles Escape, navigation, shortcuts and focus/switching: Escape cancels active
-input; navigation and shortcuts commit before forwarding; focus/switching finalize
+settles Escape, navigation, shortcuts and focus/switching: Escape now commits
+active Bangla and clears the buffer without forwarding that press; navigation
+and shortcuts commit before forwarding; focus/switching finalize
 to the original context when permitted, then clear state. Modifier-only presses
 preserve composition. The experimental addon now exercises this policy through
 Fcitx5's dispatcher with synthetic input. Frontend AltGr/compose handling, mouse
-relocation, actual desktop typing and Unicode case policy remain unverified or
+relocation, broader desktop behavior and Unicode case policy remain unverified or
 unsettled; see the [feasibility evidence](docs/v1.md#fcitx5-local-feasibility-result).
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
@@ -703,7 +705,9 @@ matches still take priority (`gNgx` uses `gN` first and now yields `গ্ণগ
 
 This builds an experimental addon and runs synthetic input through the installed
 Fcitx5 dispatcher. It does not install the addon, connect a desktop frontend, or
-change input-method settings. No application has been smoke-tested yet.
+change input-method settings. Limited user-reported desktop smoke observations
+are recorded in the [specification](docs/v1.md#fcitx5-local-feasibility-result);
+the full frontend matrix is still unverified.
 
 In addition to Rust, use Fcitx5 Core/Utils development headers **5.1.23 or newer**,
 a C++20 compiler, CMake **3.25 or newer**, and Ninja. These are build requirements;
@@ -729,7 +733,11 @@ and explicit preedit clicks. They verify UTF-8 cursor offsets and ordered
 preedit/commit/application-key effects, including framework-owned shortcuts and
 both focus-out commit owners. A simulated frontend commit is not evidence that a
 real toolkit honors that path. Actual AltGr/compose completion, document relocation,
-Wayland/XWayland delivery and desktop UI still need smoke tests. The precise
+Wayland/XWayland delivery and desktop UI still need systematic smoke tests.
+The changed Escape behavior needs manual retesting: `ki` then Escape should
+keep কি, and the next `i` should start a fresh ই. Restart the private test daemon
+with the rebuilt addon; an already loaded process keeps its old implementation.
+The precise
 [boundary contract and limits](docs/v1.md#fcitx5-local-feasibility-result) are recorded
 alongside the product specification.
 

@@ -9,88 +9,91 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Current position
 
-- **Implemented:** dependency-free Rust transliteration/composition APIs plus a
-  minimal build-local Fcitx5 addon. The C++ addon owns framework events/UI; a
-  separate Rust C-ABI crate wraps the existing controller. Core rules and
-  composition logic are unchanged and still forbid unsafe code.
-- **Behavior:** editable Bangla without a choice list; raw-key Backspace;
-  Ctrl+Backspace clears active input; Escape cancels; Space/Enter, navigation and
-  application shortcuts finalize before the original action. Releases and
-  modifiers preserve composition unless Fcitx handles a configured shortcut.
-- **Lifecycle:** one non-copying Rust handle per context. Ordinary focused
-  switching commits once; focus-out defers to Fcitx/frontend ownership and only
-  clears Rust state. Reset, destruction and capability restrictions discard.
-  See the [contract and evidence](v1.md#fcitx5-local-feasibility-result).
-- **Validation:** real local addon loader and Fcitx5 dispatcher with a synthetic
-  frontend, ten suites, three FFI tests, 20 composition/352 conversion tests,
-  two doctests and 522,933 unchanged fixture rows pass. Format/lint/release builds
-  and C++ ASan/UBSan pass; leak detection could not run under sandbox ptrace.
-- **Environment:** CachyOS x86_64; session reports KDE/Wayland; Plasma 6.8.2,
-  Fcitx5 5.1.23, Rust/Cargo 1.99.1, GCC 16.2.1, CMake 4.4.5, Ninja 1.13.2.
-  Installed toolkit versions are recorded in the evidence; no actual app tested.
-- **Remaining limits:** desktop/AltGr/compose/mouse delivery, frontend-owned
-  commits, visible fallback UI, Unicode case policy and performance remain
-  unverified or unresolved. No installation, settings changes or packaging.
+- **Implemented:** dependency-free Rust transliteration/composition APIs, separate
+  C-ABI wrapper and experimental C++ Fcitx5 addon with a real-dispatcher harness.
+  Phonetic rules and reusable composition logic are unchanged; the core still
+  forbids unsafe code and has no platform dependencies.
+- **Updated user policy:** Escape now commits the pending Bangla, clears the raw
+  buffer and consumes that press. It preserves the word without adding a space
+  or newline. Idle Escape forwards; invisible raw input clears without an empty
+  framework commit. Explicit reset/destruction/cancel still discard.
+- **Other behavior:** Ctrl+Backspace clears active raw input and otherwise forwards;
+  Space/Enter/navigation/application shortcuts commit before the original action.
+  One non-copying handle per context; focus-out leaves commit ownership to Fcitx/
+  frontend, ordinary focused switching commits once, reset/restrictions discard.
+- **Manual smoke report:** user saw no ordinary typing or field-switching issues,
+  including no restored buffer. GTK3 Ctrl+Backspace worked. KWrite Ctrl+Backspace
+  and Ctrl+Left/Right failed; active-versus-committed and English/Jong-off behavior
+  are still being clarified. Do not mark the KWrite issue fixed or a full frontend
+  matrix passed. Exact launch/runtime details and other tested apps are pending.
+- **Current validation:** ten dispatcher suites, three FFI tests, 20 composition/
+  352 conversion tests, two doctests and 522,933 unchanged fixture rows pass;
+  formatting/lint/release builds and C++ ASan/UBSan pass with leak detection off.
+- **Limits:** new Escape behavior still needs manual retesting. Qt word shortcuts,
+  AltGr/compose/mouse/frontend delivery, Unicode case policy and performance remain
+  unresolved or incompletely validated. No installation/global settings changes.
 
 ## Latest completed step
 
-- **2026-10-29 — Minimal Fcitx5 addon, Rust boundary and dispatcher harness.**
-  Added `adapters/fcitx5`, CMake/build-local metadata and a Cargo workspace member
-  with no registry dependencies. The `.so` loads through the installed Fcitx5
-  loader in an isolated Instance; only it and a harness passthrough engine load.
-- **Boundary:** Rust allocates/frees opaque handles; Unicode scalar input and
-  borrowed UTF-8 pointer/length output; C++ copies spans before framework calls.
-  Documented lifetimes, thread/exclusive access, errors, panic containment and
-  process-failure limits. Unsafe operations stay outside the reusable core.
-- **Results:** ordered clear-preedit/commit/one-key delivery; active/invisible/idle
-  editing; case/keypad text; modifiers/releases/repeats; framework switching keys;
-  ordinary switching; server/frontend-owned focus-out; repeated callbacks; reset,
-  destruction/restriction; independent fields; fallback preedit and preedit click.
-  Frontend ownership is simulated, not established in a real toolkit.
-- **Investigation:** inspected matching installed headers and upstream 5.1.23
-  dispatcher/delivery/loader/default-shortcut sources. Fcitx commits before the
-  addon focus-out callback; default Shift release is a framework toggle. Sources,
-  license provenance and exact environment versions are linked in the spec.
+- **2026-10-29 — Preserve the pending word on Escape; record initial smoke feedback.**
+  Superseded the former Escape-cancels policy in README/spec and implemented a
+  private `JongEscape` action using the existing Rust controller's `commit()` and
+  raw-active state. No new core key variant or phonetic behavior was added.
+- **Regression evidence:** Escape clears preedit, commits কি once and consumes;
+  idle/repeated Escape forwards after that commit; the next `i` starts fresh ই;
+  invisible input clears without an empty commit. Modified Escape still commits
+  and forwards. Expanded boundary checks for Ctrl+Right alongside Ctrl+Left and
+  unchanged repeat/idle boundary delivery. All ten harness suites pass.
+- **KWrite investigation:** inspected matching KTextEditor 6.31.0 editing actions
+  and Fcitx5 Qt 5.1.16 shared Qt5/Qt6 input filtering/forwarding code. Word editing
+  uses application shortcut actions. This does not establish the cause; no Qt
+  workaround or speculative modifier change was made. Sources and installed
+  package inventory are in the [spec](v1.md#fcitx5-local-feasibility-result).
+- **User evidence:** basic typing/field isolation and GTK3 word deletion worked;
+  KWrite word deletion/navigation did not. These observations describe the old
+  Escape build; exact runtime paths and checklist coverage remain unconfirmed.
 - **Rust checks:** `cargo fmt --all -- --check`;
   `cargo clippy --offline --workspace --all-targets -- -D warnings`;
   `cargo test --offline --workspace`; `cargo build --offline --workspace --release`
-  — all passed: 20 composition, 352 conversion, three FFI tests, two doctests,
-  all unchanged fixture rows. No external reference parser/audit rerun.
+  — passed: 20 composition, 352 conversion, three FFI tests, two doctests and all
+  unchanged fixtures. External reference parser/audits were not rerun.
 - **C++ checks:** `clang-format --dry-run --Werror adapters/fcitx5/addon.cpp
   adapters/fcitx5/jong.h adapters/fcitx5/tests/harness.cpp` passed.
-  `cmake -S adapters/fcitx5 -B target/fcitx5 -G Ninja -DCMAKE_BUILD_TYPE=Debug`;
-  `cmake --build target/fcitx5`;
-  `ctest --test-dir target/fcitx5 --output-on-failure` — passed, ten suites.
-- **Sanitizers:** configured `target/fcitx5-sanitized` with the README's actual
+  `cmake -S adapters/fcitx5 -B target/fcitx5-escape -G Ninja -DCMAKE_BUILD_TYPE=Debug`;
+  `cmake --build target/fcitx5-escape`;
+  `ctest --test-dir target/fcitx5-escape --output-on-failure` — passed.
+- **Sanitizers:** configured `target/fcitx5-escape-sanitized` with the README's
   `-fsanitize=address,undefined -fno-omit-frame-pointer` compiler and sanitizer
-  linker flags; `cmake --build target/fcitx5-sanitized` passed. Default CTest hit
-  LeakSanitizer's ptrace fatal error. Repeated with `ASAN_OPTIONS=detect_leaks=0
-  ctest --test-dir target/fcitx5-sanitized --output-on-failure` — passed. C++ is
-  instrumented; Rust/system libraries and leaks are not covered by that result.
-- **Docs checks:** `python /tmp/jong-check-fcitx5-docs.py` and
-  `git diff --check` passed; local links/anchors, handoff, acceptance table,
-  fixture inventory, workspace boundary and unchanged historical entries checked.
-- **Prior evidence, not rerun:** the 83,353-input mixed-context audit found no new
-  gaps and three known Unicode case differences; the 1,350-input vowel-pair and
-  302-input standalone audits remain bounded compatibility evidence.
-- **Next action:** prepare the separate reversible desktop smoke-test increment.
+  linker flags; `cmake --build target/fcitx5-escape-sanitized` and
+  `ASAN_OPTIONS=detect_leaks=0 ctest --test-dir target/fcitx5-escape-sanitized
+  --output-on-failure` — passed. LeakSanitizer's sandbox ptrace failure is prior
+  evidence, not retried here; Rust/system libraries are not instrumented.
+- **Docs checks:** `python /tmp/jong-check-escape-docs.py` and `git diff --check`
+  passed; local links/anchors, superseded Escape policy, 15 acceptance groups,
+  unchanged fixtures/core logic/history and concise handoff checked.
+- **Build isolation:** used separate build directories; the user's potentially
+  running `target/fcitx5` addon was not rebuilt or restarted. Manual retesting
+  requires closing that test session, rebuilding its addon and starting again.
+- **Prior evidence, not rerun:** 83,353-input mixed-context, 1,350-input vowel-pair
+  and 302-input standalone audits remain bounded compatibility evidence, with
+  three known Unicode case differences in the mixed-context audit.
 
 ## Next small implementation step
 
-1. Prepare an isolated desktop smoke-test setup without replacing the active
-   daemon or modifying global input-method settings. Specify local addon discovery,
-   temporary profile/configuration, cleanup and the app/frontend paths to test.
-2. Test actual native Wayland Qt and GTK applications and a browser; record exact
-   application/toolkit/Fcitx integration versions and Wayland versus XWayland.
-   Validate resolved AltGr/compose text, ordinary boundaries, shortcut/release/
-   repeat handling, original-field focus-out commit ownership and reset/switching.
-3. Exercise preedit clicks and app cursor/selection moves. Record missing frontend
-   notifications and limitations; update the adapter only for observed gaps.
-   Keep packaging, general installation and performance measurements separate.
+1. Manually retest updated Escape: `ki` → Escape keeps কি; following `i` starts ই;
+   Ctrl+Backspace then affects only the new active buffer. Check GTK3 and KWrite.
+2. Clarify whether KWrite Ctrl+Backspace fails during preedit, after Space commits,
+   and with ordinary English text while Jong is off. Compare Ctrl+Left/Right in
+   the same states. Confirm tested apps, private-session launch and actual versions.
+3. Use that evidence to isolate app shortcut configuration, Qt/Fcitx forwarding or
+   addon handling; reproduce before changing behavior. Record remaining frontend
+   routes separately, including browser, AltGr/compose and mouse relocation.
+   Keep global input-method settings, installation/packaging and performance work
+   outside this increment.
 
-**Done when:** reproducible app smoke-test evidence establishes which frontend
-routes work, how focus-out avoids duplicates and what remains limited. The current
-local build/harness milestone is complete; actual desktop typing is not validated.
+**Done when:** Escape's requested behavior has desktop evidence and the KWrite
+word-shortcut failure is isolated, with a reproducible fix or documented frontend
+limitation. The Escape implementation is complete; the KWrite report is unresolved.
 
 ## Completed steps
 

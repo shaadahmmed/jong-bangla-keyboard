@@ -106,7 +106,7 @@ pub unsafe extern "C" fn jong_session_action(
     action: u32,
     scalar: u32,
 ) -> JongResult {
-    if session.is_null() || action > 7 || (action == 0 && char::from_u32(scalar).is_none()) {
+    if session.is_null() || action > 8 || (action == 0 && char::from_u32(scalar).is_none()) {
         return JongResult::error(INVALID);
     }
     // SAFETY: null is checked; validity and exclusive access are caller obligations.
@@ -127,6 +127,10 @@ pub unsafe extern "C" fn jong_session_action(
                 session.word.reset();
                 return false;
             }
+            8 => KeyEffect {
+                consumed: session.word.is_active(),
+                committed: session.word.commit(),
+            },
             _ => unreachable!(),
         };
         session.committed = effect.committed.unwrap_or_default();
@@ -186,7 +190,7 @@ mod tests {
             );
             jong_session_free(std::ptr::null_mut());
             jong_session_action(session, 0, 'k' as u32);
-            for (action, scalar) in [(0, 0xd800), (0, 0x110000), (8, 0)] {
+            for (action, scalar) in [(0, 0xd800), (0, 0x110000), (9, 0)] {
                 assert_eq!(jong_session_action(session, action, scalar).status, INVALID);
             }
             let result = jong_session_action(session, 5, 0);

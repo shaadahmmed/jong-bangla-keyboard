@@ -210,6 +210,10 @@ void boundary(Instance &instance, Key key) {
   ic.expect({"preedit:", "commit:কি", "key"});
   ic.unchanged(key);
   ic.clear();
+  require(!ic.send(key), "idle boundary remains unhandled");
+  ic.expect({"key"});
+  ic.unchanged(key);
+  ic.clear();
   require(!ic.send(Key(FcitxKey_BackSpace)), "idle Backspace belongs to app");
   ic.expect({"key"});
 }
@@ -227,7 +231,7 @@ void test_boundaries(Instance &instance) {
     boundary(instance, Key(sym, KeyState::Shift));
   }
   for (const auto sym : {FcitxKey_c, FcitxKey_v, FcitxKey_x, FcitxKey_a,
-                         FcitxKey_z, FcitxKey_Left}) {
+                         FcitxKey_z, FcitxKey_Left, FcitxKey_Right}) {
     boundary(instance, Key(sym, KeyState::Ctrl));
   }
   boundary(instance, Key(FcitxKey_BackSpace, KeyState::Ctrl_Shift));
@@ -254,13 +258,13 @@ void test_editing(Instance &instance) {
   ic.type("ki");
   ic.clear();
   require(ic.send(Key(FcitxKey_Escape)), "active Escape consumed");
-  ic.expect({"preedit:"});
+  ic.expect({"preedit:", "commit:কি"});
   ic.clear();
   require(!ic.send(Key(FcitxKey_Escape)), "idle Escape forwarded");
   ic.expect({"key"});
   ic.type("i");
   require(ic.inputPanel().clientPreedit().toString() == "ই",
-          "fresh word after cancel");
+          "fresh word after Escape commit");
 }
 
 void test_invisible(Instance &instance) {
@@ -391,7 +395,7 @@ void test_repeats(Instance &instance) {
           "active Escape repeat consumes");
   require(!ic.send(Key(FcitxKey_Escape, KeyState::Repeat)),
           "idle Escape repeat forwards");
-  ic.expect({"preedit:", "key"});
+  ic.expect({"preedit:", "commit:কি", "key"});
 }
 
 void test_framework_shortcuts(Instance &instance) {
