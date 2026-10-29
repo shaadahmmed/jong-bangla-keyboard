@@ -7,11 +7,32 @@ implemented from scratch with a reusable Rust engine. The first release targets
 Fcitx5 on Linux, with CachyOS + KDE Plasma on Wayland as the first test environment.
 IBus and Windows integrations are future work. Project code is MIT licensed.
 
-Read [README.md](README.md), [docs/v1.md](docs/v1.md), and
-[docs/progress.md](docs/progress.md) before making changes.
 `docs/v1.md` distinguishes confirmed requirements from proposals and open decisions.
 Do not turn a proposal into a requirement without explaining the decision.
 User instructions take precedence over this guide; update the docs when they change.
+
+## Read project context efficiently
+
+- Follow applicable `AGENTS.md` instructions; reuse instructions already supplied
+  in the conversation instead of reading the same file again.
+- At the start of a session, read only the
+  [Current position](docs/progress.md#current-position) and
+  [Next small implementation step](docs/progress.md#next-small-implementation-step)
+  sections of the progress log for the current handoff.
+- Read relevant sections of [README.md](README.md) for orientation, usage, and
+  check commands, and [docs/v1.md](docs/v1.md) for requirements and decisions
+  needed by the task. Do not read either document in full by default.
+- Read historical progress entries only when investigating an earlier decision
+  or regression, or when the current handoff lacks necessary context.
+- Read affected code, related tests/fixtures, and check tooling as needed. Use
+  targeted searches and line ranges instead of printing entire large files.
+- Do not reread unchanged material already available in the conversation. After
+  context compaction, recover only the sections needed to continue; reread when
+  a file changes or necessary context is missing.
+- Keep successful check output to a summary; inspect and show failure details
+  when needed. Run all required checks without printing every passing fixture.
+- Keep the current handoff accurate so routine work does not require reading
+  the full history. These reading rules do not reduce validation requirements.
 
 ## Collaborate in small steps
 

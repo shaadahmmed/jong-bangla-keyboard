@@ -82,6 +82,21 @@ results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
 
+### 2026-10-29 — Focused project reading instructions
+
+- Replaced the blanket read-all-documents rule in [AGENTS.md](../AGENTS.md)
+  with focused reading: current handoff first, relevant README/requirements
+  sections and affected code/tests as needed, history for investigations only.
+- Required reuse of unchanged context, targeted recovery after compaction, and
+  concise successful check output. Existing validation requirements still apply.
+- Checks: UTF-8, final newlines, trailing whitespace, and 120 local links/anchors
+  passed across both changed documents; `git diff --check` passed. Reviewed
+  consistency with existing requirements and validation rules. No engine or
+  reference comparison checks apply to this documentation-only change.
+- Limitations: missing context and changed files may still require rereading.
+  This step changes instructions only; the reference checker's output is unchanged.
+- Next: check standalone `kkh` against the pinned reference as described above.
+
 ### 2026-10-28 — Exact NgkSh conjunct
 
 - Added exact `NgkSh` → ঙ্ক্ষ (U+0999 U+09CD U+0995 U+09CD U+09B7),
