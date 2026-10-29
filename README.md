@@ -133,6 +133,25 @@ nonconjunct `lph` behavior. Evaluate `lT` if independent evidence fits a coheren
 review; exact implementation scope remains unconfirmed.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
+## Library structure
+
+[`src/lib.rs`](src/lib.rs) exposes `jong_bangla_core::transliterate`. Its
+implementation lives in private modules under `src/transliteration/`:
+
+- [`mod.rs`](src/transliteration/mod.rs): the scanner, per-call context, and
+  explicit matching priority across rule families.
+- [`rules.rs`](src/transliteration/rules.rs): independently authored mapping
+  tables, retaining their verified order and provenance comments.
+- [`vowels.rs`](src/transliteration/vowels.rs): ordinary vowel matching and
+  contextual output; higher-priority `rri`, ng-vowel, and `aZ`/`oZ` forms remain
+  in the scanner.
+- [`following_r.rs`](src/transliteration/following_r.rs): shared following-`r`
+  attachment and exceptions based on raw keys.
+
+This split preserves the public API and existing conversion behavior. Composition
+and platform adapters remain future work, with the boundaries described in
+[the architecture plan](docs/v1.md#proposed-architecture).
+
 ## Build and try the conversion slice
 
 Use Rust/Cargo **1.99.1 or newer**, with rustfmt and Clippy. This initial baseline

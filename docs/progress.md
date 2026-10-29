@@ -13,66 +13,51 @@ Dates use the project's Asia/Dhaka timezone.
   example; principal forms for all 11 basic vowels and 40 basic consonant
   sequences (35 letters), contextual forms, selected conjuncts, and selected
   following-`r` forms. See the [coverage overview](../README.md#current-status).
-- **Latest engine change:** six exact m-prefix conjunct spellings `mb`/`mbh`/
-  `mv`/`mp`/`mph`/`mf`, longer `mpl` (মপ্ল), and `lm`/`sm`/`shm`/`Sm`.
-  Earlier m-ending matches consume `m` first (`smp` → স্মপ); `mpl` stays
-  separate before `pl`. The old `mbl`/`mbhl`/`mvl`/`mphl`/`mfl` gaps now pass.
-  Exact Unicode and scope: [batch decision](v1.md#m-prefix-and-m-ending-conjunct-batch).
+- **Library organization:** `src/lib.rs` exposes the unchanged `transliterate`
+  API. Private modules separate the scanner and per-call context, authored
+  rule tables, ordinary vowels, and following-`r` handling. Cross-family
+  matching priority stays centralized. See [layout](../README.md#library-structure).
+- **Latest coverage:** the m-prefix and m-ending batch from commit `5ad840f`;
+  this refactor adds no rules or fixtures. Exact Unicode and scope:
+  [batch decision](v1.md#m-prefix-and-m-ending-conjunct-batch).
 - **Validation:** all 157,340 authored fixture cases match the SHA-256-verified
   pinned parser. Formatting, Clippy, 183 integration tests, 1 doctest, release
-  build, and default/batch smoke checks passed in this step.
+  build, and default/mixed-input smoke checks passed after the module split.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete.
   Earlier l/s/Sh labial rules, `bb`/`pp`, `pn`/`sn`/`shn`, `ns`/`ps`, and `lT`
   remain explicit gaps; other conjuncts, aliases, reph, and escapes are incomplete.
   Composition, Fcitx5, and a usable desktop keyboard are not implemented.
   Performance and platform support remain unverified.
-- **Workflow:** investigate the largest coherent related batch that can be
-  independently checked and reviewed. Complete one full validation, docs, and
-  commit cycle per batch. No known blocker to the next investigation is recorded.
 
 ## Latest completed step
 
-- **2026-10-29 — M-prefix and m-ending batch.** Six m-prefix conjunct spellings,
-  longer `mpl`, and four independently checked m-ending spellings. Expanded to
-  `lm`/`sm`/`shm`/`Sm` because they consume `m` before this batch's initial forms.
-  Longer `mbh`/`mph`/`mpl` precede `mb`/`mp`; context and following-`r` reuse
-  the existing helper. No upstream source, tables, fixtures, dependencies, or
-  case normalization were imported; no additional basic attachment was needed.
-- **Evidence:** 23,459 new authored rows across twelve files: independent exact
-  Unicode, vowels/ya, one through eight `r` keys and exceptions, preceding
-  contexts, existing matches in both orders, every ordered batch pair,
-  shared-key overlaps, adjacent consonants, digits, every internal split,
-  boundaries, copied Unicode, repetition, words, and nonconjunct controls.
-  Seven resolved partial-output assertions moved into passing fixtures. Earlier
-  fixture files remain unchanged; lowercase `shm` and uppercase `Sm` have
-  distinct filenames, preserving the existing uppercase `Shm` file.
+- **2026-10-29 — Modularize the transliteration library.** Reduced `src/lib.rs`
+  from 784 to 83 lines, preserving the public import and documentation.
+  `transliteration/mod.rs` owns the scanner and per-call context; `rules.rs`
+  owns mapping tables; `vowels.rs` handles ordinary vowel matching and output;
+  `following_r.rs` owns shared attachment and exceptions. Helpers and tables
+  are private to the implementation. No dependencies or behavior were added.
+- **Priority:** retained branch ordering and high-priority `rri`, ng-vowel,
+  and `aZ`/`oZ` handling in the scanner. Table contents, provenance comments,
+  following-r helper, and existing public documentation were retained.
 - **Checks run:** `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`; `cargo test --offline`
   (183 integration tests and 1 doctest); `cargo build --offline --release` — passed.
   `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 157,340 cases passed; thirty-five gap probes printed separately.
-  `node /tmp/jong-verify-m-labial.mjs` — all 23,459 new authored rows matched;
-  each spelling's context and priority evidence was checked before implementation.
-  `node /tmp/jong-verify-m-labial-extra.mjs` — 427 additional authored boundary,
-  separate-call, long-input, and reference-gap expectations matched.
-  `cargo test --offline m_labial` — all fourteen targeted tests passed.
-  `cargo test --offline l_batch_earlier_unimplemented_matches_remain_explicit_gaps`
-  and `cargo test --offline unsupported_rules_still_preserve_unmatched_characters`
-  — passed after moving resolved assertions into passing fixtures.
-  Rust/Cargo 1.99.1 and Node.js v24.21.0 were used.
+  — all 157,340 authored cases passed; thirty-five existing gaps printed
+  separately. Existing fixtures and tests were unchanged.
 - **Smoke checks:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট.
-  `cargo run --offline --example convert -- 'mb mbh mv mp mph mf mpl lm sm shm Sm mbrri mbhrry mvrrZ mpry mphrri mfrry mplrrZ lmrri smrry shmrrZ Smry mbl mbhl mvl mphl mfl mplk mpll mplTm lmp smp shmp Smp lmpl smpl shmpl Smpl Ngmb kkhmp sklm kshm mbbl mppl kombol gombhir omvor sompod lompho domf almari smarok shmoshan'`
-  — all new forms, exceptions, consuming priorities, and words matched.
-- **Documentation checks:** `python /tmp/jong-check-m-labial-docs.py` — local
-  links/anchors, counts/code points, unique manifests, original fixture retention,
-  behavior and gap tables, README examples, bounded handoff, preserved history,
-  and the current gap-probe count passed. `git diff --check` — passed.
-- **Remaining limitations:** `nsm`/`psm`/`nshm`/`pshm` remain partial-output
-  regressions, separate from compatibility fixtures. Ten case-alias gap
-  expectations are likewise explicit. Five resolved probes were removed and
-  four added; thirty-five remain. Other conjuncts (including `mth`), aliases,
-  reph, escapes, composition, and platform work remain incomplete. No broader
-  compatibility or performance claim.
+  `cargo run --offline --example convert -- 'mb mbh mpl smp NgkShm kxNrri yrr wrry OI OU ngee ngoo aZ oZ ee oo ooo 0123456789 🙂'`
+  — selected overlaps, r exceptions, vowel priorities, digits, and Unicode
+  produced their existing expected output. Rust/Cargo 1.99.1 and Node.js
+  v24.21.0 were used; no performance claim is made.
+- **Documentation checks:** `python /tmp/jong-check-module-docs.py` — local
+  links/anchors, bounded handoff, and preserved historical entries passed.
+  `git diff --check` — passed. README documents the module responsibilities;
+  v1 records the implemented split separately from proposed future layers.
+- **Remaining limitations:** unchanged compatibility gaps and incomplete
+  composition/platform work. No new reference investigation was needed for
+  this organizational change. The l-prefix batch below has not started.
 - **Next action:** investigate l-prefix spellings and their longer exceptions.
 
 ## Next small implementation step
