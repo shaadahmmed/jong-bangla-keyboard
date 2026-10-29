@@ -1,6 +1,155 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn nasal_stops_reset_at_every_split_boundary_and_between_calls() {
+    for (raw, bangla, parts) in [
+        ("nd", "ন্দ", vec![("ন", "দ")]),
+        ("ndh", "ন্ধ", vec![("ন", "ধ"), ("ন্দ", "হ")]),
+        ("nD", "ন্ড", vec![("ন", "ড")]),
+        ("ND", "ণ্ড", vec![("ণ", "ড")]),
+        ("NDh", "ণ্ঢ", vec![("ণ", "ঢ"), ("ণ্ড", "হ")]),
+        ("nt", "ন্ত", vec![("ন", "ত")]),
+        ("nth", "ন্থ", vec![("ন", "থ"), ("ন্ত", "হ")]),
+        ("nT", "ন্ট", vec![("ন", "ট")]),
+        ("NT", "ণ্ট", vec![("ণ", "ট")]),
+        ("nTh", "ন্ঠ", vec![("ন", "ঠ"), ("ন্ট", "হ")]),
+        ("NTh", "ণ্ঠ", vec![("ণ", "ঠ"), ("ণ্ট", "হ")]),
+    ] {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "ন্দ", "\u{301}"] {
+            for (index, (first, tail)) in parts.iter().enumerate() {
+                let split = index + 1;
+                assert_eq!(
+                    transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
+                    format!("{first}{boundary}{tail}")
+                );
+            }
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        for (index, (first, tail)) in parts.iter().enumerate() {
+            let split = index + 1;
+            assert_eq!(transliterate(&raw[..split]), *first);
+            assert_eq!(transliterate(&raw[split..]), *tail);
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    for (raw, bangla) in [("t", "ত"), ("th", "থ"), ("T", "ট"), ("Th", "ঠ")] {
+        for boundary in ["\n", "\r", "\t", "\0", "🙂", "ত্র"] {
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}a")),
+                format!("{bangla}্র{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+        }
+    }
+    assert_eq!(
+        transliterate(
+            &"nd ndh nD ND NDh nt nth nT NT nTh NTh nddh ndhn nDh nntr kShNThr 🙂 ".repeat(64)
+        ),
+        "ন্দ ন্ধ ন্ড ণ্ড ণ্ঢ ন্ত ন্থ ন্ট ণ্ট ন্ঠ ণ্ঠ ন্দধ ন্ধন ন্ডহ ন্নত্র ক্ষ্ণঠ্র 🙂 ".repeat(64)
+    );
+}
+
+#[test]
+fn nasal_stops_conjunct_ndh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ndh.tsv"));
+}
+
+#[test]
+fn nasal_stops_conjunct_nd_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-nd.tsv"));
+}
+
+#[test]
+fn nasal_stops_conjunct_n_d_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-n-d-retroflex.tsv"));
+}
+
+#[test]
+fn nasal_stops_conjunct_n_retroflex_dh_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-n-retroflex-dh-retroflex.tsv"
+    ));
+}
+
+#[test]
+fn nasal_stops_conjunct_n_retroflex_d_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-n-retroflex-d-retroflex.tsv"
+    ));
+}
+
+#[test]
+fn nasal_stops_conjunct_nth_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-nth.tsv"));
+}
+
+#[test]
+fn nasal_stops_conjunct_nt_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-nt.tsv"));
+}
+
+#[test]
+fn nasal_stops_conjunct_n_th_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-n-th-retroflex.tsv"));
+}
+
+#[test]
+fn nasal_stops_conjunct_n_t_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-n-t-retroflex.tsv"));
+}
+
+#[test]
+fn nasal_stops_conjunct_n_retroflex_th_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-n-retroflex-th-retroflex.tsv"
+    ));
+}
+
+#[test]
+fn nasal_stops_conjunct_n_retroflex_t_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-n-retroflex-t-retroflex.tsv"
+    ));
+}
+
+#[test]
+fn nasal_stops_t_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/t-following-r.tsv"));
+}
+
+#[test]
+fn nasal_stops_th_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/th-following-r.tsv"));
+}
+
+#[test]
+fn nasal_stops_t_retroflex_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/t-retroflex-following-r.tsv"));
+}
+
+#[test]
+fn nasal_stops_th_retroflex_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/th-retroflex-following-r.tsv"));
+}
+
+#[test]
 fn d_batch_resets_at_boundaries_and_between_calls() {
     for (raw, bangla, parts) in [
         ("dd", "দ্দ", vec![("দ", "দ")]),
@@ -880,7 +1029,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Ngx`a", "ঙ্ষ`আ"),
         ("Gg", "Gগ"),
         ("gNG", "গ্ণG"),
-        ("ndd", "নদ্দ"),
         ("bdd", "বদ্দ"),
         ("ddH", "দ্দH"),
         ("dHn", "দHন"),

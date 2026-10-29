@@ -13,18 +13,18 @@ Dates use the project's Asia/Dhaka timezone.
   example; principal forms for all 11 basic vowels and 40 basic consonant
   sequences (35 letters), contextual forms, selected conjuncts, and selected
   following-`r` forms. See the [coverage overview](../README.md#current-status).
-- **Latest engine change:** eight exact d/dh spellings:
-  `dd`/`ddh`/`dhn`/`dhm`/`dm`/`dbh`/`dv`/`DD`, plus following `r` after basic
-  `d`/`dh`/`D`/`Dh`/`b`/`bh`/`v`. Consumed-key priority resolves `ddghr`,
-  `dddh`, `ddbh`, and `DDh`; exposed consonants now attach in `dddhr`, `ddbhr`,
-  and `DDDhr`. Exact scope and Unicode are in the
-  [batch decision](v1.md#d-and-dh-conjunct-batch).
-- **Validation:** all 47,290 authored cases match the SHA-256-verified pinned
-  reference. Formatting, Clippy, 109 integration tests, 1 doctest, release build,
-  and default/batch smoke checks passed in this step.
+- **Latest engine change:** eleven exact nasal dental/retroflex spellings:
+  `nd`/`ndh`/`nD`/`ND`/`NDh`/`nt`/`nth`/`nT`/`NT`/`nTh`/`NTh`, plus following
+  `r` after basic `t`/`th`/`T`/`Th`. Longer forms and earlier consumed nasal
+  matches retain priority. `ndd`/`nddh` now give ন্দদ/ন্দধ; exact `nDh` gives
+  ন্ডহ, distinct from `NDh` → ণ্ঢ. Exact Unicode and scope are in the
+  [batch decision](v1.md#nasal-dental-and-retroflex-conjunct-batch).
+- **Validation:** all 62,845 authored fixture cases match the SHA-256-verified
+  pinned reference. Formatting, Clippy, 125 integration tests, 1 doctest,
+  release build, and default/batch smoke checks passed in this step.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete,
   including other conjuncts and following-`r` forms, aliases, reph, and escapes.
-  Earlier `nd`/`bd` and `shn`/`shm`/`bhl`/`phl`/`shl`/`vl` remain known gaps.
+  Earlier `bd` and `shn`/`shm`/`bhl`/`phl`/`shl`/`vl` remain known gaps.
   Composition, Fcitx5, and a usable desktop keyboard are not implemented.
   Performance/platform support remain unverified.
 - **Workflow:** prefer the largest coherent related batch that can be reliably
@@ -34,51 +34,51 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Latest completed step
 
-- **2026-10-29 — D and dh conjunct batch.** Expanded the planned seven exact
-  spellings to eight by including doubled retroflex `DD`. Added basic
-  `d`/`dh`/`D`/`Dh`/`b`/`bh`/`v` attachment needed by exposed consonants.
-  Kept transliteration independent, dependency-free, and case-sensitive.
-- **Evidence:** 11,687 new authored cases across 15 fixture files independently
+- **2026-10-29 — Nasal dental and retroflex conjunct batch.** Implemented all
+  eleven planned exact spellings and four basic attachments. Each spelling has
+  independent context/priority evidence. Kept transliteration independent,
+  dependency-free, and case-sensitive; no upstream source or tables imported.
+- **Evidence:** 15,555 new authored rows across 15 fixture files independently
   check each spelling's Unicode, vowels/ya, following `r` (one through eight
-  keys), exceptions, existing matches in both orders, all ordered batch pairs,
-  shared-key overlaps, adjacent basic consonants, digits, raw boundaries,
-  copied Unicode, and words. Rust regressions also check control boundaries,
-  every internal split, separate calls, and long mixed Unicode. Resolved partial
-  output assertions moved into checked fixtures.
+  keys), exceptions, existing matches in both orders, every ordered batch pair,
+  shared-key overlaps, adjacent basic consonants, digits, boundaries, copied
+  Unicode, every internal split, and words. Rust regressions also check controls,
+  separate calls at every split, and long mixed Unicode. Resolved `ndd` moved
+  from a partial assertion into passing fixtures; the gap probe now uses `bdd`.
 - **Checks run:** `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`; `cargo test --offline`
-  (109 integration tests and 1 doctest); `cargo build --offline --release` — passed.
+  (125 integration tests and 1 doctest); `cargo build --offline --release` — passed.
   `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 47,290 cases passed; nine remaining gaps printed separately.
+  — all 62,845 fixture cases passed; nine remaining gaps printed separately.
+  `node /tmp/jong-verify-nasal-stops-controls.mjs` — 473 authored control/split,
+  separate-call, and long-Unicode expectations matched the pinned reference.
   Rust/Cargo 1.99.1 and Node.js v24.21.0 were used.
 - **Smoke checks:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট.
-  `cargo run --offline --example convert -- 'dd ddh dhn dhm dm dbh dv DD dr dhr Dr Dhr br bhr vr ddghr dddhr ddbhr DDDhr'`
-  — all eight exact forms, seven basic attachments, and four overlaps matched.
-- **Documentation checks:** `python /tmp/jong-check-d-batch-docs.py` — local
+  `cargo run --offline --example convert -- 'nd ndh nD ND NDh nt nth nT NT nTh NTh tr thr Tr Thr ndd nddh ndhn nDh nntr kShNThr bondhu koNTho'`
+  — all eleven exact forms, four basic attachments, overlaps, and words matched.
+- **Documentation checks:** `python /tmp/jong-check-nasal-stops-docs.py` — local
   links/anchors, fixture counts/code points/manifests, behavior table, README
   examples, bounded handoff, and preserved history passed.
   `git diff --check` — passed.
-- **Remaining limitations:** earlier nasal/b-prefixed `ndd`/`bdd`, case aliases
-  such as `ddH`/`dHn`/`dV`, s/sh/l families, reph, and escapes remain gaps,
-  separate from passing fixtures. No full-compatibility, performance,
-  composition, or platform milestone is claimed.
-- **Next action:** investigate related nasal/dental/retroflex conjuncts as one
-  coherent batch, preserving independent context and priority evidence.
+- **Remaining limitations:** earlier b-prefixed matches, t-family conjuncts,
+  s/sh/l families, case aliases, reph, and escapes remain gaps, separate from
+  passing fixtures. No full-compatibility, performance, composition, or platform
+  milestone is claimed.
+- **Next action:** investigate related t-family conjuncts as one coherent batch,
+  preserving independent context and priority evidence.
 
 ## Next small implementation step
 
-1. Define the largest coherent batch around exact
-   `nd`/`ndh`/`nD`/`ND`/`NDh` and `nt`/`nth`/`nT`/`NT`/`nTh`/`NTh`.
-   Investigate related spellings and exposed basic attachment before editing;
-   expand when reliable to review together.
+1. Define the largest coherent batch around exact `tt`/`tth`/`tn`/`tm`.
+   Investigate related t/th/T/Th spellings and exposed basic attachment before
+   editing; expand when reliable to validate and review together.
 2. Independently check each selected spelling against the
    [pinned reference](v1.md#phonetic-behavior-reference): exact Unicode,
    vowels/ya, preceding contexts, following `r`, longer `r` runs,
    `rri`/`rry`/`rrZ` exceptions, digits, boundaries, copied Unicode, and controls.
-3. Check longer spellings before their shorter forms, earlier consuming nasal
-   matches, the d/dh batch and its basic attachments, `ndd`/`nddh`, and existing
-   k/Sh/nasal overlaps. Keep b-prefixed and s/sh/l families separate unless
-   deliberately included.
+3. Check longer forms before shorter ones, consumed-key overlaps with the nasal
+   dental/retroflex batch, earlier nasal/k/Sh matches, and the d/dh batch.
+   Keep b-prefixed and s/sh/l families separate unless deliberately included.
 4. Implement the verified batch, extend fixtures, run the full README checks,
    update behavioral docs and this handoff once, and commit the batch together.
    Keep composition, platform integration, packaging, and unrelated work separate.

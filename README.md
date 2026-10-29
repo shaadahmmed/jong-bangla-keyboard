@@ -45,7 +45,9 @@ Exact `ngh`/`nn`/`Nn`/`mn`/`hm`/`hl`/`nm`/`Nm`/`mm`/`ml`/`Ngm`/`gm`
 and following `r` after basic `m`/`l` are also implemented.
 Exact `dd`/`ddh`/`dhn`/`dhm`/`dm`/`dbh`/`dv`/`DD` and following `r` after
 basic `d`/`dh`/`D`/`Dh`/`b`/`bh`/`v` are also implemented.
-This is a partial engine with 47,290 reference-checked examples,
+Exact `nd`/`ndh`/`nD`/`ND`/`NDh`/`nt`/`nth`/`nT`/`NT`/`nTh`/`NTh`
+and following `r` after basic `t`/`th`/`T`/`Th` are also implemented.
+This is a partial engine with 62,845 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Other
 letter forms, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -96,7 +98,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [exact `Ngg`/`Nggh`](docs/v1.md#exact-ngg-and-nggh-conjuncts), then
 [the g and nasal conjunct batch](docs/v1.md#g-and-nasal-conjunct-batch), then
 [the nasal and h conjunct batch](docs/v1.md#nasal-and-h-conjunct-batch), then
-[the d and dh conjunct batch](docs/v1.md#d-and-dh-conjunct-batch).
+[the d and dh conjunct batch](docs/v1.md#d-and-dh-conjunct-batch), then
+[the nasal dental and retroflex batch](docs/v1.md#nasal-dental-and-retroflex-conjunct-batch).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress handoff](docs/progress.md) for current state, the latest completed
@@ -106,9 +109,10 @@ that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
 update, and commit per completed batch. The next planned batch investigates
-related nasal/dental/retroflex conjuncts around
-`nd`/`ndh`/`nD`/`ND`/`NDh` and `nt`/`nth`/`nT`/`NT`/`nTh`/`NTh`,
-including priority against the now-supported d/dh forms. This is planned work.
+related t-family conjuncts around `tt`/`tth`/`tn`/`tm`, including longer matches
+and overlaps with the now-supported nasal forms. Exact scope and additional
+related spellings will be established by independent reference checks.
+This is planned work.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Build and try the conversion slice
@@ -358,9 +362,23 @@ Basic `d`/`dh`/`D`/`Dh`/`b`/`bh`/`v` now attach following `r`:
 `'dr dhr Dr Dhr br bhr vr'` → `দ্র ধ্র ড্র ঢ্র ব্র ভ্র ভ্র`.
 This resolves `ddghr` → `দ্দঘ্র`, `dddhr` → `দ্দধ্র`, `ddbhr` → `দ্দভ্র`,
 and `DDDhr` → `ড্ডঢ্র`. Try `'buddhi podmo udbhob udvob aDDa brrikkho'` → `বুদ্ধি পদ্ম উদ্ভব উদ্ভব আড্ডা বৃক্ষ`.
-Copied Bangla resets context (`দ্দr` → `দ্দর`). Earlier nasal/b-prefixed
-matches (`nd`, `bd`), `shn`/`shm`/`bhl`/`phl`/`shl`/`vl`, other conjuncts
-and following-`r` forms, uppercase aliases, reph, and escapes remain incomplete.
+Copied Bangla resets context (`দ্দr` → `দ্দর`).
+Exact `nd`/`ndh`/`nD`/`ND`/`NDh`/`nt`/`nth`/`nT`/`NT`/`nTh`/`NTh`
+now produce ন্দ/ন্ধ/ন্ড/ণ্ড/ণ্ঢ/ন্ত/ন্থ/ন্ট/ণ্ট/ন্ঠ/ণ্ঠ, respectively.
+Try `'nd ndh nD ND NDh nt nth nT NT nTh NTh'` → `ন্দ ন্ধ ন্ড ণ্ড ণ্ঢ ন্ত ন্থ ন্ট ণ্ট ন্ঠ ণ্ঠ`.
+Each spelling supports vowel signs, ya, and following `r`, including the existing
+`rri`/`rry`/`rrZ` exceptions (`ndrri` → `ন্দৃ`, `ntrry` → `ন্তরর‍্য`).
+Longer `ndh`/`NDh`/`nth`/`nTh`/`NTh` win over their shorter forms.
+Case and consumed keys matter: `nDh` → `ন্ডহ`, `NDh` → `ণ্ঢ`,
+`ndd` → `ন্দদ`, `nddh` → `ন্দধ`, `ndhn` → `ন্ধন`, and `nndh` → `ন্নধ`.
+Earlier `ShN`/`kShN`/`kxN` still consume `N` first (`kShNThr` → `ক্ষ্ণঠ্র`).
+Basic `t`/`th`/`T`/`Th` now attach following `r`:
+`'tr thr Tr Thr'` → `ত্র থ্র ট্র ঠ্র`, resolving `nntr` → `ন্নত্র`.
+Try `'anondo bondhu grontho ghonTa ghoNTa konTho koNTho'` → `আনন্দ বন্ধু গ্রন্থ ঘন্টা ঘণ্টা কন্ঠ কণ্ঠ`.
+Copied Bangla resets context (`ন্দr` → `ন্দর`). Earlier b-prefixed
+matches (`bd`), t-family conjuncts, `shn`/`shm`/`bhl`/`phl`/`shl`/`vl`,
+other conjuncts and following-`r` forms, uppercase aliases, reph, and escapes
+remain incomplete.
 Lowercase `ng` produces ং (U+0982), as in `bangla` → `বাংলা`. Before the supported
 single-key vowels and `OI`/`OU`, it produces ঙ্গ plus the appropriate vowel sign
 (`nga` → `ঙ্গা`, `ngOI` → `ঙ্গৈ`, `ngo` → `ঙ্গ`). These forms consume their vowel
@@ -532,8 +550,23 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`D` following-`r` fixtures](tests/fixtures/d-retroflex-following-r.tsv),
 [`Dh` following-`r` fixtures](tests/fixtures/dh-retroflex-following-r.tsv),
 [`b` following-`r` fixtures](tests/fixtures/b-following-r.tsv),
-[`bh` following-`r` fixtures](tests/fixtures/bh-following-r.tsv), and
-[`v` following-`r` fixtures](tests/fixtures/v-following-r.tsv) record the raw input,
+[`bh` following-`r` fixtures](tests/fixtures/bh-following-r.tsv),
+[`v` following-`r` fixtures](tests/fixtures/v-following-r.tsv),
+[`ndh` fixtures](tests/fixtures/conjunct-ndh.tsv),
+[`nd` fixtures](tests/fixtures/conjunct-nd.tsv),
+[`nD` fixtures](tests/fixtures/conjunct-n-d-retroflex.tsv),
+[`NDh` fixtures](tests/fixtures/conjunct-n-retroflex-dh-retroflex.tsv),
+[`ND` fixtures](tests/fixtures/conjunct-n-retroflex-d-retroflex.tsv),
+[`nth` fixtures](tests/fixtures/conjunct-nth.tsv),
+[`nt` fixtures](tests/fixtures/conjunct-nt.tsv),
+[`nTh` fixtures](tests/fixtures/conjunct-n-th-retroflex.tsv),
+[`nT` fixtures](tests/fixtures/conjunct-n-t-retroflex.tsv),
+[`NTh` fixtures](tests/fixtures/conjunct-n-retroflex-th-retroflex.tsv),
+[`NT` fixtures](tests/fixtures/conjunct-n-retroflex-t-retroflex.tsv),
+[`t` following-`r` fixtures](tests/fixtures/t-following-r.tsv),
+[`th` following-`r` fixtures](tests/fixtures/th-following-r.tsv),
+[`T` following-`r` fixtures](tests/fixtures/t-retroflex-following-r.tsv), and
+[`Th` following-`r` fixtures](tests/fixtures/th-retroflex-following-r.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -549,7 +582,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 47,290 cases used by Rust tests and prints reference outputs for
+It checks the same 62,845 cases used by Rust tests and prints reference outputs for
 nine known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
