@@ -1,6 +1,295 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn conjunct_completion_resets_at_every_split_and_between_calls() {
+    for (raw, bangla, parts) in [
+        ("pt", "প্ত", &[("প", "ত")][..]),
+        ("pT", "প্ট", &[("প", "ট")][..]),
+        ("bdh", "ব্ধ", &[("ব", "ধ"), ("ব্দ", "হ")][..]),
+        ("bd", "ব্দ", &[("ব", "দ")][..]),
+        ("bj", "ব্জ", &[("ব", "জ")][..]),
+        ("cNG", "চ্ঞ", &[("চ", "ঞ"), ("চণ", "G")][..]),
+        ("cch", "চ্ছ", &[("চ", "ছ"), ("চ্চ", "হ")][..]),
+        ("cc", "চ্চ", &[("চ", "চ")][..]),
+        ("gdh", "গ্ধ", &[("গ", "ধ"), ("গদ", "হ")][..]),
+        ("jjh", "জ্ঝ", &[("জ", "ঝ"), ("জ্জ", "হ")][..]),
+        ("jNG", "জ্ঞ", &[("জ", "ঞ"), ("জণ", "G")][..]),
+        ("jj", "জ্জ", &[("জ", "জ")][..]),
+        ("mth", "ম্থ", &[("ম", "থ"), ("মত", "হ")][..]),
+        ("NGch", "ঞ্ছ", &[("ণ", "Gছ"), ("ঞ", "ছ"), ("ঞ্চ", "হ")][..]),
+        ("NGjh", "ঞ্ঝ", &[("ণ", "Gঝ"), ("ঞ", "ঝ"), ("ঞ্জ", "হ")][..]),
+        ("NGc", "ঞ্চ", &[("ণ", "Gচ"), ("ঞ", "চ")][..]),
+        ("NGj", "ঞ্জ", &[("ণ", "Gজ"), ("ঞ", "জ")][..]),
+        ("nch", "ঞ্ছ", &[("ন", "ছ"), ("ঞ্চ", "হ")][..]),
+        ("njh", "ঞ্ঝ", &[("ন", "ঝ"), ("ঞ্জ", "হ")][..]),
+        ("nj", "ঞ্জ", &[("ন", "জ")][..]),
+        ("nc", "ঞ্চ", &[("ন", "চ")][..]),
+        ("shch", "শ্ছ", &[("স", "হছ"), ("শ", "ছ"), ("শ্চ", "হ")][..]),
+        ("Sch", "শ্ছ", &[("শ", "ছ"), ("শ্চ", "হ")][..]),
+        ("shc", "শ্চ", &[("স", "হচ"), ("শ", "চ")][..]),
+        ("Sc", "শ্চ", &[("শ", "চ")][..]),
+        ("c", "চ", &[][..]),
+        ("ch", "ছ", &[("চ", "হ")][..]),
+        ("j", "জ", &[][..]),
+        ("jh", "ঝ", &[("জ", "হ")][..]),
+    ] {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "জ্ঞ", "\u{301}"] {
+            for (index, (first, tail)) in parts.iter().enumerate() {
+                let split = index + 1;
+                // A split can expose standalone G, still an explicit alias gap.
+                assert_eq!(
+                    transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
+                    format!("{first}{boundary}{tail}")
+                );
+            }
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        for (index, (first, tail)) in parts.iter().enumerate() {
+            let split = index + 1;
+            assert_eq!(transliterate(&raw[..split]), *first);
+            assert_eq!(transliterate(&raw[split..]), *tail);
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    assert_eq!(transliterate(&"pt pT bdh bd bj cNG cch cc gdh jjh jNG jj mth NGch NGjh NGc NGj nch njh nj nc shch Sch shc Sc 🙂 ".repeat(64)), "প্ত প্ট ব্ধ ব্দ ব্জ চ্ঞ চ্ছ চ্চ গ্ধ জ্ঝ জ্ঞ জ্জ ম্থ ঞ্ছ ঞ্ঝ ঞ্চ ঞ্জ ঞ্ছ ঞ্ঝ ঞ্জ ঞ্চ শ্ছ শ্ছ শ্চ শ্চ 🙂 ".repeat(64));
+}
+
+#[test]
+fn conjunct_completion_consumed_and_fresh_keys_keep_their_priorities() {
+    for (raw, expected) in [
+        ("pt pT bd bdh bj", "প্ত প্ট ব্দ ব্ধ ব্জ"),
+        ("cNG cch cc gdh jjh jNG jj mth", "চ্ঞ চ্ছ চ্চ গ্ধ জ্ঝ জ্ঞ জ্জ ম্থ"),
+        ("NGch NGjh NGc NGj nch njh nj nc", "ঞ্ছ ঞ্ঝ ঞ্চ ঞ্জ ঞ্ছ ঞ্ঝ ঞ্জ ঞ্চ"),
+        ("shch Sch shc Sc", "শ্ছ শ্ছ শ্চ শ্চ"),
+        (
+            "pthm pThm bjhm bdhm cchm jjhm mthm",
+            "প্তহ্ম প্টহ্ম ব্জহ্ম ব্ধম চ্ছম জ্ঝম ম্থম",
+        ),
+        (
+            "NGchm NGjhm nchm njhm shchm Schm",
+            "ঞ্ছম ঞ্ঝম ঞ্ছম ঞ্ঝম শ্ছম শ্ছম",
+        ),
+        ("bdd bddh bdhn bdhhn", "ব্দদ ব্দধ ব্ধন ব্ধহ্ন"),
+        ("ccNG ccc cccc ccch cNGcNG", "চ্চঞ চ্চচ চ্চচ্চ চ্চছ চ্ঞচ্ঞ"),
+        ("jjNG jjj jjjj jjjh jNGjNG", "জ্জঞ জ্জজ জ্জজ্জ জ্জঝ জ্ঞজ্ঞ"),
+        ("pnch pnnch snj snnj", "প্নছ প্নঞ্ছ স্নজ স্নঞ্জ"),
+        (
+            "ksch kshch nsch nshch psch pshch",
+            "ক্সছ কশছ ন্সছ নশছ প্সছ পশছ",
+        ),
+        ("cr chr jr jhr cNGr jNGr", "চ্র ছ্র জ্র ঝ্র চ্ঞ্র জ্ঞ্র"),
+        (
+            "bjrri cchrry jNGrrZ NGchry",
+            "ব্জৃ চ্ছরর\u{200d}্য জ্ঞরর\u{200d}্য ঞ্ছ্র্য",
+        ),
+    ] {
+        assert_eq!(transliterate(raw), expected, "{raw}");
+    }
+}
+
+#[test]
+fn conjunct_completion_aliases_reph_and_escapes_remain_explicit_gaps() {
+    // These are partial engine outputs, not claims of reference compatibility.
+    for (raw, partial) in [
+        ("Gdh", "Gধ"),
+        ("G", "G"),
+        ("J", "J"),
+        ("P", "P"),
+        ("bDh", "বঢ"),
+        ("bdH", "ব্দH"),
+        ("ccH", "চ্চH"),
+        ("ShNGch", "ষ্ণGছ"),
+        ("NNGch", "ণ্ণGছ"),
+        ("gNGjh", "গ্ণGঝ"),
+        ("hNGc", "হ্ণGচ"),
+        ("kShNGj", "ক্ষ্ণGজ"),
+        ("rrcch", "ররচ্ছ"),
+        ("cch`a", "চ্ছ`আ"),
+        ("cchqr", "চ্ছকর"),
+    ] {
+        assert_eq!(transliterate(raw), partial, "{raw}");
+    }
+}
+
+#[test]
+fn conjunct_completion_bd_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-bd.tsv"));
+}
+
+#[test]
+fn conjunct_completion_bdh_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-bdh.tsv"));
+}
+
+#[test]
+fn conjunct_completion_bj_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-bj.tsv"));
+}
+
+#[test]
+fn conjunct_completion_c_following_r_matches_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-completion-c-following-r.tsv"
+    ));
+}
+
+#[test]
+fn conjunct_completion_c_nya_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-c-nya.tsv"));
+}
+
+#[test]
+fn conjunct_completion_cc_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-cc.tsv"));
+}
+
+#[test]
+fn conjunct_completion_cch_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-cch.tsv"));
+}
+
+#[test]
+fn conjunct_completion_ch_following_r_matches_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-completion-ch-following-r.tsv"
+    ));
+}
+
+#[test]
+fn conjunct_completion_controls_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-controls.tsv"));
+}
+
+#[test]
+fn conjunct_completion_gdh_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-gdh.tsv"));
+}
+
+#[test]
+fn conjunct_completion_j_following_r_matches_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-completion-j-following-r.tsv"
+    ));
+}
+
+#[test]
+fn conjunct_completion_j_nya_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-j-nya.tsv"));
+}
+
+#[test]
+fn conjunct_completion_jh_following_r_matches_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-completion-jh-following-r.tsv"
+    ));
+}
+
+#[test]
+fn conjunct_completion_jj_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-jj.tsv"));
+}
+
+#[test]
+fn conjunct_completion_jjh_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-jjh.tsv"));
+}
+
+#[test]
+fn conjunct_completion_mth_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-mth.tsv"));
+}
+
+#[test]
+fn conjunct_completion_nc_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-nc.tsv"));
+}
+
+#[test]
+fn conjunct_completion_nch_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-nch.tsv"));
+}
+
+#[test]
+fn conjunct_completion_nj_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-nj.tsv"));
+}
+
+#[test]
+fn conjunct_completion_njh_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-njh.tsv"));
+}
+
+#[test]
+fn conjunct_completion_nya_c_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-nya-c.tsv"));
+}
+
+#[test]
+fn conjunct_completion_nya_ch_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-nya-ch.tsv"));
+}
+
+#[test]
+fn conjunct_completion_nya_j_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-nya-j.tsv"));
+}
+
+#[test]
+fn conjunct_completion_nya_jh_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-nya-jh.tsv"));
+}
+
+#[test]
+fn conjunct_completion_p_retroflex_t_matches_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-completion-p-retroflex-t.tsv"
+    ));
+}
+
+#[test]
+fn conjunct_completion_pt_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-pt.tsv"));
+}
+
+#[test]
+fn conjunct_completion_s_uppercase_c_matches_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-completion-s-uppercase-c.tsv"
+    ));
+}
+
+#[test]
+fn conjunct_completion_s_uppercase_ch_matches_exact_unicode() {
+    check_fixture(include_str!(
+        "fixtures/conjunct-completion-s-uppercase-ch.tsv"
+    ));
+}
+
+#[test]
+fn conjunct_completion_sh_c_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-sh-c.tsv"));
+}
+
+#[test]
+fn conjunct_completion_sh_ch_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-completion-sh-ch.tsv"));
+}
+
+#[test]
 fn s_stops_sth_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/conjunct-sth.tsv"));
 }
@@ -2077,7 +2366,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Ngx`a", "ঙ্ষ`আ"),
         ("Gg", "Gগ"),
         ("gNG", "গ্ণG"),
-        ("bdd", "বদ্দ"),
         ("ddH", "দ্দH"),
         ("dHn", "দHন"),
         ("dV", "দV"),
@@ -2163,8 +2451,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("kSh`h", "ক্ষ`হ"),
         ("k`Sh", "ক`ষ"),
         ("kSh.", "ক্ষ."),
-        ("NGc", "ঞচ"),
-        ("NGch", "ঞছ"),
         ("N`g", "ণ`গ"),
         ("y`a", "ইয়`আ"),
         ("y`h", "ইয়`হ"),
@@ -2175,10 +2461,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Ph", "Pহ"),
         ("F", "F"),
         ("p`h", "প`হ"),
-        ("cc", "চচ"),
-        ("cch", "চছ"),
-        ("jjh", "জঝ"),
-        ("cr", "চর"),
         ("C", "C"),
         ("J", "J"),
         ("Jh", "Jহ"),

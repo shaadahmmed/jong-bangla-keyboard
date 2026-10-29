@@ -10,87 +10,82 @@ Dates use the project's Asia/Dhaka timezone.
 ## Current position
 
 - **Implemented:** a dependency-free Rust transliteration library and terminal
-  example; principal forms for all 11 basic vowels and 40 basic consonant
-  sequences (35 letters), contextual forms, selected conjuncts, and selected
-  following-`r` forms. See the [coverage overview](../README.md#current-status).
-- **Latest coverage:** seven exact s/Sh stop spellings, independently checked
-  for Unicode/context/priority. Longer `sth`/`ShTh` consume `h`; `sTh`/`shth`/
-  `Sth` leave it available. Consumed t/T cannot start a later t-family match.
-  See the [batch decision](v1.md#s-and-sh-stop-conjunct-batch).
-- **Library organization:** `src/lib.rs` exposes `transliterate`; private
-  modules separate the scanner, authored rules, vowels, and following r.
-  Cross-family priority stays explicit. See [layout](../README.md#library-structure).
-- **Validation:** all 244,859 fixture rows match the pinned parser; formatting,
-  Clippy, 232 integration tests, 1 doctest, release/documentation builds,
+  example; principal basic vowel/consonant forms, contextual forms, selected
+  conjuncts, and following-r forms. See the [coverage overview](../README.md#current-status).
+- **Latest coverage:** all 25 exact conjunct spellings identified by the standalone
+  gap audit, implemented together at the user's request. Basic c/ch/j/jh also
+  attach following r. Independent evidence, Unicode, priorities and limits are
+  in the [batch record](v1.md#remaining-exact-conjunct-batch).
+- **Library:** Rust scanner, authored rule tables, vowels, and following-r modules
+  remain independent of platforms; the public `transliterate` API is unchanged.
+- **Validation:** all 353,674 fixture rows match the pinned parser; formatting,
+  Clippy, 265 integration tests, 1 doctest, release/documentation builds,
   default/batch smoke checks, and documentation consistency checks passed.
-- **Limitations:** full vowel context and Avro compatibility remain incomplete.
-  Other conjuncts, b/p stop forms, aliases, `mth`, reph, and escapes are incomplete.
-  Composition, Fcitx5, and a usable desktop keyboard are not implemented.
-  Performance and platform support remain unverified.
+- **Limitations:** standalone inventory now has 52 discrepancies (27 uppercase/
+  alternate spellings and 25 punctuation/symbol/escape spellings). This excludes
+  context interactions and is not a compatibility percentage. Reph, vowel-context
+  edges and following-r gaps after q/z/R/Rh remain. Composition, Fcitx5, and a
+  usable desktop keyboard are not implemented; performance/platforms are unverified.
 
 ## Latest completed step
 
-- **2026-10-29 — Add verified s/Sh stop conjuncts.** Implemented all seven
-  proposed exact spellings: `st`/`sth`/`sT`/`ShT`/`ShTh`/`sht`/`St`.
-  No extra longer rule is needed for `sTh`/`shth`/`Sth`: following h remains
-  available after `sT`/`sht`/`St`, unlike consuming `sth`/`ShTh`.
-- **Behavior:** shared vowel/following-r helpers preserve context/exceptions.
-  `sthm` → স্থম, `ShThm` → ষ্ঠম, `sThm` → স্টহ্ম, `shthm`/`Sthm` → শ্তহ্ম.
-  Consumed t/T cannot start tn/tm/tt/TT/Tm (`stn` → স্তন, `ShTm` → ষ্টম);
-  fresh keys can (`sttn` → স্তত্ন, `ShTTm` → ষ্টট্ম). Earlier matches retain
-  priority (`kst` → ক্সত, `ksht` → কশত, `nsht` → নশত, `kShT` → ক্ষট).
-  No upstream source, rule tables, fixtures, dependencies, or normalization
-  were imported. Equal `sht`/`St` output does not imply case folding.
-- **Evidence:** 20,090 new authored fixture rows independently cover all seven
-  spellings and controls: Unicode, vowels/ya/context, r runs/exceptions,
-  existing families in both orders, ordered pairs, shared keys, longer forms,
-  digits, splits, copied Unicode, boundaries, repetition, and words. All older
-  fixtures remain unchanged. Two resolved partial-output assertions moved
-  into passing coverage; the five existing reference gap probes remain.
-  Rust tests add explicit priorities, separate calls, and long mixed input.
-- **Reference checks run:** `node /tmp/jong-verify-s-stops.mjs` — all 20,090
-  new rows passed; `node /tmp/jong-verify-s-stops-extra.mjs` — all 287 extra
-  authored boundary/separate-call/long-input expectations passed;
-  `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 244,859 rows passed against the SHA-256-verified pinned parser.
-- **Rust checks run:** `cargo test --offline s_stops` — 10 tests passed;
+- **2026-10-29 — Implement the 25 remaining identified exact conjuncts together.**
+  Added pt/pT/bd/bdh/bj, cc/cch/cNG, jj/jjh/jNG, gdh/mth,
+  NGc/NGch/NGj/NGjh, nc/nch/nj/njh, and shc/shch/Sc/Sch.
+  Added independently verified following-r behavior after basic c/ch/j/jh.
+- **Behavior:** longer h forms consume h; pth/pTh/bjh leave it available.
+  `bdhm` → ব্ধম versus `pthm` → প্তহ্ম. Consumed keys cannot begin later
+  matches (`bdd` → ব্দদ, `ccNG` → চ্চঞ); fresh keys can. Existing families
+  retain priority. Exact cNG/jNG ending in G attach r without enabling standalone G.
+  No upstream source, rules, fixtures, dependencies or case normalization imported.
+- **Evidence:** 108,815 new authored rows in 30 files independently cover every
+  spelling, Unicode, vowels/ya, context, r runs/exceptions, all ordered pairs,
+  existing families in both orders, shared keys, longer forms, digits, splits,
+  copied Unicode, repetition and words. All older fixture files are unchanged.
+  Seven resolved partial assertions moved to passing coverage; the resolved bdd
+  reference probe was replaced by Gdh. Exposed uppercase-G overlaps/splits and
+  q/z/R/Rh following-r limits remain explicit gaps, outside supported fixtures.
+- **Reference checks run:** `node /tmp/jong-verify-conjunct-completion.mjs` — all
+  108,815 new rows plus 1,084 extra authored boundary/split/separate-call/priority/
+  long-input expectations passed. `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
+  — all 353,674 rows passed against the SHA-256-verified pinned parser; five
+  remaining-gap probes printed exact reference outputs. Node v24.21.0.
+- **Rust checks run:** `cargo test --offline conjunct_completion` — 33 passed;
   `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`;
-  `cargo test --offline` — 232 integration tests and 1 doctest passed;
+  `cargo test --offline` — 265 integration tests and 1 doctest passed;
   `cargo build --offline --release`;
   `RUSTDOCFLAGS='-D warnings' cargo doc --offline --no-deps` — passed.
-- **Smoke checks run:** `cargo run --offline --example convert -- 'kh12T'`
-  — খ১২ট; `cargo run --offline --example convert -- 'st sth sT ShT ShTh sht St sTh shth Sth sThm shthm Sthm sthm ShThm stn stm sttn sttm ShTm ShTTm kst ksht kSt nst nsht pst psht kShT NgkShTh strri sthrry ShThry rasta astha sTeshon koShTo niShTha proshtho'`
-  — matched independently checked outputs, including রাস্তা/আস্থা/স্টেশন/কষ্ট/নিষ্ঠা.
-  `proshtho` gives প্রশ্তহ without dictionary spelling correction.
-- **Documentation checks:** `python /tmp/jong-check-s-stops-docs.py` — local
-  links/anchors, fixture manifests/code points/counts, retained older fixtures,
-  repeated-input consistency, behavior table/examples, README examples, gap
-  probes, bounded handoff, and preserved history passed. `git diff --check`
-  passed. Rust/Cargo 1.99.1 and Node v24.21.0 were used.
-- **Remaining limitations:** other conjuncts, uppercase aliases, reph, escapes,
-  composition/platform work, and performance validation remain incomplete.
-- **Next action:** investigate the b/p stop candidates below. This s/Sh stop
-  batch is complete; the next batch has not started.
+  Rust/Cargo 1.99.1 were used.
+- **Smoke checks run:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট;
+  `cargo run --offline --example convert -- 'pt pT bd bdh bj cNG cch cc gdh jjh jNG jj mth NGch NGjh NGc NGj nch njh nj nc shch Sch shc Sc pthm pThm bjhm bdhm cchm jjhm mthm bdd cr chr jr jhr cNGr jNGr shobdo iccha jNGan nishcoy'`
+  — matched independently checked outputs, including শব্দ/ইচ্ছা/জ্ঞান/নিশ্চয়.
+- **Documentation checks:** `python /tmp/jong-check-conjunct-completion-docs.py --before-handoff`
+  and `python /tmp/jong-check-conjunct-completion-docs.py`
+  — local links/anchors, manifests/counts/code points, retained older fixtures,
+  repeated inputs, 25-row Unicode/evidence table, README examples and gap probes
+  passed, including the updated handoff and preserved history.
+  `git diff --check` passed.
+- **Standalone audit:** 302 distinct pattern/uppercase probes were rerun; all
+  25 targeted conjuncts match, with 52 known standalone discrepancies remaining.
+  This does not establish full compatibility, performance, or platform support.
+- **Next action:** investigate uppercase/alternate spellings below. This batch's
+  implementation and full code checks are complete; alias work has not started.
 
 ## Next small implementation step
 
-1. Investigate `pt`/`pT`/`bd`/`bdh`/`bj` as a proposed related labial-prefix
-   stop batch. Inspect longer `pth`/`pTh`/`bdh` and other extensions before
-   fixing scope; do not infer their behavior from other conjunct families.
-2. Independently check each spelling against the
-   [pinned reference](v1.md#phonetic-behavior-reference): Unicode, vowels/ya,
-   preceding contexts, following r and longer runs, `rri`/`rry`/`rrZ` exceptions,
-   digits, boundaries, copied Unicode, case controls, and priorities.
-3. Check existing b/p, d/t/T/j/h, s/Sh stop/labial, k/l/m/nasal, repetition,
-   and ns/ps families, including shared keys and fresh versus consumed keys.
-   Keep `mth`, aliases, and unrelated forms separate unless included with evidence.
-4. Implement the verified batch, extend fixtures, run the full README checks,
-   update behavioral docs and this handoff once, and commit the batch together.
-   Keep composition, platform integration, packaging, and unrelated work separate.
+1. Audit the remaining uppercase/alternate spellings against the pinned parser,
+   distinguishing case normalization from explicit case-sensitive G/J behavior.
+   Investigate A/AZ and aliases exposed after consumed keys before fixing scope.
+2. Choose the largest coherent related batch supported by independent Unicode,
+   vowel/context, following-r, boundary and priority evidence for every spelling.
+   Preserve established case-sensitive distinctions; do not infer blanket folding.
+3. Implement only that verified batch, extend fixtures, run the full README checks,
+   update behavioral docs and this handoff, and commit the batch together.
+   Keep reph, punctuation/escapes, composition and platform work separate.
 
-**Done when:** each selected spelling has independent reference evidence,
-interactions and supported cases pass, actual checks and limits are recorded,
+**Done when:** every selected spelling has independent reference evidence,
+existing cases and interactions pass, actual checks and limits are recorded,
 and the batch is committed. The next batch has not started.
 
 ## Completed steps

@@ -77,9 +77,18 @@ implemented, including consuming priority and selected vowel/following-`r` forms
 Exact `st`/`sth`/`sT`/`ShT`/`ShTh`/`sht`/`St` are also implemented,
 including consuming priority and selected vowel/following-`r` forms. Longer
 `sth`/`ShTh` consume `h`; `sTh`/`shth`/`Sth` leave `h` available.
-This is a partial engine with 244,859 reference-checked examples,
-not a usable desktop keyboard or a full Avro compatibility claim. Other
-letter forms, conjuncts, composition, and Fcitx5 integration are still missing.
+The 25 remaining exact conjunct spellings identified in the standalone audit
+are now implemented together: `pt`/`pT`/`bd`/`bdh`/`bj`, `cc`/`cch`/`cNG`,
+`jj`/`jjh`/`jNG`, `gdh`/`mth`, `NGc`/`NGch`/`NGj`/`NGjh`,
+`nc`/`nch`/`nj`/`njh`, and `shc`/`shch`/`Sc`/`Sch`.
+Basic `c`/`ch`/`j`/`jh` also attach following `r`. Longer matches consume
+their keys: `bdhm` → `ব্ধম`, while `pthm` → `প্তহ্ম` leaves `h` available.
+See the [combined batch](docs/v1.md#remaining-exact-conjunct-batch) for exact
+Unicode, per-spelling evidence, priorities, and remaining context/alias gaps.
+This is a partial engine with 353,674 reference-checked examples,
+not a usable desktop keyboard or a full Avro compatibility claim. Uppercase aliases,
+reph, punctuation/escapes, some context interactions, composition, and Fcitx5
+integration are still incomplete.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
 [first vowel group](docs/v1.md#first-vowel-group) and
@@ -139,7 +148,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [the s/Sh labial batch](docs/v1.md#s-and-sh-labial-conjunct-batch), then
 [the repetition and n-ending batch](docs/v1.md#repetition-and-n-ending-conjunct-batch), then
 [the consuming ns/ps batch](docs/v1.md#consuming-ns-and-ps-batch), then
-[the s/Sh stop batch](docs/v1.md#s-and-sh-stop-conjunct-batch).
+[the s/Sh stop batch](docs/v1.md#s-and-sh-stop-conjunct-batch), and
+[the remaining exact conjunct batch](docs/v1.md#remaining-exact-conjunct-batch).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress handoff](docs/progress.md) for current state, the latest completed
@@ -148,9 +158,10 @@ Rule coverage favors the [largest coherent related batches](docs/v1.md#small-dev
 that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
-update, and commit per completed batch. The next proposed batch investigates
-labial-prefix stop forms (`pt`/`pT`/`bd`/`bdh`/`bj`), including longer
-priorities and shared keys; scope remains unconfirmed.
+update, and commit per completed batch. The latest combined batch completes all
+25 identified exact conjunct spellings.
+Next, investigate uppercase/alternate spellings and their case/context rules;
+reph and punctuation/escape coverage remain separate work.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
@@ -273,8 +284,9 @@ match handles `ph` before `p` (`phi` → `ফি`, matching `fi` → `ফি`). 
 aliases and larger sequences such as `pph` remain incomplete. Following `r`
 now attaches: `'pr phr fr'` → `প্র ফ্র ফ্র`, with `rri`/`rry`/`rrZ` exceptions.
 Lowercase `c`/`ch`/`j`/`jh` produce `চ`/`ছ`/`জ`/`ঝ`; `ch` and `jh` match before
-their single-key prefixes. Uppercase aliases, conjuncts such as `cch` → `চ্ছ`,
-and escapes remain incomplete.
+their single-key prefixes. Exact `cc`/`cch`/`cNG` and `jj`/`jjh`/`jNG` now
+match, including following `r`: `'cr chr jr jhr'` → `চ্র ছ্র জ্র ঝ্র`.
+Uppercase aliases and escapes remain incomplete.
 Exact `d`/`dh`/`D`/`Dh` produce `দ`/`ধ`/`ড`/`ঢ`; `dh` and `Dh` match before
 their single-key prefixes. Case distinguishes `da` → `দা` from `Da` → `ডা`.
 `ddh` → `দ্ধ` now matches, as described below. Uppercase-`H` aliases
@@ -835,7 +847,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`ShTh` fixtures](tests/fixtures/conjunct-sh-th-retroflex.tsv),
 [`sht` fixtures](tests/fixtures/conjunct-sh-lowercase-t.tsv),
 [`St` fixtures](tests/fixtures/conjunct-s-uppercase-t.tsv),
-and [s/Sh stop controls](tests/fixtures/s-stop-controls.tsv) record the raw input,
+[s/Sh stop controls](tests/fixtures/s-stop-controls.tsv), and the 30 fixture
+files linked in the [remaining conjunct batch](docs/v1.md#remaining-exact-conjunct-batch)
+record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -851,8 +865,9 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 244,859 cases used by Rust tests and prints reference outputs for
-five known coverage gaps. The original comparison and test tooling are MIT;
+It checks the same 353,674 cases used by Rust tests and prints reference outputs for
+five known coverage gaps. Resolved `bdd` has been replaced by the uppercase
+`Gdh` alias probe. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
 ## License

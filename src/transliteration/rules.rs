@@ -260,3 +260,35 @@ pub(super) const REPEAT_N_CONJUNCTS: [(&str, &str, char); 6] = [
     ("shn", "শ্ন", 'n'),
     ("Sn", "শ্ন", 'n'),
 ];
+
+// Independently authored remaining exact conjunct spellings. Longer bdh/cch/
+// jjh/NGch/NGjh/nch/njh/shch/Sch consume h before their shorter counterparts.
+// pt/pT/bj/cNG/jNG do not consume a following h. Earlier complete matches keep
+// their shared keys; cNG/jNG end in raw G, not a standalone uppercase alias.
+pub(super) const COMPLETION_CONJUNCTS: [(&str, &str, char); 25] = [
+    ("pt", "প্ত", 't'),
+    ("pT", "প্ট", 'T'),
+    ("bdh", "ব্ধ", 'h'),
+    ("bd", "ব্দ", 'd'),
+    ("bj", "ব্জ", 'j'),
+    ("cNG", "চ্ঞ", 'G'),
+    ("cch", "চ্ছ", 'h'),
+    ("cc", "চ্চ", 'c'),
+    ("gdh", "গ্ধ", 'h'),
+    ("jjh", "জ্ঝ", 'h'),
+    ("jNG", "জ্ঞ", 'G'),
+    ("jj", "জ্জ", 'j'),
+    ("mth", "ম্থ", 'h'),
+    ("NGch", "ঞ্ছ", 'h'),
+    ("NGjh", "ঞ্ঝ", 'h'),
+    ("NGc", "ঞ্চ", 'c'),
+    ("NGj", "ঞ্জ", 'j'),
+    ("nch", "ঞ্ছ", 'h'),
+    ("njh", "ঞ্ঝ", 'h'),
+    ("nj", "ঞ্জ", 'j'),
+    ("nc", "ঞ্চ", 'c'),
+    ("shch", "শ্ছ", 'h'),
+    ("Sch", "শ্ছ", 'h'),
+    ("shc", "শ্চ", 'c'),
+    ("Sc", "শ্চ", 'c'),
+];

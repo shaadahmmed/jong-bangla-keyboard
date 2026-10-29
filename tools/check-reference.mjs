@@ -26,6 +26,36 @@ const codePoints = (text) =>
 
 let count = 0;
 for (const name of [
+  "conjunct-completion-bd.tsv",
+  "conjunct-completion-bdh.tsv",
+  "conjunct-completion-bj.tsv",
+  "conjunct-completion-c-following-r.tsv",
+  "conjunct-completion-c-nya.tsv",
+  "conjunct-completion-cc.tsv",
+  "conjunct-completion-cch.tsv",
+  "conjunct-completion-ch-following-r.tsv",
+  "conjunct-completion-controls.tsv",
+  "conjunct-completion-gdh.tsv",
+  "conjunct-completion-j-following-r.tsv",
+  "conjunct-completion-j-nya.tsv",
+  "conjunct-completion-jh-following-r.tsv",
+  "conjunct-completion-jj.tsv",
+  "conjunct-completion-jjh.tsv",
+  "conjunct-completion-mth.tsv",
+  "conjunct-completion-nc.tsv",
+  "conjunct-completion-nch.tsv",
+  "conjunct-completion-nj.tsv",
+  "conjunct-completion-njh.tsv",
+  "conjunct-completion-nya-c.tsv",
+  "conjunct-completion-nya-ch.tsv",
+  "conjunct-completion-nya-j.tsv",
+  "conjunct-completion-nya-jh.tsv",
+  "conjunct-completion-p-retroflex-t.tsv",
+  "conjunct-completion-pt.tsv",
+  "conjunct-completion-s-uppercase-c.tsv",
+  "conjunct-completion-s-uppercase-ch.tsv",
+  "conjunct-completion-sh-c.tsv",
+  "conjunct-completion-sh-ch.tsv",
   "conjunct-sth.tsv",
   "conjunct-st.tsv",
   "conjunct-s-t-retroflex.tsv",
@@ -251,7 +281,7 @@ console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
 // These probes expose missing behavior; they are not supported-slice fixtures.
 for (const input of [
-  "ShNG", "bdd", "ShM", "rrShN", "Shm`a",
+  "ShNG", "Gdh", "ShM", "rrShN", "Shm`a",
 ]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);

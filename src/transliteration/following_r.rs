@@ -4,6 +4,7 @@
 // including Z in aZ/oZ, x in kx/Ngx/Ngkx, k in Ngk/kk, and h in Ngkh/Ngkkh/NgkSh/kkh/kSh.
 // The N in kkhN/kShN/kxN/ShN and m in kkhm/kShm/kxm/Shm share single-r attachment.
 // Selected basic consonants and all exact conjunct tables call this helper.
+// Exact cNG/jNG end in G; c/ch/j/jh and c/j-ending conjuncts attach single r.
 // Do not infer them from copied Bangla.
 pub(super) fn consume_following_r_prefix<'a>(
     remaining: &'a str,
@@ -36,6 +37,9 @@ pub(super) fn consume_following_r_prefix<'a>(
             | 'S'
             | 'p'
             | 'f'
+            | 'c'
+            | 'j'
+            | 'G'
     ) && remaining.starts_with('r')
         && !remaining.starts_with("rr"))
         || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))
