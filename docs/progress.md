@@ -41,18 +41,21 @@ Dates use the project's Asia/Dhaka timezone.
   `Ngk`, sharing `Ngx`/`kx` following-`r` behavior. Exact `Ngkkh` → ঙ্ক্ষ
   matches before `Ngk`, sharing `Ngkh`'s single-`r` attachment and longer-`r`
   priority. Exact `NgkSh` → ঙ্ক্ষ now shares `Ngkkh`'s branch and
-  vowel/following-`r` behavior. There are 8,410 reference-checked cases.
+  vowel/following-`r` behavior. Exact standalone `kkh` → ক্ষ now matches before
+  basic `k`/`kh`, with the same vowel context and following-`r` attachment.
+  `NGkkh` → ঞক্ষ and `ngkkh` → ংক্ষ now also match. There are 8,740
+  reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
   matching prefixes, contextual lowercase `y`/`w`/`x`, uppercase `Z`/`aZ`/`oZ`,
-  exact `kx`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, and selected
+  exact `kx`/`kkh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, and selected
   following-`r` forms after
-  `y`/`Z`/`Y`/`w`/`x`/`kx`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`.
+  `y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** check exact standalone `kkh` → ক্ষ and its supported vowel/context
+- **Next:** check exact standalone `kSh` → ক্ষ and its supported vowel/context
   interactions against the pinned reference as a separate conjunct increment.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
@@ -60,27 +63,72 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Next small implementation step
 
-1. Independently author cases for exact standalone `kkh` → ক্ষ, preceding contexts,
+1. Independently author cases for exact standalone `kSh` → ক্ষ, preceding contexts,
    supported vowels/aliases, following-`r` overlaps, repetition, digits,
    boundaries, copied Unicode, and raw-spelling controls. Check earlier and
-   longer matches before defining the supported slice. Verify selected
-   `ng`/`NG` preceding contexts and single-`r` attachment.
+   longer matches before defining the supported slice, including `kShN`/`kShm`.
+   Verify selected `ng`/`NG` preceding contexts and single-`r` attachment.
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-   Currently `kkh` produces কখ instead of ক্ষ.
-3. Add the selected conjunct before shorter `k`/`kh` matches, preserving
-   `Ng`/`NG`/`ng`, `NgkSh`, `Ngkkh`, `Ngkx`, `Ngkh`, `Ngk`, `Ngx`, `x`/`kx`,
-   and following-`r` behavior.
-   Keep `kSh`, other conjuncts, earlier-prefix conflicts,
-   reph, uppercase aliases, and escapes separate. No composition or platform work.
+   Currently `kSh` produces কষ instead of ক্ষ.
+3. Add the selected conjunct before shorter `k` matches, preserving
+   `kkh`, `Ng`/`NG`/`ng`, `NgkSh`, `Ngkkh`, `Ngkx`, `Ngkh`, `Ngk`, `Ngx`,
+   `x`/`kx`, and following-`r` behavior. Keep other conjuncts, earlier-prefix
+   conflicts, longer `kkhN`/`kkhm` and `kShN`/`kShm` forms, reph, uppercase
+   aliases, and escapes separate. No composition or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed increment.
 
-**Done when:** selected `kkh` cases match the reference, existing conversion
+**Done when:** selected `kSh` cases match the reference, existing conversion
 cases still pass, limitations are documented, and this log records actual
 results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-29 — Exact standalone kkh conjunct
+
+- Added exact `kkh` → ক্ষ (U+0995 U+09CD U+09B7) before basic `k`/`kh`,
+  preserving earlier exact `Ngkkh` and all existing conjuncts. The 40 basic
+  consonant sequences producing 35 letters remain unchanged.
+- Reused the existing following-`r` helper with final raw `h`: single `r`
+  attaches without U+200D (`kkhr` → ক্ষ্র, `kkhry` → ক্ষ্র্য), with the same
+  two-`r` behavior and `rri`/`rry`/`rrZ` exceptions as `Ngkh`.
+  Case-distinct `NGkkh` → ঞক্ষ and `ngkkh` → ংক্ষ now also match.
+- Independently authored 330 [fixtures](../tests/fixtures/conjunct-kkh.tsv)
+  and checked them against the SHA-256-verified pinned parser before implementation.
+  They cover vowels/aliases and transitions, selected preceding contexts,
+  one through eight following `r` keys, attachment/joiner exceptions,
+  repetition, raw-spelling controls, digits, boundaries, copied Unicode, and
+  words. All 8,740 reference cases pass under Node.js v24.21.0.
+- The focused Rust regression failed on `kkh` before implementation and passed
+  afterward. Extended control-character, separate-call, and long-buffer checks;
+  replaced resolved gap regressions with supported fixtures. Recorded explicit
+  partial outputs for earlier `kk`/`nk`/`lk`/`sk`/`Shk` matches, longer
+  `kkhN`/`kkhm`, aliases, reph, and escapes; refreshed seven reference gap probes.
+- Updated [README.md](../README.md) and [v1.md](v1.md#exact-kkh-conjunct)
+  with Unicode sequences, priority, examples, counts, limitations, and next work.
+  Earlier gap descriptions are historical. No upstream source, rule tables,
+  fixtures, dependencies, normalization, persistent state, or platform code added.
+- Checks: `cargo fmt --all -- --check`,
+  `cargo clippy --offline --all-targets -- -D warnings`, `cargo test --offline`
+  (41 regression tests and one documentation example), and
+  `cargo build --offline --release` passed. `node --check` and all 8,740
+  pinned-reference comparisons passed. Reused Rust/Cargo 1.99.1 and Node.js
+  v24.21.0; no tools installed or upgraded. The cached reference parser and
+  license remain outside the repository.
+- Example: `cargo run --offline --example convert -- 'kkh kkha kkhr kkhrri'`
+  printed `ক্ষ ক্ষা ক্ষ্র ক্ষৃ`. All 46 documented conversions and gap examples
+  in the new v1 section passed direct CLI and pinned-reference checks.
+- Documentation/fixture checks: UTF-8, local Markdown links/anchors,
+  final newlines, trailing whitespace, all fixture code points, 330 distinct
+  new inputs, both runner registrations, and `git diff --check` passed.
+  The pre-existing untracked `.vscode/` is untouched.
+- Limitations: standalone `kSh`, earlier-prefix conflicts, longer `kkhN`/`kkhm`,
+  other conjuncts, reph, uppercase aliases, punctuation/escapes, composition,
+  and Fcitx5 integration remain incomplete. No broader compatibility,
+  performance, or platform validation claimed.
+- Next: check exact standalone `kSh` → ক্ষ and its supported vowel/context
+  interactions as a separate reference-checked increment.
 
 ### 2026-10-29 — Focused project reading instructions
 

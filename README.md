@@ -25,11 +25,11 @@ through 40 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
 with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`/`w`/`x`
 and uppercase `Z` with selected `aZ`/`oZ` forms. Following-`r` matching after
-`y`/`Z`/`Y`/`w`/`x`/`kx`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`
+`y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`
 is also implemented. Exact
-`kx` → `ক্ষ`, `Ngx` → `ঙ্ষ`, `Ngk` → `ঙ্ক`, `Ngkh` → `ঙ্খ`, and
+`kx`/`kkh` → `ক্ষ`, `Ngx` → `ঙ্ষ`, `Ngk` → `ঙ্ক`, `Ngkh` → `ঙ্খ`, and
 `Ngkx`/`Ngkkh`/`NgkSh` → `ঙ্ক্ষ` are implemented.
-This is a partial engine with 8,410 reference-checked examples,
+This is a partial engine with 8,740 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Other
 letter forms, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -68,7 +68,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [exact `Ngkh`](docs/v1.md#exact-ngkh-conjunct), then
 [exact `Ngkx`](docs/v1.md#exact-ngkx-conjunct), then
 [exact `Ngkkh`](docs/v1.md#exact-ngkkh-conjunct), then
-[exact `NgkSh`](docs/v1.md#exact-ngksh-conjunct).
+[exact `NgkSh`](docs/v1.md#exact-ngksh-conjunct), then
+[exact `kkh`](docs/v1.md#exact-kkh-conjunct).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
@@ -127,6 +128,7 @@ Try `'Ngkh Ngkha Ngkhr Ngkhrri'` → `ঙ্খ ঙ্খা ঙ্খ্র ঙ
 Try `'Ngkx Ngkxa Ngkxrri Ngkxrr'` → `ঙ্ক্ষ ঙ্ক্ষা ঙ্ক্ষৃ ঙ্ক্ষ্রর` for exact `Ngkx` and its following forms.
 Try `'Ngkkh Ngkkha Ngkkhr Ngkkhrri'` → `ঙ্ক্ষ ঙ্ক্ষা ঙ্ক্ষ্র ঙ্ক্ষৃ` for exact `Ngkkh` and its following forms.
 Try `'NgkSh NgkSha NgkShr NgkShrri'` → `ঙ্ক্ষ ঙ্ক্ষা ঙ্ক্ষ্র ঙ্ক্ষৃ` for exact `NgkSh` and its following forms.
+Try `'kkh kkha kkhr kkhrri'` → `ক্ষ ক্ষা ক্ষ্র ক্ষৃ` for exact `kkh` and its following forms.
 Pass the input as one quoted argument. The example prints the result to the
 terminal; the library retains no input state
 and performs no logging, file access, or network access.
@@ -201,12 +203,19 @@ Earlier-prefix conflicts such as `gNgkx` remain gaps.
 Exact `Ngkkh` → `ঙ্ক্ষ` matches before `Ngk`, with vowel signs/aliases and
 `Ngkh`'s following-`r` behavior (`Ngkkhr` → `ঙ্ক্ষ্র`, `Ngkkhrri` → `ঙ্ক্ষৃ`).
 Its single following `r` attaches without a joiner (`Ngkkhry` → `ঙ্ক্ষ্র্য`),
-while `Ngkxry` retains U+200D. Standalone `kkh`, `NGkkh`/`ngkkh`, earlier-prefix
-conflicts, reph, uppercase aliases, and escapes remain gaps.
+while `Ngkxry` retains U+200D. Earlier-prefix conflicts, reph, uppercase aliases,
+and escapes remain gaps.
 Exact `NgkSh` shares `Ngkkh`'s output and vowel/following-`r` behavior
 (`NgkShr` → `ঙ্ক্ষ্র`, `NgkShrri` → `ঙ্ক্ষৃ`, `NgkShry` → `ঙ্ক্ষ্র্য`).
 Case-distinct `Ngksh` → `ঙ্কশ` stays separate. Standalone `kSh`, `NGkSh`/`ngkSh`,
 earlier-prefix conflicts, reph, uppercase aliases, and escapes remain gaps.
+Exact `kkh` → `ক্ষ` matches before basic `k`/`kh`, sharing `Ngkh`'s vowel
+context and following-`r` behavior (`kkhr` → `ক্ষ্র`, `kkhrri` → `ক্ষৃ`,
+`kkhry` → `ক্ষ্র্য`). Earlier exact `Ngkkh` keeps priority;
+`NGkkh` → `ঞক্ষ` and `ngkkh` → `ংক্ষ` now also match the reference.
+Earlier `kk`/`nk`/`lk`/`sk`/`Shk` matches (`kkkh`, `nkkh`, `lkkh`, `skkh`,
+`Shkkh`), longer `kkhN`/`kkhm` matches (including `kkhNgkkh`), other conjuncts, reph,
+uppercase aliases, and punctuation/escapes remain gaps.
 Lowercase `ng` produces ং (U+0982), as in `bangla` → `বাংলা`. Before the supported
 single-key vowels and `OI`/`OU`, it produces ঙ্গ plus the appropriate vowel sign
 (`nga` → `ঙ্গা`, `ngOI` → `ঙ্গৈ`, `ngo` → `ঙ্গ`). These forms consume their vowel
@@ -318,8 +327,9 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`Ngk` fixtures](tests/fixtures/conjunct-ngk.tsv),
 [`Ngkh` fixtures](tests/fixtures/conjunct-ngkh.tsv),
 [`Ngkx` fixtures](tests/fixtures/conjunct-ngkx.tsv),
-[`Ngkkh` fixtures](tests/fixtures/conjunct-ngkkh.tsv), and
-[`NgkSh` fixtures](tests/fixtures/conjunct-ngksh.tsv) record the raw input,
+[`Ngkkh` fixtures](tests/fixtures/conjunct-ngkkh.tsv),
+[`NgkSh` fixtures](tests/fixtures/conjunct-ngksh.tsv), and
+[`kkh` fixtures](tests/fixtures/conjunct-kkh.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -335,7 +345,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 8,410 cases used by Rust tests and prints reference outputs for
+It checks the same 8,740 cases used by Rust tests and prints reference outputs for
 seven known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
