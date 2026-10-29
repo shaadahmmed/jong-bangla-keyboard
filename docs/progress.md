@@ -45,22 +45,24 @@ Dates use the project's Asia/Dhaka timezone.
   basic `k`/`kh`, with the same vowel context and following-`r` attachment.
   `NGkkh` → ঞক্ষ and `ngkkh` → ংক্ষ now also match. Exact standalone `kSh`
   now shares `kkh`'s branch, vowel context, and following-`r` behavior;
-  `NGkSh` → ঞক্ষ and `ngkSh` → ংক্ষ now also match. There are 9,072
-  reference-checked cases.
+  `NGkSh` → ঞক্ষ and `ngkSh` → ংক্ষ now also match. Exact
+  `kkhN`/`kShN`/`kxN` → ক্ষ্ণ share verified vowel context and single-`r`
+  attachment, preserving earlier `Ngkkh`/`NgkSh`/`Ngkx` priority and consuming
+  `N` before a following nasal sequence. There are 10,303 reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
   matching prefixes, contextual lowercase `y`/`w`/`x`, uppercase `Z`/`aZ`/`oZ`,
-  exact `kx`/`kkh`/`kSh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, and selected
+  exact `kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, and selected
   following-`r` forms after
-  `y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`.
+  `y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
 - **Workflow:** use small batches of related conjuncts, with independent
   reference checks for each spelling and one checked, documented commit per
   completed batch. This replaces the previous one-spelling next-step plan.
-- **Next:** check exact `kkhN`/`kShN`/`kxN` → ক্ষ্ণ and their supported
+- **Next:** check exact `kkhm`/`kShm`/`kxm` → ক্ষ্ম and their supported
   vowel/context interactions against the pinned reference as one related batch.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
@@ -68,25 +70,26 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Next small implementation step
 
-1. Independently author cases for each of exact `kkhN`/`kShN`/`kxN` → ক্ষ্ণ
-   (U+0995 U+09CD U+09B7 U+09CD U+09A3), preceding contexts,
+1. Independently author cases for each of exact `kkhm`/`kShm`/`kxm` → ক্ষ্ম
+   (U+0995 U+09CD U+09B7 U+09CD U+09AE), preceding contexts,
    supported vowels/aliases, following-`r` overlaps, repetition, digits,
    boundaries, copied Unicode, and raw-spelling controls. Check earlier and
    longer matches before defining the supported slice, including interaction
-   with existing `Ngkkh`/`NgkSh`/`Ngkx` and following `g`/`G`
-   (`kkhNg`/`kkhNG`, `kShNg`/`kShNG`, and `kxNg`/`kxNG`).
+   with existing `Ngkkh`/`NgkSh`/`Ngkx`, `kkhN`/`kShN`/`kxN`, and
+   following `m`/`n`/`N`/`Ng`/`NG`/`ng`. Check matches that consume the
+   initial `k` before the selected form, and conflicts involving adjacent forms.
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
    These forms remain unimplemented; shared output does not prove shared
    context behavior. Define each spelling's supported slice from those checks.
 3. Match the selected forms before shorter `kkh`/`kSh`/`kx`, preserving `Ng`/`NG`/`ng`,
-   `NgkSh`, `Ngkkh`, `Ngkx`, `Ngkh`, `Ngk`, `Ngx`, `x`/`kx`, and existing
+   `NgkSh`, `Ngkkh`, `Ngkx`, `Ngkh`, `Ngk`, `Ngx`, `kkhN`/`kShN`/`kxN`, and existing
    following-`r` behavior outside the batch. Check each spelling's own
    following-`r` behavior independently; share implementation only where
-   verified. Cover priority changes caused by consuming `N` before a following
-   nasal sequence. Keep `kkhm`/`kShm`/`kxm`, unrelated earlier-prefix conflicts,
-   other conjuncts, reph, uppercase aliases, and escapes separate. No composition
-   or platform work.
+   verified. Cover priority changes caused by consuming `m` before a following
+   sequence. Keep unrelated earlier-prefix conflicts, other conjuncts, reph,
+   uppercase aliases (including the remaining `kkhNG`/`kShNG`/`kxNG` gap),
+   and escapes separate. No composition or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed batch.
 
@@ -95,6 +98,55 @@ existing conversion cases still pass, limitations are documented, and this log
 records actual results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-29 — Related kkhN, kShN and kxN conjunct batch
+
+**Result:** exact `kkhN`/`kShN`/`kxN` now produce ক্ষ্ণ
+(U+0995 U+09CD U+09B7 U+09CD U+09A3) before shorter `kkh`/`kSh`/`kx`.
+Each spelling was checked independently before sharing one branch and the
+existing following-`r` helper with final raw `N`. Single `r` attaches without
+U+200D (`kxNry` → `ক্ষ্ণ্র্য`); two `r` keys and `rri`/`rry`/`rrZ` keep
+their checked priority. Basic `Nr` behavior is unchanged. Earlier
+`Ngkkh`/`NgkSh`/`Ngkx` still win (`NgkShN` → `ঙ্ক্ষণ`). Consuming `N`
+resolves `kkhNgkkh`/`kShNgkSh` → `ক্ষ্ণগক্ষ` and six former `kxNg…` gaps.
+
+Added 1,231 independently authored fixtures: 410 `kkhN`, 411 `kShN`, and
+410 `kxN`, each with expected UTF-8 and exact code points. They cover supported
+vowels/aliases and transitions, preceding contexts, earlier/neighboring match
+priority, following `g` and nasal overlaps, one through eight following `r`
+keys, repetition, digits, boundaries, copied Unicode, raw spelling, and words.
+Rust regressions also cover control characters, separate calls, long mixed
+input, and remaining partial outputs. Updated README examples and behavior
+notes. No upstream source/rules/fixtures, dependencies, normalization,
+persistent state, performance measurements, or platform code added.
+
+**Checks:**
+
+- Before implementation, the original 1,222 expectations matched the external pinned
+  parser after SHA-256 verification. A new Rust fixture test then failed on
+  `kkhN` as expected, confirming the missing virama before ণ.
+- Nine additional `g`-overlap cases were authored and reference-checked afterward.
+- After implementation, `node tools/check-reference.mjs` passed all **10,303**
+  cases with Node v24.21.0 and printed seven remaining-gap probes.
+- `cargo fmt --all -- --check`, `cargo clippy --offline --all-targets -- -D warnings`,
+  `cargo test --offline` (**46 integration tests and 1 doc test**), and
+  `cargo build --offline --release` passed with Rust/Cargo 1.99.1.
+- Terminal examples passed: `kh12T` → `খ১২ট`, and
+  `kkhN kShNa kxNr kxNrri kShNgkSh NgkShN kShNG` →
+  `ক্ষ্ণ ক্ষ্ণা ক্ষ্ণ্র ক্ষ্ণৃ ক্ষ্ণগক্ষ ঙ্ক্ষণ ক্ষ্ণG`.
+- `git diff --check` passed. All 334 local documentation links/anchors passed;
+  the 41 fixture files agree between Rust and the reference checker, with
+  unique inputs per file and matching exact code points/counts.
+
+**Limitations:** `kkhNG`/`kShNG`/`kxNG` produce partial `ক্ষ্ণG` versus
+reference `ক্ষ্ণগ`; standalone uppercase `G` remains outside this batch, as
+specified by its scope. Earlier `kk`/`nk`/`lk`/`sk`/`Shk` conflicts, adjacent
+unimplemented conjuncts, `kkhm`/`kShm`/`kxm`, reph, uppercase aliases,
+punctuation/escapes, composition, and Fcitx5 remain incomplete. Full Avro
+compatibility and desktop support are not established.
+
+**Next:** independently check exact `kkhm`/`kShm`/`kxm` → ক্ষ্ম and their
+vowels, following-`r` behavior, and overlaps as one related batch.
 
 ### 2026-10-29 — Use related conjunct batches for rule coverage
 

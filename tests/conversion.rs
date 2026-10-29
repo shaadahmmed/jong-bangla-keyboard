@@ -190,6 +190,47 @@ fn ksh_conjunct_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/conjunct-ksh.tsv"));
 }
 
+#[test]
+fn kkhn_conjunct_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-kkhn.tsv"));
+}
+
+#[test]
+fn kshn_conjunct_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-kshn.tsv"));
+}
+
+#[test]
+fn kxn_conjunct_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-kxn.tsv"));
+}
+
+#[test]
+fn n_conjunct_context_resets_at_boundaries_and_between_calls() {
+    for raw in ["kkhN", "kShN", "kxN"] {
+        for boundary in ['\0', '\n', '\r', '\t', '🙂', 'ক', '\u{301}'] {
+            let shorter = &raw[..raw.len() - 1];
+            assert_eq!(
+                transliterate(&format!("{shorter}{boundary}N")),
+                format!("ক্ষ{boundary}ণ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("ক্ষ্ণ{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("ক্ষ্ণ্র{boundary}ইয়")
+            );
+        }
+        assert_eq!(transliterate(raw), "ক্ষ্ণ");
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+        assert_eq!(transliterate("N"), "ণ");
+    }
+}
+
 fn check_fixture(fixture: &str) {
     let mut count = 0;
     for line in fixture.lines() {
@@ -237,7 +278,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("NNgx", "ণঙ্ষ"),
         ("hNgx", "হঙ্ষ"),
         ("ShNgx", "ষঙ্ষ"),
-        ("kxNgx", "ক্ষঙ্ষ"),
         ("rrNgx", "ররঙ্ষ"),
         ("Ngx`a", "ঙ্ষ`আ"),
         ("Ngx`h", "ঙ্ষ`হ"),
@@ -290,7 +330,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("NNgk", "ণঙ্ক"),
         ("hNgk", "হঙ্ক"),
         ("ShNgk", "ষঙ্ক"),
-        ("kxNgk", "ক্ষঙ্ক"),
         ("rrNgk", "ররঙ্ক"),
         ("Ngk`a", "ঙ্ক`আ"),
         ("Ngk`h", "ঙ্ক`হ"),
@@ -298,7 +337,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("NNgkh", "ণঙ্খ"),
         ("hNgkh", "হঙ্খ"),
         ("ShNgkh", "ষঙ্খ"),
-        ("kxNgkh", "ক্ষঙ্খ"),
         ("rrNgkh", "ররঙ্খ"),
         ("NgKh", "ঙKহ"),
         ("NgkhA", "ঙ্খA"),
@@ -308,7 +346,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("NNgkx", "ণঙ্ক্ষ"),
         ("hNgkx", "হঙ্ক্ষ"),
         ("ShNgkx", "ষঙ্ক্ষ"),
-        ("kxNgkx", "ক্ষঙ্ক্ষ"),
         ("rrNgkx", "ররঙ্ক্ষ"),
         ("NgkX", "ঙ্কX"),
         ("NgKx", "ঙKএক্স"),
@@ -319,7 +356,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("NNgkkh", "ণঙ্ক্ষ"),
         ("hNgkkh", "হঙ্ক্ষ"),
         ("ShNgkkh", "ষঙ্ক্ষ"),
-        ("kxNgkkh", "ক্ষঙ্ক্ষ"),
         ("rrNgkkh", "ররঙ্ক্ষ"),
         ("NgKkh", "ঙKখ"),
         ("NgkkH", "ঙ্ককH"),
@@ -330,7 +366,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("NNgkSh", "ণঙ্ক্ষ"),
         ("hNgkSh", "হঙ্ক্ষ"),
         ("ShNgkSh", "ষঙ্ক্ষ"),
-        ("kxNgkSh", "ক্ষঙ্ক্ষ"),
         ("rrNgkSh", "ররঙ্ক্ষ"),
         ("NgKSh", "ঙKষ"),
         ("NgkSH", "ঙ্কশH"),
@@ -343,10 +378,13 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("skSh", "সক্ষ"),
         ("ShkSh", "ষক্ষ"),
         ("kShkk", "ক্ষকক"),
-        ("kShN", "ক্ষণ"),
         ("kShm", "ক্ষম"),
-        ("kShNgkSh", "ক্ষঙ্ক্ষ"),
-        ("kShNG", "ক্ষঞ"),
+        ("kShNG", "ক্ষ্ণG"),
+        ("kkShN", "কক্ষ্ণ"),
+        ("kShNkk", "ক্ষ্ণকক"),
+        ("rrkShN", "ররক্ষ্ণ"),
+        ("kSHN", "কশHণ"),
+        ("kShN`a", "ক্ষ্ণ`আ"),
         ("kSH", "কশH"),
         ("KSh", "Kষ"),
         ("kShA", "ক্ষA"),
@@ -402,10 +440,9 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("skkh", "সক্ষ"),
         ("Shkkh", "ষক্ষ"),
         ("kkhkk", "ক্ষকক"),
-        ("kkhN", "ক্ষণ"),
         ("kkhm", "ক্ষম"),
-        ("kkhNgkkh", "ক্ষঙ্ক্ষ"),
-        ("kkhNG", "ক্ষঞ"),
+        ("kkhNG", "ক্ষ্ণG"),
+        ("kxNG", "ক্ষ্ণG"),
         ("kkH", "ককH"),
         ("Kkh", "Kখ"),
         ("kKh", "কKহ"),
@@ -434,6 +471,17 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("rr`", "রর`"),
     ] {
         assert_eq!(transliterate(input), expected, "input: {input:?}");
+    }
+    // Earlier k/n/l/s/Sh + k rules and standalone uppercase G remain gaps.
+    for raw in ["kkhN", "kShN", "kxN"] {
+        for (prefix, letter) in [("k", "ক"), ("n", "ন"), ("l", "ল"), ("s", "স"), ("Sh", "ষ")]
+        {
+            assert_eq!(
+                transliterate(&format!("{prefix}{raw}")),
+                format!("{letter}ক্ষ্ণ")
+            );
+        }
+        assert_eq!(transliterate(&format!("{raw}G")), "ক্ষ্ণG");
     }
 }
 
@@ -467,6 +515,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = input + &"🙂NgkSha1NgkShr2NgkShrri3NgkShry4NgkShrry5NgkShNgkkh".repeat(4096);
     let input = input + &"🙂kkha1kkhr2kkhrri3kkhry4kkhrry5kkhkkh".repeat(4096);
     let input = input + &"🙂kSha1kShr2kShrri3kShry4kShrry5kShkkh".repeat(4096);
+    let input = input + &"🙂kkhNa1kShNr2kxNrri3kxNry4kkhNrry5kShNgkSh".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -495,6 +544,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let expected = expected + &"🙂ঙ্ক্ষা১ঙ্ক্ষ্র২ঙ্ক্ষৃ৩ঙ্ক্ষ্র্য৪ঙ্ক্ষরর\u{200D}্য৫ঙ্ক্ষঙ্ক্ষ".repeat(4096);
     let expected = expected + &"🙂ক্ষা১ক্ষ্র২ক্ষৃ৩ক্ষ্র্য৪ক্ষরর\u{200D}্য৫ক্ষক্ষ".repeat(4096);
     let expected = expected + &"🙂ক্ষা১ক্ষ্র২ক্ষৃ৩ক্ষ্র্য৪ক্ষরর\u{200D}্য৫ক্ষক্ষ".repeat(4096);
+    let expected = expected + &"🙂ক্ষ্ণা১ক্ষ্ণ্র২ক্ষ্ণৃ৩ক্ষ্ণ্র্য৪ক্ষ্ণরর\u{200D}্য৫ক্ষ্ণগক্ষ".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
