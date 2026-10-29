@@ -86,10 +86,9 @@ User instructions take precedence over this guide; update the docs when they cha
   engine. Choose and document the compatibility reference before claiming parity.
 - Keep the active word in preedit: text remains editable before it is committed
   to the application. Backspace removes a raw phonetic keystroke and recomputes it.
-- Show only two choices: converted Bangla first, exact original Latin input second.
-  The Latin choice is a literal fallback, not an English translation or prediction.
-- Convert digits to Bangla by default. Do not consume digit keys as candidate
-  selection shortcuts by default.
+- For v1, show converted Bangla in editable preedit without a Bangla/Latin choice
+  list or raw Latin selection. Revisit choices after the first release if needed.
+- Convert digits to Bangla by default; digit keys enter text.
 - Keep future autocorrection separate from deterministic transliteration. Do not
   silently change spelling, add dictionaries, or implement prediction for v1.
 - Prioritize responsive typing and low resource use; verify performance claims.
@@ -99,8 +98,8 @@ User instructions take precedence over this guide; update the docs when they cha
 - Keep transliteration independent of Fcitx5, display servers, desktop APIs, and UI.
 - Keep composition state and edit/commit actions independent of the platform
   adapter so future IBus and Windows adapters can share behavior.
-- Keep framework-specific key events, preedit updates, candidate display, and
-  commits in the adapter. Reuse Fcitx5 UI facilities where suitable.
+- Keep framework-specific key events, preedit updates, and commits in the adapter.
+  Reuse Fcitx5 UI facilities where suitable.
 - Rust is the implementation language for engine and composition logic. A minimal
   C++ bridge is a proposal to validate against Fcitx5's addon API, not a settled
   requirement. Do not move transliteration rules into a bridge.
@@ -115,7 +114,7 @@ User instructions take precedence over this guide; update the docs when they cha
   boundaries; deleting a raw keystroke must not delete a byte from Bangla output.
 - Add meaningful regression cases for phonetic rules and composition behavior:
   contextual vowels, conjuncts, case-sensitive sequences, punctuation/escape
-  sequences, digits, raw Latin selection, backspace, commit, cancel, and reset.
+  sequences, digits, backspace, commit, cancel, and reset.
 - Track expected Unicode sequences and the source of compatibility fixtures.
   Visually similar output alone does not establish compatibility.
 - Keep platform smoke tests separate from engine tests. Record actual distro,

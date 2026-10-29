@@ -12,7 +12,7 @@ is **CachyOS + KDE Plasma**. IBus and Windows support are planned for later.
 
 - Avro-compatible phonetic typing, with an independently implemented engine.
 - An editable current word; Backspace removes the last phonetic keystroke.
-- Two choices only: converted Bangla, then the exact original Latin text.
+- Converted Bangla in editable preedit, without a Bangla/Latin choice list for v1.
 - Bangla digits by default.
 - Fast, lightweight, offline typing.
 - Room for modular autocorrection later; no automatic spelling changes or
