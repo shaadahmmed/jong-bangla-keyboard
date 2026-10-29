@@ -1,6 +1,68 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn reph_basic_spellings_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/reph-basic.tsv"));
+}
+
+#[test]
+fn reph_conjuncts_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/reph-conjuncts.tsv"));
+}
+
+#[test]
+fn reph_contextual_spellings_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/reph-contextual.tsv"));
+}
+
+#[test]
+fn reph_controls_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/reph-controls.tsv"));
+}
+
+#[test]
+fn reph_respects_utf8_and_control_boundaries() {
+    for (raw, base) in [("q", "ক"), ("z", "য"), ("R", "ড়"), ("Rh", "ঢ়")] {
+        for boundary in ['\0', '\n', '\r', '\t', '🙂', 'ক', 'é', '\u{301}'] {
+            let input = format!("rr{raw}{boundary}a{boundary}rr{raw}ry");
+            let original = input.clone();
+            assert_eq!(
+                transliterate(&input),
+                format!("র্{base}{boundary}আ{boundary}র্{base}্র্য")
+            );
+            assert_eq!(input, original);
+        }
+    }
+}
+
+#[test]
+fn reph_calls_and_internal_splits_are_independent() {
+    for (left, right, left_out, right_out) in [
+        ("r", "rRhry", "র", "রঢ়্র্য"),
+        ("rr", "Rhry", "রর", "ঢ়্র্য"),
+        ("rrR", "hry", "র্ড়", "হ্র্য"),
+        ("rrRh", "ry", "র্ঢ়", "র\u{200D}্য"),
+        ("rrRhr", "y", "র্ঢ়্র", "ইয়"),
+    ] {
+        assert_eq!(transliterate(left), left_out);
+        assert_eq!(transliterate(right), right_out);
+    }
+    assert_eq!(transliterate("rrRhry"), "র্ঢ়্র্য");
+    assert_eq!(transliterate("r"), "র");
+    assert_eq!(transliterate("rrr"), "র্র");
+    assert_eq!(transliterate("rrr!"), "ররর!");
+    assert_eq!(transliterate("rri"), "ঋ");
+    assert_eq!(transliterate("a"), "আ");
+}
+
+#[test]
+fn reph_handles_long_mixed_input() {
+    let input = "rrqry1rrzrry2rrRrri3rrRHrr4rrShN5rrw6rrx7rrt``a8r`rrq🙂";
+    let expected = "র্ক্র্য১র্যরর\u{200D}্য২র্ড়ৃ৩র্ঢ়্রর৪র্ষ্ণ৫র্্ব৬র্ক্স৭র্ৎআ৮রর্ক🙂";
+    assert_eq!(transliterate(&input.repeat(1024)), expected.repeat(1024));
+}
+
+#[test]
 fn four_following_r_q_matches_exact_unicode() {
     check_fixture(include_str!("fixtures/following-r-q.tsv"));
 }
@@ -777,14 +839,6 @@ fn conjunct_completion_consumed_and_fresh_keys_keep_their_priorities() {
         ),
     ] {
         assert_eq!(transliterate(raw), expected, "{raw}");
-    }
-}
-
-#[test]
-fn conjunct_completion_case_and_reph_remain_explicit_gaps() {
-    // These are partial engine outputs, not claims of reference compatibility.
-    for (raw, partial) in [("bDh", "বঢ"), ("rrcch", "ররচ্ছ")] {
-        assert_eq!(transliterate(raw), partial, "{raw}");
     }
 }
 
@@ -2942,43 +2996,23 @@ fn empty_input_and_unmatched_unicode_are_preserved() {
 }
 
 #[test]
-fn unsupported_rules_still_preserve_unmatched_characters() {
-    for (input, expected) in [
-        ("rrqr", "ররক্র"),
-        ("rrzr", "ররয্র"),
-        ("rrRr", "ররড়্র"),
-        ("rrNgx", "ররঙ্ষ"),
-        ("rrdd", "ররদ্দ"),
-        ("rrhm", "ররহ্ম"),
-        ("rrx", "ররক্স"),
-        ("rrkx", "ররক্ষ"),
-        ("rrw", "রর্ব"),
-        ("rrk", "ররক"),
-        ("rrr", "ররর"),
-        ("rrNgk", "ররঙ্ক"),
-        ("rrNgkh", "ররঙ্খ"),
-        ("rrNgkx", "ররঙ্ক্ষ"),
-        ("rrNgkkh", "ররঙ্ক্ষ"),
-        ("rrNgkSh", "ররঙ্ক্ষ"),
-        ("rrkShN", "ররক্ষ্ণ"),
-        ("rrkSh", "ররক্ষ"),
-        ("rrY", "ররয়"),
-        ("rrShN", "ররষ্ণ"),
-        ("rrShm", "ররষ্ম"),
-        ("rrkk", "ররক্ক"),
-        ("rrkkh", "ররক্ষ"),
-        ("rrt``", "ররৎ"),
-    ] {
-        assert_eq!(transliterate(input), expected, "input: {input:?}");
-    }
+fn consumed_keys_leave_fresh_g_aliases_and_backtick_boundaries() {
     // An exposed G converts after consumed N; standalone backticks separate matches.
     for raw in ["kkhN", "kShN", "kxN"] {
         assert_eq!(transliterate(&format!("{raw}G")), "ক্ষ্ণগ");
     }
     for raw in ["kkhm", "kShm", "kxm"] {
-        assert_eq!(transliterate(&format!("rr{raw}")), "ররক্ষ্ম");
         assert_eq!(transliterate(&format!("{}M", &raw[..raw.len() - 1])), "ক্ষ্ম");
         assert_eq!(transliterate(&format!("{raw}`a")), "ক্ষ্মআ");
+    }
+}
+
+#[test]
+fn reference_unicode_lowercasing_remains_separate() {
+    // Reference lowercases these to ই + U+0307, é and σ. Keep the current
+    // Unicode preservation contract explicit until that policy is decided.
+    for raw in ["İ", "É", "Σ"] {
+        assert_eq!(transliterate(raw), raw);
     }
 }
 

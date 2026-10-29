@@ -5,6 +5,7 @@
 
 mod case;
 mod following_r;
+mod reph;
 mod rules;
 mod symbols;
 mod vowels;
@@ -98,6 +99,13 @@ pub fn transliterate(input: &str) -> String {
             });
             context = Context::Vowel('i');
             remaining = &remaining[3..];
+        } else if let Some(after_reph) = reph::consume(
+            remaining,
+            normalized[..normalized.len() - remaining.len()].ends_with('r'),
+            &mut output,
+        ) {
+            remaining = after_reph;
+            context = Context::Consonant { ya_joiner: false };
         } else if let Some(after_nggh) = remaining.strip_prefix("Nggh") {
             output.push_str("ঙ্ঘ");
             remaining = consume_following_r_prefix(after_nggh, 'h', &mut output);

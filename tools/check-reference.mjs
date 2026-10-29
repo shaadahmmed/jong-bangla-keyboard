@@ -26,6 +26,11 @@ const codePoints = (text) =>
 
 let count = 0;
 for (const name of [
+  "reph-basic.tsv",
+  "reph-conjuncts.tsv",
+  "reph-contextual.tsv",
+  "reph-controls.tsv",
+
   "following-r-q.tsv",
   "following-r-z.tsv",
   "following-r-r-retroflex.tsv",
@@ -354,9 +359,7 @@ for (const name of [
 console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
 // These probes expose missing behavior; they are not supported-slice fixtures.
-for (const input of [
-  "rrqr", "rrzr", "rrRr", "rrShN", "rrt``",
-]) {
+for (const input of ["İ", "É", "Σ"]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);
 }

@@ -101,10 +101,12 @@ The final t-double-backtick escape now emits the single letter ৎ (U+09CE);
 see its [behavior and evidence](docs/v1.md#final-t-escape).
 Following `r` after `q`/`z`/`R`/`Rh` now attaches, including their repeated-r
 and vowel/ya exceptions; see the [batch record](docs/v1.md#following-r-after-q-z-r-and-rh).
-This is a partial engine with 509,530 reference-checked examples,
-not a usable desktop keyboard or a full Avro compatibility claim. Reph,
-some context interactions and reference Unicode lowercasing
-differences remain; composition and Fcitx5 integration are unimplemented.
+Reph now attaches leading `rr` across basic consonants and existing conjuncts;
+see the [reph behavior and evidence](docs/v1.md#reph-batch).
+This is a partial engine with 522,933 reference-checked examples,
+not a usable desktop keyboard or a full Avro compatibility claim. Further
+context auditing and a decision about reference Unicode lowercasing remain;
+composition and Fcitx5 integration are unimplemented.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
 [first vowel group](docs/v1.md#first-vowel-group) and
@@ -176,12 +178,11 @@ Rule coverage favors the [largest coherent related batches](docs/v1.md#small-dev
 that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
-update, and commit per completed batch. The latest step implements following r
-after q/z/R/Rh, with independent Unicode evidence for each spelling and its
-exceptions. The prior 302-input standalone inventory had zero discrepancies;
-context cases have their own fixtures. Next, investigate reph (a leading rr
-that attaches to a following consonant). Composition and platform integration
-remain separate work.
+update, and commit per completed batch. The latest step implements reph, with
+independent Unicode, vowel/ya, following-r and matching-priority evidence. A bounded audit of 1,350
+vowel-pair contexts found no discrepancies; wider context coverage and Unicode
+case handling still need review. The prior 302-input standalone inventory is
+separate evidence. Composition and platform integration remain future work.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
@@ -200,6 +201,8 @@ implementation lives in private modules under `src/transliteration/`:
   handles ordinary `rri` plus `aZ`/`oZ`.
 - [`symbols.rs`](src/transliteration/symbols.rs): ordered punctuation, symbol escapes,
   and empty-output backticks; all reset raw phonetic context.
+- [`reph.rs`](src/transliteration/reph.rs): leading-`rr` attachment, raw preceding-r
+  guard, and terminal `rrr` exception.
 - [`following_r.rs`](src/transliteration/following_r.rs): shared following-`r`
   attachment and exceptions based on raw keys.
 
@@ -316,8 +319,13 @@ The separate escape ``` t`` ``` → ৎ uses one Unicode letter. It resets conte
 Uppercase `Q` aliases `q`: `Qa` → `কা`; following `qr`/`Qr` produce `ক্র`.
 Basic `r` produces `র`, and `rr`
 produces `রর`; `rri` is matched before either. This resolves `rrri` → `রররি` and
-`rrrri` → `ররৃ`. Basic `kr` now produces `ক্র`; reph remains incomplete
-(`rrk` produces `ররক` instead of `র্ক`).
+`rrrri` → `ররৃ`. Basic `kr` produces `ক্র`. Reph attaches leading `rr`:
+`'rrq rrz rrR rrRh rrk rrShN'` → `র্ক র্য র্ড় র্ঢ় র্ক র্ষ্ণ`.
+Existing vowel and following-r rules still apply (`rrqry` → `র্ক্র্য`,
+`rrqrry` → `র্করর‍্য`); lowercase y and uppercase Z keep the basic rr joiner.
+Exactly terminal `rrr` → `র্র`, while `rrr!` → `ররর!` and `rrrq` → `রররক`.
+A consumed r prevents a fresh reph match (`krrq` → `ক্ররক`); a backtick
+separates raw matches (`` r`rrq `` → `রর্ক`). See the [reph batch](docs/v1.md#reph-batch).
 Lowercase `p` produces `প`; `ph` and `f` both produce `ফ`. The longest supported
 match handles `ph` before `p` (`phi` → `ফি`, matching `fi` → `ফি`).
 `P`/`F` and uppercase `H` inside matches now work as aliases. Following `r`
@@ -349,11 +357,11 @@ They support vowel signs (`Ngi` → `ঙি`, `NGU` → `ঞূ`). Exact `Ngk` �
 now matches before `Ng` and supports vowels and aliases (`Ngki` → `ঙ্কি`).
 It attaches single following `r` without U+200D (`Ngkr` → `ঙ্ক্র`, `Ngkry` → `ঙ্ক্র্য`),
 sharing the two-`r` priority and exceptions (`Ngkrri` → `ঙ্কৃ`,
-`Ngkrry` → `ঙ্করর‍্য`). Earlier `gN` now wins in `gNgk` → `গ্ণগক`; reph remains incomplete.
+`Ngkrry` → `ঙ্করর‍্য`). Earlier `gN` now wins in `gNgk` → `গ্ণগক`.
 Exact `Ngkh` → `ঙ্খ` now matches before `Ngk` and shares its vowel context
 and following-`r` priority (`Ngkhi` → `ঙ্খি`, `Ngkhr` → `ঙ্খ্র`,
 `Ngkhrri` → `ঙ্খৃ`, `Ngkhrry` → `ঙ্খরর‍্য`). Earlier `gN` now wins in
-`gNgkh` → `গ্ণগখ`; reph remains incomplete.
+`gNgkh` → `গ্ণগখ`.
 Exact `Ngkx` → `ঙ্ক্ষ` also matches before `Ngk`, sharing `Ngx`/`kx`
 vowel context and following-`r` priority (`Ngkxi` → `ঙ্ক্ষি`,
 `Ngkxrri` → `ঙ্ক্ষৃ`, `Ngkxrr` → `ঙ্ক্ষ্রর`). Single `Ngkxr` → `ঙ্ক্ষর`
@@ -362,24 +370,21 @@ Earlier `gN` now wins in `gNgkx` → `গ্ণগক্ষ`.
 Exact `Ngkkh` → `ঙ্ক্ষ` matches before `Ngk`, with vowel signs/aliases and
 `Ngkh`'s following-`r` behavior (`Ngkkhr` → `ঙ্ক্ষ্র`, `Ngkkhrri` → `ঙ্ক্ষৃ`).
 Its single following `r` attaches without a joiner (`Ngkkhry` → `ঙ্ক্ষ্র্য`),
-while `Ngkxry` retains U+200D. Earlier `gN`/`NN`/`hN` overlaps now match;
-reph remains incomplete.
+while `Ngkxry` retains U+200D. Earlier `gN`/`NN`/`hN` overlaps now match.
 Exact `NgkSh` shares `Ngkkh`'s output and vowel/following-`r` behavior
 (`NgkShr` → `ঙ্ক্ষ্র`, `NgkShrri` → `ঙ্ক্ষৃ`, `NgkShry` → `ঙ্ক্ষ্র্য`).
 Case-distinct `Ngksh` → `ঙ্কশ` stays separate. Earlier `gN`/`NN`/`hN` overlaps
-now match; reph remains incomplete.
+now match.
 Exact `kkh` → `ক্ষ` matches before basic `k`/`kh`, sharing `Ngkh`'s vowel
 context and following-`r` behavior (`kkhr` → `ক্ষ্র`, `kkhrri` → `ক্ষৃ`,
 `kkhry` → `ক্ষ্র্য`). Earlier exact `Ngkkh` keeps priority;
 `NGkkh` → `ঞক্ষ` and `ngkkh` → `ংক্ষ` now also match the reference.
 Earlier `nk`/`lk`/`sk`/`Shk` now consume `k` first (`nkkh` → `ঙ্কখ`,
-`lkkh` → `ল্কখ`, `skkh` → `স্কখ`, `Shkkh` → `ষ্কখ`). Other conjuncts
-and reph remain gaps.
+`lkkh` → `ল্কখ`, `skkh` → `স্কখ`, `Shkkh` → `ষ্কখ`).
 Exact `kSh` shares `kkh`'s output, vowel context, and following-`r` behavior
 (`kShr` → `ক্ষ্র`, `kShrri` → `ক্ষৃ`, `kShry` → `ক্ষ্র্য`). Earlier exact
 `NgkSh` keeps priority; `NGkSh` → `ঞক্ষ` and `ngkSh` → `ংক্ষ` now match.
-Case-distinct `ksh` → `কশ` stays separate. Earlier-prefix conflicts
-and reph remain gaps.
+Case-distinct `ksh` → `কশ` stays separate.
 Exact `kkhN`/`kShN`/`kxN` → `ক্ষ্ণ` match before their shorter forms, with
 supported vowel signs/aliases and single-`r` attachment (`kxNr` → `ক্ষ্ণ্র`,
 `kxNry` → `ক্ষ্ণ্র্য`). Two `r` keys normally add ্রর, while `rri` and
@@ -387,8 +392,7 @@ supported vowel signs/aliases and single-`r` attachment (`kxNr` → `ক্ষ�
 Earlier `Ngkkh`/`NgkSh`/`Ngkx` still win (`NgkShN` → `ঙ্ক্ষণ`). Consuming
 the final `N` prevents a following nasal match (`kShNgkSh` → `ক্ষ্ণগক্ষ`);
 this also resolves `kxNgx`, `kxNgk`, `kxNgkh`, `kxNgkx`, `kxNgkkh`, and `kxNgkSh`.
-Uppercase `G` also converts after these forms (`kShNG` → `ক্ষ্ণগ`);
-earlier-prefix conflicts, unrelated conjuncts, and reph remain gaps.
+Uppercase `G` also converts after these forms (`kShNG` → `ক্ষ্ণগ`).
 Exact `kkhm`/`kShm`/`kxm` → `ক্ষ্ম` also match before their shorter forms,
 with supported vowel signs/aliases and single-`r` attachment (`kxmr` → `ক্ষ্ম্র`,
 `kxmry` → `ক্ষ্ম্র্য`). The `rri` and `rry`/`rrZ` exceptions keep priority
@@ -397,7 +401,7 @@ with supported vowel signs/aliases and single-`r` attachment (`kxmr` → `ক্
 Earlier `Ngkkh`/`NgkSh`/`Ngkx` still win (`NgkShm` → `ঙ্ক্ষম`).
 Consuming `m` prevents it joining a following nasal (`kShmng` → `ক্ষ্মং`,
 `kShmn` → `ক্ষ্মন`). Basic `mr`/`mm`/`mn` are now supported by the nasal/h
-batch below. Earlier-prefix conflicts and reph remain incomplete.
+batch below.
 Exact `kk` → `ক্ক` matches after longer `kkh`/`kkhN`/`kkhm` and before single `k`.
 Its vowel context and following `r` share `Ngk`'s behavior: `kki` → `ক্কি`,
 `kkr` → `ক্ক্র`, `kkrri` → `ক্কৃ`, `kkry` → `ক্ক্র্য`, and `kkrry` → `ক্করর‍্য`.
@@ -406,7 +410,6 @@ Consuming both keys changes `kkkh` → `ক্কখ`, `kkSh` → `ক্কষ`
 `kkx` → `ক্কক্স`; the second key cannot begin `kkh`/`kSh`/`kx`.
 Earlier `Ngk` still wins (`Ngkk` → `ঙ্কক`). Repeated `kk` and neighboring
 supported forms work (`kkkk` → `ক্কক্ক`, `kkhkk` → `ক্ষক্ক`).
-Earlier `nk`/`lk`/`sk`/`Shk` and reph remain incomplete.
 Exact `ShN` → `ষ্ণ` and `Shm` → `ষ্ম` match before basic `Sh`, with supported
 vowel signs/aliases and following-`r` attachment: `ShNi` → `ষ্ণি`, `Shmr` → `ষ্ম্র`,
 `ShNrri` → `ষ্ণৃ`, `Shmry` → `ষ্ম্র্য`, and `Shmrry` → `ষ্মরর‍্য`.
@@ -416,7 +419,7 @@ Earlier `kShN`/`kShm` and `NgkSh` still win; `kkShN` → `ক্কষ্ণ` an
 `ShNgx` → `ষ্ণগক্স`, `ShNgkSh` → `ষ্ণগক্ষ`. Consuming `m` keeps a following
 nasal separate: `Shmng` → `ষ্মং`, `Shmn` → `ষ্মন`. Uppercase `G` now converts
 after `ShN` (`ShNG` → `ষ্ণগ`). Basic
-`mr`/`mm`/`mn` now match as described below; reph remains incomplete.
+`mr`/`mm`/`mn` now match as described below.
 Basic `k`/`kh`/`Sh` now attach following `r`: try `'kr khr Shr'` → `ক্র খ্র ষ্র`.
 Vowels and ya forms work (`kri` → `ক্রি`, `khry` → `খ্র্য`, `ShrZ` → `ষ্র্য`).
 The `rri` and `rry`/`rrZ` exceptions remain (`krri` → `কৃ`, `krry` → `করর‍্য`);
@@ -430,8 +433,7 @@ The exceptions remain (`grri` → `গৃ`, `ghrry` → `ঘরর‍্য`), w
 Try `'grIShmo ghraN ghrriNa'` → `গ্রীষ্ম ঘ্রাণ ঘৃণা`.
 Existing conjuncts retain priority; exposed `g` now attaches in `ShNgr` → `ষ্ণগ্র`,
 `Shmgr` → `ষ্মগ্র`, and `kShmgr` → `ক্ষ্মগ্র`. Earlier `dg`/`Rg`/`gg`/`gN`
-matches now have their own rules; other basic following-`r` forms, aliases,
-and reph remain incomplete. Copied Unicode resets context (`গr` → `গর`, `ঘr` → `ঘর`).
+matches now have their own rules. Copied Unicode resets context (`গr` → `গর`, `ঘr` → `ঘর`).
 Exact `Ngg`/`Nggh` now produce `ঙ্গ`/`ঙ্ঘ`: try
 `'Ngg Nggh Nggr Ngghr Nggrri Ngghry'` → `ঙ্গ ঙ্ঘ ঙ্গ্র ঙ্ঘ্র ঙ্গৃ ঙ্ঘ্র্য`.
 Both allow supported vowel signs and ya forms; `Nggrr` → `ঙ্গ্রর`, while
@@ -602,8 +604,6 @@ Vowels and following `r` retain their checked exceptions (`strri` → `স্ত
 Try `'rasta astha sTeshon koShTo niShTha proshtho'`
 → `রাস্তা আস্থা স্টেশন কষ্ট নিষ্ঠা প্রশ্তহ`, without dictionary correction.
 Uppercase aliases also participate in these matches (`mB` → `ম্ব`).
-Earlier b-prefixed matches (`bd`),
-other conjuncts and following-`r` forms and reph remain incomplete.
 Lowercase `ng` produces ং (U+0982), as in `bangla` → `বাংলা`. Before the supported
 single-key vowels and `OI`/`OU`, it produces ঙ্গ plus the appropriate vowel sign
 (`nga` → `ঙ্গা`, `ngOI` → `ঙ্গৈ`, `ngo` → `ঙ্গ`). These forms consume their vowel
@@ -637,8 +637,7 @@ The same rules apply after `aZ`/`oZ` (`aZrr` → `অ্যা্রর`). Upper
 also attaches a single following `r` (`Yr` → `য়্র`, `Yry` → `য়্র্য`),
 without a U+200D joiner. Its longer runs share the two-`r` matching priority:
 `Yrrri` → `য়্রররি`, `Yrrrri` → `য়্ররৃ`, while `Yrri` → `য়ৃ` and
-`Yrry` → `য়রর‍্য` keep their existing behavior. `AZ` now aliases `aZ`. Reph such as `rrY` → `র্য়`
-remains incomplete.
+`Yrry` → `য়রর‍্য` keep their existing behavior. `AZ` now aliases `aZ`. Reph also supports `rrY` → `র্য়`.
 Lowercase `q` produces ক (U+0995) and establishes consonant context for vowels:
 `qi` → `কি`, `qOI` → `কৈ`, `qrri` → `কৃ`. Raw sequences keep their own matching:
 `qh` → `কহ`, `qq` → `কক`, and existing `kh` → `খ`. Uppercase `Q` aliases `q`;
@@ -658,7 +657,7 @@ shares lowercase `y`'s two-key priority: `wrr` → `ও্রর`, `wrrri` → `
 and `wrrrri` → `ও্ররৃ`, while `wrri` → `ওৃ` and `wrry` → `ওরর‍্য` keep
 their exceptions. Single `wr` stays separate (`wr` → `ওর`, `wry` → `ওর‍্য`).
 The same rule applies after consonants/vowels (`kwrr` → `ক্ব্রর`, `awrr` → `আও্রর`).
-Uppercase `W` aliases `w`; reph (`rrw` → `র্্ব`) and other conjuncts remain incomplete.
+Uppercase `W` aliases `w`; reph `rrw` → `র্্ব` preserves both U+09CD viramas.
 Lowercase `x` produces এক্স at the start or after a copied character/digit,
 and ক্স after supported converted input (`ax` → `আক্স`, `qx` → `কক্স`).
 Exact `kx` matches before single `k` and produces ক্ষ. Both establish consonant
@@ -673,7 +672,7 @@ Exact `Ngx` matches before `Ng` and produces ঙ্ষ (U+0999 U+09CD U+09B7),
 with the same vowel context and following-`r` priority as `kx`:
 `Ngxi` → `ঙ্ষি`, `Ngxrri` → `ঙ্ষৃ`, `Ngxrr` → `ঙ্ষ্রর`. Existing case
 distinctions remain (`NGx` → `ঞক্স`, `ngx` → `ংক্স`). Some earlier longer
-matches still take priority (`gNgx` uses `gN` first and now yields `গ্ণগক্স`). `kkx` now converts as `ক্কক্স`; reph remains incomplete.
+matches still take priority (`gNgx` uses `gN` first and now yields `গ্ণগক্স`). `kkx` now converts as `ক্কক্স`.
 
 ## Repeat the reference comparison
 
@@ -886,7 +885,8 @@ the 13 files linked in the [explicit G/J batch](docs/v1.md#explicit-gj-spelling-
 the 12 files linked in the [symbol batch](docs/v1.md#punctuation-and-symbol-batch),
 the 19 files linked in the [vowel-escape batch](docs/v1.md#vowel-sign-escape-batch),
 the three files linked in the [final-escape record](docs/v1.md#final-t-escape),
-and the five files linked in the [q/z/R/Rh following-r record](docs/v1.md#following-r-after-q-z-r-and-rh)
+the five files linked in the [q/z/R/Rh following-r record](docs/v1.md#following-r-after-q-z-r-and-rh),
+and the four files linked in the [reph record](docs/v1.md#reph-batch)
 record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
@@ -903,9 +903,10 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 509,530 cases used by Rust tests and prints reference outputs for
-five known reph gaps: `rrqr`, `rrzr`, `rrRr`, `rrShN`, and ``` rrt`` ```.
-The resolved standalone following-r probes now check their remaining reph interactions.
+It checks the same 522,933 cases used by Rust tests and prints reference outputs
+for three Unicode case differences: `İ`, `É`, and `Σ`. The engine currently
+preserves these inputs; the reference returns `ই̇`, `é`, and `σ`. These probes
+are separate from the supported fixtures and require a case-handling decision.
 The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
