@@ -1,111 +1,67 @@
 # Development progress
 
-This is the handoff log for developers and future coding sessions. Update it
-after each small, completed step. Requirements and behavioral decisions belong
-in [v1.md](v1.md); this file records actual progress and evidence.
-
+This is the current handoff for developers and future coding sessions. Replace
+these summaries after each completed step; aim for 50–100 lines before
+[Completed steps](#completed-steps). That section preserves older history and
+need not grow. Use Git for detailed change history, [v1.md](v1.md) for requirements
+and behavioral decisions, and tests/fixtures for exact compatibility evidence.
 Dates use the project's Asia/Dhaka timezone.
 
 ## Current position
 
-- **Completed:** initial requirements, contributor guide, MIT license, and progress
-  tracking documentation; pinned phonetic reference; first Rust conversion slice;
-  `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri` vowel forms.
-  Basic `r`/`rr`, `p`/`ph`/`f`, `c`/`ch`/`j`/`jh`, `d`/`dh`/`D`/`Dh`, `l`/`h`,
-  `s`/`sh`/`S`/`Sh`, `R`/`Rh`, lowercase `z`, `Ng`/`NG`, and uppercase `Y` consonant matching is
-  implemented. Lowercase `ng` → ং and selected ng-vowel forms are implemented.
-  Following `rri` and longer `r` runs after `Ng`/`NG`/`ng` now match the reference.
-  Contextual lowercase `y` now handles independent, vowel-following, and
-  consonant-following forms, including basic `r`/`rr` joiners.
-  Uppercase `Z` → ্য and selected `aZ`/`oZ` longer forms are implemented.
-  Following-`r` priority after lowercase `y` and uppercase `Z` is implemented,
-  including `rri`/`rry`/`rrZ` exceptions and differing `yry`/`Zry` joiners.
-  Uppercase `Y` now attaches following `r`, with the same two-`r` priority
-  and exceptions; single `Yr`/`Yry` forms omit the basic-`r` joiner.
-  Basic lowercase `q` → ক and its vowel context are implemented.
-  Basic lowercase `v` → ভ and its vowel context are implemented.
-  Contextual lowercase `w` now handles independent, vowel-following, and
-  consonant-following forms, including the independent following-vowel য়.
-  Following-`r` priority after `w` now handles two-`r` attachment and preserves
-  the `rri`/`rry`/`rrZ` exceptions and basic-`r` joiners.
-  Contextual lowercase `x` now handles boundary and following-input forms;
-  exact `kx` → ক্ষ matches before single `k`.
-  Following-`r` priority after `x`/`kx` now handles two-`r` attachment,
-  preserving `rri`/`rry`/`rrZ` exceptions and single-`r` joiners.
-  Exact `Ngx` → ঙ্ষ now matches before `Ng`, with supported vowel/context
-  interactions and the existing `x`/`kx` following-`r` priority.
-  Exact `Ngk` → ঙ্ক now matches before `Ng`, with supported vowel/context
-  interactions, single following-`r` attachment, and `rri`/`rry`/`rrZ` priority.
-  Exact `Ngkh` → ঙ্খ now matches before `Ngk`, sharing its vowel context
-  and following-`r` attachment/priority. Exact `Ngkx` → ঙ্ক্ষ now matches before
-  `Ngk`, sharing `Ngx`/`kx` following-`r` behavior. Exact `Ngkkh` → ঙ্ক্ষ
-  matches before `Ngk`, sharing `Ngkh`'s single-`r` attachment and longer-`r`
-  priority. Exact `NgkSh` → ঙ্ক্ষ now shares `Ngkkh`'s branch and
-  vowel/following-`r` behavior. Exact standalone `kkh` → ক্ষ now matches before
-  basic `k`/`kh`, with the same vowel context and following-`r` attachment.
-  `NGkkh` → ঞক্ষ and `ngkkh` → ংক্ষ now also match. Exact standalone `kSh`
-  now shares `kkh`'s branch, vowel context, and following-`r` behavior;
-  `NGkSh` → ঞক্ষ and `ngkSh` → ংক্ষ now also match. Exact
-  `kkhN`/`kShN`/`kxN` → ক্ষ্ণ share verified vowel context and single-`r`
-  attachment, preserving earlier `Ngkkh`/`NgkSh`/`Ngkx` priority and consuming
-  `N` before a following nasal sequence. Exact `kkhm`/`kShm`/`kxm` → ক্ষ্ম
-  now share verified vowel context and single-`r` attachment, preserving earlier
-  `Ngkkh`/`NgkSh`/`Ngkx` priority and consuming `m` before following nasal
-  sequences. Exact `kk` → ক্ক now shares verified vowel context and single-`r`
-  attachment, preserving longer `kkh`/`kkhN`/`kkhm` and earlier `Ng` priority.
-  It corrects `kkkh`/`kkSh`/`kkx` overlaps by consuming both initial keys.
-  Exact `ShN` → ষ্ণ and `Shm` → ষ্ম now share verified vowel context and
-  following-`r` attachment. They resolve `kkShN`/`kkShm` and selected `ShNg…`
-  overlaps while preserving earlier `kShN`/`kShm`/`NgkSh` priority. Basic
-  following-`r` and uppercase/escape gaps remain. There are 12,933
-  reference-checked cases.
-- **Implementation:** a dependency-free library and terminal example exist.
-  Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
-  exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
-  matching prefixes, contextual lowercase `y`/`w`/`x`, uppercase `Z`/`aZ`/`oZ`,
-  exact `kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`kkhm`/`kShm`/`kxm`/`kk`/`ShN`/`Shm`,
-  `Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, and selected
-  following-`r` forms after
-  `y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`kkhm`/`kShm`/`kxm`/`kk`/`ShN`/`Shm`
-  and `Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`.
-  Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
-  integration, and a usable desktop keyboard remain incomplete. Full Avro
-  compatibility is not established.
-- **Workflow:** use small batches of related conjuncts, with independent
-  reference checks for each spelling and one checked, documented commit per
-  completed batch. This replaces the previous one-spelling next-step plan.
-- **Next:** independently check following `r` after basic `k`/`kh`/`Sh`,
-  including single attachment, longer `r` runs, vowel/ya context, and priority
-  against the existing conjuncts.
-- **Version history:** Git is available. Each completed step is committed after
-  checks and the progress update. Initial entries below describing unavailable
-  Git refer to the earlier workspace state.
+- **Implemented:** a dependency-free Rust transliteration library and terminal
+  example; principal forms for all 11 basic vowels and 40 basic consonant
+  sequences (35 letters), contextual `ng`/`y`/`w`/`x` and uppercase `Z`, selected
+  conjuncts, and selected following-`r` forms. See the
+  [coverage overview](../README.md#current-status) and linked rule sections for
+  exact supported spellings and context behavior.
+- **Latest engine change:** `ShN` → ষ্ণ and `Shm` → ষ্ম with verified vowel,
+  following-`r`, and overlapping-match behavior (`5f165a4`, 2026-10-29).
+- **Last engine validation:** 12,933 cases matched the pinned reference;
+  formatting, Clippy, 55 integration tests, 1 doctest, release build, and a
+  conversion smoke check passed in that step. These are recorded prior results,
+  not checks rerun for later documentation changes.
+- **Limitations:** full vowel context and Avro compatibility remain incomplete,
+  including basic consonant-plus-`r`, other conjuncts, uppercase aliases, reph,
+  and punctuation/escapes. Composition, Fcitx5 integration, and a usable desktop
+  keyboard are not implemented. Performance and platform support are unverified.
+- **Workflow:** implement small related rule batches, independently reference-
+  check each spelling, validate, update this handoff, and commit each step.
+  No known blocker to the next batch is recorded.
+
+## Latest completed step
+
+- **2026-10-29 — Simplify progress tracking (documentation only).** Replaced the
+  growing coverage narrative with a concise state summary, rolling latest-step
+  record, and bounded next task. Updated contributor instructions to maintain
+  this format; preserved all existing historical entries below.
+- **Checks:** `python /tmp/jong-check-progress-docs.py` — passed: 225 local
+  links/anchors, handoff size/section alignment, next-batch scope, unchanged
+  historical entries, and prior commit existence. `git diff --check` — passed.
+- **Limitations:** no engine or platform behavior changed; no Cargo or reference
+  checks are needed for this documentation-only step.
+- **Next action:** resume the rule batch below.
 
 ## Next small implementation step
 
-1. Independently author cases for following `r` after basic `k`/`kh`/`Sh`
-   (`kr` → ক্র, `khr` → খ্র, `Shr` → ষ্র), including exact Unicode,
-   vowels/aliases, preceding contexts, longer `r` runs, `rri`/`rry`/`rrZ`
-   exceptions, ya joiners, digits, boundaries, copied Unicode, and raw-spelling
-   controls. Check each spelling against the
-   [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-2. Define priority from reference evidence: check existing `kk`, `kkh`/`kSh`,
-   `kkhN`/`kShN`/`kxN`, `kkhm`/`kShm`/`kxm`, `ShN`/`Shm`, and `Ng` forms.
-   Investigate `kkkhr`, `kkShr`, and `Ngkkr`; preserve earlier matches and
-   their independently verified following-`r` behavior. Share helpers only if
-   each spelling's evidence supports it; split the batch if needed.
-3. Implement only the verified slice. Keep basic `qr`/`gr`/`mr` and other
-   consonant-plus-`r` forms, `mm`/`mn`, unrelated `nk`/`lk`/`sk`/`Shk`,
-   lowercase `shn`/`shm` and `Sm`, reph, uppercase aliases (including
-   `ShNG` and `kkhNG`/`kShNG`/`kxNG`), and punctuation/escapes separate.
-   No composition or platform work.
-4. Extend regression fixtures, run the README checks, update documentation, and
-   commit the completed step.
+1. Independently author and check following-`r` cases after basic `k`/`kh`/`Sh`
+   (`kr` → ক্র, `khr` → খ্র, `Shr` → ষ্র) against the
+   [pinned reference](v1.md#phonetic-behavior-reference). Cover exact Unicode,
+   vowel/ya context, preceding contexts, longer `r` runs, `rri`/`rry`/`rrZ`
+   exceptions, digits, boundaries, copied Unicode, and raw-spelling controls.
+2. Verify priority against existing `kk`, `kkh`/`kSh`, their `N`/`m` conjuncts,
+   `kxN`/`kxm`, `ShN`/`Shm`, and `Ng` forms. Investigate `kkkhr`, `kkShr`,
+   and `Ngkkr`; share helpers only when each spelling's evidence supports it.
+3. Implement only that verified slice. Keep other consonant-plus-`r` forms,
+   unrelated conjuncts, uppercase aliases, reph, punctuation/escapes,
+   composition, and platform work separate. Split the batch if behavior differs
+   enough to need separate review.
+4. Extend regression fixtures, run the README checks, update relevant behavioral
+   documentation and this handoff, and commit the completed step.
 
-**Done when:** selected cases match the reference, existing supported cases
-still pass (or any verified priority corrections are explained and documented),
-limitations are documented, and this log records actual results. Composition
-and Fcitx5 integration remain later steps.
+**Done when:** selected cases match the reference, supported cases still pass
+(or verified priority corrections are documented), and actual checks and
+remaining limitations are recorded. This batch has not started.
 
 ## Completed steps
 

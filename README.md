@@ -85,7 +85,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [exact `ShN`/`Shm`](docs/v1.md#exact-shn-and-shm-conjuncts).
 
 Start with [v1 requirements and development steps](docs/v1.md).
-See [the progress log](docs/progress.md) for completed work, checks, and the next task.
+See [the progress handoff](docs/progress.md) for current state, the latest completed
+step and checks, and the next task. Detailed change history is in Git.
 Rule coverage now proceeds in [small batches of related conjuncts](docs/v1.md#small-development-steps),
 with checks, documentation, and a commit for each batch. The next planned batch is
 following `r` after basic `k`/`kh`/`Sh`, checked independently for each spelling.

@@ -16,7 +16,8 @@ User instructions take precedence over this guide; update the docs when they cha
 - Follow applicable `AGENTS.md` instructions; reuse instructions already supplied
   in the conversation instead of reading the same file again.
 - At the start of a session, read only the
-  [Current position](docs/progress.md#current-position) and
+  [Current position](docs/progress.md#current-position),
+  [Latest completed step](docs/progress.md#latest-completed-step), and
   [Next small implementation step](docs/progress.md#next-small-implementation-step)
   sections of the progress log for the current handoff.
 - Read relevant sections of [README.md](README.md) for orientation, usage, and
@@ -48,9 +49,19 @@ User instructions take precedence over this guide; update the docs when they cha
   shared behavior. Split a batch if differences make it hard to review.
 - Walk the user through the result in plain language: what changed, why it matters,
   how it was checked, and what comes next. Explain unfamiliar terms when introduced.
-- Update `docs/progress.md` after each coherent step: record the date, result,
-  actual checks and their outcomes, remaining limitations, and the next action.
-  Keep planned, in-progress, and completed work distinct. Never claim a check or
+- Update the three handoff sections in `docs/progress.md` after each coherent
+  step; replace their summaries rather than extending a cumulative narrative.
+  Aim for 50–100 lines before the historical `Completed steps` section. Keep
+  current state concise and point to coverage docs instead of listing every rule.
+- In `Latest completed step`, record the date, result, actual check commands and
+  outcomes, remaining limitations, and next action. Summarize successful checks;
+  include failure details when they affect the handoff. Identify any older check
+  results as prior evidence, not checks rerun in the current step.
+- Preserve existing historical entries without routinely appending new ones.
+  Use Git for detailed change history, `docs/v1.md` for requirements and behavioral
+  decisions, and tests/fixtures for exact compatibility evidence. Reference a
+  relevant existing commit when useful; do not try to embed a commit's own hash.
+- Keep planned, in-progress, and completed work distinct. Never claim a check or
   milestone is complete without evidence.
 - Commit each completed step after its checks and progress-log update, using a
   descriptive message that explains the change. Include only that step's work.
