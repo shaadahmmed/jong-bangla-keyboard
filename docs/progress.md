@@ -10,85 +10,80 @@ Dates use the project's Asia/Dhaka timezone.
 ## Current position
 
 - **Implemented:** dependency-free Rust transliteration library and terminal
-  example; principal vowels/consonants, contextual forms, existing conjuncts,
-  following-r forms, selective ASCII aliases, explicit G/J, symbols and escapes.
-  See the [coverage overview](../README.md#current-status).
-- **Latest coverage:** shared leading-rr reph across basic/contextual consonants
-  and existing conjuncts, including consumed-r guards and terminal rrr.
-  See the [reph record](v1.md#reph-batch) for exact Unicode and fixture scope.
-- **Library:** private case/scanner/rules/vowels/following-r/reph/symbols modules
-  remain platform-independent; the public `transliterate` API is unchanged.
-- **Validation:** all 522,933 fixture rows match the pinned parser; formatting,
-  Clippy, 352 integration tests, 1 doctest, release/documentation builds,
-  default/batch smoke checks and documentation consistency checks passed.
-- **Limitations:** complete context coverage is unproven; reference Unicode
-  lowercasing differs from the documented preservation contract. A new bounded
-  vowel-pair audit found zero discrepancies in 1,350 inputs. The older 302-input
-  standalone audit is prior evidence. Neither establishes full compatibility.
-  Composition, Fcitx5, desktop use and performance are unimplemented or unverified.
+  example; vowels/consonants, contextual forms, exact conjuncts, following-r,
+  reph, selective ASCII aliases, explicit G/J, symbols and escapes. See the
+  [coverage overview](../README.md#current-status); this step changes no rules.
+- **Latest evidence:** reproducible bounded mixed-context audit of 83,353 distinct
+  inputs, with zero unexpected discrepancies and three known Unicode case
+  differences. See the [scope](v1.md#bounded-mixed-context-audit) and
+  [report](evidence/mixed-context-audit.json) for exact groups, hashes and outputs.
+- **Validation:** all 522,933 existing fixture rows match the pinned parser;
+  formatting, Clippy, 352 integration tests, one doctest, release/documentation
+  builds, converter smoke checks and documentation consistency checks passed.
+- **Limitations:** this bounded audit does not prove full compatibility. The
+  engine preserves Unicode case; adopting the reference's lowercasing remains
+  undecided. The 1,350-input vowel-pair and 302-input standalone audits are prior
+  evidence. Composition, Fcitx5, desktop use and performance remain unimplemented
+  or unverified. Interaction defaults are proposals, not settled requirements.
 
 ## Latest completed step
 
-- **2026-10-29 — Shared reph and raw-r context.** Added an independently authored
-  helper emitting র্ before a verified following consonant, leaving existing
-  matching priorities in the scanner. No upstream source, tables, fixtures or
-  dependencies imported. The raw preceding-r guard also covers consumed tokens.
-- **Behavior:** rrq/rrz/rrR/rrRh → র্ক/র্য/র্ড়/র্ঢ়; vowel/ya/following-r rules
-  and conjunct/escape priority remain. rry/rrZ keep U+200D; rrw preserves two
-  U+09CD viramas. Exactly terminal rrr → র্র; rrr! and rrrq stay separate letters.
-  Backticks reset matches, and the t escape still resets following context.
-- **Evidence:** 13,403 new authored rows across four files; 43 basic spellings and
-  166 exact conjunct spellings have 54 contexts each, plus contextual/control
-  evidence. All 509,530 earlier rows are unchanged. Old reph partial assertions
-  and five probes now have exact fixtures. bDh already matched the reference;
-  its misleading gap label was removed and it is retained as a fixture control.
-- **Targeted checks:** `node /tmp/jong-author-reph.mjs` — all 13,403 expectations
-  passed before final validation. An initial rrkShNgghr expectation was corrected
-  for consumed N. `node /tmp/jong-verify-reph-extra.mjs` — 49 extra expectations,
-  including UTF-8/control boundaries, internal splits, independent calls and
-  1,024 repeated mixed segments, passed. `cargo test --offline reph` — seven
-  tests passed. An earlier targeted invocation found the stale rrcch partial
-  assertion; it was migrated before the successful targeted/full runs.
+- **2026-10-29 — Reproducible mixed-context audit.** Added an original MIT audit
+  command and a length-framed UTF-8 Rust batch example. No engine behavior,
+  upstream source/tables, fixture files or dependencies changed. Reph was
+  implemented in the prior step, commit `903b500`.
+- **Audit command:**
+  `node tools/audit-context.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js docs/evidence/mixed-context-audit.json`
+  — 83,353 distinct inputs, zero unexpected discrepancies. The overlapping
+  groups cover triples, nasal/reph, consumed/exposed keys, aliases, symbols,
+  escapes and copied Unicode/control boundaries. İ/É/Σ retain their three
+  explicit policy differences. Node v24.21.0; Rust/Cargo 1.99.1.
+- **Evidence:** the recorded report contains generator/transport hashes,
+  per-group counts and ordered output hashes, exact case differences and tool
+  versions. The command verifies the pinned reference SHA-256, checks every
+  response including empty outputs, and exits unsuccessfully for unexpected gaps.
+- **Tool checks:** `python /tmp/jong-check-context-tool.py` — empty/control/Unicode
+  binary round trips passed; malformed lengths, truncated payloads and invalid
+  UTF-8 were rejected. A wrong reference hash was rejected before evaluation;
+  an injected valid Bangla discrepancy was recorded and returned exit status 1.
 - **Full reference check:**
   `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 522,933 rows passed against the SHA-256-verified parser; replacement
-  probes printed Unicode case differences for İ/É/Σ. Node v24.21.0.
+  — all 522,933 authored rows passed; the three known case probes remain visible.
 - **Rust checks:** `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`;
-  `cargo test --offline` — 352 integration tests and 1 doctest passed;
+  `cargo test --offline` — 352 integration tests and one doctest passed;
   `cargo build --offline --release`;
   `RUSTDOCFLAGS='-D warnings' cargo doc --offline --no-deps`;
-  `cargo build --offline --example convert` — passed. Rust/Cargo 1.99.1.
+  `cargo build --offline --example convert` — passed. The audit command also
+  built the release `audit_batch` example offline.
 - **Smoke checks:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট;
   `cargo run --offline --example convert -- 'rrq rrz rrR rrRh rrShN rrx rrw'`
-  — র্ক র্য র্ড় র্ঢ় র্ষ্ণ র্ক্স র্্ব. Escape/run/backtick smoke examples and
-  documentation examples were also checked against the built converter.
-- **Bounded audit:** `node /tmp/jong-audit-context-next.mjs` after preparing
-  input and piping it through `/tmp/jong-reph-batch` — zero discrepancies in
-  1,350 vowel-pair inputs after six prefixes. This is audit evidence, not new
-  fixtures or proof of full parity; no unrelated vowel behavior was changed.
-- **Documentation checks:** `python /tmp/jong-check-reph-docs.py` — local links,
-  anchors, fixture manifests/counts/code points, unchanged prior fixtures/history,
-  examples, superseded assertions and bounded handoff passed.
-  `git diff --check` passed. The 302-input standalone audit was not rerun.
-- **Next action:** audit broader mixed raw contexts; review Unicode case policy
-  separately before changing the documented preservation behavior.
+  — র্ক র্য র্ড় র্ঢ় র্ষ্ণ র্ক্স র্্ব. Documentation examples also passed.
+- **Documentation checks:** `python /tmp/jong-check-context-docs.py` — local links
+  and anchors, report/source hashes and counts, fixture manifests/Unicode/counts,
+  unchanged engine/fixtures/history, examples and handoff consistency passed.
+  `git diff --check` passed. The older 1,350- and 302-input audits were not rerun.
+- **Next action:** composition contract design, chosen because this audit scope
+  revealed no new engine gap. Unicode case policy remains a separate open choice;
+  no interaction proposal was promoted to a requirement by this audit.
 
 ## Next small implementation step
 
-1. Extend the bounded context audit beyond vowel pairs: mixed vowel/ya/w/x,
-   nasal and reph interactions, three-token runs, aliases, consumed/exposed keys,
-   symbols/escapes and copied Unicode. Preserve exact discrepancy evidence.
-2. Implement a coherent reference-verified group if gaps are found; if none are
-   found, record the bounded evidence and choose the next milestone explicitly.
-   Review İ/É/Σ and related Unicode case behavior separately: adopting reference
-   lowercasing changes the current API contract and is not yet a settled choice.
-3. Run applicable README checks, update behavioral docs and this handoff, and
-   commit. Keep composition, platform integration and performance work separate.
+1. Design the platform-independent Rust composition contract using the confirmed
+   raw-buffer, two-choice, digit and Backspace requirements. Specify actions and
+   outputs for editing, selecting, committing, cancelling and resetting.
+2. Resolve material interaction proposals before implementing them: Enter/Space,
+   candidate selection, phonetic punctuation/escapes, navigation and focus/input-
+   method switching. Present concrete behavior and ask only for unresolved user
+   choices; do not assume the existing proposal table is approved.
+3. Record settled decisions in v1.md and define the first coherent controller
+   implementation/test batch. Keep Fcitx5 adaptation and Unicode case policy
+   separate; broader parity and performance claims still need their own evidence.
 
-**Done when:** the selected audit scope has reproducible evidence, any chosen
-behavior change has independent fixtures, checks/limits are recorded, and the
-step is committed. Wider context auditing and Unicode policy work have not started.
+**Done when:** the controller contract and interaction decisions are reviewable,
+confirmed requirements are distinguished from remaining proposals, the next code
+batch has clear regression cases, documentation checks pass, and the design
+step is committed. Composition design and implementation have not started.
 
 ## Completed steps
 

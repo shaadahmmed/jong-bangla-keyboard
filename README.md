@@ -178,11 +178,14 @@ Rule coverage favors the [largest coherent related batches](docs/v1.md#small-dev
 that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
-update, and commit per completed batch. The latest step implements reph, with
-independent Unicode, vowel/ya, following-r and matching-priority evidence. A bounded audit of 1,350
-vowel-pair contexts found no discrepancies; wider context coverage and Unicode
-case handling still need review. The prior 302-input standalone inventory is
-separate evidence. Composition and platform integration remain future work.
+update, and commit per completed batch. The latest step adds a reproducible
+[mixed-context audit](docs/v1.md#bounded-mixed-context-audit): 83,353 distinct
+inputs, no new discrepancies, and the three known Unicode case differences.
+This is bounded evidence, not proof of complete compatibility. The earlier
+1,350-input vowel-pair audit and 302-input inventory are prior evidence.
+Next is composition contract design; interaction defaults remain proposals.
+Unicode case policy, composition implementation and platform integration remain
+future work.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
@@ -909,6 +912,22 @@ preserves these inputs; the reference returns `ই̇`, `é`, and `σ`. These pro
 are separate from the supported fixtures and require a case-handling decision.
 The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
+
+To repeat the broader generated context audit, using the same external parser:
+
+```sh
+node tools/audit-context.mjs "$reference_dir/avro-lib.js" /tmp/jong-context-audit.json
+```
+
+This builds and runs the `audit_batch` Rust example offline. Its binary UTF-8
+transport preserves empty strings, newlines, NULs and other copied characters.
+The command writes counts, hashes and every discrepancy with exact code points;
+it exits unsuccessfully for any unexpected difference. The three known case
+probes are checked separately against explicit outputs. The
+[recorded report](docs/evidence/mixed-context-audit.json) contains the validated
+results and tool versions. Group hashes cover ordered JSON arrays of
+`[input, engine output, reference output]`; group counts overlap. Compare hashes
+and counts when reproducing results with different tool versions.
 
 ## License
 
