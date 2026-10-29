@@ -1,6 +1,150 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn d_batch_resets_at_boundaries_and_between_calls() {
+    for (raw, bangla, parts) in [
+        ("dd", "দ্দ", vec![("দ", "দ")]),
+        ("ddh", "দ্ধ", vec![("দ", "ধ"), ("দ্দ", "হ")]),
+        ("dhn", "ধ্ন", vec![("দ", "হ্ন"), ("ধ", "ন")]),
+        ("dhm", "ধ্ম", vec![("দ", "হ্ম"), ("ধ", "ম")]),
+        ("dm", "দ্ম", vec![("দ", "ম")]),
+        ("dbh", "দ্ভ", vec![("দ", "ভ"), ("দব", "হ")]),
+        ("dv", "দ্ভ", vec![("দ", "ভ")]),
+        ("DD", "ড্ড", vec![("ড", "ড")]),
+    ] {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "দ্ধ", "\u{301}"] {
+            for (index, (first, tail)) in parts.iter().enumerate() {
+                let split = index + 1;
+                assert_eq!(
+                    transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
+                    format!("{first}{boundary}{tail}")
+                );
+            }
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    for (raw, bangla) in [
+        ("d", "দ"),
+        ("dh", "ধ"),
+        ("D", "ড"),
+        ("Dh", "ঢ"),
+        ("b", "ব"),
+        ("bh", "ভ"),
+        ("v", "ভ"),
+    ] {
+        for boundary in ["\n", "\r", "\t", "\0", "🙂", "দ্র"] {
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}a")),
+                format!("{bangla}্র{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("r"), "র");
+    }
+    assert_eq!(
+        transliterate(
+            &"dd ddh dhn dhm dm dbh dv DD dr dhr Dr Dhr br bhr vr ddghr dddhr ddbhr DDDhr 🙂 "
+                .repeat(64)
+        ),
+        "দ্দ দ্ধ ধ্ন ধ্ম দ্ম দ্ভ দ্ভ ড্ড দ্র ধ্র ড্র ঢ্র ব্র ভ্র ভ্র দ্দঘ্র দ্দধ্র দ্দভ্র ড্ডঢ্র 🙂 ".repeat(64)
+    );
+}
+
+#[test]
+fn d_batch_conjunct_ddh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ddh.tsv"));
+}
+
+#[test]
+fn d_batch_conjunct_dd_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-dd.tsv"));
+}
+
+#[test]
+fn d_batch_conjunct_dhn_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-dhn.tsv"));
+}
+
+#[test]
+fn d_batch_conjunct_dhm_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-dhm.tsv"));
+}
+
+#[test]
+fn d_batch_conjunct_dm_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-dm.tsv"));
+}
+
+#[test]
+fn d_batch_conjunct_dbh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-dbh.tsv"));
+}
+
+#[test]
+fn d_batch_conjunct_dv_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-dv.tsv"));
+}
+
+#[test]
+fn d_batch_conjunct_d_retroflex_pair_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-d-retroflex-pair.tsv"));
+}
+
+#[test]
+fn d_batch_d_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/d-following-r.tsv"));
+}
+
+#[test]
+fn d_batch_dh_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/dh-following-r.tsv"));
+}
+
+#[test]
+fn d_batch_d_retroflex_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/d-retroflex-following-r.tsv"));
+}
+
+#[test]
+fn d_batch_dh_retroflex_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/dh-retroflex-following-r.tsv"));
+}
+
+#[test]
+fn d_batch_b_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/b-following-r.tsv"));
+}
+
+#[test]
+fn d_batch_bh_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/bh-following-r.tsv"));
+}
+
+#[test]
+fn d_batch_v_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/v-following-r.tsv"));
+}
+
+#[test]
 fn nasal_h_batch_resets_at_boundaries_and_between_calls() {
     assert_eq!(transliterate("mr mm mn mng"), "ম্র ম্ম ম্ন ম্নগ");
     for (raw, bangla, first, tail) in [
@@ -736,6 +880,13 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Ngx`a", "ঙ্ষ`আ"),
         ("Gg", "Gগ"),
         ("gNG", "গ্ণG"),
+        ("ndd", "নদ্দ"),
+        ("bdd", "বদ্দ"),
+        ("ddH", "দ্দH"),
+        ("dHn", "দHন"),
+        ("dV", "দV"),
+        ("rrdd", "ররদ্দ"),
+        ("dd`a", "দ্দ`আ"),
         ("Gm", "Gম"),
         ("bhl", "ভল"),
         ("phl", "ফল"),
@@ -743,7 +894,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("vl", "ভল"),
         ("hm`a", "হ্ম`আ"),
         ("rrhm", "ররহ্ম"),
-        ("ddghr", "দদ্ঘ্র"),
         ("Ngx`h", "ঙ্ষ`হ"),
         ("rrx", "ররক্স"),
         ("rrkx", "ররক্ষ"),
@@ -760,7 +910,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Qa", "Qআ"),
         ("V", "V"),
         ("Va", "Vআ"),
-        ("vr", "ভর"),
         ("vH", "ভH"),
         ("v`a", "ভ`আ"),
         ("v`h", "ভ`হ"),
@@ -849,9 +998,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("J", "J"),
         ("Jh", "Jহ"),
         ("c`h", "চ`হ"),
-        ("ddh", "দধ"),
-        ("DDh", "ডঢ"),
-        ("dr", "দর"),
         ("dH", "দH"),
         ("DH", "ডH"),
         ("d`h", "দ`হ"),

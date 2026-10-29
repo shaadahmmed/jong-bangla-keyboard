@@ -43,7 +43,9 @@ Exact `gg`/`gN`/`NN`/`hN`/`gn`/`ghn`/`hn`/`dg`/`dgh`/`Rg` and following
 `r` after basic `h`/`n`/`N` are now implemented, including overlapping nasal matches.
 Exact `ngh`/`nn`/`Nn`/`mn`/`hm`/`hl`/`nm`/`Nm`/`mm`/`ml`/`Ngm`/`gm`
 and following `r` after basic `m`/`l` are also implemented.
-This is a partial engine with 35,603 reference-checked examples,
+Exact `dd`/`ddh`/`dhn`/`dhm`/`dm`/`dbh`/`dv`/`DD` and following `r` after
+basic `d`/`dh`/`D`/`Dh`/`b`/`bh`/`v` are also implemented.
+This is a partial engine with 47,290 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Other
 letter forms, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -93,7 +95,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [following `r` after `g`/`gh`](docs/v1.md#following-r-after-basic-g-and-gh), then
 [exact `Ngg`/`Nggh`](docs/v1.md#exact-ngg-and-nggh-conjuncts), then
 [the g and nasal conjunct batch](docs/v1.md#g-and-nasal-conjunct-batch), then
-[the nasal and h conjunct batch](docs/v1.md#nasal-and-h-conjunct-batch).
+[the nasal and h conjunct batch](docs/v1.md#nasal-and-h-conjunct-batch), then
+[the d and dh conjunct batch](docs/v1.md#d-and-dh-conjunct-batch).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress handoff](docs/progress.md) for current state, the latest completed
@@ -103,8 +106,9 @@ that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
 update, and commit per completed batch. The next planned batch investigates
-related d/dh conjuncts around `dd`/`ddh`/`dhn`/`dhm`/`dm`/`dbh`/`dv`, including
-priority and interactions with the now-supported nasal/h forms. This is planned work.
+related nasal/dental/retroflex conjuncts around
+`nd`/`ndh`/`nD`/`ND`/`NDh` and `nt`/`nth`/`nT`/`NT`/`nTh`/`NTh`,
+including priority against the now-supported d/dh forms. This is planned work.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Build and try the conversion slice
@@ -206,8 +210,8 @@ their single-key prefixes. Uppercase aliases, conjuncts such as `cch` → `চ�
 and escapes remain incomplete.
 Exact `d`/`dh`/`D`/`Dh` produce `দ`/`ধ`/`ড`/`ঢ`; `dh` and `Dh` match before
 their single-key prefixes. Case distinguishes `da` → `দা` from `Da` → `ডা`.
-Uppercase-`H` aliases (`dH`/`DH`), conjuncts such as `ddh` → `দ্ধ`, and
-escapes remain incomplete.
+`ddh` → `দ্ধ` now matches, as described below. Uppercase-`H` aliases
+(`dH`/`DH`) and escapes remain incomplete.
 Lowercase `l`/`h` produce `ল`/`হ` and establish vowel context (`li` → `লি`,
 `hu` → `হু`). Existing two-key matches still win: `kh` → `খ`, `khh` → `খহ`.
 Uppercase `L`/`H`, conjuncts such as `ll` → `ল্ল`, and escapes remain incomplete.
@@ -343,8 +347,20 @@ The `rri`/`rry`/`rrZ` exceptions remain (`mlrri` → `ম্লৃ`, `nnrry` →
 Basic `m`/`l` now attach following `r` (`mr lr` → `ম্র ল্র`), resolving
 `NgkShmr` → `ঙ্ক্ষম্র`. The new forms also resolve `Shmmm` → `ষ্মম্ম`
 and `ShNmng` → `ষ্ণম্নগ`. Copied Bangla resets context (`হ্মr` → `হ্মর`).
-Earlier `dd`/`shn`/`shm`/`bhl`/`phl`/`shl`/`vl`, other conjuncts and
-following-`r` forms, uppercase aliases, reph, and punctuation/escapes remain incomplete.
+Exact `dd`/`ddh`/`dhn`/`dhm`/`dm`/`dbh`/`dv`/`DD` now produce
+দ্দ/দ্ধ/ধ্ন/ধ্ম/দ্ম/দ্ভ/দ্ভ/ড্ড, respectively. Try
+`'dd ddh dhn dhm dm dbh dv DD'` → `দ্দ দ্ধ ধ্ন ধ্ম দ্ম দ্ভ দ্ভ ড্ড`.
+Each supports vowel signs, ya, and following `r`, preserving the
+`rri`/`rry`/`rrZ` exceptions (`ddrri` → `দ্দৃ`, `dvrry` → `দ্ভরর‍্য`).
+Longer `ddh` wins before `dd`. Consumed keys cannot start another match:
+`dddh` → `দ্দধ`, `ddhn` → `দ্ধন`, `ddbh` → `দ্দভ`, and `DDh` → `ড্ডহ`.
+Basic `d`/`dh`/`D`/`Dh`/`b`/`bh`/`v` now attach following `r`:
+`'dr dhr Dr Dhr br bhr vr'` → `দ্র ধ্র ড্র ঢ্র ব্র ভ্র ভ্র`.
+This resolves `ddghr` → `দ্দঘ্র`, `dddhr` → `দ্দধ্র`, `ddbhr` → `দ্দভ্র`,
+and `DDDhr` → `ড্ডঢ্র`. Try `'buddhi podmo udbhob udvob aDDa brrikkho'` → `বুদ্ধি পদ্ম উদ্ভব উদ্ভব আড্ডা বৃক্ষ`.
+Copied Bangla resets context (`দ্দr` → `দ্দর`). Earlier nasal/b-prefixed
+matches (`nd`, `bd`), `shn`/`shm`/`bhl`/`phl`/`shl`/`vl`, other conjuncts
+and following-`r` forms, uppercase aliases, reph, and escapes remain incomplete.
 Lowercase `ng` produces ং (U+0982), as in `bangla` → `বাংলা`. Before the supported
 single-key vowels and `OI`/`OU`, it produces ঙ্গ plus the appropriate vowel sign
 (`nga` → `ঙ্গা`, `ngOI` → `ঙ্গৈ`, `ngo` → `ঙ্গ`). These forms consume their vowel
@@ -388,8 +404,8 @@ Lowercase `q` produces ক (U+0995) and establishes consonant context for vowels
 such as `qr` → `ক্র`, and escapes remain incomplete.
 Lowercase `v` produces ভ (U+09AD), sharing basic vowel context with `bh`:
 `vi` → `ভি`, `vU` → `ভূ`, `vrri` → `ভৃ`. Repeated `v` and following `h`
-stay separate (`vv` → `ভভ`, `vh` → `ভহ`). Uppercase `V`, conjuncts such as
-`vr` → `ভ্র`, and escapes remain incomplete.
+stay separate (`vv` → `ভভ`, `vh` → `ভহ`). Following `r` now attaches
+(`vr` → `ভ্র`). Uppercase `V` and escapes remain incomplete.
 Lowercase `w` produces ও independently and after vowels, or ্ব after supported
 consonants (`kw` → `ক্ব`). At the start or after a copied character/digit, it
 adds য় before a following supported single-key vowel (`wa` → `ওয়া`, `wee` → `ওয়ী`).
@@ -501,8 +517,23 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`ml` fixtures](tests/fixtures/conjunct-ml.tsv),
 [`Ngm` fixtures](tests/fixtures/conjunct-ng-m.tsv),
 [`gm` fixtures](tests/fixtures/conjunct-gm.tsv),
-[`m` following-`r` fixtures](tests/fixtures/m-following-r.tsv), and
-[`l` following-`r` fixtures](tests/fixtures/l-following-r.tsv) record the raw input,
+[`m` following-`r` fixtures](tests/fixtures/m-following-r.tsv),
+[`l` following-`r` fixtures](tests/fixtures/l-following-r.tsv),
+[`ddh` fixtures](tests/fixtures/conjunct-ddh.tsv),
+[`dd` fixtures](tests/fixtures/conjunct-dd.tsv),
+[`dhn` fixtures](tests/fixtures/conjunct-dhn.tsv),
+[`dhm` fixtures](tests/fixtures/conjunct-dhm.tsv),
+[`dm` fixtures](tests/fixtures/conjunct-dm.tsv),
+[`dbh` fixtures](tests/fixtures/conjunct-dbh.tsv),
+[`dv` fixtures](tests/fixtures/conjunct-dv.tsv),
+[`DD` fixtures](tests/fixtures/conjunct-d-retroflex-pair.tsv),
+[`d` following-`r` fixtures](tests/fixtures/d-following-r.tsv),
+[`dh` following-`r` fixtures](tests/fixtures/dh-following-r.tsv),
+[`D` following-`r` fixtures](tests/fixtures/d-retroflex-following-r.tsv),
+[`Dh` following-`r` fixtures](tests/fixtures/dh-retroflex-following-r.tsv),
+[`b` following-`r` fixtures](tests/fixtures/b-following-r.tsv),
+[`bh` following-`r` fixtures](tests/fixtures/bh-following-r.tsv), and
+[`v` following-`r` fixtures](tests/fixtures/v-following-r.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -518,7 +549,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 35,603 cases used by Rust tests and prints reference outputs for
+It checks the same 47,290 cases used by Rust tests and prints reference outputs for
 nine known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
