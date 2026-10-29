@@ -15,52 +15,54 @@ Dates use the project's Asia/Dhaka timezone.
   conjuncts, and selected following-`r` forms. See the
   [coverage overview](../README.md#current-status) and linked rule sections for
   exact supported spellings and context behavior.
-- **Latest engine change:** basic `gr` → গ্র and `ghr` → ঘ্র, including
-  vowel/ya context, longer `r` runs, and exposed `g` after existing conjuncts
-  (`ShNgr`/`Shmgr` and the ক্ষ্ম spellings; 2026-10-29).
-- **Validation:** 15,308 cases match the pinned reference; formatting, Clippy,
-  61 integration tests, 1 doctest, release build, and conversion smoke checks
-  passed in this step. Exact case coverage is recorded in fixtures.
+- **Latest engine change:** exact `Ngg` → ঙ্গ and `Nggh` → ঙ্ঘ, with supported
+  vowel/ya context and following `r`; `Nggr`/`Ngghr` now produce ঙ্গ্র/ঙ্ঘ্র
+  (2026-10-29). Earlier matches that consume `N` retain priority.
+- **Validation:** all 16,370 cases match the pinned reference; formatting,
+  Clippy, 64 integration tests, 1 doctest, release build, conversion smoke checks,
+  and documentation checks passed in this step.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete,
-  including other basic consonant-plus-`r` forms, other conjuncts, uppercase
-  aliases, reph, and punctuation/escapes. Composition, Fcitx5 integration, and a
-  usable desktop keyboard are not implemented. Performance/platform support
-  remain unverified.
+  including other conjuncts, basic following-`r` forms, uppercase aliases, reph,
+  and punctuation/escapes. Composition, Fcitx5 integration, and a usable desktop
+  keyboard are not implemented. Performance/platform support remain unverified.
 - **Workflow:** implement small related rule batches, independently reference-
   check each spelling, validate, update this handoff, and commit each step.
-  No known blocker to the next batch is recorded.
+  No known blocker to the next slice is recorded.
 
 ## Latest completed step
 
-- **2026-10-29 — Following `r` after basic `g`/`gh`.** Independently authored
-  and reference-checked 948 new cases (475/473 respectively), then extended
-  the existing helper for these basic spellings. Preserved `rri`/`rry`/`rrZ`
-  priority, existing `Ng` forms, and k-conjuncts. Resolved `ShNgr`, `Shmgr`,
-  and following `gr` after all three ক্ষ্ম spellings. Updated usage and coverage.
+- **2026-10-29 — Exact `Ngg`/`Nggh` conjuncts.** Independently authored and
+  reference-checked 1,062 new cases (531 per spelling), then added branches
+  before basic `Ng`/`g`/`gh`, matching `Nggh` before `Ngg`. Reused the existing
+  following-`r` helper after checking vowels, ya, one through eight `r` keys,
+  exceptions, adjacent matches, boundaries, and raw controls separately.
+  Updated usage, coverage, and explicit partial outputs for earlier matches.
 - **Checks:** `node tools/check-reference.mjs
-  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` — all 15,308 cases matched the
+  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` — all 16,370 cases matched the
   SHA-256-verified pinned parser. `cargo fmt --all -- --check` and
   `cargo clippy --offline --all-targets -- -D warnings` — passed.
-  `cargo test --offline` — 61 integration tests and 1 doctest passed.
+  `cargo test --offline` — 64 integration tests and 1 doctest passed.
   `cargo build --offline --release` — passed. `cargo run --offline --example
   convert -- 'kh12T'` and the same command with
-  `'gr ghr gry ghrry grri ShNgr Shmgr kShmgr'` — expected outputs.
-  `python /tmp/jong-check-g-r-docs.py` and `git diff --check` — passed.
-- **Limitations:** earlier `dg`/`dgh`/`Rg`/`gg`/`gN` and `Ngg`/`Nggh`
-  matches remain gaps. Nine reference gap probes remain, replacing resolved
-  `ShNgr`/`Shmgr` with `Nggr`/`Ngghr`. No performance/platform claim added.
-- **Next action:** independently investigate exact `Ngg`/`Nggh` conjuncts.
+  `'Ngg Nggh Nggr Ngghr Nggrri Ngghry bhaNgga loNgghon'` — expected outputs.
+  `python /tmp/jong-check-ngg-docs.py`,
+  `node /tmp/jong-check-ngg-doc-reference.mjs`, and `git diff --check` — passed.
+- **Limitations:** earlier `gN`/`NN`/`hN` and `gg` remain gaps. Existing `ShN`
+  and ক্ষ্ণ matches consume `N`, exposing unsupported `gg`. Nine reference
+  probes remain, replacing resolved `Nggr`/`Ngghr` with `ShNggr`/`kShNgghr`.
+  No performance/platform claim added.
+- **Next action:** independently investigate exact `gg` and exposed overlaps.
 
 ## Next small implementation step
 
-1. Independently author and check exact `Ngg`/`Nggh` conjunct cases against the
-   [pinned reference](v1.md#phonetic-behavior-reference). Cover exact Unicode,
+1. Independently author and check exact `gg` conjunct cases against the
+   [pinned reference](v1.md#phonetic-behavior-reference). Check exact Unicode,
    vowel/ya context, preceding contexts, following `r`, longer `r` runs,
    `rri`/`rry`/`rrZ` exceptions, digits, boundaries, copied Unicode, and raw controls.
-2. Verify priority against existing `Ng` forms, basic `g`/`gh`, `ng`/`NG`, and
-   k-conjuncts. Investigate `Nggr`/`Ngghr` and adjacent `g`/`gh`/nasal matches;
-   identify earlier `gN`/`gg` matches separately. Share helpers only when each
-   spelling's evidence supports it; split the batch if the behavior differs.
+2. Verify priority against `Ngg`/`Nggh`, basic `g`/`gh`, `Ng`/`NG`/`ng`, and
+   k-conjuncts. Investigate `ShNggr`/`kShNgghr` and all ক্ষ্ণ spellings, where
+   an earlier match consumes `N` and leaves `gg`; distinguish earlier `gN`,
+   `NN`, `hN`, `dg`/`dgh`/`Rg`, and case aliases as separate gaps.
 3. Implement only that verified slice. Keep unrelated conjuncts, uppercase
    aliases, reph, punctuation/escapes, composition, and platform work separate.
 4. Extend fixtures, run README checks, update behavioral documentation and this
@@ -68,7 +70,7 @@ Dates use the project's Asia/Dhaka timezone.
 
 **Done when:** selected cases match the reference, supported cases still pass
 (or verified priority corrections are documented), and actual checks and
-remaining limitations are recorded. This next batch has not started.
+remaining limitations are recorded. This next slice has not started.
 
 ## Completed steps
 

@@ -1,6 +1,48 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn ngg_conjunct_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ngg.tsv"));
+}
+
+#[test]
+fn nggh_conjunct_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-nggh.tsv"));
+}
+
+#[test]
+fn ngg_nggh_context_resets_at_boundaries_and_between_calls() {
+    for (raw, bangla, last) in [("Ngg", "ঙ্গ", "গ"), ("Nggh", "ঙ্ঘ", "ঘ")] {
+        for boundary in [' ', '\n', '\r', '\t', '\0', '🙂', 'ঙ', '\u{301}'] {
+            assert_eq!(
+                transliterate(&format!("Ng{boundary}{}", &raw[2..])),
+                format!("ঙ{boundary}{last}")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    assert_eq!(
+        transliterate(&"Ngg Nggh Nggr Ngghr Nggrri Ngghry 🙂 ".repeat(64)),
+        "ঙ্গ ঙ্ঘ ঙ্গ্র ঙ্ঘ্র ঙ্গৃ ঙ্ঘ্র্য 🙂 ".repeat(64)
+    );
+}
+
+#[test]
 fn g_following_r_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/g-following-r.tsv"));
 }
@@ -440,8 +482,15 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Rghr", "ড়ঘ্র"),
         ("ggr", "গগ্র"),
         ("gNgr", "গঙর"),
-        ("Nggr", "ঙগ্র"),
-        ("Ngghr", "ঙঘ্র"),
+        ("gNgg", "গঙ্গ"),
+        ("gNggh", "গঙ্ঘ"),
+        ("NNgg", "ণঙ্গ"),
+        ("hNgg", "হঙ্গ"),
+        ("ShNgg", "ষ্ণগগ"),
+        ("ShNggr", "ষ্ণগগ্র"),
+        ("kkhNggr", "ক্ষ্ণগগ্র"),
+        ("kShNgghr", "ক্ষ্ণগঘ্র"),
+        ("kxNgghr", "ক্ষ্ণগঘ্র"),
         ("NNgx", "ণঙ্ষ"),
         ("hNgx", "হঙ্ষ"),
         ("rrNgx", "ররঙ্ষ"),

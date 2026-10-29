@@ -2,7 +2,7 @@
 //!
 //! Supports ASCII digits, contextual lowercase `y`/`w`/`x`, exact
 //! `kx`/`kkh`/`kSh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, uppercase `Z` and `aZ`/`oZ`,
-//! exact `kkhN`/`kShN`/`kxN`, `kkhm`/`kShm`/`kxm`, `kk`, `ShN`, and `Shm`,
+//! exact `kkhN`/`kShN`/`kxN`, `kkhm`/`kShm`/`kxm`, `kk`, `ShN`/`Shm`, `Ngg`/`Nggh`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -58,6 +58,7 @@
 //! assert_eq!(transliterate("ShN Shm ShNr Shmrri kkShN ShNgx"), "ষ্ণ ষ্ম ষ্ণ্র ষ্মৃ ক্কষ্ণ ষ্ণগক্স");
 //! assert_eq!(transliterate("kr khr Shr kry krry kkkhr kkShr Ngkkr"), "ক্র খ্র ষ্র ক্র্য করর‍্য ক্কখ্র ক্কষ্র ঙ্কক্র");
 //! assert_eq!(transliterate("gr ghr gry ghrry grri ShNgr Shmgr"), "গ্র ঘ্র গ্র্য ঘরর‍্য গৃ ষ্ণগ্র ষ্মগ্র");
+//! assert_eq!(transliterate("Ngg Nggh Nggr Ngghr Nggrri Ngghry"), "ঙ্গ ঙ্ঘ ঙ্গ্র ঙ্ঘ্র ঙ্গৃ ঙ্ঘ্র্য");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -209,6 +210,9 @@ enum Context {
 /// They retain rri/rry/rrZ exceptions and resolve kkkhr/kkShr/Ngkkr overlaps.
 /// Basic g/gh share attachment and exceptions: gr -> গ্র, ghr -> ঘ্র, grri -> গৃ.
 /// ShNgr/Shmgr/kShmgr now attach the exposed g before r; earlier dg/Rg/gg/gN remain gaps.
+/// Exact Nggh/Ngg produce ঙ্ঘ/ঙ্গ before basic Ng and g/gh, using the same vowel
+/// context and following-r helper: Ngghr -> ঙ্ঘ্র, Nggrri -> ঙ্গৃ. Nggh wins over
+/// Ngg followed by h. Earlier ShN/kShN consume N first, leaving gg as a separate gap.
 /// Earlier longer matches (such as gN in gNgx) and reph remain gaps;
 /// supported prefixes still convert inside them.
 /// Backtick escapes remain unsupported.
@@ -257,6 +261,14 @@ pub fn transliterate(input: &str) -> String {
             });
             context = Context::Vowel('i');
             remaining = &remaining[3..];
+        } else if let Some(after_nggh) = remaining.strip_prefix("Nggh") {
+            output.push_str("ঙ্ঘ");
+            remaining = consume_following_r_prefix(after_nggh, 'h', &mut output);
+            context = Context::Consonant { ya_joiner: false };
+        } else if let Some(after_ngg) = remaining.strip_prefix("Ngg") {
+            output.push_str("ঙ্গ");
+            remaining = consume_following_r_prefix(after_ngg, 'g', &mut output);
+            context = Context::Consonant { ya_joiner: false };
         } else if let Some(after_ngx) = remaining.strip_prefix("Ngx") {
             output.push_str("ঙ্ষ");
             remaining = consume_following_r_prefix(after_ngx, 'x', &mut output);
@@ -472,7 +484,7 @@ fn consume_following_r_prefix<'a>(
         && !remaining.starts_with("rr"))
         || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))
     {
-        // Selected basic spellings and k/h/N/m-ending conjuncts attach single r without a joiner.
+        // Selected basic spellings and k/g/h/N/m-ending conjuncts attach single r without a joiner.
         // Z only does so before y/Z.
         output.push_str("্র");
         &remaining[1..]
