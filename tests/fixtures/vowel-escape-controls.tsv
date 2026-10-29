@@ -1,0 +1,2011 @@
+# MIT. Independently authored expectations; no upstream code, tables or fixtures copied.
+# Reference: jsAvroPhonetic v1.1.4, d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Independently authored overlaps, repetition, aliases, all 324 escaped-form pairs and symbol interactions.
+# Raw input	Expected UTF-8 output	Exact Unicode code points
+aa`	আা	U+0986 U+09BE
+ia`	ইা	U+0987 U+09BE
+kia`	কিা	U+0995 U+09BF U+09BE
+kaA`	কাা	U+0995 U+09BE U+09BE
+eeE`	ঈে	U+0988 U+09C7
+eee`	ঈে	U+0988 U+09C7
+oooo`	উু	U+0989 U+09C1
+ooo`	উ	U+0989
+OO`	ওো	U+0993 U+09CB
+Oi`	ওি	U+0993 U+09BF
+Oo`	ও	U+0993
+OIi`	ঐি	U+0990 U+09BF
+OUU`	ঔূ	U+0994 U+09C2
+aZa`	অ্যাা	U+0985 U+09CD U+09AF U+09BE U+09BE
+oZo`	অ্য	U+0985 U+09CD U+09AF
+aZ`a	অ্যাআ	U+0985 U+09CD U+09AF U+09BE U+0986
+oZ`a	অ্যআ	U+0985 U+09CD U+09AF U+0986
+a`Za	া্যা	U+09BE U+09CD U+09AF U+09BE
+o`Za	্যা	U+09CD U+09AF U+09BE
+aZrri`	অ্যাৃ	U+0985 U+09CD U+09AF U+09BE U+09C3
+ngrrri`	ংরৃ	U+0982 U+09B0 U+09C3
+Ngrrri`	ঙরৃ	U+0999 U+09B0 U+09C3
+NGrrri`	ঞরৃ	U+099E U+09B0 U+09C3
+ngrrrri`	ংররররি	U+0982 U+09B0 U+09B0 U+09B0 U+09B0 U+09BF
+rrri`	রররি	U+09B0 U+09B0 U+09B0 U+09BF
+rrrri`	ররৃ	U+09B0 U+09B0 U+09C3
+rrrrri`	রররররি	U+09B0 U+09B0 U+09B0 U+09B0 U+09B0 U+09BF
+krri`	কৃ	U+0995 U+09C3
+qrri`	কৃ	U+0995 U+09C3
+ngee`a	ঙ্গেেআ	U+0999 U+09CD U+0997 U+09C7 U+09C7 U+0986
+ngoo`a	ঙ্গআ	U+0999 U+09CD U+0997 U+0986
+ngrri`a	ংররিআ	U+0982 U+09B0 U+09B0 U+09BF U+0986
+Ngrri`a	ঙররিআ	U+0999 U+09B0 U+09B0 U+09BF U+0986
+NGrrri`a	ঞরৃআ	U+099E U+09B0 U+09C3 U+0986
+t`a	তআ	U+09A4 U+0986
+t`i`	তি	U+09A4 U+09BF
+t`rri`	তৃ	U+09A4 U+09C3
+a``	া	U+09BE
+a```	া	U+09BE
+a``a	াআ	U+09BE U+0986
+a```a	াআ	U+09BE U+0986
+a``i	াই	U+09BE U+0987
+a```i	াই	U+09BE U+0987
+a``I	াঈ	U+09BE U+0988
+a```I	াঈ	U+09BE U+0988
+a``u	াউ	U+09BE U+0989
+a```u	াউ	U+09BE U+0989
+a``U	াঊ	U+09BE U+098A
+a```U	াঊ	U+09BE U+098A
+a``e	াএ	U+09BE U+098F
+a```e	াএ	U+09BE U+098F
+a``ee	াঈ	U+09BE U+0988
+a```ee	াঈ	U+09BE U+0988
+a``o	াঅ	U+09BE U+0985
+a```o	াঅ	U+09BE U+0985
+a``O	াও	U+09BE U+0993
+a```O	াও	U+09BE U+0993
+a``oo	াউ	U+09BE U+0989
+a```oo	াউ	U+09BE U+0989
+a``OI	াঐ	U+09BE U+0990
+a```OI	াঐ	U+09BE U+0990
+a``OU	াঔ	U+09BE U+0994
+a```OU	াঔ	U+09BE U+0994
+a``rri	াঋ	U+09BE U+098B
+a```rri	াঋ	U+09BE U+098B
+a``y	াইয়	U+09BE U+0987 U+09DF
+a```y	াইয়	U+09BE U+0987 U+09DF
+a``Z	া্য	U+09BE U+09CD U+09AF
+a```Z	া্য	U+09BE U+09CD U+09AF
+a``wa	াওয়া	U+09BE U+0993 U+09DF U+09BE
+a```wa	াওয়া	U+09BE U+0993 U+09DF U+09BE
+a``x	াএক্স	U+09BE U+098F U+0995 U+09CD U+09B8
+a```x	াএক্স	U+09BE U+098F U+0995 U+09CD U+09B8
+a``r	ার	U+09BE U+09B0
+a```r	ার	U+09BE U+09B0
+a``rr	ারর	U+09BE U+09B0 U+09B0
+a```rr	ারর	U+09BE U+09B0 U+09B0
+a``ry	ার‍্য	U+09BE U+09B0 U+200D U+09CD U+09AF
+a```ry	ার‍্য	U+09BE U+09B0 U+200D U+09CD U+09AF
+a``rZ	ার‍্য	U+09BE U+09B0 U+200D U+09CD U+09AF
+a```rZ	ার‍্য	U+09BE U+09B0 U+200D U+09CD U+09AF
+a``rra	াররা	U+09BE U+09B0 U+09B0 U+09BE
+a```rra	াররা	U+09BE U+09B0 U+09B0 U+09BE
+a``rriya	াঋয়া	U+09BE U+098B U+09DF U+09BE
+a```rriya	াঋয়া	U+09BE U+098B U+09DF U+09BE
+a``kr	াক্র	U+09BE U+0995 U+09CD U+09B0
+a```kr	াক্র	U+09BE U+0995 U+09CD U+09B0
+a``khry	াখ্র্য	U+09BE U+0996 U+09CD U+09B0 U+09CD U+09AF
+a```khry	াখ্র্য	U+09BE U+0996 U+09CD U+09B0 U+09CD U+09AF
+a``Shm	াষ্ম	U+09BE U+09B7 U+09CD U+09AE
+a```Shm	াষ্ম	U+09BE U+09B7 U+09CD U+09AE
+a``Ngk	াঙ্ক	U+09BE U+0999 U+09CD U+0995
+a```Ngk	াঙ্ক	U+09BE U+0999 U+09CD U+0995
+a``Gdh	াগ্ধ	U+09BE U+0997 U+09CD U+09A7
+a```Gdh	াগ্ধ	U+09BE U+0997 U+09CD U+09A7
+a``J	াজ	U+09BE U+099C
+a```J	াজ	U+09BE U+099C
+a``012	া০১২	U+09BE U+09E6 U+09E7 U+09E8
+a```012	া০১২	U+09BE U+09E6 U+09E7 U+09E8
+a``ক	াক	U+09BE U+0995
+a```ক	াক	U+09BE U+0995
+a``é	াé	U+09BE U+00E9
+a```é	াé	U+09BE U+00E9
+a``́	া́	U+09BE U+0301
+a```́	া́	U+09BE U+0301
+a``🙂	া🙂	U+09BE U+1F642
+a```🙂	া🙂	U+09BE U+1F642
+a`.a	া।আ	U+09BE U+0964 U+0986
+k.a`ry	ক।ার‍্য	U+0995 U+0964 U+09BE U+09B0 U+200D U+09CD U+09AF
+a`..a	া।।আ	U+09BE U+0964 U+0964 U+0986
+k..a`ry	ক।।ার‍্য	U+0995 U+0964 U+0964 U+09BE U+09B0 U+200D U+09CD U+09AF
+a`...a	া...আ	U+09BE U+002E U+002E U+002E U+0986
+k...a`ry	ক...ার‍্য	U+0995 U+002E U+002E U+002E U+09BE U+09B0 U+200D U+09CD U+09AF
+a`.`a	া.আ	U+09BE U+002E U+0986
+k.`a`ry	ক.ার‍্য	U+0995 U+002E U+09BE U+09B0 U+200D U+09CD U+09AF
+a`:a	াঃআ	U+09BE U+0983 U+0986
+k:a`ry	কঃার‍্য	U+0995 U+0983 U+09BE U+09B0 U+200D U+09CD U+09AF
+a`:`a	া:আ	U+09BE U+003A U+0986
+k:`a`ry	ক:ার‍্য	U+0995 U+003A U+09BE U+09B0 U+200D U+09CD U+09AF
+a`^a	াঁআ	U+09BE U+0981 U+0986
+k^a`ry	কঁার‍্য	U+0995 U+0981 U+09BE U+09B0 U+200D U+09CD U+09AF
+a`^`a	া^আ	U+09BE U+005E U+0986
+k^`a`ry	ক^ার‍্য	U+0995 U+005E U+09BE U+09B0 U+200D U+09CD U+09AF
+a`,,a	া্‌আ	U+09BE U+09CD U+200C U+0986
+k,,a`ry	ক্‌ার‍্য	U+0995 U+09CD U+200C U+09BE U+09B0 U+200D U+09CD U+09AF
+a`$a	া৳আ	U+09BE U+09F3 U+0986
+k$a`ry	ক৳ার‍্য	U+0995 U+09F3 U+09BE U+09B0 U+200D U+09CD U+09AF
+k`a`ry	কার‍্য	U+0995 U+09BE U+09B0 U+200D U+09CD U+09AF
+a`a`	াা	U+09BE U+09BE
+a`i`	াি	U+09BE U+09BF
+a`I`	াী	U+09BE U+09C0
+a`u`	াু	U+09BE U+09C1
+a`U`	াূ	U+09BE U+09C2
+a`e`	াে	U+09BE U+09C7
+a`ee`	াী	U+09BE U+09C0
+a`o`	া	U+09BE
+a`O`	াো	U+09BE U+09CB
+a`oo`	াু	U+09BE U+09C1
+a`OI`	াৈ	U+09BE U+09C8
+a`OU`	াৌ	U+09BE U+09CC
+a`rri`	াৃ	U+09BE U+09C3
+a`A`	াা	U+09BE U+09BE
+a`E`	াে	U+09BE U+09C7
+a`eE`	াী	U+09BE U+09C0
+a`Ee`	াী	U+09BE U+09C0
+a`EE`	াী	U+09BE U+09C0
+i``	ি	U+09BF
+i```	ি	U+09BF
+i``a	িআ	U+09BF U+0986
+i```a	িআ	U+09BF U+0986
+i``i	িই	U+09BF U+0987
+i```i	িই	U+09BF U+0987
+i``I	িঈ	U+09BF U+0988
+i```I	িঈ	U+09BF U+0988
+i``u	িউ	U+09BF U+0989
+i```u	িউ	U+09BF U+0989
+i``U	িঊ	U+09BF U+098A
+i```U	িঊ	U+09BF U+098A
+i``e	িএ	U+09BF U+098F
+i```e	িএ	U+09BF U+098F
+i``ee	িঈ	U+09BF U+0988
+i```ee	িঈ	U+09BF U+0988
+i``o	িঅ	U+09BF U+0985
+i```o	িঅ	U+09BF U+0985
+i``O	িও	U+09BF U+0993
+i```O	িও	U+09BF U+0993
+i``oo	িউ	U+09BF U+0989
+i```oo	িউ	U+09BF U+0989
+i``OI	িঐ	U+09BF U+0990
+i```OI	িঐ	U+09BF U+0990
+i``OU	িঔ	U+09BF U+0994
+i```OU	িঔ	U+09BF U+0994
+i``rri	িঋ	U+09BF U+098B
+i```rri	িঋ	U+09BF U+098B
+i``y	িইয়	U+09BF U+0987 U+09DF
+i```y	িইয়	U+09BF U+0987 U+09DF
+i``Z	ি্য	U+09BF U+09CD U+09AF
+i```Z	ি্য	U+09BF U+09CD U+09AF
+i``wa	িওয়া	U+09BF U+0993 U+09DF U+09BE
+i```wa	িওয়া	U+09BF U+0993 U+09DF U+09BE
+i``x	িএক্স	U+09BF U+098F U+0995 U+09CD U+09B8
+i```x	িএক্স	U+09BF U+098F U+0995 U+09CD U+09B8
+i``r	ির	U+09BF U+09B0
+i```r	ির	U+09BF U+09B0
+i``rr	িরর	U+09BF U+09B0 U+09B0
+i```rr	িরর	U+09BF U+09B0 U+09B0
+i``ry	ির‍্য	U+09BF U+09B0 U+200D U+09CD U+09AF
+i```ry	ির‍্য	U+09BF U+09B0 U+200D U+09CD U+09AF
+i``rZ	ির‍্য	U+09BF U+09B0 U+200D U+09CD U+09AF
+i```rZ	ির‍্য	U+09BF U+09B0 U+200D U+09CD U+09AF
+i``rra	িররা	U+09BF U+09B0 U+09B0 U+09BE
+i```rra	িররা	U+09BF U+09B0 U+09B0 U+09BE
+i``rriya	িঋয়া	U+09BF U+098B U+09DF U+09BE
+i```rriya	িঋয়া	U+09BF U+098B U+09DF U+09BE
+i``kr	িক্র	U+09BF U+0995 U+09CD U+09B0
+i```kr	িক্র	U+09BF U+0995 U+09CD U+09B0
+i``khry	িখ্র্য	U+09BF U+0996 U+09CD U+09B0 U+09CD U+09AF
+i```khry	িখ্র্য	U+09BF U+0996 U+09CD U+09B0 U+09CD U+09AF
+i``Shm	িষ্ম	U+09BF U+09B7 U+09CD U+09AE
+i```Shm	িষ্ম	U+09BF U+09B7 U+09CD U+09AE
+i``Ngk	িঙ্ক	U+09BF U+0999 U+09CD U+0995
+i```Ngk	িঙ্ক	U+09BF U+0999 U+09CD U+0995
+i``Gdh	িগ্ধ	U+09BF U+0997 U+09CD U+09A7
+i```Gdh	িগ্ধ	U+09BF U+0997 U+09CD U+09A7
+i``J	িজ	U+09BF U+099C
+i```J	িজ	U+09BF U+099C
+i``012	ি০১২	U+09BF U+09E6 U+09E7 U+09E8
+i```012	ি০১২	U+09BF U+09E6 U+09E7 U+09E8
+i``ক	িক	U+09BF U+0995
+i```ক	িক	U+09BF U+0995
+i``é	িé	U+09BF U+00E9
+i```é	িé	U+09BF U+00E9
+i``́	ি́	U+09BF U+0301
+i```́	ি́	U+09BF U+0301
+i``🙂	ি🙂	U+09BF U+1F642
+i```🙂	ি🙂	U+09BF U+1F642
+i`.a	ি।আ	U+09BF U+0964 U+0986
+k.i`ry	ক।ির‍্য	U+0995 U+0964 U+09BF U+09B0 U+200D U+09CD U+09AF
+i`..a	ি।।আ	U+09BF U+0964 U+0964 U+0986
+k..i`ry	ক।।ির‍্য	U+0995 U+0964 U+0964 U+09BF U+09B0 U+200D U+09CD U+09AF
+i`...a	ি...আ	U+09BF U+002E U+002E U+002E U+0986
+k...i`ry	ক...ির‍্য	U+0995 U+002E U+002E U+002E U+09BF U+09B0 U+200D U+09CD U+09AF
+i`.`a	ি.আ	U+09BF U+002E U+0986
+k.`i`ry	ক.ির‍্য	U+0995 U+002E U+09BF U+09B0 U+200D U+09CD U+09AF
+i`:a	িঃআ	U+09BF U+0983 U+0986
+k:i`ry	কঃির‍্য	U+0995 U+0983 U+09BF U+09B0 U+200D U+09CD U+09AF
+i`:`a	ি:আ	U+09BF U+003A U+0986
+k:`i`ry	ক:ির‍্য	U+0995 U+003A U+09BF U+09B0 U+200D U+09CD U+09AF
+i`^a	িঁআ	U+09BF U+0981 U+0986
+k^i`ry	কঁির‍্য	U+0995 U+0981 U+09BF U+09B0 U+200D U+09CD U+09AF
+i`^`a	ি^আ	U+09BF U+005E U+0986
+k^`i`ry	ক^ির‍্য	U+0995 U+005E U+09BF U+09B0 U+200D U+09CD U+09AF
+i`,,a	ি্‌আ	U+09BF U+09CD U+200C U+0986
+k,,i`ry	ক্‌ির‍্য	U+0995 U+09CD U+200C U+09BF U+09B0 U+200D U+09CD U+09AF
+i`$a	ি৳আ	U+09BF U+09F3 U+0986
+k$i`ry	ক৳ির‍্য	U+0995 U+09F3 U+09BF U+09B0 U+200D U+09CD U+09AF
+k`i`ry	কির‍্য	U+0995 U+09BF U+09B0 U+200D U+09CD U+09AF
+i`a`	িা	U+09BF U+09BE
+i`i`	িি	U+09BF U+09BF
+i`I`	িী	U+09BF U+09C0
+i`u`	িু	U+09BF U+09C1
+i`U`	িূ	U+09BF U+09C2
+i`e`	িে	U+09BF U+09C7
+i`ee`	িী	U+09BF U+09C0
+i`o`	ি	U+09BF
+i`O`	িো	U+09BF U+09CB
+i`oo`	িু	U+09BF U+09C1
+i`OI`	িৈ	U+09BF U+09C8
+i`OU`	িৌ	U+09BF U+09CC
+i`rri`	িৃ	U+09BF U+09C3
+i`A`	িা	U+09BF U+09BE
+i`E`	িে	U+09BF U+09C7
+i`eE`	িী	U+09BF U+09C0
+i`Ee`	িী	U+09BF U+09C0
+i`EE`	িী	U+09BF U+09C0
+I``	ী	U+09C0
+I```	ী	U+09C0
+I``a	ীআ	U+09C0 U+0986
+I```a	ীআ	U+09C0 U+0986
+I``i	ীই	U+09C0 U+0987
+I```i	ীই	U+09C0 U+0987
+I``I	ীঈ	U+09C0 U+0988
+I```I	ীঈ	U+09C0 U+0988
+I``u	ীউ	U+09C0 U+0989
+I```u	ীউ	U+09C0 U+0989
+I``U	ীঊ	U+09C0 U+098A
+I```U	ীঊ	U+09C0 U+098A
+I``e	ীএ	U+09C0 U+098F
+I```e	ীএ	U+09C0 U+098F
+I``ee	ীঈ	U+09C0 U+0988
+I```ee	ীঈ	U+09C0 U+0988
+I``o	ীঅ	U+09C0 U+0985
+I```o	ীঅ	U+09C0 U+0985
+I``O	ীও	U+09C0 U+0993
+I```O	ীও	U+09C0 U+0993
+I``oo	ীউ	U+09C0 U+0989
+I```oo	ীউ	U+09C0 U+0989
+I``OI	ীঐ	U+09C0 U+0990
+I```OI	ীঐ	U+09C0 U+0990
+I``OU	ীঔ	U+09C0 U+0994
+I```OU	ীঔ	U+09C0 U+0994
+I``rri	ীঋ	U+09C0 U+098B
+I```rri	ীঋ	U+09C0 U+098B
+I``y	ীইয়	U+09C0 U+0987 U+09DF
+I```y	ীইয়	U+09C0 U+0987 U+09DF
+I``Z	ী্য	U+09C0 U+09CD U+09AF
+I```Z	ী্য	U+09C0 U+09CD U+09AF
+I``wa	ীওয়া	U+09C0 U+0993 U+09DF U+09BE
+I```wa	ীওয়া	U+09C0 U+0993 U+09DF U+09BE
+I``x	ীএক্স	U+09C0 U+098F U+0995 U+09CD U+09B8
+I```x	ীএক্স	U+09C0 U+098F U+0995 U+09CD U+09B8
+I``r	ীর	U+09C0 U+09B0
+I```r	ীর	U+09C0 U+09B0
+I``rr	ীরর	U+09C0 U+09B0 U+09B0
+I```rr	ীরর	U+09C0 U+09B0 U+09B0
+I``ry	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+I```ry	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+I``rZ	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+I```rZ	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+I``rra	ীররা	U+09C0 U+09B0 U+09B0 U+09BE
+I```rra	ীররা	U+09C0 U+09B0 U+09B0 U+09BE
+I``rriya	ীঋয়া	U+09C0 U+098B U+09DF U+09BE
+I```rriya	ীঋয়া	U+09C0 U+098B U+09DF U+09BE
+I``kr	ীক্র	U+09C0 U+0995 U+09CD U+09B0
+I```kr	ীক্র	U+09C0 U+0995 U+09CD U+09B0
+I``khry	ীখ্র্য	U+09C0 U+0996 U+09CD U+09B0 U+09CD U+09AF
+I```khry	ীখ্র্য	U+09C0 U+0996 U+09CD U+09B0 U+09CD U+09AF
+I``Shm	ীষ্ম	U+09C0 U+09B7 U+09CD U+09AE
+I```Shm	ীষ্ম	U+09C0 U+09B7 U+09CD U+09AE
+I``Ngk	ীঙ্ক	U+09C0 U+0999 U+09CD U+0995
+I```Ngk	ীঙ্ক	U+09C0 U+0999 U+09CD U+0995
+I``Gdh	ীগ্ধ	U+09C0 U+0997 U+09CD U+09A7
+I```Gdh	ীগ্ধ	U+09C0 U+0997 U+09CD U+09A7
+I``J	ীজ	U+09C0 U+099C
+I```J	ীজ	U+09C0 U+099C
+I``012	ী০১২	U+09C0 U+09E6 U+09E7 U+09E8
+I```012	ী০১২	U+09C0 U+09E6 U+09E7 U+09E8
+I``ক	ীক	U+09C0 U+0995
+I```ক	ীক	U+09C0 U+0995
+I``é	ীé	U+09C0 U+00E9
+I```é	ীé	U+09C0 U+00E9
+I``́	ী́	U+09C0 U+0301
+I```́	ী́	U+09C0 U+0301
+I``🙂	ী🙂	U+09C0 U+1F642
+I```🙂	ী🙂	U+09C0 U+1F642
+I`.a	ী।আ	U+09C0 U+0964 U+0986
+k.I`ry	ক।ীর‍্য	U+0995 U+0964 U+09C0 U+09B0 U+200D U+09CD U+09AF
+I`..a	ী।।আ	U+09C0 U+0964 U+0964 U+0986
+k..I`ry	ক।।ীর‍্য	U+0995 U+0964 U+0964 U+09C0 U+09B0 U+200D U+09CD U+09AF
+I`...a	ী...আ	U+09C0 U+002E U+002E U+002E U+0986
+k...I`ry	ক...ীর‍্য	U+0995 U+002E U+002E U+002E U+09C0 U+09B0 U+200D U+09CD U+09AF
+I`.`a	ী.আ	U+09C0 U+002E U+0986
+k.`I`ry	ক.ীর‍্য	U+0995 U+002E U+09C0 U+09B0 U+200D U+09CD U+09AF
+I`:a	ীঃআ	U+09C0 U+0983 U+0986
+k:I`ry	কঃীর‍্য	U+0995 U+0983 U+09C0 U+09B0 U+200D U+09CD U+09AF
+I`:`a	ী:আ	U+09C0 U+003A U+0986
+k:`I`ry	ক:ীর‍্য	U+0995 U+003A U+09C0 U+09B0 U+200D U+09CD U+09AF
+I`^a	ীঁআ	U+09C0 U+0981 U+0986
+k^I`ry	কঁীর‍্য	U+0995 U+0981 U+09C0 U+09B0 U+200D U+09CD U+09AF
+I`^`a	ী^আ	U+09C0 U+005E U+0986
+k^`I`ry	ক^ীর‍্য	U+0995 U+005E U+09C0 U+09B0 U+200D U+09CD U+09AF
+I`,,a	ী্‌আ	U+09C0 U+09CD U+200C U+0986
+k,,I`ry	ক্‌ীর‍্য	U+0995 U+09CD U+200C U+09C0 U+09B0 U+200D U+09CD U+09AF
+I`$a	ী৳আ	U+09C0 U+09F3 U+0986
+k$I`ry	ক৳ীর‍্য	U+0995 U+09F3 U+09C0 U+09B0 U+200D U+09CD U+09AF
+k`I`ry	কীর‍্য	U+0995 U+09C0 U+09B0 U+200D U+09CD U+09AF
+I`a`	ীা	U+09C0 U+09BE
+I`i`	ীি	U+09C0 U+09BF
+I`I`	ীী	U+09C0 U+09C0
+I`u`	ীু	U+09C0 U+09C1
+I`U`	ীূ	U+09C0 U+09C2
+I`e`	ীে	U+09C0 U+09C7
+I`ee`	ীী	U+09C0 U+09C0
+I`o`	ী	U+09C0
+I`O`	ীো	U+09C0 U+09CB
+I`oo`	ীু	U+09C0 U+09C1
+I`OI`	ীৈ	U+09C0 U+09C8
+I`OU`	ীৌ	U+09C0 U+09CC
+I`rri`	ীৃ	U+09C0 U+09C3
+I`A`	ীা	U+09C0 U+09BE
+I`E`	ীে	U+09C0 U+09C7
+I`eE`	ীী	U+09C0 U+09C0
+I`Ee`	ীী	U+09C0 U+09C0
+I`EE`	ীী	U+09C0 U+09C0
+u``	ু	U+09C1
+u```	ু	U+09C1
+u``a	ুআ	U+09C1 U+0986
+u```a	ুআ	U+09C1 U+0986
+u``i	ুই	U+09C1 U+0987
+u```i	ুই	U+09C1 U+0987
+u``I	ুঈ	U+09C1 U+0988
+u```I	ুঈ	U+09C1 U+0988
+u``u	ুউ	U+09C1 U+0989
+u```u	ুউ	U+09C1 U+0989
+u``U	ুঊ	U+09C1 U+098A
+u```U	ুঊ	U+09C1 U+098A
+u``e	ুএ	U+09C1 U+098F
+u```e	ুএ	U+09C1 U+098F
+u``ee	ুঈ	U+09C1 U+0988
+u```ee	ুঈ	U+09C1 U+0988
+u``o	ুঅ	U+09C1 U+0985
+u```o	ুঅ	U+09C1 U+0985
+u``O	ুও	U+09C1 U+0993
+u```O	ুও	U+09C1 U+0993
+u``oo	ুউ	U+09C1 U+0989
+u```oo	ুউ	U+09C1 U+0989
+u``OI	ুঐ	U+09C1 U+0990
+u```OI	ুঐ	U+09C1 U+0990
+u``OU	ুঔ	U+09C1 U+0994
+u```OU	ুঔ	U+09C1 U+0994
+u``rri	ুঋ	U+09C1 U+098B
+u```rri	ুঋ	U+09C1 U+098B
+u``y	ুইয়	U+09C1 U+0987 U+09DF
+u```y	ুইয়	U+09C1 U+0987 U+09DF
+u``Z	ু্য	U+09C1 U+09CD U+09AF
+u```Z	ু্য	U+09C1 U+09CD U+09AF
+u``wa	ুওয়া	U+09C1 U+0993 U+09DF U+09BE
+u```wa	ুওয়া	U+09C1 U+0993 U+09DF U+09BE
+u``x	ুএক্স	U+09C1 U+098F U+0995 U+09CD U+09B8
+u```x	ুএক্স	U+09C1 U+098F U+0995 U+09CD U+09B8
+u``r	ুর	U+09C1 U+09B0
+u```r	ুর	U+09C1 U+09B0
+u``rr	ুরর	U+09C1 U+09B0 U+09B0
+u```rr	ুরর	U+09C1 U+09B0 U+09B0
+u``ry	ুর‍্য	U+09C1 U+09B0 U+200D U+09CD U+09AF
+u```ry	ুর‍্য	U+09C1 U+09B0 U+200D U+09CD U+09AF
+u``rZ	ুর‍্য	U+09C1 U+09B0 U+200D U+09CD U+09AF
+u```rZ	ুর‍্য	U+09C1 U+09B0 U+200D U+09CD U+09AF
+u``rra	ুররা	U+09C1 U+09B0 U+09B0 U+09BE
+u```rra	ুররা	U+09C1 U+09B0 U+09B0 U+09BE
+u``rriya	ুঋয়া	U+09C1 U+098B U+09DF U+09BE
+u```rriya	ুঋয়া	U+09C1 U+098B U+09DF U+09BE
+u``kr	ুক্র	U+09C1 U+0995 U+09CD U+09B0
+u```kr	ুক্র	U+09C1 U+0995 U+09CD U+09B0
+u``khry	ুখ্র্য	U+09C1 U+0996 U+09CD U+09B0 U+09CD U+09AF
+u```khry	ুখ্র্য	U+09C1 U+0996 U+09CD U+09B0 U+09CD U+09AF
+u``Shm	ুষ্ম	U+09C1 U+09B7 U+09CD U+09AE
+u```Shm	ুষ্ম	U+09C1 U+09B7 U+09CD U+09AE
+u``Ngk	ুঙ্ক	U+09C1 U+0999 U+09CD U+0995
+u```Ngk	ুঙ্ক	U+09C1 U+0999 U+09CD U+0995
+u``Gdh	ুগ্ধ	U+09C1 U+0997 U+09CD U+09A7
+u```Gdh	ুগ্ধ	U+09C1 U+0997 U+09CD U+09A7
+u``J	ুজ	U+09C1 U+099C
+u```J	ুজ	U+09C1 U+099C
+u``012	ু০১২	U+09C1 U+09E6 U+09E7 U+09E8
+u```012	ু০১২	U+09C1 U+09E6 U+09E7 U+09E8
+u``ক	ুক	U+09C1 U+0995
+u```ক	ুক	U+09C1 U+0995
+u``é	ুé	U+09C1 U+00E9
+u```é	ুé	U+09C1 U+00E9
+u``́	ু́	U+09C1 U+0301
+u```́	ু́	U+09C1 U+0301
+u``🙂	ু🙂	U+09C1 U+1F642
+u```🙂	ু🙂	U+09C1 U+1F642
+u`.a	ু।আ	U+09C1 U+0964 U+0986
+k.u`ry	ক।ুর‍্য	U+0995 U+0964 U+09C1 U+09B0 U+200D U+09CD U+09AF
+u`..a	ু।।আ	U+09C1 U+0964 U+0964 U+0986
+k..u`ry	ক।।ুর‍্য	U+0995 U+0964 U+0964 U+09C1 U+09B0 U+200D U+09CD U+09AF
+u`...a	ু...আ	U+09C1 U+002E U+002E U+002E U+0986
+k...u`ry	ক...ুর‍্য	U+0995 U+002E U+002E U+002E U+09C1 U+09B0 U+200D U+09CD U+09AF
+u`.`a	ু.আ	U+09C1 U+002E U+0986
+k.`u`ry	ক.ুর‍্য	U+0995 U+002E U+09C1 U+09B0 U+200D U+09CD U+09AF
+u`:a	ুঃআ	U+09C1 U+0983 U+0986
+k:u`ry	কঃুর‍্য	U+0995 U+0983 U+09C1 U+09B0 U+200D U+09CD U+09AF
+u`:`a	ু:আ	U+09C1 U+003A U+0986
+k:`u`ry	ক:ুর‍্য	U+0995 U+003A U+09C1 U+09B0 U+200D U+09CD U+09AF
+u`^a	ুঁআ	U+09C1 U+0981 U+0986
+k^u`ry	কঁুর‍্য	U+0995 U+0981 U+09C1 U+09B0 U+200D U+09CD U+09AF
+u`^`a	ু^আ	U+09C1 U+005E U+0986
+k^`u`ry	ক^ুর‍্য	U+0995 U+005E U+09C1 U+09B0 U+200D U+09CD U+09AF
+u`,,a	ু্‌আ	U+09C1 U+09CD U+200C U+0986
+k,,u`ry	ক্‌ুর‍্য	U+0995 U+09CD U+200C U+09C1 U+09B0 U+200D U+09CD U+09AF
+u`$a	ু৳আ	U+09C1 U+09F3 U+0986
+k$u`ry	ক৳ুর‍্য	U+0995 U+09F3 U+09C1 U+09B0 U+200D U+09CD U+09AF
+k`u`ry	কুর‍্য	U+0995 U+09C1 U+09B0 U+200D U+09CD U+09AF
+u`a`	ুা	U+09C1 U+09BE
+u`i`	ুি	U+09C1 U+09BF
+u`I`	ুী	U+09C1 U+09C0
+u`u`	ুু	U+09C1 U+09C1
+u`U`	ুূ	U+09C1 U+09C2
+u`e`	ুে	U+09C1 U+09C7
+u`ee`	ুী	U+09C1 U+09C0
+u`o`	ু	U+09C1
+u`O`	ুো	U+09C1 U+09CB
+u`oo`	ুু	U+09C1 U+09C1
+u`OI`	ুৈ	U+09C1 U+09C8
+u`OU`	ুৌ	U+09C1 U+09CC
+u`rri`	ুৃ	U+09C1 U+09C3
+u`A`	ুা	U+09C1 U+09BE
+u`E`	ুে	U+09C1 U+09C7
+u`eE`	ুী	U+09C1 U+09C0
+u`Ee`	ুী	U+09C1 U+09C0
+u`EE`	ুী	U+09C1 U+09C0
+U``	ূ	U+09C2
+U```	ূ	U+09C2
+U``a	ূআ	U+09C2 U+0986
+U```a	ূআ	U+09C2 U+0986
+U``i	ূই	U+09C2 U+0987
+U```i	ূই	U+09C2 U+0987
+U``I	ূঈ	U+09C2 U+0988
+U```I	ূঈ	U+09C2 U+0988
+U``u	ূউ	U+09C2 U+0989
+U```u	ূউ	U+09C2 U+0989
+U``U	ূঊ	U+09C2 U+098A
+U```U	ূঊ	U+09C2 U+098A
+U``e	ূএ	U+09C2 U+098F
+U```e	ূএ	U+09C2 U+098F
+U``ee	ূঈ	U+09C2 U+0988
+U```ee	ূঈ	U+09C2 U+0988
+U``o	ূঅ	U+09C2 U+0985
+U```o	ূঅ	U+09C2 U+0985
+U``O	ূও	U+09C2 U+0993
+U```O	ূও	U+09C2 U+0993
+U``oo	ূউ	U+09C2 U+0989
+U```oo	ূউ	U+09C2 U+0989
+U``OI	ূঐ	U+09C2 U+0990
+U```OI	ূঐ	U+09C2 U+0990
+U``OU	ূঔ	U+09C2 U+0994
+U```OU	ূঔ	U+09C2 U+0994
+U``rri	ূঋ	U+09C2 U+098B
+U```rri	ূঋ	U+09C2 U+098B
+U``y	ূইয়	U+09C2 U+0987 U+09DF
+U```y	ূইয়	U+09C2 U+0987 U+09DF
+U``Z	ূ্য	U+09C2 U+09CD U+09AF
+U```Z	ূ্য	U+09C2 U+09CD U+09AF
+U``wa	ূওয়া	U+09C2 U+0993 U+09DF U+09BE
+U```wa	ূওয়া	U+09C2 U+0993 U+09DF U+09BE
+U``x	ূএক্স	U+09C2 U+098F U+0995 U+09CD U+09B8
+U```x	ূএক্স	U+09C2 U+098F U+0995 U+09CD U+09B8
+U``r	ূর	U+09C2 U+09B0
+U```r	ূর	U+09C2 U+09B0
+U``rr	ূরর	U+09C2 U+09B0 U+09B0
+U```rr	ূরর	U+09C2 U+09B0 U+09B0
+U``ry	ূর‍্য	U+09C2 U+09B0 U+200D U+09CD U+09AF
+U```ry	ূর‍্য	U+09C2 U+09B0 U+200D U+09CD U+09AF
+U``rZ	ূর‍্য	U+09C2 U+09B0 U+200D U+09CD U+09AF
+U```rZ	ূর‍্য	U+09C2 U+09B0 U+200D U+09CD U+09AF
+U``rra	ূররা	U+09C2 U+09B0 U+09B0 U+09BE
+U```rra	ূররা	U+09C2 U+09B0 U+09B0 U+09BE
+U``rriya	ূঋয়া	U+09C2 U+098B U+09DF U+09BE
+U```rriya	ূঋয়া	U+09C2 U+098B U+09DF U+09BE
+U``kr	ূক্র	U+09C2 U+0995 U+09CD U+09B0
+U```kr	ূক্র	U+09C2 U+0995 U+09CD U+09B0
+U``khry	ূখ্র্য	U+09C2 U+0996 U+09CD U+09B0 U+09CD U+09AF
+U```khry	ূখ্র্য	U+09C2 U+0996 U+09CD U+09B0 U+09CD U+09AF
+U``Shm	ূষ্ম	U+09C2 U+09B7 U+09CD U+09AE
+U```Shm	ূষ্ম	U+09C2 U+09B7 U+09CD U+09AE
+U``Ngk	ূঙ্ক	U+09C2 U+0999 U+09CD U+0995
+U```Ngk	ূঙ্ক	U+09C2 U+0999 U+09CD U+0995
+U``Gdh	ূগ্ধ	U+09C2 U+0997 U+09CD U+09A7
+U```Gdh	ূগ্ধ	U+09C2 U+0997 U+09CD U+09A7
+U``J	ূজ	U+09C2 U+099C
+U```J	ূজ	U+09C2 U+099C
+U``012	ূ০১২	U+09C2 U+09E6 U+09E7 U+09E8
+U```012	ূ০১২	U+09C2 U+09E6 U+09E7 U+09E8
+U``ক	ূক	U+09C2 U+0995
+U```ক	ূক	U+09C2 U+0995
+U``é	ূé	U+09C2 U+00E9
+U```é	ূé	U+09C2 U+00E9
+U``́	ূ́	U+09C2 U+0301
+U```́	ূ́	U+09C2 U+0301
+U``🙂	ূ🙂	U+09C2 U+1F642
+U```🙂	ূ🙂	U+09C2 U+1F642
+U`.a	ূ।আ	U+09C2 U+0964 U+0986
+k.U`ry	ক।ূর‍্য	U+0995 U+0964 U+09C2 U+09B0 U+200D U+09CD U+09AF
+U`..a	ূ।।আ	U+09C2 U+0964 U+0964 U+0986
+k..U`ry	ক।।ূর‍্য	U+0995 U+0964 U+0964 U+09C2 U+09B0 U+200D U+09CD U+09AF
+U`...a	ূ...আ	U+09C2 U+002E U+002E U+002E U+0986
+k...U`ry	ক...ূর‍্য	U+0995 U+002E U+002E U+002E U+09C2 U+09B0 U+200D U+09CD U+09AF
+U`.`a	ূ.আ	U+09C2 U+002E U+0986
+k.`U`ry	ক.ূর‍্য	U+0995 U+002E U+09C2 U+09B0 U+200D U+09CD U+09AF
+U`:a	ূঃআ	U+09C2 U+0983 U+0986
+k:U`ry	কঃূর‍্য	U+0995 U+0983 U+09C2 U+09B0 U+200D U+09CD U+09AF
+U`:`a	ূ:আ	U+09C2 U+003A U+0986
+k:`U`ry	ক:ূর‍্য	U+0995 U+003A U+09C2 U+09B0 U+200D U+09CD U+09AF
+U`^a	ূঁআ	U+09C2 U+0981 U+0986
+k^U`ry	কঁূর‍্য	U+0995 U+0981 U+09C2 U+09B0 U+200D U+09CD U+09AF
+U`^`a	ূ^আ	U+09C2 U+005E U+0986
+k^`U`ry	ক^ূর‍্য	U+0995 U+005E U+09C2 U+09B0 U+200D U+09CD U+09AF
+U`,,a	ূ্‌আ	U+09C2 U+09CD U+200C U+0986
+k,,U`ry	ক্‌ূর‍্য	U+0995 U+09CD U+200C U+09C2 U+09B0 U+200D U+09CD U+09AF
+U`$a	ূ৳আ	U+09C2 U+09F3 U+0986
+k$U`ry	ক৳ূর‍্য	U+0995 U+09F3 U+09C2 U+09B0 U+200D U+09CD U+09AF
+k`U`ry	কূর‍্য	U+0995 U+09C2 U+09B0 U+200D U+09CD U+09AF
+U`a`	ূা	U+09C2 U+09BE
+U`i`	ূি	U+09C2 U+09BF
+U`I`	ূী	U+09C2 U+09C0
+U`u`	ূু	U+09C2 U+09C1
+U`U`	ূূ	U+09C2 U+09C2
+U`e`	ূে	U+09C2 U+09C7
+U`ee`	ূী	U+09C2 U+09C0
+U`o`	ূ	U+09C2
+U`O`	ূো	U+09C2 U+09CB
+U`oo`	ূু	U+09C2 U+09C1
+U`OI`	ূৈ	U+09C2 U+09C8
+U`OU`	ূৌ	U+09C2 U+09CC
+U`rri`	ূৃ	U+09C2 U+09C3
+U`A`	ূা	U+09C2 U+09BE
+U`E`	ূে	U+09C2 U+09C7
+U`eE`	ূী	U+09C2 U+09C0
+U`Ee`	ূী	U+09C2 U+09C0
+U`EE`	ূী	U+09C2 U+09C0
+e``	ে	U+09C7
+e```	ে	U+09C7
+e``a	েআ	U+09C7 U+0986
+e```a	েআ	U+09C7 U+0986
+e``i	েই	U+09C7 U+0987
+e```i	েই	U+09C7 U+0987
+e``I	েঈ	U+09C7 U+0988
+e```I	েঈ	U+09C7 U+0988
+e``u	েউ	U+09C7 U+0989
+e```u	েউ	U+09C7 U+0989
+e``U	েঊ	U+09C7 U+098A
+e```U	েঊ	U+09C7 U+098A
+e``e	েএ	U+09C7 U+098F
+e```e	েএ	U+09C7 U+098F
+e``ee	েঈ	U+09C7 U+0988
+e```ee	েঈ	U+09C7 U+0988
+e``o	েঅ	U+09C7 U+0985
+e```o	েঅ	U+09C7 U+0985
+e``O	েও	U+09C7 U+0993
+e```O	েও	U+09C7 U+0993
+e``oo	েউ	U+09C7 U+0989
+e```oo	েউ	U+09C7 U+0989
+e``OI	েঐ	U+09C7 U+0990
+e```OI	েঐ	U+09C7 U+0990
+e``OU	েঔ	U+09C7 U+0994
+e```OU	েঔ	U+09C7 U+0994
+e``rri	েঋ	U+09C7 U+098B
+e```rri	েঋ	U+09C7 U+098B
+e``y	েইয়	U+09C7 U+0987 U+09DF
+e```y	েইয়	U+09C7 U+0987 U+09DF
+e``Z	ে্য	U+09C7 U+09CD U+09AF
+e```Z	ে্য	U+09C7 U+09CD U+09AF
+e``wa	েওয়া	U+09C7 U+0993 U+09DF U+09BE
+e```wa	েওয়া	U+09C7 U+0993 U+09DF U+09BE
+e``x	েএক্স	U+09C7 U+098F U+0995 U+09CD U+09B8
+e```x	েএক্স	U+09C7 U+098F U+0995 U+09CD U+09B8
+e``r	ের	U+09C7 U+09B0
+e```r	ের	U+09C7 U+09B0
+e``rr	েরর	U+09C7 U+09B0 U+09B0
+e```rr	েরর	U+09C7 U+09B0 U+09B0
+e``ry	ের‍্য	U+09C7 U+09B0 U+200D U+09CD U+09AF
+e```ry	ের‍্য	U+09C7 U+09B0 U+200D U+09CD U+09AF
+e``rZ	ের‍্য	U+09C7 U+09B0 U+200D U+09CD U+09AF
+e```rZ	ের‍্য	U+09C7 U+09B0 U+200D U+09CD U+09AF
+e``rra	েররা	U+09C7 U+09B0 U+09B0 U+09BE
+e```rra	েররা	U+09C7 U+09B0 U+09B0 U+09BE
+e``rriya	েঋয়া	U+09C7 U+098B U+09DF U+09BE
+e```rriya	েঋয়া	U+09C7 U+098B U+09DF U+09BE
+e``kr	েক্র	U+09C7 U+0995 U+09CD U+09B0
+e```kr	েক্র	U+09C7 U+0995 U+09CD U+09B0
+e``khry	েখ্র্য	U+09C7 U+0996 U+09CD U+09B0 U+09CD U+09AF
+e```khry	েখ্র্য	U+09C7 U+0996 U+09CD U+09B0 U+09CD U+09AF
+e``Shm	েষ্ম	U+09C7 U+09B7 U+09CD U+09AE
+e```Shm	েষ্ম	U+09C7 U+09B7 U+09CD U+09AE
+e``Ngk	েঙ্ক	U+09C7 U+0999 U+09CD U+0995
+e```Ngk	েঙ্ক	U+09C7 U+0999 U+09CD U+0995
+e``Gdh	েগ্ধ	U+09C7 U+0997 U+09CD U+09A7
+e```Gdh	েগ্ধ	U+09C7 U+0997 U+09CD U+09A7
+e``J	েজ	U+09C7 U+099C
+e```J	েজ	U+09C7 U+099C
+e``012	ে০১২	U+09C7 U+09E6 U+09E7 U+09E8
+e```012	ে০১২	U+09C7 U+09E6 U+09E7 U+09E8
+e``ক	েক	U+09C7 U+0995
+e```ক	েক	U+09C7 U+0995
+e``é	েé	U+09C7 U+00E9
+e```é	েé	U+09C7 U+00E9
+e``́	ে́	U+09C7 U+0301
+e```́	ে́	U+09C7 U+0301
+e``🙂	ে🙂	U+09C7 U+1F642
+e```🙂	ে🙂	U+09C7 U+1F642
+e`.a	ে।আ	U+09C7 U+0964 U+0986
+k.e`ry	ক।ের‍্য	U+0995 U+0964 U+09C7 U+09B0 U+200D U+09CD U+09AF
+e`..a	ে।।আ	U+09C7 U+0964 U+0964 U+0986
+k..e`ry	ক।।ের‍্য	U+0995 U+0964 U+0964 U+09C7 U+09B0 U+200D U+09CD U+09AF
+e`...a	ে...আ	U+09C7 U+002E U+002E U+002E U+0986
+k...e`ry	ক...ের‍্য	U+0995 U+002E U+002E U+002E U+09C7 U+09B0 U+200D U+09CD U+09AF
+e`.`a	ে.আ	U+09C7 U+002E U+0986
+k.`e`ry	ক.ের‍্য	U+0995 U+002E U+09C7 U+09B0 U+200D U+09CD U+09AF
+e`:a	েঃআ	U+09C7 U+0983 U+0986
+k:e`ry	কঃের‍্য	U+0995 U+0983 U+09C7 U+09B0 U+200D U+09CD U+09AF
+e`:`a	ে:আ	U+09C7 U+003A U+0986
+k:`e`ry	ক:ের‍্য	U+0995 U+003A U+09C7 U+09B0 U+200D U+09CD U+09AF
+e`^a	েঁআ	U+09C7 U+0981 U+0986
+k^e`ry	কঁের‍্য	U+0995 U+0981 U+09C7 U+09B0 U+200D U+09CD U+09AF
+e`^`a	ে^আ	U+09C7 U+005E U+0986
+k^`e`ry	ক^ের‍্য	U+0995 U+005E U+09C7 U+09B0 U+200D U+09CD U+09AF
+e`,,a	ে্‌আ	U+09C7 U+09CD U+200C U+0986
+k,,e`ry	ক্‌ের‍্য	U+0995 U+09CD U+200C U+09C7 U+09B0 U+200D U+09CD U+09AF
+e`$a	ে৳আ	U+09C7 U+09F3 U+0986
+k$e`ry	ক৳ের‍্য	U+0995 U+09F3 U+09C7 U+09B0 U+200D U+09CD U+09AF
+k`e`ry	কের‍্য	U+0995 U+09C7 U+09B0 U+200D U+09CD U+09AF
+e`a`	ো	U+09C7 U+09BE
+e`i`	েি	U+09C7 U+09BF
+e`I`	েী	U+09C7 U+09C0
+e`u`	েু	U+09C7 U+09C1
+e`U`	েূ	U+09C7 U+09C2
+e`e`	েে	U+09C7 U+09C7
+e`ee`	েী	U+09C7 U+09C0
+e`o`	ে	U+09C7
+e`O`	েো	U+09C7 U+09CB
+e`oo`	েু	U+09C7 U+09C1
+e`OI`	েৈ	U+09C7 U+09C8
+e`OU`	েৌ	U+09C7 U+09CC
+e`rri`	েৃ	U+09C7 U+09C3
+e`A`	ো	U+09C7 U+09BE
+e`E`	েে	U+09C7 U+09C7
+e`eE`	েী	U+09C7 U+09C0
+e`Ee`	েী	U+09C7 U+09C0
+e`EE`	েী	U+09C7 U+09C0
+ee``	ী	U+09C0
+ee```	ী	U+09C0
+ee``a	ীআ	U+09C0 U+0986
+ee```a	ীআ	U+09C0 U+0986
+ee``i	ীই	U+09C0 U+0987
+ee```i	ীই	U+09C0 U+0987
+ee``I	ীঈ	U+09C0 U+0988
+ee```I	ীঈ	U+09C0 U+0988
+ee``u	ীউ	U+09C0 U+0989
+ee```u	ীউ	U+09C0 U+0989
+ee``U	ীঊ	U+09C0 U+098A
+ee```U	ীঊ	U+09C0 U+098A
+ee``e	ীএ	U+09C0 U+098F
+ee```e	ীএ	U+09C0 U+098F
+ee``ee	ীঈ	U+09C0 U+0988
+ee```ee	ীঈ	U+09C0 U+0988
+ee``o	ীঅ	U+09C0 U+0985
+ee```o	ীঅ	U+09C0 U+0985
+ee``O	ীও	U+09C0 U+0993
+ee```O	ীও	U+09C0 U+0993
+ee``oo	ীউ	U+09C0 U+0989
+ee```oo	ীউ	U+09C0 U+0989
+ee``OI	ীঐ	U+09C0 U+0990
+ee```OI	ীঐ	U+09C0 U+0990
+ee``OU	ীঔ	U+09C0 U+0994
+ee```OU	ীঔ	U+09C0 U+0994
+ee``rri	ীঋ	U+09C0 U+098B
+ee```rri	ীঋ	U+09C0 U+098B
+ee``y	ীইয়	U+09C0 U+0987 U+09DF
+ee```y	ীইয়	U+09C0 U+0987 U+09DF
+ee``Z	ী্য	U+09C0 U+09CD U+09AF
+ee```Z	ী্য	U+09C0 U+09CD U+09AF
+ee``wa	ীওয়া	U+09C0 U+0993 U+09DF U+09BE
+ee```wa	ীওয়া	U+09C0 U+0993 U+09DF U+09BE
+ee``x	ীএক্স	U+09C0 U+098F U+0995 U+09CD U+09B8
+ee```x	ীএক্স	U+09C0 U+098F U+0995 U+09CD U+09B8
+ee``r	ীর	U+09C0 U+09B0
+ee```r	ীর	U+09C0 U+09B0
+ee``rr	ীরর	U+09C0 U+09B0 U+09B0
+ee```rr	ীরর	U+09C0 U+09B0 U+09B0
+ee``ry	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee```ry	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee``rZ	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee```rZ	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee``rra	ীররা	U+09C0 U+09B0 U+09B0 U+09BE
+ee```rra	ীররা	U+09C0 U+09B0 U+09B0 U+09BE
+ee``rriya	ীঋয়া	U+09C0 U+098B U+09DF U+09BE
+ee```rriya	ীঋয়া	U+09C0 U+098B U+09DF U+09BE
+ee``kr	ীক্র	U+09C0 U+0995 U+09CD U+09B0
+ee```kr	ীক্র	U+09C0 U+0995 U+09CD U+09B0
+ee``khry	ীখ্র্য	U+09C0 U+0996 U+09CD U+09B0 U+09CD U+09AF
+ee```khry	ীখ্র্য	U+09C0 U+0996 U+09CD U+09B0 U+09CD U+09AF
+ee``Shm	ীষ্ম	U+09C0 U+09B7 U+09CD U+09AE
+ee```Shm	ীষ্ম	U+09C0 U+09B7 U+09CD U+09AE
+ee``Ngk	ীঙ্ক	U+09C0 U+0999 U+09CD U+0995
+ee```Ngk	ীঙ্ক	U+09C0 U+0999 U+09CD U+0995
+ee``Gdh	ীগ্ধ	U+09C0 U+0997 U+09CD U+09A7
+ee```Gdh	ীগ্ধ	U+09C0 U+0997 U+09CD U+09A7
+ee``J	ীজ	U+09C0 U+099C
+ee```J	ীজ	U+09C0 U+099C
+ee``012	ী০১২	U+09C0 U+09E6 U+09E7 U+09E8
+ee```012	ী০১২	U+09C0 U+09E6 U+09E7 U+09E8
+ee``ক	ীক	U+09C0 U+0995
+ee```ক	ীক	U+09C0 U+0995
+ee``é	ীé	U+09C0 U+00E9
+ee```é	ীé	U+09C0 U+00E9
+ee``́	ী́	U+09C0 U+0301
+ee```́	ী́	U+09C0 U+0301
+ee``🙂	ী🙂	U+09C0 U+1F642
+ee```🙂	ী🙂	U+09C0 U+1F642
+ee`.a	ী।আ	U+09C0 U+0964 U+0986
+k.ee`ry	ক।ীর‍্য	U+0995 U+0964 U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee`..a	ী।।আ	U+09C0 U+0964 U+0964 U+0986
+k..ee`ry	ক।।ীর‍্য	U+0995 U+0964 U+0964 U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee`...a	ী...আ	U+09C0 U+002E U+002E U+002E U+0986
+k...ee`ry	ক...ীর‍্য	U+0995 U+002E U+002E U+002E U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee`.`a	ী.আ	U+09C0 U+002E U+0986
+k.`ee`ry	ক.ীর‍্য	U+0995 U+002E U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee`:a	ীঃআ	U+09C0 U+0983 U+0986
+k:ee`ry	কঃীর‍্য	U+0995 U+0983 U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee`:`a	ী:আ	U+09C0 U+003A U+0986
+k:`ee`ry	ক:ীর‍্য	U+0995 U+003A U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee`^a	ীঁআ	U+09C0 U+0981 U+0986
+k^ee`ry	কঁীর‍্য	U+0995 U+0981 U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee`^`a	ী^আ	U+09C0 U+005E U+0986
+k^`ee`ry	ক^ীর‍্য	U+0995 U+005E U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee`,,a	ী্‌আ	U+09C0 U+09CD U+200C U+0986
+k,,ee`ry	ক্‌ীর‍্য	U+0995 U+09CD U+200C U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee`$a	ী৳আ	U+09C0 U+09F3 U+0986
+k$ee`ry	ক৳ীর‍্য	U+0995 U+09F3 U+09C0 U+09B0 U+200D U+09CD U+09AF
+k`ee`ry	কীর‍্য	U+0995 U+09C0 U+09B0 U+200D U+09CD U+09AF
+ee`a`	ীা	U+09C0 U+09BE
+ee`i`	ীি	U+09C0 U+09BF
+ee`I`	ীী	U+09C0 U+09C0
+ee`u`	ীু	U+09C0 U+09C1
+ee`U`	ীূ	U+09C0 U+09C2
+ee`e`	ীে	U+09C0 U+09C7
+ee`ee`	ীী	U+09C0 U+09C0
+ee`o`	ী	U+09C0
+ee`O`	ীো	U+09C0 U+09CB
+ee`oo`	ীু	U+09C0 U+09C1
+ee`OI`	ীৈ	U+09C0 U+09C8
+ee`OU`	ীৌ	U+09C0 U+09CC
+ee`rri`	ীৃ	U+09C0 U+09C3
+ee`A`	ীা	U+09C0 U+09BE
+ee`E`	ীে	U+09C0 U+09C7
+ee`eE`	ীী	U+09C0 U+09C0
+ee`Ee`	ীী	U+09C0 U+09C0
+ee`EE`	ীী	U+09C0 U+09C0
+o``		
+o```		
+o``a	আ	U+0986
+o```a	আ	U+0986
+o``i	ই	U+0987
+o```i	ই	U+0987
+o``I	ঈ	U+0988
+o```I	ঈ	U+0988
+o``u	উ	U+0989
+o```u	উ	U+0989
+o``U	ঊ	U+098A
+o```U	ঊ	U+098A
+o``e	এ	U+098F
+o```e	এ	U+098F
+o``ee	ঈ	U+0988
+o```ee	ঈ	U+0988
+o``o	অ	U+0985
+o```o	অ	U+0985
+o``O	ও	U+0993
+o```O	ও	U+0993
+o``oo	উ	U+0989
+o```oo	উ	U+0989
+o``OI	ঐ	U+0990
+o```OI	ঐ	U+0990
+o``OU	ঔ	U+0994
+o```OU	ঔ	U+0994
+o``rri	ঋ	U+098B
+o```rri	ঋ	U+098B
+o``y	ইয়	U+0987 U+09DF
+o```y	ইয়	U+0987 U+09DF
+o``Z	্য	U+09CD U+09AF
+o```Z	্য	U+09CD U+09AF
+o``wa	ওয়া	U+0993 U+09DF U+09BE
+o```wa	ওয়া	U+0993 U+09DF U+09BE
+o``x	এক্স	U+098F U+0995 U+09CD U+09B8
+o```x	এক্স	U+098F U+0995 U+09CD U+09B8
+o``r	র	U+09B0
+o```r	র	U+09B0
+o``rr	রর	U+09B0 U+09B0
+o```rr	রর	U+09B0 U+09B0
+o``ry	র‍্য	U+09B0 U+200D U+09CD U+09AF
+o```ry	র‍্য	U+09B0 U+200D U+09CD U+09AF
+o``rZ	র‍্য	U+09B0 U+200D U+09CD U+09AF
+o```rZ	র‍্য	U+09B0 U+200D U+09CD U+09AF
+o``rra	ররা	U+09B0 U+09B0 U+09BE
+o```rra	ররা	U+09B0 U+09B0 U+09BE
+o``rriya	ঋয়া	U+098B U+09DF U+09BE
+o```rriya	ঋয়া	U+098B U+09DF U+09BE
+o``kr	ক্র	U+0995 U+09CD U+09B0
+o```kr	ক্র	U+0995 U+09CD U+09B0
+o``khry	খ্র্য	U+0996 U+09CD U+09B0 U+09CD U+09AF
+o```khry	খ্র্য	U+0996 U+09CD U+09B0 U+09CD U+09AF
+o``Shm	ষ্ম	U+09B7 U+09CD U+09AE
+o```Shm	ষ্ম	U+09B7 U+09CD U+09AE
+o``Ngk	ঙ্ক	U+0999 U+09CD U+0995
+o```Ngk	ঙ্ক	U+0999 U+09CD U+0995
+o``Gdh	গ্ধ	U+0997 U+09CD U+09A7
+o```Gdh	গ্ধ	U+0997 U+09CD U+09A7
+o``J	জ	U+099C
+o```J	জ	U+099C
+o``012	০১২	U+09E6 U+09E7 U+09E8
+o```012	০১২	U+09E6 U+09E7 U+09E8
+o``ক	ক	U+0995
+o```ক	ক	U+0995
+o``é	é	U+00E9
+o```é	é	U+00E9
+o``́	́	U+0301
+o```́	́	U+0301
+o``🙂	🙂	U+1F642
+o```🙂	🙂	U+1F642
+o`.a	।আ	U+0964 U+0986
+k.o`ry	ক।র‍্য	U+0995 U+0964 U+09B0 U+200D U+09CD U+09AF
+o`..a	।।আ	U+0964 U+0964 U+0986
+k..o`ry	ক।।র‍্য	U+0995 U+0964 U+0964 U+09B0 U+200D U+09CD U+09AF
+o`...a	...আ	U+002E U+002E U+002E U+0986
+k...o`ry	ক...র‍্য	U+0995 U+002E U+002E U+002E U+09B0 U+200D U+09CD U+09AF
+o`.`a	.আ	U+002E U+0986
+k.`o`ry	ক.র‍্য	U+0995 U+002E U+09B0 U+200D U+09CD U+09AF
+o`:a	ঃআ	U+0983 U+0986
+k:o`ry	কঃর‍্য	U+0995 U+0983 U+09B0 U+200D U+09CD U+09AF
+o`:`a	:আ	U+003A U+0986
+k:`o`ry	ক:র‍্য	U+0995 U+003A U+09B0 U+200D U+09CD U+09AF
+o`^a	ঁআ	U+0981 U+0986
+k^o`ry	কঁর‍্য	U+0995 U+0981 U+09B0 U+200D U+09CD U+09AF
+o`^`a	^আ	U+005E U+0986
+k^`o`ry	ক^র‍্য	U+0995 U+005E U+09B0 U+200D U+09CD U+09AF
+o`,,a	্‌আ	U+09CD U+200C U+0986
+k,,o`ry	ক্‌র‍্য	U+0995 U+09CD U+200C U+09B0 U+200D U+09CD U+09AF
+o`$a	৳আ	U+09F3 U+0986
+k$o`ry	ক৳র‍্য	U+0995 U+09F3 U+09B0 U+200D U+09CD U+09AF
+k`o`ry	কর‍্য	U+0995 U+09B0 U+200D U+09CD U+09AF
+o`a`	া	U+09BE
+o`i`	ি	U+09BF
+o`I`	ী	U+09C0
+o`u`	ু	U+09C1
+o`U`	ূ	U+09C2
+o`e`	ে	U+09C7
+o`ee`	ী	U+09C0
+o`o`		
+o`O`	ো	U+09CB
+o`oo`	ু	U+09C1
+o`OI`	ৈ	U+09C8
+o`OU`	ৌ	U+09CC
+o`rri`	ৃ	U+09C3
+o`A`	া	U+09BE
+o`E`	ে	U+09C7
+o`eE`	ী	U+09C0
+o`Ee`	ী	U+09C0
+o`EE`	ী	U+09C0
+O``	ো	U+09CB
+O```	ো	U+09CB
+O``a	োআ	U+09CB U+0986
+O```a	োআ	U+09CB U+0986
+O``i	োই	U+09CB U+0987
+O```i	োই	U+09CB U+0987
+O``I	োঈ	U+09CB U+0988
+O```I	োঈ	U+09CB U+0988
+O``u	োউ	U+09CB U+0989
+O```u	োউ	U+09CB U+0989
+O``U	োঊ	U+09CB U+098A
+O```U	োঊ	U+09CB U+098A
+O``e	োএ	U+09CB U+098F
+O```e	োএ	U+09CB U+098F
+O``ee	োঈ	U+09CB U+0988
+O```ee	োঈ	U+09CB U+0988
+O``o	োঅ	U+09CB U+0985
+O```o	োঅ	U+09CB U+0985
+O``O	োও	U+09CB U+0993
+O```O	োও	U+09CB U+0993
+O``oo	োউ	U+09CB U+0989
+O```oo	োউ	U+09CB U+0989
+O``OI	োঐ	U+09CB U+0990
+O```OI	োঐ	U+09CB U+0990
+O``OU	োঔ	U+09CB U+0994
+O```OU	োঔ	U+09CB U+0994
+O``rri	োঋ	U+09CB U+098B
+O```rri	োঋ	U+09CB U+098B
+O``y	োইয়	U+09CB U+0987 U+09DF
+O```y	োইয়	U+09CB U+0987 U+09DF
+O``Z	ো্য	U+09CB U+09CD U+09AF
+O```Z	ো্য	U+09CB U+09CD U+09AF
+O``wa	োওয়া	U+09CB U+0993 U+09DF U+09BE
+O```wa	োওয়া	U+09CB U+0993 U+09DF U+09BE
+O``x	োএক্স	U+09CB U+098F U+0995 U+09CD U+09B8
+O```x	োএক্স	U+09CB U+098F U+0995 U+09CD U+09B8
+O``r	োর	U+09CB U+09B0
+O```r	োর	U+09CB U+09B0
+O``rr	োরর	U+09CB U+09B0 U+09B0
+O```rr	োরর	U+09CB U+09B0 U+09B0
+O``ry	োর‍্য	U+09CB U+09B0 U+200D U+09CD U+09AF
+O```ry	োর‍্য	U+09CB U+09B0 U+200D U+09CD U+09AF
+O``rZ	োর‍্য	U+09CB U+09B0 U+200D U+09CD U+09AF
+O```rZ	োর‍্য	U+09CB U+09B0 U+200D U+09CD U+09AF
+O``rra	োররা	U+09CB U+09B0 U+09B0 U+09BE
+O```rra	োররা	U+09CB U+09B0 U+09B0 U+09BE
+O``rriya	োঋয়া	U+09CB U+098B U+09DF U+09BE
+O```rriya	োঋয়া	U+09CB U+098B U+09DF U+09BE
+O``kr	োক্র	U+09CB U+0995 U+09CD U+09B0
+O```kr	োক্র	U+09CB U+0995 U+09CD U+09B0
+O``khry	োখ্র্য	U+09CB U+0996 U+09CD U+09B0 U+09CD U+09AF
+O```khry	োখ্র্য	U+09CB U+0996 U+09CD U+09B0 U+09CD U+09AF
+O``Shm	োষ্ম	U+09CB U+09B7 U+09CD U+09AE
+O```Shm	োষ্ম	U+09CB U+09B7 U+09CD U+09AE
+O``Ngk	োঙ্ক	U+09CB U+0999 U+09CD U+0995
+O```Ngk	োঙ্ক	U+09CB U+0999 U+09CD U+0995
+O``Gdh	োগ্ধ	U+09CB U+0997 U+09CD U+09A7
+O```Gdh	োগ্ধ	U+09CB U+0997 U+09CD U+09A7
+O``J	োজ	U+09CB U+099C
+O```J	োজ	U+09CB U+099C
+O``012	ো০১২	U+09CB U+09E6 U+09E7 U+09E8
+O```012	ো০১২	U+09CB U+09E6 U+09E7 U+09E8
+O``ক	োক	U+09CB U+0995
+O```ক	োক	U+09CB U+0995
+O``é	োé	U+09CB U+00E9
+O```é	োé	U+09CB U+00E9
+O``́	ো́	U+09CB U+0301
+O```́	ো́	U+09CB U+0301
+O``🙂	ো🙂	U+09CB U+1F642
+O```🙂	ো🙂	U+09CB U+1F642
+O`.a	ো।আ	U+09CB U+0964 U+0986
+k.O`ry	ক।োর‍্য	U+0995 U+0964 U+09CB U+09B0 U+200D U+09CD U+09AF
+O`..a	ো।।আ	U+09CB U+0964 U+0964 U+0986
+k..O`ry	ক।।োর‍্য	U+0995 U+0964 U+0964 U+09CB U+09B0 U+200D U+09CD U+09AF
+O`...a	ো...আ	U+09CB U+002E U+002E U+002E U+0986
+k...O`ry	ক...োর‍্য	U+0995 U+002E U+002E U+002E U+09CB U+09B0 U+200D U+09CD U+09AF
+O`.`a	ো.আ	U+09CB U+002E U+0986
+k.`O`ry	ক.োর‍্য	U+0995 U+002E U+09CB U+09B0 U+200D U+09CD U+09AF
+O`:a	োঃআ	U+09CB U+0983 U+0986
+k:O`ry	কঃোর‍্য	U+0995 U+0983 U+09CB U+09B0 U+200D U+09CD U+09AF
+O`:`a	ো:আ	U+09CB U+003A U+0986
+k:`O`ry	ক:োর‍্য	U+0995 U+003A U+09CB U+09B0 U+200D U+09CD U+09AF
+O`^a	োঁআ	U+09CB U+0981 U+0986
+k^O`ry	কঁোর‍্য	U+0995 U+0981 U+09CB U+09B0 U+200D U+09CD U+09AF
+O`^`a	ো^আ	U+09CB U+005E U+0986
+k^`O`ry	ক^োর‍্য	U+0995 U+005E U+09CB U+09B0 U+200D U+09CD U+09AF
+O`,,a	ো্‌আ	U+09CB U+09CD U+200C U+0986
+k,,O`ry	ক্‌োর‍্য	U+0995 U+09CD U+200C U+09CB U+09B0 U+200D U+09CD U+09AF
+O`$a	ো৳আ	U+09CB U+09F3 U+0986
+k$O`ry	ক৳োর‍্য	U+0995 U+09F3 U+09CB U+09B0 U+200D U+09CD U+09AF
+k`O`ry	কোর‍্য	U+0995 U+09CB U+09B0 U+200D U+09CD U+09AF
+O`a`	োা	U+09CB U+09BE
+O`i`	োি	U+09CB U+09BF
+O`I`	োী	U+09CB U+09C0
+O`u`	োু	U+09CB U+09C1
+O`U`	োূ	U+09CB U+09C2
+O`e`	োে	U+09CB U+09C7
+O`ee`	োী	U+09CB U+09C0
+O`o`	ো	U+09CB
+O`O`	োো	U+09CB U+09CB
+O`oo`	োু	U+09CB U+09C1
+O`OI`	োৈ	U+09CB U+09C8
+O`OU`	োৌ	U+09CB U+09CC
+O`rri`	োৃ	U+09CB U+09C3
+O`A`	োা	U+09CB U+09BE
+O`E`	োে	U+09CB U+09C7
+O`eE`	োী	U+09CB U+09C0
+O`Ee`	োী	U+09CB U+09C0
+O`EE`	োী	U+09CB U+09C0
+oo``	ু	U+09C1
+oo```	ু	U+09C1
+oo``a	ুআ	U+09C1 U+0986
+oo```a	ুআ	U+09C1 U+0986
+oo``i	ুই	U+09C1 U+0987
+oo```i	ুই	U+09C1 U+0987
+oo``I	ুঈ	U+09C1 U+0988
+oo```I	ুঈ	U+09C1 U+0988
+oo``u	ুউ	U+09C1 U+0989
+oo```u	ুউ	U+09C1 U+0989
+oo``U	ুঊ	U+09C1 U+098A
+oo```U	ুঊ	U+09C1 U+098A
+oo``e	ুএ	U+09C1 U+098F
+oo```e	ুএ	U+09C1 U+098F
+oo``ee	ুঈ	U+09C1 U+0988
+oo```ee	ুঈ	U+09C1 U+0988
+oo``o	ুঅ	U+09C1 U+0985
+oo```o	ুঅ	U+09C1 U+0985
+oo``O	ুও	U+09C1 U+0993
+oo```O	ুও	U+09C1 U+0993
+oo``oo	ুউ	U+09C1 U+0989
+oo```oo	ুউ	U+09C1 U+0989
+oo``OI	ুঐ	U+09C1 U+0990
+oo```OI	ুঐ	U+09C1 U+0990
+oo``OU	ুঔ	U+09C1 U+0994
+oo```OU	ুঔ	U+09C1 U+0994
+oo``rri	ুঋ	U+09C1 U+098B
+oo```rri	ুঋ	U+09C1 U+098B
+oo``y	ুইয়	U+09C1 U+0987 U+09DF
+oo```y	ুইয়	U+09C1 U+0987 U+09DF
+oo``Z	ু্য	U+09C1 U+09CD U+09AF
+oo```Z	ু্য	U+09C1 U+09CD U+09AF
+oo``wa	ুওয়া	U+09C1 U+0993 U+09DF U+09BE
+oo```wa	ুওয়া	U+09C1 U+0993 U+09DF U+09BE
+oo``x	ুএক্স	U+09C1 U+098F U+0995 U+09CD U+09B8
+oo```x	ুএক্স	U+09C1 U+098F U+0995 U+09CD U+09B8
+oo``r	ুর	U+09C1 U+09B0
+oo```r	ুর	U+09C1 U+09B0
+oo``rr	ুরর	U+09C1 U+09B0 U+09B0
+oo```rr	ুরর	U+09C1 U+09B0 U+09B0
+oo``ry	ুর‍্য	U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo```ry	ুর‍্য	U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo``rZ	ুর‍্য	U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo```rZ	ুর‍্য	U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo``rra	ুররা	U+09C1 U+09B0 U+09B0 U+09BE
+oo```rra	ুররা	U+09C1 U+09B0 U+09B0 U+09BE
+oo``rriya	ুঋয়া	U+09C1 U+098B U+09DF U+09BE
+oo```rriya	ুঋয়া	U+09C1 U+098B U+09DF U+09BE
+oo``kr	ুক্র	U+09C1 U+0995 U+09CD U+09B0
+oo```kr	ুক্র	U+09C1 U+0995 U+09CD U+09B0
+oo``khry	ুখ্র্য	U+09C1 U+0996 U+09CD U+09B0 U+09CD U+09AF
+oo```khry	ুখ্র্য	U+09C1 U+0996 U+09CD U+09B0 U+09CD U+09AF
+oo``Shm	ুষ্ম	U+09C1 U+09B7 U+09CD U+09AE
+oo```Shm	ুষ্ম	U+09C1 U+09B7 U+09CD U+09AE
+oo``Ngk	ুঙ্ক	U+09C1 U+0999 U+09CD U+0995
+oo```Ngk	ুঙ্ক	U+09C1 U+0999 U+09CD U+0995
+oo``Gdh	ুগ্ধ	U+09C1 U+0997 U+09CD U+09A7
+oo```Gdh	ুগ্ধ	U+09C1 U+0997 U+09CD U+09A7
+oo``J	ুজ	U+09C1 U+099C
+oo```J	ুজ	U+09C1 U+099C
+oo``012	ু০১২	U+09C1 U+09E6 U+09E7 U+09E8
+oo```012	ু০১২	U+09C1 U+09E6 U+09E7 U+09E8
+oo``ক	ুক	U+09C1 U+0995
+oo```ক	ুক	U+09C1 U+0995
+oo``é	ুé	U+09C1 U+00E9
+oo```é	ুé	U+09C1 U+00E9
+oo``́	ু́	U+09C1 U+0301
+oo```́	ু́	U+09C1 U+0301
+oo``🙂	ু🙂	U+09C1 U+1F642
+oo```🙂	ু🙂	U+09C1 U+1F642
+oo`.a	ু।আ	U+09C1 U+0964 U+0986
+k.oo`ry	ক।ুর‍্য	U+0995 U+0964 U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo`..a	ু।।আ	U+09C1 U+0964 U+0964 U+0986
+k..oo`ry	ক।।ুর‍্য	U+0995 U+0964 U+0964 U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo`...a	ু...আ	U+09C1 U+002E U+002E U+002E U+0986
+k...oo`ry	ক...ুর‍্য	U+0995 U+002E U+002E U+002E U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo`.`a	ু.আ	U+09C1 U+002E U+0986
+k.`oo`ry	ক.ুর‍্য	U+0995 U+002E U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo`:a	ুঃআ	U+09C1 U+0983 U+0986
+k:oo`ry	কঃুর‍্য	U+0995 U+0983 U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo`:`a	ু:আ	U+09C1 U+003A U+0986
+k:`oo`ry	ক:ুর‍্য	U+0995 U+003A U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo`^a	ুঁআ	U+09C1 U+0981 U+0986
+k^oo`ry	কঁুর‍্য	U+0995 U+0981 U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo`^`a	ু^আ	U+09C1 U+005E U+0986
+k^`oo`ry	ক^ুর‍্য	U+0995 U+005E U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo`,,a	ু্‌আ	U+09C1 U+09CD U+200C U+0986
+k,,oo`ry	ক্‌ুর‍্য	U+0995 U+09CD U+200C U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo`$a	ু৳আ	U+09C1 U+09F3 U+0986
+k$oo`ry	ক৳ুর‍্য	U+0995 U+09F3 U+09C1 U+09B0 U+200D U+09CD U+09AF
+k`oo`ry	কুর‍্য	U+0995 U+09C1 U+09B0 U+200D U+09CD U+09AF
+oo`a`	ুা	U+09C1 U+09BE
+oo`i`	ুি	U+09C1 U+09BF
+oo`I`	ুী	U+09C1 U+09C0
+oo`u`	ুু	U+09C1 U+09C1
+oo`U`	ুূ	U+09C1 U+09C2
+oo`e`	ুে	U+09C1 U+09C7
+oo`ee`	ুী	U+09C1 U+09C0
+oo`o`	ু	U+09C1
+oo`O`	ুো	U+09C1 U+09CB
+oo`oo`	ুু	U+09C1 U+09C1
+oo`OI`	ুৈ	U+09C1 U+09C8
+oo`OU`	ুৌ	U+09C1 U+09CC
+oo`rri`	ুৃ	U+09C1 U+09C3
+oo`A`	ুা	U+09C1 U+09BE
+oo`E`	ুে	U+09C1 U+09C7
+oo`eE`	ুী	U+09C1 U+09C0
+oo`Ee`	ুী	U+09C1 U+09C0
+oo`EE`	ুী	U+09C1 U+09C0
+OI``	ৈ	U+09C8
+OI```	ৈ	U+09C8
+OI``a	ৈআ	U+09C8 U+0986
+OI```a	ৈআ	U+09C8 U+0986
+OI``i	ৈই	U+09C8 U+0987
+OI```i	ৈই	U+09C8 U+0987
+OI``I	ৈঈ	U+09C8 U+0988
+OI```I	ৈঈ	U+09C8 U+0988
+OI``u	ৈউ	U+09C8 U+0989
+OI```u	ৈউ	U+09C8 U+0989
+OI``U	ৈঊ	U+09C8 U+098A
+OI```U	ৈঊ	U+09C8 U+098A
+OI``e	ৈএ	U+09C8 U+098F
+OI```e	ৈএ	U+09C8 U+098F
+OI``ee	ৈঈ	U+09C8 U+0988
+OI```ee	ৈঈ	U+09C8 U+0988
+OI``o	ৈঅ	U+09C8 U+0985
+OI```o	ৈঅ	U+09C8 U+0985
+OI``O	ৈও	U+09C8 U+0993
+OI```O	ৈও	U+09C8 U+0993
+OI``oo	ৈউ	U+09C8 U+0989
+OI```oo	ৈউ	U+09C8 U+0989
+OI``OI	ৈঐ	U+09C8 U+0990
+OI```OI	ৈঐ	U+09C8 U+0990
+OI``OU	ৈঔ	U+09C8 U+0994
+OI```OU	ৈঔ	U+09C8 U+0994
+OI``rri	ৈঋ	U+09C8 U+098B
+OI```rri	ৈঋ	U+09C8 U+098B
+OI``y	ৈইয়	U+09C8 U+0987 U+09DF
+OI```y	ৈইয়	U+09C8 U+0987 U+09DF
+OI``Z	ৈ্য	U+09C8 U+09CD U+09AF
+OI```Z	ৈ্য	U+09C8 U+09CD U+09AF
+OI``wa	ৈওয়া	U+09C8 U+0993 U+09DF U+09BE
+OI```wa	ৈওয়া	U+09C8 U+0993 U+09DF U+09BE
+OI``x	ৈএক্স	U+09C8 U+098F U+0995 U+09CD U+09B8
+OI```x	ৈএক্স	U+09C8 U+098F U+0995 U+09CD U+09B8
+OI``r	ৈর	U+09C8 U+09B0
+OI```r	ৈর	U+09C8 U+09B0
+OI``rr	ৈরর	U+09C8 U+09B0 U+09B0
+OI```rr	ৈরর	U+09C8 U+09B0 U+09B0
+OI``ry	ৈর‍্য	U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI```ry	ৈর‍্য	U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI``rZ	ৈর‍্য	U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI```rZ	ৈর‍্য	U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI``rra	ৈররা	U+09C8 U+09B0 U+09B0 U+09BE
+OI```rra	ৈররা	U+09C8 U+09B0 U+09B0 U+09BE
+OI``rriya	ৈঋয়া	U+09C8 U+098B U+09DF U+09BE
+OI```rriya	ৈঋয়া	U+09C8 U+098B U+09DF U+09BE
+OI``kr	ৈক্র	U+09C8 U+0995 U+09CD U+09B0
+OI```kr	ৈক্র	U+09C8 U+0995 U+09CD U+09B0
+OI``khry	ৈখ্র্য	U+09C8 U+0996 U+09CD U+09B0 U+09CD U+09AF
+OI```khry	ৈখ্র্য	U+09C8 U+0996 U+09CD U+09B0 U+09CD U+09AF
+OI``Shm	ৈষ্ম	U+09C8 U+09B7 U+09CD U+09AE
+OI```Shm	ৈষ্ম	U+09C8 U+09B7 U+09CD U+09AE
+OI``Ngk	ৈঙ্ক	U+09C8 U+0999 U+09CD U+0995
+OI```Ngk	ৈঙ্ক	U+09C8 U+0999 U+09CD U+0995
+OI``Gdh	ৈগ্ধ	U+09C8 U+0997 U+09CD U+09A7
+OI```Gdh	ৈগ্ধ	U+09C8 U+0997 U+09CD U+09A7
+OI``J	ৈজ	U+09C8 U+099C
+OI```J	ৈজ	U+09C8 U+099C
+OI``012	ৈ০১২	U+09C8 U+09E6 U+09E7 U+09E8
+OI```012	ৈ০১২	U+09C8 U+09E6 U+09E7 U+09E8
+OI``ক	ৈক	U+09C8 U+0995
+OI```ক	ৈক	U+09C8 U+0995
+OI``é	ৈé	U+09C8 U+00E9
+OI```é	ৈé	U+09C8 U+00E9
+OI``́	ৈ́	U+09C8 U+0301
+OI```́	ৈ́	U+09C8 U+0301
+OI``🙂	ৈ🙂	U+09C8 U+1F642
+OI```🙂	ৈ🙂	U+09C8 U+1F642
+OI`.a	ৈ।আ	U+09C8 U+0964 U+0986
+k.OI`ry	ক।ৈর‍্য	U+0995 U+0964 U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI`..a	ৈ।।আ	U+09C8 U+0964 U+0964 U+0986
+k..OI`ry	ক।।ৈর‍্য	U+0995 U+0964 U+0964 U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI`...a	ৈ...আ	U+09C8 U+002E U+002E U+002E U+0986
+k...OI`ry	ক...ৈর‍্য	U+0995 U+002E U+002E U+002E U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI`.`a	ৈ.আ	U+09C8 U+002E U+0986
+k.`OI`ry	ক.ৈর‍্য	U+0995 U+002E U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI`:a	ৈঃআ	U+09C8 U+0983 U+0986
+k:OI`ry	কঃৈর‍্য	U+0995 U+0983 U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI`:`a	ৈ:আ	U+09C8 U+003A U+0986
+k:`OI`ry	ক:ৈর‍্য	U+0995 U+003A U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI`^a	ৈঁআ	U+09C8 U+0981 U+0986
+k^OI`ry	কঁৈর‍্য	U+0995 U+0981 U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI`^`a	ৈ^আ	U+09C8 U+005E U+0986
+k^`OI`ry	ক^ৈর‍্য	U+0995 U+005E U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI`,,a	ৈ্‌আ	U+09C8 U+09CD U+200C U+0986
+k,,OI`ry	ক্‌ৈর‍্য	U+0995 U+09CD U+200C U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI`$a	ৈ৳আ	U+09C8 U+09F3 U+0986
+k$OI`ry	ক৳ৈর‍্য	U+0995 U+09F3 U+09C8 U+09B0 U+200D U+09CD U+09AF
+k`OI`ry	কৈর‍্য	U+0995 U+09C8 U+09B0 U+200D U+09CD U+09AF
+OI`a`	ৈা	U+09C8 U+09BE
+OI`i`	ৈি	U+09C8 U+09BF
+OI`I`	ৈী	U+09C8 U+09C0
+OI`u`	ৈু	U+09C8 U+09C1
+OI`U`	ৈূ	U+09C8 U+09C2
+OI`e`	ৈে	U+09C8 U+09C7
+OI`ee`	ৈী	U+09C8 U+09C0
+OI`o`	ৈ	U+09C8
+OI`O`	ৈো	U+09C8 U+09CB
+OI`oo`	ৈু	U+09C8 U+09C1
+OI`OI`	ৈৈ	U+09C8 U+09C8
+OI`OU`	ৈৌ	U+09C8 U+09CC
+OI`rri`	ৈৃ	U+09C8 U+09C3
+OI`A`	ৈা	U+09C8 U+09BE
+OI`E`	ৈে	U+09C8 U+09C7
+OI`eE`	ৈী	U+09C8 U+09C0
+OI`Ee`	ৈী	U+09C8 U+09C0
+OI`EE`	ৈী	U+09C8 U+09C0
+OU``	ৌ	U+09CC
+OU```	ৌ	U+09CC
+OU``a	ৌআ	U+09CC U+0986
+OU```a	ৌআ	U+09CC U+0986
+OU``i	ৌই	U+09CC U+0987
+OU```i	ৌই	U+09CC U+0987
+OU``I	ৌঈ	U+09CC U+0988
+OU```I	ৌঈ	U+09CC U+0988
+OU``u	ৌউ	U+09CC U+0989
+OU```u	ৌউ	U+09CC U+0989
+OU``U	ৌঊ	U+09CC U+098A
+OU```U	ৌঊ	U+09CC U+098A
+OU``e	ৌএ	U+09CC U+098F
+OU```e	ৌএ	U+09CC U+098F
+OU``ee	ৌঈ	U+09CC U+0988
+OU```ee	ৌঈ	U+09CC U+0988
+OU``o	ৌঅ	U+09CC U+0985
+OU```o	ৌঅ	U+09CC U+0985
+OU``O	ৌও	U+09CC U+0993
+OU```O	ৌও	U+09CC U+0993
+OU``oo	ৌউ	U+09CC U+0989
+OU```oo	ৌউ	U+09CC U+0989
+OU``OI	ৌঐ	U+09CC U+0990
+OU```OI	ৌঐ	U+09CC U+0990
+OU``OU	ৌঔ	U+09CC U+0994
+OU```OU	ৌঔ	U+09CC U+0994
+OU``rri	ৌঋ	U+09CC U+098B
+OU```rri	ৌঋ	U+09CC U+098B
+OU``y	ৌইয়	U+09CC U+0987 U+09DF
+OU```y	ৌইয়	U+09CC U+0987 U+09DF
+OU``Z	ৌ্য	U+09CC U+09CD U+09AF
+OU```Z	ৌ্য	U+09CC U+09CD U+09AF
+OU``wa	ৌওয়া	U+09CC U+0993 U+09DF U+09BE
+OU```wa	ৌওয়া	U+09CC U+0993 U+09DF U+09BE
+OU``x	ৌএক্স	U+09CC U+098F U+0995 U+09CD U+09B8
+OU```x	ৌএক্স	U+09CC U+098F U+0995 U+09CD U+09B8
+OU``r	ৌর	U+09CC U+09B0
+OU```r	ৌর	U+09CC U+09B0
+OU``rr	ৌরর	U+09CC U+09B0 U+09B0
+OU```rr	ৌরর	U+09CC U+09B0 U+09B0
+OU``ry	ৌর‍্য	U+09CC U+09B0 U+200D U+09CD U+09AF
+OU```ry	ৌর‍্য	U+09CC U+09B0 U+200D U+09CD U+09AF
+OU``rZ	ৌর‍্য	U+09CC U+09B0 U+200D U+09CD U+09AF
+OU```rZ	ৌর‍্য	U+09CC U+09B0 U+200D U+09CD U+09AF
+OU``rra	ৌররা	U+09CC U+09B0 U+09B0 U+09BE
+OU```rra	ৌররা	U+09CC U+09B0 U+09B0 U+09BE
+OU``rriya	ৌঋয়া	U+09CC U+098B U+09DF U+09BE
+OU```rriya	ৌঋয়া	U+09CC U+098B U+09DF U+09BE
+OU``kr	ৌক্র	U+09CC U+0995 U+09CD U+09B0
+OU```kr	ৌক্র	U+09CC U+0995 U+09CD U+09B0
+OU``khry	ৌখ্র্য	U+09CC U+0996 U+09CD U+09B0 U+09CD U+09AF
+OU```khry	ৌখ্র্য	U+09CC U+0996 U+09CD U+09B0 U+09CD U+09AF
+OU``Shm	ৌষ্ম	U+09CC U+09B7 U+09CD U+09AE
+OU```Shm	ৌষ্ম	U+09CC U+09B7 U+09CD U+09AE
+OU``Ngk	ৌঙ্ক	U+09CC U+0999 U+09CD U+0995
+OU```Ngk	ৌঙ্ক	U+09CC U+0999 U+09CD U+0995
+OU``Gdh	ৌগ্ধ	U+09CC U+0997 U+09CD U+09A7
+OU```Gdh	ৌগ্ধ	U+09CC U+0997 U+09CD U+09A7
+OU``J	ৌজ	U+09CC U+099C
+OU```J	ৌজ	U+09CC U+099C
+OU``012	ৌ০১২	U+09CC U+09E6 U+09E7 U+09E8
+OU```012	ৌ০১২	U+09CC U+09E6 U+09E7 U+09E8
+OU``ক	ৌক	U+09CC U+0995
+OU```ক	ৌক	U+09CC U+0995
+OU``é	ৌé	U+09CC U+00E9
+OU```é	ৌé	U+09CC U+00E9
+OU``́	ৌ́	U+09CC U+0301
+OU```́	ৌ́	U+09CC U+0301
+OU``🙂	ৌ🙂	U+09CC U+1F642
+OU```🙂	ৌ🙂	U+09CC U+1F642
+OU`.a	ৌ।আ	U+09CC U+0964 U+0986
+k.OU`ry	ক।ৌর‍্য	U+0995 U+0964 U+09CC U+09B0 U+200D U+09CD U+09AF
+OU`..a	ৌ।।আ	U+09CC U+0964 U+0964 U+0986
+k..OU`ry	ক।।ৌর‍্য	U+0995 U+0964 U+0964 U+09CC U+09B0 U+200D U+09CD U+09AF
+OU`...a	ৌ...আ	U+09CC U+002E U+002E U+002E U+0986
+k...OU`ry	ক...ৌর‍্য	U+0995 U+002E U+002E U+002E U+09CC U+09B0 U+200D U+09CD U+09AF
+OU`.`a	ৌ.আ	U+09CC U+002E U+0986
+k.`OU`ry	ক.ৌর‍্য	U+0995 U+002E U+09CC U+09B0 U+200D U+09CD U+09AF
+OU`:a	ৌঃআ	U+09CC U+0983 U+0986
+k:OU`ry	কঃৌর‍্য	U+0995 U+0983 U+09CC U+09B0 U+200D U+09CD U+09AF
+OU`:`a	ৌ:আ	U+09CC U+003A U+0986
+k:`OU`ry	ক:ৌর‍্য	U+0995 U+003A U+09CC U+09B0 U+200D U+09CD U+09AF
+OU`^a	ৌঁআ	U+09CC U+0981 U+0986
+k^OU`ry	কঁৌর‍্য	U+0995 U+0981 U+09CC U+09B0 U+200D U+09CD U+09AF
+OU`^`a	ৌ^আ	U+09CC U+005E U+0986
+k^`OU`ry	ক^ৌর‍্য	U+0995 U+005E U+09CC U+09B0 U+200D U+09CD U+09AF
+OU`,,a	ৌ্‌আ	U+09CC U+09CD U+200C U+0986
+k,,OU`ry	ক্‌ৌর‍্য	U+0995 U+09CD U+200C U+09CC U+09B0 U+200D U+09CD U+09AF
+OU`$a	ৌ৳আ	U+09CC U+09F3 U+0986
+k$OU`ry	ক৳ৌর‍্য	U+0995 U+09F3 U+09CC U+09B0 U+200D U+09CD U+09AF
+k`OU`ry	কৌর‍্য	U+0995 U+09CC U+09B0 U+200D U+09CD U+09AF
+OU`a`	ৌা	U+09CC U+09BE
+OU`i`	ৌি	U+09CC U+09BF
+OU`I`	ৌী	U+09CC U+09C0
+OU`u`	ৌু	U+09CC U+09C1
+OU`U`	ৌূ	U+09CC U+09C2
+OU`e`	ৌে	U+09CC U+09C7
+OU`ee`	ৌী	U+09CC U+09C0
+OU`o`	ৌ	U+09CC
+OU`O`	ৌো	U+09CC U+09CB
+OU`oo`	ৌু	U+09CC U+09C1
+OU`OI`	ৌৈ	U+09CC U+09C8
+OU`OU`	ৌৌ	U+09CC U+09CC
+OU`rri`	ৌৃ	U+09CC U+09C3
+OU`A`	ৌা	U+09CC U+09BE
+OU`E`	ৌে	U+09CC U+09C7
+OU`eE`	ৌী	U+09CC U+09C0
+OU`Ee`	ৌী	U+09CC U+09C0
+OU`EE`	ৌী	U+09CC U+09C0
+rri``	ৃ	U+09C3
+rri```	ৃ	U+09C3
+rri``a	ৃআ	U+09C3 U+0986
+rri```a	ৃআ	U+09C3 U+0986
+rri``i	ৃই	U+09C3 U+0987
+rri```i	ৃই	U+09C3 U+0987
+rri``I	ৃঈ	U+09C3 U+0988
+rri```I	ৃঈ	U+09C3 U+0988
+rri``u	ৃউ	U+09C3 U+0989
+rri```u	ৃউ	U+09C3 U+0989
+rri``U	ৃঊ	U+09C3 U+098A
+rri```U	ৃঊ	U+09C3 U+098A
+rri``e	ৃএ	U+09C3 U+098F
+rri```e	ৃএ	U+09C3 U+098F
+rri``ee	ৃঈ	U+09C3 U+0988
+rri```ee	ৃঈ	U+09C3 U+0988
+rri``o	ৃঅ	U+09C3 U+0985
+rri```o	ৃঅ	U+09C3 U+0985
+rri``O	ৃও	U+09C3 U+0993
+rri```O	ৃও	U+09C3 U+0993
+rri``oo	ৃউ	U+09C3 U+0989
+rri```oo	ৃউ	U+09C3 U+0989
+rri``OI	ৃঐ	U+09C3 U+0990
+rri```OI	ৃঐ	U+09C3 U+0990
+rri``OU	ৃঔ	U+09C3 U+0994
+rri```OU	ৃঔ	U+09C3 U+0994
+rri``rri	ৃঋ	U+09C3 U+098B
+rri```rri	ৃঋ	U+09C3 U+098B
+rri``y	ৃইয়	U+09C3 U+0987 U+09DF
+rri```y	ৃইয়	U+09C3 U+0987 U+09DF
+rri``Z	ৃ্য	U+09C3 U+09CD U+09AF
+rri```Z	ৃ্য	U+09C3 U+09CD U+09AF
+rri``wa	ৃওয়া	U+09C3 U+0993 U+09DF U+09BE
+rri```wa	ৃওয়া	U+09C3 U+0993 U+09DF U+09BE
+rri``x	ৃএক্স	U+09C3 U+098F U+0995 U+09CD U+09B8
+rri```x	ৃএক্স	U+09C3 U+098F U+0995 U+09CD U+09B8
+rri``r	ৃর	U+09C3 U+09B0
+rri```r	ৃর	U+09C3 U+09B0
+rri``rr	ৃরর	U+09C3 U+09B0 U+09B0
+rri```rr	ৃরর	U+09C3 U+09B0 U+09B0
+rri``ry	ৃর‍্য	U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri```ry	ৃর‍্য	U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri``rZ	ৃর‍্য	U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri```rZ	ৃর‍্য	U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri``rra	ৃররা	U+09C3 U+09B0 U+09B0 U+09BE
+rri```rra	ৃররা	U+09C3 U+09B0 U+09B0 U+09BE
+rri``rriya	ৃঋয়া	U+09C3 U+098B U+09DF U+09BE
+rri```rriya	ৃঋয়া	U+09C3 U+098B U+09DF U+09BE
+rri``kr	ৃক্র	U+09C3 U+0995 U+09CD U+09B0
+rri```kr	ৃক্র	U+09C3 U+0995 U+09CD U+09B0
+rri``khry	ৃখ্র্য	U+09C3 U+0996 U+09CD U+09B0 U+09CD U+09AF
+rri```khry	ৃখ্র্য	U+09C3 U+0996 U+09CD U+09B0 U+09CD U+09AF
+rri``Shm	ৃষ্ম	U+09C3 U+09B7 U+09CD U+09AE
+rri```Shm	ৃষ্ম	U+09C3 U+09B7 U+09CD U+09AE
+rri``Ngk	ৃঙ্ক	U+09C3 U+0999 U+09CD U+0995
+rri```Ngk	ৃঙ্ক	U+09C3 U+0999 U+09CD U+0995
+rri``Gdh	ৃগ্ধ	U+09C3 U+0997 U+09CD U+09A7
+rri```Gdh	ৃগ্ধ	U+09C3 U+0997 U+09CD U+09A7
+rri``J	ৃজ	U+09C3 U+099C
+rri```J	ৃজ	U+09C3 U+099C
+rri``012	ৃ০১২	U+09C3 U+09E6 U+09E7 U+09E8
+rri```012	ৃ০১২	U+09C3 U+09E6 U+09E7 U+09E8
+rri``ক	ৃক	U+09C3 U+0995
+rri```ক	ৃক	U+09C3 U+0995
+rri``é	ৃé	U+09C3 U+00E9
+rri```é	ৃé	U+09C3 U+00E9
+rri``́	ৃ́	U+09C3 U+0301
+rri```́	ৃ́	U+09C3 U+0301
+rri``🙂	ৃ🙂	U+09C3 U+1F642
+rri```🙂	ৃ🙂	U+09C3 U+1F642
+rri`.a	ৃ।আ	U+09C3 U+0964 U+0986
+k.rri`ry	ক।ৃর‍্য	U+0995 U+0964 U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri`..a	ৃ।।আ	U+09C3 U+0964 U+0964 U+0986
+k..rri`ry	ক।।ৃর‍্য	U+0995 U+0964 U+0964 U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri`...a	ৃ...আ	U+09C3 U+002E U+002E U+002E U+0986
+k...rri`ry	ক...ৃর‍্য	U+0995 U+002E U+002E U+002E U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri`.`a	ৃ.আ	U+09C3 U+002E U+0986
+k.`rri`ry	ক.ৃর‍্য	U+0995 U+002E U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri`:a	ৃঃআ	U+09C3 U+0983 U+0986
+k:rri`ry	কঃৃর‍্য	U+0995 U+0983 U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri`:`a	ৃ:আ	U+09C3 U+003A U+0986
+k:`rri`ry	ক:ৃর‍্য	U+0995 U+003A U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri`^a	ৃঁআ	U+09C3 U+0981 U+0986
+k^rri`ry	কঁৃর‍্য	U+0995 U+0981 U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri`^`a	ৃ^আ	U+09C3 U+005E U+0986
+k^`rri`ry	ক^ৃর‍্য	U+0995 U+005E U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri`,,a	ৃ্‌আ	U+09C3 U+09CD U+200C U+0986
+k,,rri`ry	ক্‌ৃর‍্য	U+0995 U+09CD U+200C U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri`$a	ৃ৳আ	U+09C3 U+09F3 U+0986
+k$rri`ry	ক৳ৃর‍্য	U+0995 U+09F3 U+09C3 U+09B0 U+200D U+09CD U+09AF
+k`rri`ry	কৃর‍্য	U+0995 U+09C3 U+09B0 U+200D U+09CD U+09AF
+rri`a`	ৃা	U+09C3 U+09BE
+rri`i`	ৃি	U+09C3 U+09BF
+rri`I`	ৃী	U+09C3 U+09C0
+rri`u`	ৃু	U+09C3 U+09C1
+rri`U`	ৃূ	U+09C3 U+09C2
+rri`e`	ৃে	U+09C3 U+09C7
+rri`ee`	ৃী	U+09C3 U+09C0
+rri`o`	ৃ	U+09C3
+rri`O`	ৃো	U+09C3 U+09CB
+rri`oo`	ৃু	U+09C3 U+09C1
+rri`OI`	ৃৈ	U+09C3 U+09C8
+rri`OU`	ৃৌ	U+09C3 U+09CC
+rri`rri`	ৃৃ	U+09C3 U+09C3
+rri`A`	ৃা	U+09C3 U+09BE
+rri`E`	ৃে	U+09C3 U+09C7
+rri`eE`	ৃী	U+09C3 U+09C0
+rri`Ee`	ৃী	U+09C3 U+09C0
+rri`EE`	ৃী	U+09C3 U+09C0
+A``	া	U+09BE
+A```	া	U+09BE
+A``a	াআ	U+09BE U+0986
+A```a	াআ	U+09BE U+0986
+A``i	াই	U+09BE U+0987
+A```i	াই	U+09BE U+0987
+A``I	াঈ	U+09BE U+0988
+A```I	াঈ	U+09BE U+0988
+A``u	াউ	U+09BE U+0989
+A```u	াউ	U+09BE U+0989
+A``U	াঊ	U+09BE U+098A
+A```U	াঊ	U+09BE U+098A
+A``e	াএ	U+09BE U+098F
+A```e	াএ	U+09BE U+098F
+A``ee	াঈ	U+09BE U+0988
+A```ee	াঈ	U+09BE U+0988
+A``o	াঅ	U+09BE U+0985
+A```o	াঅ	U+09BE U+0985
+A``O	াও	U+09BE U+0993
+A```O	াও	U+09BE U+0993
+A``oo	াউ	U+09BE U+0989
+A```oo	াউ	U+09BE U+0989
+A``OI	াঐ	U+09BE U+0990
+A```OI	াঐ	U+09BE U+0990
+A``OU	াঔ	U+09BE U+0994
+A```OU	াঔ	U+09BE U+0994
+A``rri	াঋ	U+09BE U+098B
+A```rri	াঋ	U+09BE U+098B
+A``y	াইয়	U+09BE U+0987 U+09DF
+A```y	াইয়	U+09BE U+0987 U+09DF
+A``Z	া্য	U+09BE U+09CD U+09AF
+A```Z	া্য	U+09BE U+09CD U+09AF
+A``wa	াওয়া	U+09BE U+0993 U+09DF U+09BE
+A```wa	াওয়া	U+09BE U+0993 U+09DF U+09BE
+A``x	াএক্স	U+09BE U+098F U+0995 U+09CD U+09B8
+A```x	াএক্স	U+09BE U+098F U+0995 U+09CD U+09B8
+A``r	ার	U+09BE U+09B0
+A```r	ার	U+09BE U+09B0
+A``rr	ারর	U+09BE U+09B0 U+09B0
+A```rr	ারর	U+09BE U+09B0 U+09B0
+A``ry	ার‍্য	U+09BE U+09B0 U+200D U+09CD U+09AF
+A```ry	ার‍্য	U+09BE U+09B0 U+200D U+09CD U+09AF
+A``rZ	ার‍্য	U+09BE U+09B0 U+200D U+09CD U+09AF
+A```rZ	ার‍্য	U+09BE U+09B0 U+200D U+09CD U+09AF
+A``rra	াররা	U+09BE U+09B0 U+09B0 U+09BE
+A```rra	াররা	U+09BE U+09B0 U+09B0 U+09BE
+A``rriya	াঋয়া	U+09BE U+098B U+09DF U+09BE
+A```rriya	াঋয়া	U+09BE U+098B U+09DF U+09BE
+A``kr	াক্র	U+09BE U+0995 U+09CD U+09B0
+A```kr	াক্র	U+09BE U+0995 U+09CD U+09B0
+A``khry	াখ্র্য	U+09BE U+0996 U+09CD U+09B0 U+09CD U+09AF
+A```khry	াখ্র্য	U+09BE U+0996 U+09CD U+09B0 U+09CD U+09AF
+A``Shm	াষ্ম	U+09BE U+09B7 U+09CD U+09AE
+A```Shm	াষ্ম	U+09BE U+09B7 U+09CD U+09AE
+A``Ngk	াঙ্ক	U+09BE U+0999 U+09CD U+0995
+A```Ngk	াঙ্ক	U+09BE U+0999 U+09CD U+0995
+A``Gdh	াগ্ধ	U+09BE U+0997 U+09CD U+09A7
+A```Gdh	াগ্ধ	U+09BE U+0997 U+09CD U+09A7
+A``J	াজ	U+09BE U+099C
+A```J	াজ	U+09BE U+099C
+A``012	া০১২	U+09BE U+09E6 U+09E7 U+09E8
+A```012	া০১২	U+09BE U+09E6 U+09E7 U+09E8
+A``ক	াক	U+09BE U+0995
+A```ক	াক	U+09BE U+0995
+A``é	াé	U+09BE U+00E9
+A```é	াé	U+09BE U+00E9
+A``́	া́	U+09BE U+0301
+A```́	া́	U+09BE U+0301
+A``🙂	া🙂	U+09BE U+1F642
+A```🙂	া🙂	U+09BE U+1F642
+A`.a	া।আ	U+09BE U+0964 U+0986
+k.A`ry	ক।ার‍্য	U+0995 U+0964 U+09BE U+09B0 U+200D U+09CD U+09AF
+A`..a	া।।আ	U+09BE U+0964 U+0964 U+0986
+k..A`ry	ক।।ার‍্য	U+0995 U+0964 U+0964 U+09BE U+09B0 U+200D U+09CD U+09AF
+A`...a	া...আ	U+09BE U+002E U+002E U+002E U+0986
+k...A`ry	ক...ার‍্য	U+0995 U+002E U+002E U+002E U+09BE U+09B0 U+200D U+09CD U+09AF
+A`.`a	া.আ	U+09BE U+002E U+0986
+k.`A`ry	ক.ার‍্য	U+0995 U+002E U+09BE U+09B0 U+200D U+09CD U+09AF
+A`:a	াঃআ	U+09BE U+0983 U+0986
+k:A`ry	কঃার‍্য	U+0995 U+0983 U+09BE U+09B0 U+200D U+09CD U+09AF
+A`:`a	া:আ	U+09BE U+003A U+0986
+k:`A`ry	ক:ার‍্য	U+0995 U+003A U+09BE U+09B0 U+200D U+09CD U+09AF
+A`^a	াঁআ	U+09BE U+0981 U+0986
+k^A`ry	কঁার‍্য	U+0995 U+0981 U+09BE U+09B0 U+200D U+09CD U+09AF
+A`^`a	া^আ	U+09BE U+005E U+0986
+k^`A`ry	ক^ার‍্য	U+0995 U+005E U+09BE U+09B0 U+200D U+09CD U+09AF
+A`,,a	া্‌আ	U+09BE U+09CD U+200C U+0986
+k,,A`ry	ক্‌ার‍্য	U+0995 U+09CD U+200C U+09BE U+09B0 U+200D U+09CD U+09AF
+A`$a	া৳আ	U+09BE U+09F3 U+0986
+k$A`ry	ক৳ার‍্য	U+0995 U+09F3 U+09BE U+09B0 U+200D U+09CD U+09AF
+k`A`ry	কার‍্য	U+0995 U+09BE U+09B0 U+200D U+09CD U+09AF
+A`a`	াা	U+09BE U+09BE
+A`i`	াি	U+09BE U+09BF
+A`I`	াী	U+09BE U+09C0
+A`u`	াু	U+09BE U+09C1
+A`U`	াূ	U+09BE U+09C2
+A`e`	াে	U+09BE U+09C7
+A`ee`	াী	U+09BE U+09C0
+A`o`	া	U+09BE
+A`O`	াো	U+09BE U+09CB
+A`oo`	াু	U+09BE U+09C1
+A`OI`	াৈ	U+09BE U+09C8
+A`OU`	াৌ	U+09BE U+09CC
+A`rri`	াৃ	U+09BE U+09C3
+A`A`	াা	U+09BE U+09BE
+A`E`	াে	U+09BE U+09C7
+A`eE`	াী	U+09BE U+09C0
+A`Ee`	াী	U+09BE U+09C0
+A`EE`	াী	U+09BE U+09C0
+E``	ে	U+09C7
+E```	ে	U+09C7
+E``a	েআ	U+09C7 U+0986
+E```a	েআ	U+09C7 U+0986
+E``i	েই	U+09C7 U+0987
+E```i	েই	U+09C7 U+0987
+E``I	েঈ	U+09C7 U+0988
+E```I	েঈ	U+09C7 U+0988
+E``u	েউ	U+09C7 U+0989
+E```u	েউ	U+09C7 U+0989
+E``U	েঊ	U+09C7 U+098A
+E```U	েঊ	U+09C7 U+098A
+E``e	েএ	U+09C7 U+098F
+E```e	েএ	U+09C7 U+098F
+E``ee	েঈ	U+09C7 U+0988
+E```ee	েঈ	U+09C7 U+0988
+E``o	েঅ	U+09C7 U+0985
+E```o	েঅ	U+09C7 U+0985
+E``O	েও	U+09C7 U+0993
+E```O	েও	U+09C7 U+0993
+E``oo	েউ	U+09C7 U+0989
+E```oo	েউ	U+09C7 U+0989
+E``OI	েঐ	U+09C7 U+0990
+E```OI	েঐ	U+09C7 U+0990
+E``OU	েঔ	U+09C7 U+0994
+E```OU	েঔ	U+09C7 U+0994
+E``rri	েঋ	U+09C7 U+098B
+E```rri	েঋ	U+09C7 U+098B
+E``y	েইয়	U+09C7 U+0987 U+09DF
+E```y	েইয়	U+09C7 U+0987 U+09DF
+E``Z	ে্য	U+09C7 U+09CD U+09AF
+E```Z	ে্য	U+09C7 U+09CD U+09AF
+E``wa	েওয়া	U+09C7 U+0993 U+09DF U+09BE
+E```wa	েওয়া	U+09C7 U+0993 U+09DF U+09BE
+E``x	েএক্স	U+09C7 U+098F U+0995 U+09CD U+09B8
+E```x	েএক্স	U+09C7 U+098F U+0995 U+09CD U+09B8
+E``r	ের	U+09C7 U+09B0
+E```r	ের	U+09C7 U+09B0
+E``rr	েরর	U+09C7 U+09B0 U+09B0
+E```rr	েরর	U+09C7 U+09B0 U+09B0
+E``ry	ের‍্য	U+09C7 U+09B0 U+200D U+09CD U+09AF
+E```ry	ের‍্য	U+09C7 U+09B0 U+200D U+09CD U+09AF
+E``rZ	ের‍্য	U+09C7 U+09B0 U+200D U+09CD U+09AF
+E```rZ	ের‍্য	U+09C7 U+09B0 U+200D U+09CD U+09AF
+E``rra	েররা	U+09C7 U+09B0 U+09B0 U+09BE
+E```rra	েররা	U+09C7 U+09B0 U+09B0 U+09BE
+E``rriya	েঋয়া	U+09C7 U+098B U+09DF U+09BE
+E```rriya	েঋয়া	U+09C7 U+098B U+09DF U+09BE
+E``kr	েক্র	U+09C7 U+0995 U+09CD U+09B0
+E```kr	েক্র	U+09C7 U+0995 U+09CD U+09B0
+E``khry	েখ্র্য	U+09C7 U+0996 U+09CD U+09B0 U+09CD U+09AF
+E```khry	েখ্র্য	U+09C7 U+0996 U+09CD U+09B0 U+09CD U+09AF
+E``Shm	েষ্ম	U+09C7 U+09B7 U+09CD U+09AE
+E```Shm	েষ্ম	U+09C7 U+09B7 U+09CD U+09AE
+E``Ngk	েঙ্ক	U+09C7 U+0999 U+09CD U+0995
+E```Ngk	েঙ্ক	U+09C7 U+0999 U+09CD U+0995
+E``Gdh	েগ্ধ	U+09C7 U+0997 U+09CD U+09A7
+E```Gdh	েগ্ধ	U+09C7 U+0997 U+09CD U+09A7
+E``J	েজ	U+09C7 U+099C
+E```J	েজ	U+09C7 U+099C
+E``012	ে০১২	U+09C7 U+09E6 U+09E7 U+09E8
+E```012	ে০১২	U+09C7 U+09E6 U+09E7 U+09E8
+E``ক	েক	U+09C7 U+0995
+E```ক	েক	U+09C7 U+0995
+E``é	েé	U+09C7 U+00E9
+E```é	েé	U+09C7 U+00E9
+E``́	ে́	U+09C7 U+0301
+E```́	ে́	U+09C7 U+0301
+E``🙂	ে🙂	U+09C7 U+1F642
+E```🙂	ে🙂	U+09C7 U+1F642
+E`.a	ে।আ	U+09C7 U+0964 U+0986
+k.E`ry	ক।ের‍্য	U+0995 U+0964 U+09C7 U+09B0 U+200D U+09CD U+09AF
+E`..a	ে।।আ	U+09C7 U+0964 U+0964 U+0986
+k..E`ry	ক।।ের‍্য	U+0995 U+0964 U+0964 U+09C7 U+09B0 U+200D U+09CD U+09AF
+E`...a	ে...আ	U+09C7 U+002E U+002E U+002E U+0986
+k...E`ry	ক...ের‍্য	U+0995 U+002E U+002E U+002E U+09C7 U+09B0 U+200D U+09CD U+09AF
+E`.`a	ে.আ	U+09C7 U+002E U+0986
+k.`E`ry	ক.ের‍্য	U+0995 U+002E U+09C7 U+09B0 U+200D U+09CD U+09AF
+E`:a	েঃআ	U+09C7 U+0983 U+0986
+k:E`ry	কঃের‍্য	U+0995 U+0983 U+09C7 U+09B0 U+200D U+09CD U+09AF
+E`:`a	ে:আ	U+09C7 U+003A U+0986
+k:`E`ry	ক:ের‍্য	U+0995 U+003A U+09C7 U+09B0 U+200D U+09CD U+09AF
+E`^a	েঁআ	U+09C7 U+0981 U+0986
+k^E`ry	কঁের‍্য	U+0995 U+0981 U+09C7 U+09B0 U+200D U+09CD U+09AF
+E`^`a	ে^আ	U+09C7 U+005E U+0986
+k^`E`ry	ক^ের‍্য	U+0995 U+005E U+09C7 U+09B0 U+200D U+09CD U+09AF
+E`,,a	ে্‌আ	U+09C7 U+09CD U+200C U+0986
+k,,E`ry	ক্‌ের‍্য	U+0995 U+09CD U+200C U+09C7 U+09B0 U+200D U+09CD U+09AF
+E`$a	ে৳আ	U+09C7 U+09F3 U+0986
+k$E`ry	ক৳ের‍্য	U+0995 U+09F3 U+09C7 U+09B0 U+200D U+09CD U+09AF
+k`E`ry	কের‍্য	U+0995 U+09C7 U+09B0 U+200D U+09CD U+09AF
+E`a`	ো	U+09C7 U+09BE
+E`i`	েি	U+09C7 U+09BF
+E`I`	েী	U+09C7 U+09C0
+E`u`	েু	U+09C7 U+09C1
+E`U`	েূ	U+09C7 U+09C2
+E`e`	েে	U+09C7 U+09C7
+E`ee`	েী	U+09C7 U+09C0
+E`o`	ে	U+09C7
+E`O`	েো	U+09C7 U+09CB
+E`oo`	েু	U+09C7 U+09C1
+E`OI`	েৈ	U+09C7 U+09C8
+E`OU`	েৌ	U+09C7 U+09CC
+E`rri`	েৃ	U+09C7 U+09C3
+E`A`	ো	U+09C7 U+09BE
+E`E`	েে	U+09C7 U+09C7
+E`eE`	েী	U+09C7 U+09C0
+E`Ee`	েী	U+09C7 U+09C0
+E`EE`	েী	U+09C7 U+09C0
+eE``	ী	U+09C0
+eE```	ী	U+09C0
+eE``a	ীআ	U+09C0 U+0986
+eE```a	ীআ	U+09C0 U+0986
+eE``i	ীই	U+09C0 U+0987
+eE```i	ীই	U+09C0 U+0987
+eE``I	ীঈ	U+09C0 U+0988
+eE```I	ীঈ	U+09C0 U+0988
+eE``u	ীউ	U+09C0 U+0989
+eE```u	ীউ	U+09C0 U+0989
+eE``U	ীঊ	U+09C0 U+098A
+eE```U	ীঊ	U+09C0 U+098A
+eE``e	ীএ	U+09C0 U+098F
+eE```e	ীএ	U+09C0 U+098F
+eE``ee	ীঈ	U+09C0 U+0988
+eE```ee	ীঈ	U+09C0 U+0988
+eE``o	ীঅ	U+09C0 U+0985
+eE```o	ীঅ	U+09C0 U+0985
+eE``O	ীও	U+09C0 U+0993
+eE```O	ীও	U+09C0 U+0993
+eE``oo	ীউ	U+09C0 U+0989
+eE```oo	ীউ	U+09C0 U+0989
+eE``OI	ীঐ	U+09C0 U+0990
+eE```OI	ীঐ	U+09C0 U+0990
+eE``OU	ীঔ	U+09C0 U+0994
+eE```OU	ীঔ	U+09C0 U+0994
+eE``rri	ীঋ	U+09C0 U+098B
+eE```rri	ীঋ	U+09C0 U+098B
+eE``y	ীইয়	U+09C0 U+0987 U+09DF
+eE```y	ীইয়	U+09C0 U+0987 U+09DF
+eE``Z	ী্য	U+09C0 U+09CD U+09AF
+eE```Z	ী্য	U+09C0 U+09CD U+09AF
+eE``wa	ীওয়া	U+09C0 U+0993 U+09DF U+09BE
+eE```wa	ীওয়া	U+09C0 U+0993 U+09DF U+09BE
+eE``x	ীএক্স	U+09C0 U+098F U+0995 U+09CD U+09B8
+eE```x	ীএক্স	U+09C0 U+098F U+0995 U+09CD U+09B8
+eE``r	ীর	U+09C0 U+09B0
+eE```r	ীর	U+09C0 U+09B0
+eE``rr	ীরর	U+09C0 U+09B0 U+09B0
+eE```rr	ীরর	U+09C0 U+09B0 U+09B0
+eE``ry	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE```ry	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE``rZ	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE```rZ	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE``rra	ীররা	U+09C0 U+09B0 U+09B0 U+09BE
+eE```rra	ীররা	U+09C0 U+09B0 U+09B0 U+09BE
+eE``rriya	ীঋয়া	U+09C0 U+098B U+09DF U+09BE
+eE```rriya	ীঋয়া	U+09C0 U+098B U+09DF U+09BE
+eE``kr	ীক্র	U+09C0 U+0995 U+09CD U+09B0
+eE```kr	ীক্র	U+09C0 U+0995 U+09CD U+09B0
+eE``khry	ীখ্র্য	U+09C0 U+0996 U+09CD U+09B0 U+09CD U+09AF
+eE```khry	ীখ্র্য	U+09C0 U+0996 U+09CD U+09B0 U+09CD U+09AF
+eE``Shm	ীষ্ম	U+09C0 U+09B7 U+09CD U+09AE
+eE```Shm	ীষ্ম	U+09C0 U+09B7 U+09CD U+09AE
+eE``Ngk	ীঙ্ক	U+09C0 U+0999 U+09CD U+0995
+eE```Ngk	ীঙ্ক	U+09C0 U+0999 U+09CD U+0995
+eE``Gdh	ীগ্ধ	U+09C0 U+0997 U+09CD U+09A7
+eE```Gdh	ীগ্ধ	U+09C0 U+0997 U+09CD U+09A7
+eE``J	ীজ	U+09C0 U+099C
+eE```J	ীজ	U+09C0 U+099C
+eE``012	ী০১২	U+09C0 U+09E6 U+09E7 U+09E8
+eE```012	ী০১২	U+09C0 U+09E6 U+09E7 U+09E8
+eE``ক	ীক	U+09C0 U+0995
+eE```ক	ীক	U+09C0 U+0995
+eE``é	ীé	U+09C0 U+00E9
+eE```é	ীé	U+09C0 U+00E9
+eE``́	ী́	U+09C0 U+0301
+eE```́	ী́	U+09C0 U+0301
+eE``🙂	ী🙂	U+09C0 U+1F642
+eE```🙂	ী🙂	U+09C0 U+1F642
+eE`.a	ী।আ	U+09C0 U+0964 U+0986
+k.eE`ry	ক।ীর‍্য	U+0995 U+0964 U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE`..a	ী।।আ	U+09C0 U+0964 U+0964 U+0986
+k..eE`ry	ক।।ীর‍্য	U+0995 U+0964 U+0964 U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE`...a	ী...আ	U+09C0 U+002E U+002E U+002E U+0986
+k...eE`ry	ক...ীর‍্য	U+0995 U+002E U+002E U+002E U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE`.`a	ী.আ	U+09C0 U+002E U+0986
+k.`eE`ry	ক.ীর‍্য	U+0995 U+002E U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE`:a	ীঃআ	U+09C0 U+0983 U+0986
+k:eE`ry	কঃীর‍্য	U+0995 U+0983 U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE`:`a	ী:আ	U+09C0 U+003A U+0986
+k:`eE`ry	ক:ীর‍্য	U+0995 U+003A U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE`^a	ীঁআ	U+09C0 U+0981 U+0986
+k^eE`ry	কঁীর‍্য	U+0995 U+0981 U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE`^`a	ী^আ	U+09C0 U+005E U+0986
+k^`eE`ry	ক^ীর‍্য	U+0995 U+005E U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE`,,a	ী্‌আ	U+09C0 U+09CD U+200C U+0986
+k,,eE`ry	ক্‌ীর‍্য	U+0995 U+09CD U+200C U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE`$a	ী৳আ	U+09C0 U+09F3 U+0986
+k$eE`ry	ক৳ীর‍্য	U+0995 U+09F3 U+09C0 U+09B0 U+200D U+09CD U+09AF
+k`eE`ry	কীর‍্য	U+0995 U+09C0 U+09B0 U+200D U+09CD U+09AF
+eE`a`	ীা	U+09C0 U+09BE
+eE`i`	ীি	U+09C0 U+09BF
+eE`I`	ীী	U+09C0 U+09C0
+eE`u`	ীু	U+09C0 U+09C1
+eE`U`	ীূ	U+09C0 U+09C2
+eE`e`	ীে	U+09C0 U+09C7
+eE`ee`	ীী	U+09C0 U+09C0
+eE`o`	ী	U+09C0
+eE`O`	ীো	U+09C0 U+09CB
+eE`oo`	ীু	U+09C0 U+09C1
+eE`OI`	ীৈ	U+09C0 U+09C8
+eE`OU`	ীৌ	U+09C0 U+09CC
+eE`rri`	ীৃ	U+09C0 U+09C3
+eE`A`	ীা	U+09C0 U+09BE
+eE`E`	ীে	U+09C0 U+09C7
+eE`eE`	ীী	U+09C0 U+09C0
+eE`Ee`	ীী	U+09C0 U+09C0
+eE`EE`	ীী	U+09C0 U+09C0
+Ee``	ী	U+09C0
+Ee```	ী	U+09C0
+Ee``a	ীআ	U+09C0 U+0986
+Ee```a	ীআ	U+09C0 U+0986
+Ee``i	ীই	U+09C0 U+0987
+Ee```i	ীই	U+09C0 U+0987
+Ee``I	ীঈ	U+09C0 U+0988
+Ee```I	ীঈ	U+09C0 U+0988
+Ee``u	ীউ	U+09C0 U+0989
+Ee```u	ীউ	U+09C0 U+0989
+Ee``U	ীঊ	U+09C0 U+098A
+Ee```U	ীঊ	U+09C0 U+098A
+Ee``e	ীএ	U+09C0 U+098F
+Ee```e	ীএ	U+09C0 U+098F
+Ee``ee	ীঈ	U+09C0 U+0988
+Ee```ee	ীঈ	U+09C0 U+0988
+Ee``o	ীঅ	U+09C0 U+0985
+Ee```o	ীঅ	U+09C0 U+0985
+Ee``O	ীও	U+09C0 U+0993
+Ee```O	ীও	U+09C0 U+0993
+Ee``oo	ীউ	U+09C0 U+0989
+Ee```oo	ীউ	U+09C0 U+0989
+Ee``OI	ীঐ	U+09C0 U+0990
+Ee```OI	ীঐ	U+09C0 U+0990
+Ee``OU	ীঔ	U+09C0 U+0994
+Ee```OU	ীঔ	U+09C0 U+0994
+Ee``rri	ীঋ	U+09C0 U+098B
+Ee```rri	ীঋ	U+09C0 U+098B
+Ee``y	ীইয়	U+09C0 U+0987 U+09DF
+Ee```y	ীইয়	U+09C0 U+0987 U+09DF
+Ee``Z	ী্য	U+09C0 U+09CD U+09AF
+Ee```Z	ী্য	U+09C0 U+09CD U+09AF
+Ee``wa	ীওয়া	U+09C0 U+0993 U+09DF U+09BE
+Ee```wa	ীওয়া	U+09C0 U+0993 U+09DF U+09BE
+Ee``x	ীএক্স	U+09C0 U+098F U+0995 U+09CD U+09B8
+Ee```x	ীএক্স	U+09C0 U+098F U+0995 U+09CD U+09B8
+Ee``r	ীর	U+09C0 U+09B0
+Ee```r	ীর	U+09C0 U+09B0
+Ee``rr	ীরর	U+09C0 U+09B0 U+09B0
+Ee```rr	ীরর	U+09C0 U+09B0 U+09B0
+Ee``ry	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee```ry	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee``rZ	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee```rZ	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee``rra	ীররা	U+09C0 U+09B0 U+09B0 U+09BE
+Ee```rra	ীররা	U+09C0 U+09B0 U+09B0 U+09BE
+Ee``rriya	ীঋয়া	U+09C0 U+098B U+09DF U+09BE
+Ee```rriya	ীঋয়া	U+09C0 U+098B U+09DF U+09BE
+Ee``kr	ীক্র	U+09C0 U+0995 U+09CD U+09B0
+Ee```kr	ীক্র	U+09C0 U+0995 U+09CD U+09B0
+Ee``khry	ীখ্র্য	U+09C0 U+0996 U+09CD U+09B0 U+09CD U+09AF
+Ee```khry	ীখ্র্য	U+09C0 U+0996 U+09CD U+09B0 U+09CD U+09AF
+Ee``Shm	ীষ্ম	U+09C0 U+09B7 U+09CD U+09AE
+Ee```Shm	ীষ্ম	U+09C0 U+09B7 U+09CD U+09AE
+Ee``Ngk	ীঙ্ক	U+09C0 U+0999 U+09CD U+0995
+Ee```Ngk	ীঙ্ক	U+09C0 U+0999 U+09CD U+0995
+Ee``Gdh	ীগ্ধ	U+09C0 U+0997 U+09CD U+09A7
+Ee```Gdh	ীগ্ধ	U+09C0 U+0997 U+09CD U+09A7
+Ee``J	ীজ	U+09C0 U+099C
+Ee```J	ীজ	U+09C0 U+099C
+Ee``012	ী০১২	U+09C0 U+09E6 U+09E7 U+09E8
+Ee```012	ী০১২	U+09C0 U+09E6 U+09E7 U+09E8
+Ee``ক	ীক	U+09C0 U+0995
+Ee```ক	ীক	U+09C0 U+0995
+Ee``é	ীé	U+09C0 U+00E9
+Ee```é	ীé	U+09C0 U+00E9
+Ee``́	ী́	U+09C0 U+0301
+Ee```́	ী́	U+09C0 U+0301
+Ee``🙂	ী🙂	U+09C0 U+1F642
+Ee```🙂	ী🙂	U+09C0 U+1F642
+Ee`.a	ী।আ	U+09C0 U+0964 U+0986
+k.Ee`ry	ক।ীর‍্য	U+0995 U+0964 U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee`..a	ী।।আ	U+09C0 U+0964 U+0964 U+0986
+k..Ee`ry	ক।।ীর‍্য	U+0995 U+0964 U+0964 U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee`...a	ী...আ	U+09C0 U+002E U+002E U+002E U+0986
+k...Ee`ry	ক...ীর‍্য	U+0995 U+002E U+002E U+002E U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee`.`a	ী.আ	U+09C0 U+002E U+0986
+k.`Ee`ry	ক.ীর‍্য	U+0995 U+002E U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee`:a	ীঃআ	U+09C0 U+0983 U+0986
+k:Ee`ry	কঃীর‍্য	U+0995 U+0983 U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee`:`a	ী:আ	U+09C0 U+003A U+0986
+k:`Ee`ry	ক:ীর‍্য	U+0995 U+003A U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee`^a	ীঁআ	U+09C0 U+0981 U+0986
+k^Ee`ry	কঁীর‍্য	U+0995 U+0981 U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee`^`a	ী^আ	U+09C0 U+005E U+0986
+k^`Ee`ry	ক^ীর‍্য	U+0995 U+005E U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee`,,a	ী্‌আ	U+09C0 U+09CD U+200C U+0986
+k,,Ee`ry	ক্‌ীর‍্য	U+0995 U+09CD U+200C U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee`$a	ী৳আ	U+09C0 U+09F3 U+0986
+k$Ee`ry	ক৳ীর‍্য	U+0995 U+09F3 U+09C0 U+09B0 U+200D U+09CD U+09AF
+k`Ee`ry	কীর‍্য	U+0995 U+09C0 U+09B0 U+200D U+09CD U+09AF
+Ee`a`	ীা	U+09C0 U+09BE
+Ee`i`	ীি	U+09C0 U+09BF
+Ee`I`	ীী	U+09C0 U+09C0
+Ee`u`	ীু	U+09C0 U+09C1
+Ee`U`	ীূ	U+09C0 U+09C2
+Ee`e`	ীে	U+09C0 U+09C7
+Ee`ee`	ীী	U+09C0 U+09C0
+Ee`o`	ী	U+09C0
+Ee`O`	ীো	U+09C0 U+09CB
+Ee`oo`	ীু	U+09C0 U+09C1
+Ee`OI`	ীৈ	U+09C0 U+09C8
+Ee`OU`	ীৌ	U+09C0 U+09CC
+Ee`rri`	ীৃ	U+09C0 U+09C3
+Ee`A`	ীা	U+09C0 U+09BE
+Ee`E`	ীে	U+09C0 U+09C7
+Ee`eE`	ীী	U+09C0 U+09C0
+Ee`Ee`	ীী	U+09C0 U+09C0
+Ee`EE`	ীী	U+09C0 U+09C0
+EE``	ী	U+09C0
+EE```	ী	U+09C0
+EE``a	ীআ	U+09C0 U+0986
+EE```a	ীআ	U+09C0 U+0986
+EE``i	ীই	U+09C0 U+0987
+EE```i	ীই	U+09C0 U+0987
+EE``I	ীঈ	U+09C0 U+0988
+EE```I	ীঈ	U+09C0 U+0988
+EE``u	ীউ	U+09C0 U+0989
+EE```u	ীউ	U+09C0 U+0989
+EE``U	ীঊ	U+09C0 U+098A
+EE```U	ীঊ	U+09C0 U+098A
+EE``e	ীএ	U+09C0 U+098F
+EE```e	ীএ	U+09C0 U+098F
+EE``ee	ীঈ	U+09C0 U+0988
+EE```ee	ীঈ	U+09C0 U+0988
+EE``o	ীঅ	U+09C0 U+0985
+EE```o	ীঅ	U+09C0 U+0985
+EE``O	ীও	U+09C0 U+0993
+EE```O	ীও	U+09C0 U+0993
+EE``oo	ীউ	U+09C0 U+0989
+EE```oo	ীউ	U+09C0 U+0989
+EE``OI	ীঐ	U+09C0 U+0990
+EE```OI	ীঐ	U+09C0 U+0990
+EE``OU	ীঔ	U+09C0 U+0994
+EE```OU	ীঔ	U+09C0 U+0994
+EE``rri	ীঋ	U+09C0 U+098B
+EE```rri	ীঋ	U+09C0 U+098B
+EE``y	ীইয়	U+09C0 U+0987 U+09DF
+EE```y	ীইয়	U+09C0 U+0987 U+09DF
+EE``Z	ী্য	U+09C0 U+09CD U+09AF
+EE```Z	ী্য	U+09C0 U+09CD U+09AF
+EE``wa	ীওয়া	U+09C0 U+0993 U+09DF U+09BE
+EE```wa	ীওয়া	U+09C0 U+0993 U+09DF U+09BE
+EE``x	ীএক্স	U+09C0 U+098F U+0995 U+09CD U+09B8
+EE```x	ীএক্স	U+09C0 U+098F U+0995 U+09CD U+09B8
+EE``r	ীর	U+09C0 U+09B0
+EE```r	ীর	U+09C0 U+09B0
+EE``rr	ীরর	U+09C0 U+09B0 U+09B0
+EE```rr	ীরর	U+09C0 U+09B0 U+09B0
+EE``ry	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE```ry	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE``rZ	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE```rZ	ীর‍্য	U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE``rra	ীররা	U+09C0 U+09B0 U+09B0 U+09BE
+EE```rra	ীররা	U+09C0 U+09B0 U+09B0 U+09BE
+EE``rriya	ীঋয়া	U+09C0 U+098B U+09DF U+09BE
+EE```rriya	ীঋয়া	U+09C0 U+098B U+09DF U+09BE
+EE``kr	ীক্র	U+09C0 U+0995 U+09CD U+09B0
+EE```kr	ীক্র	U+09C0 U+0995 U+09CD U+09B0
+EE``khry	ীখ্র্য	U+09C0 U+0996 U+09CD U+09B0 U+09CD U+09AF
+EE```khry	ীখ্র্য	U+09C0 U+0996 U+09CD U+09B0 U+09CD U+09AF
+EE``Shm	ীষ্ম	U+09C0 U+09B7 U+09CD U+09AE
+EE```Shm	ীষ্ম	U+09C0 U+09B7 U+09CD U+09AE
+EE``Ngk	ীঙ্ক	U+09C0 U+0999 U+09CD U+0995
+EE```Ngk	ীঙ্ক	U+09C0 U+0999 U+09CD U+0995
+EE``Gdh	ীগ্ধ	U+09C0 U+0997 U+09CD U+09A7
+EE```Gdh	ীগ্ধ	U+09C0 U+0997 U+09CD U+09A7
+EE``J	ীজ	U+09C0 U+099C
+EE```J	ীজ	U+09C0 U+099C
+EE``012	ী০১২	U+09C0 U+09E6 U+09E7 U+09E8
+EE```012	ী০১২	U+09C0 U+09E6 U+09E7 U+09E8
+EE``ক	ীক	U+09C0 U+0995
+EE```ক	ীক	U+09C0 U+0995
+EE``é	ীé	U+09C0 U+00E9
+EE```é	ীé	U+09C0 U+00E9
+EE``́	ী́	U+09C0 U+0301
+EE```́	ী́	U+09C0 U+0301
+EE``🙂	ী🙂	U+09C0 U+1F642
+EE```🙂	ী🙂	U+09C0 U+1F642
+EE`.a	ী।আ	U+09C0 U+0964 U+0986
+k.EE`ry	ক।ীর‍্য	U+0995 U+0964 U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE`..a	ী।।আ	U+09C0 U+0964 U+0964 U+0986
+k..EE`ry	ক।।ীর‍্য	U+0995 U+0964 U+0964 U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE`...a	ী...আ	U+09C0 U+002E U+002E U+002E U+0986
+k...EE`ry	ক...ীর‍্য	U+0995 U+002E U+002E U+002E U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE`.`a	ী.আ	U+09C0 U+002E U+0986
+k.`EE`ry	ক.ীর‍্য	U+0995 U+002E U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE`:a	ীঃআ	U+09C0 U+0983 U+0986
+k:EE`ry	কঃীর‍্য	U+0995 U+0983 U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE`:`a	ী:আ	U+09C0 U+003A U+0986
+k:`EE`ry	ক:ীর‍্য	U+0995 U+003A U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE`^a	ীঁআ	U+09C0 U+0981 U+0986
+k^EE`ry	কঁীর‍্য	U+0995 U+0981 U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE`^`a	ী^আ	U+09C0 U+005E U+0986
+k^`EE`ry	ক^ীর‍্য	U+0995 U+005E U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE`,,a	ী্‌আ	U+09C0 U+09CD U+200C U+0986
+k,,EE`ry	ক্‌ীর‍্য	U+0995 U+09CD U+200C U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE`$a	ী৳আ	U+09C0 U+09F3 U+0986
+k$EE`ry	ক৳ীর‍্য	U+0995 U+09F3 U+09C0 U+09B0 U+200D U+09CD U+09AF
+k`EE`ry	কীর‍্য	U+0995 U+09C0 U+09B0 U+200D U+09CD U+09AF
+EE`a`	ীা	U+09C0 U+09BE
+EE`i`	ীি	U+09C0 U+09BF
+EE`I`	ীী	U+09C0 U+09C0
+EE`u`	ীু	U+09C0 U+09C1
+EE`U`	ীূ	U+09C0 U+09C2
+EE`e`	ীে	U+09C0 U+09C7
+EE`ee`	ীী	U+09C0 U+09C0
+EE`o`	ী	U+09C0
+EE`O`	ীো	U+09C0 U+09CB
+EE`oo`	ীু	U+09C0 U+09C1
+EE`OI`	ীৈ	U+09C0 U+09C8
+EE`OU`	ীৌ	U+09C0 U+09CC
+EE`rri`	ীৃ	U+09C0 U+09C3
+EE`A`	ীা	U+09C0 U+09BE
+EE`E`	ীে	U+09C0 U+09C7
+EE`eE`	ীী	U+09C0 U+09C0
+EE`Ee`	ীী	U+09C0 U+09C0
+EE`EE`	ীী	U+09C0 U+09C0
+k`a`	কা	U+0995 U+09BE
+k`i`	কি	U+0995 U+09BF
+k`I`	কী	U+0995 U+09C0
+k`u`	কু	U+0995 U+09C1
+k`U`	কূ	U+0995 U+09C2
+k`e`	কে	U+0995 U+09C7
+k`o`	ক	U+0995
+k`O`	কো	U+0995 U+09CB

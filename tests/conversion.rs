@@ -1,6 +1,178 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn vowel_escapes_keep_internal_splits_and_calls_distinct() {
+    for (raw, parts) in [
+        ("a`", &[("আ", "")][..]),
+        ("i`", &[("ই", "")][..]),
+        ("I`", &[("ঈ", "")][..]),
+        ("u`", &[("উ", "")][..]),
+        ("U`", &[("ঊ", "")][..]),
+        ("e`", &[("এ", "")][..]),
+        ("ee`", &[("এ", "ে"), ("ঈ", "")][..]),
+        ("o`", &[("অ", "")][..]),
+        ("O`", &[("ও", "")][..]),
+        ("oo`", &[("অ", ""), ("উ", "")][..]),
+        ("OI`", &[("ও", "ী"), ("ঐ", "")][..]),
+        ("OU`", &[("ও", "ূ"), ("ঔ", "")][..]),
+        ("rri`", &[("র", "রি"), ("রর", "ি"), ("ঋ", "")][..]),
+        ("A`", &[("আ", "")][..]),
+        ("E`", &[("এ", "")][..]),
+        ("eE`", &[("এ", "ে"), ("ঈ", "")][..]),
+        ("Ee`", &[("এ", "ে"), ("ঈ", "")][..]),
+        ("EE`", &[("এ", "ে"), ("ঈ", "")][..]),
+    ] {
+        for (split, (left, right)) in parts.iter().enumerate() {
+            let split = split + 1;
+            assert_eq!(transliterate(&raw[..split]), *left);
+            assert_eq!(transliterate(&raw[split..]), *right);
+        }
+    }
+    assert_eq!(transliterate("o`"), "");
+    assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("y"), "ইয়");
+    assert_eq!(transliterate("k"), "ক");
+    assert_eq!(transliterate("i"), "ই");
+}
+
+#[test]
+fn vowel_escapes_reset_context_at_utf8_and_control_boundaries() {
+    for (raw, sign) in [
+        ("a`", "া"),
+        ("i`", "ি"),
+        ("I`", "ী"),
+        ("u`", "ু"),
+        ("U`", "ূ"),
+        ("e`", "ে"),
+        ("ee`", "ী"),
+        ("o`", ""),
+        ("O`", "ো"),
+        ("oo`", "ু"),
+        ("OI`", "ৈ"),
+        ("OU`", "ৌ"),
+        ("rri`", "ৃ"),
+        ("A`", "া"),
+        ("E`", "ে"),
+        ("eE`", "ী"),
+        ("Ee`", "ী"),
+        ("EE`", "ী"),
+    ] {
+        for boundary in ['\0', '\n', '\r', '\t', '🙂', 'ক', 'é', '\u{301}'] {
+            let input = format!("k{raw}{boundary}a{boundary}k{boundary}{raw}ry");
+            let original = input.clone();
+            assert_eq!(
+                transliterate(&input),
+                format!("ক{sign}{boundary}আ{boundary}ক{boundary}{sign}র\u{200D}্য")
+            );
+            assert_eq!(input, original);
+        }
+    }
+}
+
+#[test]
+fn vowel_escapes_handle_long_repeated_mixed_input() {
+    let segment = "ka`a1ki`y2kI`x3ku`r4kU`rr5ke`ry6kee`Z7ko`a8kO`wa9koo`kr0kOI`OI1kOU`rri2krri`a3ngee`a4ngoo`a5Ngrri`a6A`E`eE`Ee`EE`🙂";
+    let expected =
+        "কাআ১কিইয়২কীএক্স৩কুর৪কূরর৫কের\u{200D}্য৬কী্য৭কআ৮কোওয়া৯কুক্র০কৈঐ১কৌঋ২কৃআ৩ঙ্গেেআ৪ঙ্গআ৫ঙররিআ৬ােীীী🙂";
+    assert_eq!(transliterate(&segment.repeat(1024)), expected.repeat(1024));
+}
+
+#[test]
+fn vowel_escape_a_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-a.tsv"));
+}
+
+#[test]
+fn vowel_escape_i_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-i.tsv"));
+}
+
+#[test]
+fn vowel_escape_i_long_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-i-long.tsv"));
+}
+
+#[test]
+fn vowel_escape_u_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-u.tsv"));
+}
+
+#[test]
+fn vowel_escape_u_long_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-u-long.tsv"));
+}
+
+#[test]
+fn vowel_escape_e_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-e.tsv"));
+}
+
+#[test]
+fn vowel_escape_ee_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-ee.tsv"));
+}
+
+#[test]
+fn vowel_escape_o_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-o.tsv"));
+}
+
+#[test]
+fn vowel_escape_o_upper_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-o-upper.tsv"));
+}
+
+#[test]
+fn vowel_escape_oo_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-oo.tsv"));
+}
+
+#[test]
+fn vowel_escape_oi_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-oi.tsv"));
+}
+
+#[test]
+fn vowel_escape_ou_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-ou.tsv"));
+}
+
+#[test]
+fn vowel_escape_rri_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-rri.tsv"));
+}
+
+#[test]
+fn vowel_escape_a_upper_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-a-upper.tsv"));
+}
+
+#[test]
+fn vowel_escape_e_upper_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-e-upper.tsv"));
+}
+
+#[test]
+fn vowel_escape_ee_lower_upper_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-ee-lower-upper.tsv"));
+}
+
+#[test]
+fn vowel_escape_ee_upper_lower_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-ee-upper-lower.tsv"));
+}
+
+#[test]
+fn vowel_escape_ee_upper_pair_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-ee-upper-pair.tsv"));
+}
+
+#[test]
+fn vowel_escape_controls_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/vowel-escape-controls.tsv"));
+}
+
+#[test]
 fn symbols_keep_consumed_keys_and_separate_calls_distinct() {
     for (raw, parts) in [
         ("..", &[("।", "।")][..]),
@@ -2683,20 +2855,7 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("rrShm", "ররষ্ম"),
         ("rrkk", "ররক্ক"),
         ("rrkkh", "ররক্ষ"),
-        ("a`", "আ"),
         ("t``", "ত"),
-        ("i`", "ই"),
-        ("I`", "ঈ"),
-        ("u`", "উ"),
-        ("U`", "ঊ"),
-        ("e`", "এ"),
-        ("ee`", "ঈ"),
-        ("o`", "অ"),
-        ("O`", "ও"),
-        ("oo`", "উ"),
-        ("OI`", "ঐ"),
-        ("OU`", "ঔ"),
-        ("rri`", "ঋ"),
     ] {
         assert_eq!(transliterate(input), expected, "input: {input:?}");
     }

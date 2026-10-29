@@ -26,6 +26,26 @@ const codePoints = (text) =>
 
 let count = 0;
 for (const name of [
+  "vowel-escape-a.tsv",
+  "vowel-escape-i.tsv",
+  "vowel-escape-i-long.tsv",
+  "vowel-escape-u.tsv",
+  "vowel-escape-u-long.tsv",
+  "vowel-escape-e.tsv",
+  "vowel-escape-ee.tsv",
+  "vowel-escape-o.tsv",
+  "vowel-escape-o-upper.tsv",
+  "vowel-escape-oo.tsv",
+  "vowel-escape-oi.tsv",
+  "vowel-escape-ou.tsv",
+  "vowel-escape-rri.tsv",
+  "vowel-escape-a-upper.tsv",
+  "vowel-escape-e-upper.tsv",
+  "vowel-escape-ee-lower-upper.tsv",
+  "vowel-escape-ee-upper-lower.tsv",
+  "vowel-escape-ee-upper-pair.tsv",
+  "vowel-escape-controls.tsv",
+
   "symbols-period.tsv",
   "symbols-double-period.tsv",
   "symbols-ellipsis.tsv",
@@ -325,7 +345,7 @@ console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
 // These probes expose missing behavior; they are not supported-slice fixtures.
 for (const input of [
-  "qr", "zr", "Rr", "rrShN", "a`",
+  "qr", "zr", "Rr", "rrShN", "t``",
 ]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);

@@ -1,8 +1,35 @@
-//! Ordinary vowel matching and context-sensitive output.
+//! Vowel-sign escapes and ordinary context-sensitive vowels.
 //!
 //! The scanner handles higher-priority rri, ng-vowel, and aZ/oZ forms first.
 
 use super::Context;
+
+// Independently authored from reference behavior. Match the final backtick with
+// the vowel; every sign is explicit, including the empty escaped lowercase o.
+// The scanner keeps earlier ng/nasal-r consumption ahead of these matches.
+pub(super) fn consume_escape<'a>(remaining: &'a str, output: &mut String) -> Option<&'a str> {
+    for (raw, sign) in [
+        ("rri`", "ৃ"),
+        ("OI`", "ৈ"),
+        ("OU`", "ৌ"),
+        ("ee`", "ী"),
+        ("oo`", "ু"),
+        ("a`", "া"),
+        ("i`", "ি"),
+        ("I`", "ী"),
+        ("u`", "ু"),
+        ("U`", "ূ"),
+        ("e`", "ে"),
+        ("o`", ""),
+        ("O`", "ো"),
+    ] {
+        if let Some(after) = remaining.strip_prefix(raw) {
+            output.push_str(sign);
+            return Some(after);
+        }
+    }
+    None
+}
 
 // Return the unconsumed suffix only when an ordinary vowel matches.
 pub(super) fn consume<'a>(

@@ -85,6 +85,10 @@ pub fn transliterate(input: &str) -> String {
                 context = Context::Consonant { ya_joiner: false };
                 remaining = after_ng;
             }
+        } else if let Some(after_escape) = vowels::consume_escape(remaining, &mut output) {
+            remaining = after_escape;
+            // The consumed backtick resets context even when escaped o is empty.
+            context = Context::Other;
         } else if remaining.starts_with("rri") {
             // Match the three ASCII keys before individual consonants.
             output.push_str(if matches!(context, Context::Consonant { .. }) {
