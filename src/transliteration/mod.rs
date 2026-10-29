@@ -6,6 +6,7 @@
 mod case;
 mod following_r;
 mod rules;
+mod symbols;
 mod vowels;
 
 use following_r::consume_following_r_prefix;
@@ -27,7 +28,7 @@ enum Context {
     Other,
 }
 
-/// Convert supported phonetic sequences and ASCII digits to Bangla.
+/// Convert supported phonetic sequences, symbols and ASCII digits to Bangla.
 ///
 /// The ASCII aliases ABCEFHKLMPQVWX match their lowercase forms; other letters
 /// remain case-sensitive. Matching follows verified rule priority. Unmatched
@@ -53,7 +54,11 @@ pub fn transliterate(input: &str) -> String {
             .iter()
             .find(|(raw, _)| remaining.starts_with(raw));
 
-        if let Some((raw, bangla)) = nasal_r {
+        if let Some(after_symbol) = symbols::consume(remaining, &mut output) {
+            remaining = after_symbol;
+            // Even an empty-output backtick separates raw phonetic matches.
+            context = Context::Other;
+        } else if let Some((raw, bangla)) = nasal_r {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
             context = Context::Consonant { ya_joiner: false };

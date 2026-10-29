@@ -91,9 +91,12 @@ forms throughout matching: `AZ` → `অ্যা`, `kH` → `খ`, `SH` → `�
 `G`/`J` forms now match through explicit rules: `Gh` → `ঘ`, `Gg` → `জ্ঞ`,
 `Jh` → `জহ`, while `jh` → `ঝ`. See the [case-alias batch](docs/v1.md#selective-ascii-case-alias-batch)
 and [explicit G/J batch](docs/v1.md#explicit-gj-spelling-batch).
-This is a partial engine with 469,089 reference-checked examples,
+Punctuation and symbols now include period/double period/ellipsis, colon, caret,
+double comma, dollar, symbol escapes, and standalone backtick removal. See the
+[symbol batch](docs/v1.md#punctuation-and-symbol-batch).
+This is a partial engine with 479,913 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Reph,
-punctuation/escapes, some context interactions, composition, and Fcitx5
+vowel-sign escapes, the t-double-backtick form, some context interactions, composition, and Fcitx5
 integration are still incomplete.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
@@ -166,10 +169,10 @@ Rule coverage favors the [largest coherent related batches](docs/v1.md#small-dev
 that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
-update, and commit per completed batch. The latest batch implements the 12
-explicit G/J spellings, preserving the case-sensitive matching rules.
-Next, investigate the related punctuation and symbol forms; vowel escapes,
-reph and composition remain separate work.
+update, and commit per completed batch. The latest batch implements 11
+punctuation/symbol spellings, including their context resets and overlap priority.
+Next, investigate vowel-sign escapes together; t-double-backtick, reph and
+composition remain separate work unless reference evidence requires a shared dependency.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
@@ -186,6 +189,8 @@ implementation lives in private modules under `src/transliteration/`:
 - [`vowels.rs`](src/transliteration/vowels.rs): ordinary vowel matching and
   contextual output; higher-priority `rri`, ng-vowel, and `aZ`/`oZ` forms remain
   in the scanner.
+- [`symbols.rs`](src/transliteration/symbols.rs): ordered punctuation, symbol escapes,
+  and empty-output backticks; all reset raw phonetic context.
 - [`following_r.rs`](src/transliteration/following_r.rs): shared following-`r`
   attachment and exceptions based on raw keys.
 
@@ -214,7 +219,10 @@ cargo build --offline --release
 cargo run --offline --example convert -- 'kh12T'
 ```
 
-The last command prints `খ১২ট`. Try `'t T th Th n N'` for `ত ট থ ঠ ন ণ`, or
+The last command prints `খ১২ট`. Try `` '. .. ... .` : :` ^ ^` ,, $ k`a' ``
+for punctuation, literal symbol escapes, and a backtick between consonant and vowel.
+The exact outputs and Unicode are in the
+[symbol table](docs/v1.md#punctuation-and-symbol-batch). Try `'t T th Th n N'` for `ত ট থ ঠ ন ণ`, or
 `'0123456789'` for `০১২৩৪৫৬৭৮৯`. Try `'ami khani kia'` for `আমি খানি কিয়া`.
 The `u`/`U` group also supports `'tumi bhUmi kua'` → `তুমি ভূমি কুয়া`.
 Try `'ki kI nIti'` → `কি কী নীতি` for the `i`/`I` distinction.
@@ -348,12 +356,12 @@ context and following-`r` behavior (`kkhr` → `ক্ষ্র`, `kkhrri` → `
 `NGkkh` → `ঞক্ষ` and `ngkkh` → `ংক্ষ` now also match the reference.
 Earlier `nk`/`lk`/`sk`/`Shk` now consume `k` first (`nkkh` → `ঙ্কখ`,
 `lkkh` → `ল্কখ`, `skkh` → `স্কখ`, `Shkkh` → `ষ্কখ`). Other conjuncts,
-reph, and punctuation/escapes remain gaps.
+reph, and vowel-sign escapes remain gaps.
 Exact `kSh` shares `kkh`'s output, vowel context, and following-`r` behavior
 (`kShr` → `ক্ষ্র`, `kShrri` → `ক্ষৃ`, `kShry` → `ক্ষ্র্য`). Earlier exact
 `NgkSh` keeps priority; `NGkSh` → `ঞক্ষ` and `ngkSh` → `ংক্ষ` now match.
 Case-distinct `ksh` → `কশ` stays separate. Earlier-prefix conflicts,
-reph, and punctuation/escapes remain gaps.
+reph, and vowel-sign escapes remain gaps.
 Exact `kkhN`/`kShN`/`kxN` → `ক্ষ্ণ` match before their shorter forms, with
 supported vowel signs/aliases and single-`r` attachment (`kxNr` → `ক্ষ্ণ্র`,
 `kxNry` → `ক্ষ্ণ্র্য`). Two `r` keys normally add ্রর, while `rri` and
@@ -362,7 +370,7 @@ Earlier `Ngkkh`/`NgkSh`/`Ngkx` still win (`NgkShN` → `ঙ্ক্ষণ`). Co
 the final `N` prevents a following nasal match (`kShNgkSh` → `ক্ষ্ণগক্ষ`);
 this also resolves `kxNgx`, `kxNgk`, `kxNgkh`, `kxNgkx`, `kxNgkkh`, and `kxNgkSh`.
 Uppercase `G` also converts after these forms (`kShNG` → `ক্ষ্ণগ`);
-earlier-prefix conflicts, unrelated conjuncts, reph, and punctuation/escapes
+earlier-prefix conflicts, unrelated conjuncts, reph, and vowel-sign escapes
 remain gaps.
 Exact `kkhm`/`kShm`/`kxm` → `ক্ষ্ম` also match before their shorter forms,
 with supported vowel signs/aliases and single-`r` attachment (`kxmr` → `ক্ষ্ম্র`,
@@ -373,7 +381,7 @@ Earlier `Ngkkh`/`NgkSh`/`Ngkx` still win (`NgkShm` → `ঙ্ক্ষম`).
 Consuming `m` prevents it joining a following nasal (`kShmng` → `ক্ষ্মং`,
 `kShmn` → `ক্ষ্মন`). Basic `mr`/`mm`/`mn` are now supported by the nasal/h
 batch below. Earlier-prefix conflicts, reph, and
-punctuation/escapes remain incomplete.
+vowel-sign escapes remain incomplete.
 Exact `kk` → `ক্ক` matches after longer `kkh`/`kkhN`/`kkhm` and before single `k`.
 Its vowel context and following `r` share `Ngk`'s behavior: `kki` → `ক্কি`,
 `kkr` → `ক্ক্র`, `kkrri` → `ক্কৃ`, `kkry` → `ক্ক্র্য`, and `kkrry` → `ক্করর‍্য`.
@@ -861,7 +869,8 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [s/Sh stop controls](tests/fixtures/s-stop-controls.tsv), the 30 fixture
 files linked in the [remaining conjunct batch](docs/v1.md#remaining-exact-conjunct-batch),
 the 16 files linked in the [case-alias batch](docs/v1.md#selective-ascii-case-alias-batch),
-and the 13 files linked in the [explicit G/J batch](docs/v1.md#explicit-gj-spelling-batch)
+the 13 files linked in the [explicit G/J batch](docs/v1.md#explicit-gj-spelling-batch),
+and the 12 files linked in the [symbol batch](docs/v1.md#punctuation-and-symbol-batch)
 record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
@@ -878,9 +887,9 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 469,089 cases used by Rust tests and prints reference outputs for
-five known coverage gaps: `qr`, `zr`, `Rr`, `rrShN`, and the escaped `Shm` form.
-The resolved G/J probes have been replaced by remaining following-`r` gaps.
+It checks the same 479,913 cases used by Rust tests and prints reference outputs for
+five known coverage gaps: `qr`, `zr`, `Rr`, `rrShN`, and the vowel escape `` a` ``.
+The resolved escaped `Shm` probe has been replaced by a remaining vowel-sign gap.
 The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

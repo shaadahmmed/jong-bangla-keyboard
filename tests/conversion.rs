@@ -1,6 +1,123 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn symbols_keep_consumed_keys_and_separate_calls_distinct() {
+    for (raw, parts) in [
+        ("..", &[("।", "।")][..]),
+        ("...", &[("।", "।।"), ("।।", "।")][..]),
+        (".`", &[("।", "")][..]),
+        (":`", &[("ঃ", "")][..]),
+        ("^`", &[("ঁ", "")][..]),
+        (",,", &[(",", ",")][..]),
+    ] {
+        for (split, (left, right)) in parts.iter().enumerate() {
+            let split = split + 1;
+            assert_eq!(transliterate(&raw[..split]), *left);
+            assert_eq!(transliterate(&raw[split..]), *right);
+        }
+    }
+    assert_eq!(transliterate("`"), "");
+    assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("k"), "ক");
+    assert_eq!(transliterate("r"), "র");
+    assert_eq!(transliterate("y"), "ইয়");
+}
+
+#[test]
+fn symbols_reset_context_at_utf8_and_control_boundaries() {
+    for (raw, converted) in [
+        (".", "।"),
+        ("..", "।।"),
+        ("...", "..."),
+        (".`", "."),
+        (":", "ঃ"),
+        (":`", ":"),
+        ("^", "ঁ"),
+        ("^`", "^"),
+        (",,", "\u{09CD}\u{200C}"),
+        ("$", "৳"),
+        ("`", ""),
+    ] {
+        for boundary in ['\0', '\n', '\r', '\t', '🙂', 'ক', 'é', '\u{301}'] {
+            let input = format!("k{raw}{boundary}a{boundary}k{boundary}{raw}ry");
+            let original = input.clone();
+            assert_eq!(
+                transliterate(&input),
+                format!("ক{converted}{boundary}আ{boundary}ক{boundary}{converted}র\u{200D}্য")
+            );
+            assert_eq!(input, original);
+        }
+    }
+}
+
+#[test]
+fn symbols_handle_long_repeated_mixed_input() {
+    let segment = "k.`a1k..a2k...a3k:a4k^a5k,,a6k$a7k`a8r`y9G`dh0";
+    let expected = "ক.আ১ক।।আ২ক...আ৩কঃআ৪কঁআ৫ক্‌আ৬ক৳আ৭কআ৮রইয়৯গধ০";
+    assert_eq!(transliterate(&segment.repeat(1024)), expected.repeat(1024));
+}
+
+#[test]
+fn symbols_period_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-period.tsv"));
+}
+
+#[test]
+fn symbols_double_period_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-double-period.tsv"));
+}
+
+#[test]
+fn symbols_ellipsis_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-ellipsis.tsv"));
+}
+
+#[test]
+fn symbols_escaped_period_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-escaped-period.tsv"));
+}
+
+#[test]
+fn symbols_colon_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-colon.tsv"));
+}
+
+#[test]
+fn symbols_escaped_colon_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-escaped-colon.tsv"));
+}
+
+#[test]
+fn symbols_caret_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-caret.tsv"));
+}
+
+#[test]
+fn symbols_escaped_caret_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-escaped-caret.tsv"));
+}
+
+#[test]
+fn symbols_double_comma_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-double-comma.tsv"));
+}
+
+#[test]
+fn symbols_dollar_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-dollar.tsv"));
+}
+
+#[test]
+fn symbols_backtick_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-backtick.tsv"));
+}
+
+#[test]
+fn symbols_controls_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/symbols-controls.tsv"));
+}
+
+#[test]
 fn explicit_gj_controls_matches_exact_unicode() {
     check_fixture(include_str!("fixtures/explicit-gj-controls.tsv"));
 }
@@ -377,14 +494,10 @@ fn conjunct_completion_consumed_and_fresh_keys_keep_their_priorities() {
 }
 
 #[test]
-fn conjunct_completion_aliases_reph_and_escapes_remain_explicit_gaps() {
+fn conjunct_completion_reph_and_following_r_remain_explicit_gaps() {
     // These are partial engine outputs, not claims of reference compatibility.
-    for (raw, partial) in [
-        ("bDh", "বঢ"),
-        ("rrcch", "ররচ্ছ"),
-        ("cch`a", "চ্ছ`আ"),
-        ("cchqr", "চ্ছকর"),
-    ] {
+    for (raw, partial) in [("bDh", "বঢ"), ("rrcch", "ররচ্ছ"), ("cchqr", "চ্ছকর")]
+    {
         assert_eq!(transliterate(raw), partial, "{raw}");
     }
 }
@@ -2532,7 +2645,7 @@ fn check_fixture(fixture: &str) {
 
 #[test]
 fn empty_input_and_unmatched_unicode_are_preserved() {
-    for input in ["", "বাংলা", "é🙂\u{301}", "\t\n !`"] {
+    for input in ["", "বাংলা", "é🙂\u{301}", "\t\n !"] {
         assert_eq!(transliterate(input), input);
     }
     assert_eq!(transliterate("qXZ"), "কক্স্য");
@@ -2546,107 +2659,55 @@ fn empty_input_and_unmatched_unicode_are_preserved() {
 fn unsupported_rules_still_preserve_unmatched_characters() {
     for (input, expected) in [
         ("rrNgx", "ররঙ্ষ"),
-        ("Ngx`a", "ঙ্ষ`আ"),
         ("rrdd", "ররদ্দ"),
-        ("dd`a", "দ্দ`আ"),
-        ("hm`a", "হ্ম`আ"),
         ("rrhm", "ররহ্ম"),
-        ("Ngx`h", "ঙ্ষ`হ"),
         ("rrx", "ররক্স"),
         ("rrkx", "ররক্ষ"),
-        ("x`a", "এক্স`আ"),
-        ("x`h", "এক্স`হ"),
         ("rrw", "রর্ব"),
-        ("w`a", "ও`আ"),
-        ("w`h", "ও`হ"),
-        ("v`a", "ভ`আ"),
-        ("v`h", "ভ`হ"),
         ("qr", "কর"),
-        ("q`a", "ক`আ"),
-        ("q`h", "ক`হ"),
         ("rrk", "ররক"),
         ("rrr", "ররর"),
         ("Rri", "ড়রি"),
         ("Rr", "ড়র"),
         ("Rhr", "ঢ়র"),
-        ("R`h", "ড়`হ"),
-        ("Z`a", "্য`আ"),
-        ("Z`h", "্য`হ"),
         ("zr", "যর"),
-        ("z`h", "য`হ"),
-        ("ng`a", "ং`আ"),
         ("rrNgk", "ররঙ্ক"),
-        ("Ngk`a", "ঙ্ক`আ"),
-        ("Ngk`h", "ঙ্ক`হ"),
         ("rrNgkh", "ররঙ্খ"),
-        ("Ngkh`a", "ঙ্খ`আ"),
-        ("Ngkh`h", "ঙ্খ`হ"),
         ("rrNgkx", "ররঙ্ক্ষ"),
-        ("Ngkx`a", "ঙ্ক্ষ`আ"),
-        ("Ngkx`h", "ঙ্ক্ষ`হ"),
         ("rrNgkkh", "ররঙ্ক্ষ"),
-        ("Ngkkh`a", "ঙ্ক্ষ`আ"),
-        ("Ngkkh`h", "ঙ্ক্ষ`হ"),
         ("rrNgkSh", "ররঙ্ক্ষ"),
-        ("NgkSh`a", "ঙ্ক্ষ`আ"),
-        ("NgkSh`h", "ঙ্ক্ষ`হ"),
         ("rrkShN", "ররক্ষ্ণ"),
-        ("kShN`a", "ক্ষ্ণ`আ"),
         ("rrkSh", "ররক্ষ"),
-        ("kSh`a", "ক্ষ`আ"),
-        ("kSh`h", "ক্ষ`হ"),
-        ("k`Sh", "ক`ষ"),
-        ("kSh.", "ক্ষ."),
-        ("N`g", "ণ`গ"),
-        ("y`a", "ইয়`আ"),
-        ("y`h", "ইয়`হ"),
         ("rrY", "ররয়"),
-        ("Y`a", "য়`আ"),
-        ("Y`h", "য়`হ"),
-        ("p`h", "প`হ"),
-        ("c`h", "চ`হ"),
-        ("d`h", "দ`হ"),
-        ("l`h", "ল`হ"),
-        ("h`", "হ`"),
-        ("s`h", "স`হ"),
         ("rrShN", "ররষ্ণ"),
         ("rrShm", "ররষ্ম"),
-        ("Shm`a", "ষ্ম`আ"),
-        ("ShN`a", "ষ্ণ`আ"),
         ("rrkk", "ররক্ক"),
-        ("kk`a", "ক্ক`আ"),
         ("rrkkh", "ররক্ষ"),
-        ("kkh`a", "ক্ষ`আ"),
-        ("kkh`h", "ক্ষ`হ"),
-        ("k`kh", "ক`খ"),
-        ("kkh.", "ক্ষ."),
-        ("k`h", "ক`হ"),
-        ("k`a", "ক`আ"),
-        ("i`", "ই`"),
-        ("I`", "ঈ`"),
-        ("u`", "উ`"),
-        ("U`", "ঊ`"),
-        ("e`", "এ`"),
-        ("ee`", "ঈ`"),
-        ("o`", "অ`"),
-        ("O`", "ও`"),
-        ("oo`", "উ`"),
-        ("OI`", "ঐ`"),
-        ("OU`", "ঔ`"),
-        ("rri`", "ঋ`"),
-        ("r`", "র`"),
-        ("rr`", "রর`"),
+        ("a`", "আ"),
+        ("t``", "ত"),
+        ("i`", "ই"),
+        ("I`", "ঈ"),
+        ("u`", "উ"),
+        ("U`", "ঊ"),
+        ("e`", "এ"),
+        ("ee`", "ঈ"),
+        ("o`", "অ"),
+        ("O`", "ও"),
+        ("oo`", "উ"),
+        ("OI`", "ঐ"),
+        ("OU`", "ঔ"),
+        ("rri`", "ঋ"),
     ] {
         assert_eq!(transliterate(input), expected, "input: {input:?}");
     }
-    // An exposed G converts after consumed N; reph and escapes remain gaps.
+    // An exposed G converts after consumed N; standalone backticks separate matches.
     for raw in ["kkhN", "kShN", "kxN"] {
         assert_eq!(transliterate(&format!("{raw}G")), "ক্ষ্ণগ");
     }
     for raw in ["kkhm", "kShm", "kxm"] {
         assert_eq!(transliterate(&format!("rr{raw}")), "ররক্ষ্ম");
         assert_eq!(transliterate(&format!("{}M", &raw[..raw.len() - 1])), "ক্ষ্ম");
-        assert_eq!(transliterate(&format!("{raw}`a")), "ক্ষ্ম`আ");
+        assert_eq!(transliterate(&format!("{raw}`a")), "ক্ষ্মআ");
     }
 }
 

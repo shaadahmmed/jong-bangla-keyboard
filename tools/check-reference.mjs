@@ -26,6 +26,19 @@ const codePoints = (text) =>
 
 let count = 0;
 for (const name of [
+  "symbols-period.tsv",
+  "symbols-double-period.tsv",
+  "symbols-ellipsis.tsv",
+  "symbols-escaped-period.tsv",
+  "symbols-colon.tsv",
+  "symbols-escaped-colon.tsv",
+  "symbols-caret.tsv",
+  "symbols-escaped-caret.tsv",
+  "symbols-double-comma.tsv",
+  "symbols-dollar.tsv",
+  "symbols-backtick.tsv",
+  "symbols-controls.tsv",
+
   "explicit-gj-controls.tsv",
   "explicit-gj-g-basic.tsv",
   "explicit-gj-g-lower-upper.tsv",
@@ -312,7 +325,7 @@ console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
 // These probes expose missing behavior; they are not supported-slice fixtures.
 for (const input of [
-  "qr", "zr", "Rr", "rrShN", "Shm`a",
+  "qr", "zr", "Rr", "rrShN", "a`",
 ]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);
