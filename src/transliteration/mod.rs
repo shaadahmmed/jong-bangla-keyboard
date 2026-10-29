@@ -3,6 +3,7 @@
 //! Keep cross-family priority explicit here: consumed keys cannot begin a later
 //! match. Rule tables and helpers must not reorder these branches.
 
+mod case;
 mod following_r;
 mod rules;
 mod vowels;
@@ -28,7 +29,8 @@ enum Context {
 
 /// Convert supported phonetic sequences and ASCII digits to Bangla.
 ///
-/// Matching is case-sensitive and follows verified rule priority. Unmatched
+/// The ASCII aliases ABCEFHKLMPQVWX match their lowercase forms; other letters
+/// remain case-sensitive. Matching follows verified rule priority. Unmatched
 /// Unicode characters pass through without normalization; supported parts of
 /// an otherwise unsupported sequence may still convert.
 ///
@@ -36,7 +38,8 @@ enum Context {
 /// copied Bangla. The input is never modified or retained, and calls share no
 /// state. See the [crate documentation](crate) for coverage and behavior notes.
 pub fn transliterate(input: &str) -> String {
-    let mut remaining = input;
+    let normalized = case::normalize(input);
+    let mut remaining = normalized.as_ref();
     let mut output = String::with_capacity(input.len());
     let mut context = Context::Other;
 

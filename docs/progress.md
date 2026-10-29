@@ -10,81 +10,83 @@ Dates use the project's Asia/Dhaka timezone.
 ## Current position
 
 - **Implemented:** a dependency-free Rust transliteration library and terminal
-  example; principal basic vowel/consonant forms, contextual forms, selected
-  conjuncts, and following-r forms. See the [coverage overview](../README.md#current-status).
-- **Latest coverage:** all 25 exact conjunct spellings identified by the standalone
-  gap audit, implemented together at the user's request. Basic c/ch/j/jh also
-  attach following r. Independent evidence, Unicode, priorities and limits are
-  in the [batch record](v1.md#remaining-exact-conjunct-batch).
-- **Library:** Rust scanner, authored rule tables, vowels, and following-r modules
-  remain independent of platforms; the public `transliterate` API is unchanged.
-- **Validation:** all 353,674 fixture rows match the pinned parser; formatting,
-  Clippy, 265 integration tests, 1 doctest, release/documentation builds,
+  example; principal vowels/consonants, contextual forms, selected conjuncts,
+  following-r forms, and selective ASCII case aliases. See the
+  [coverage overview](../README.md#current-status).
+- **Latest coverage:** `ABCEFHKLMPQVWX` match their lowercase forms throughout
+  scanning, including AZ and uppercase H inside longer matches. Explicit G/J
+  behavior remains separate; see the [batch record](v1.md#selective-ascii-case-alias-batch).
+- **Library:** private case/scanner/rules/vowels/following-r modules remain
+  independent of platforms; the public `transliterate` API is unchanged.
+- **Validation:** all 462,920 fixture rows match the pinned parser; formatting,
+  Clippy, 280 integration tests, 1 doctest, release/documentation builds,
   default/batch smoke checks, and documentation consistency checks passed.
-- **Limitations:** standalone inventory now has 52 discrepancies (27 uppercase/
-  alternate spellings and 25 punctuation/symbol/escape spellings). This excludes
-  context interactions and is not a compatibility percentage. Reph, vowel-context
-  edges and following-r gaps after q/z/R/Rh remain. Composition, Fcitx5, and a
-  usable desktop keyboard are not implemented; performance/platforms are unverified.
+- **Limitations:** the standalone inventory has 37 discrepancies (12 explicit
+  G/J forms and 25 punctuation/symbol/escape forms); context interactions are
+  excluded, so this is not a compatibility percentage. Reph, vowel-context edges,
+  following-r gaps after q/z/R/Rh, and reference Unicode-lowercasing differences
+  remain. Composition, Fcitx5, desktop use, and performance are unimplemented
+  or unverified.
 
 ## Latest completed step
 
-- **2026-10-29 — Implement the 25 remaining identified exact conjuncts together.**
-  Added pt/pT/bd/bdh/bj, cc/cch/cNG, jj/jjh/jNG, gdh/mth,
-  NGc/NGch/NGj/NGjh, nc/nch/nj/njh, and shc/shch/Sc/Sch.
-  Added independently verified following-r behavior after basic c/ch/j/jh.
-- **Behavior:** longer h forms consume h; pth/pTh/bjh leave it available.
-  `bdhm` → ব্ধম versus `pthm` → প্তহ্ম. Consumed keys cannot begin later
-  matches (`bdd` → ব্দদ, `ccNG` → চ্চঞ); fresh keys can. Existing families
-  retain priority. Exact cNG/jNG ending in G attach r without enabling standalone G.
-  No upstream source, rules, fixtures, dependencies or case normalization imported.
-- **Evidence:** 108,815 new authored rows in 30 files independently cover every
-  spelling, Unicode, vowels/ya, context, r runs/exceptions, all ordered pairs,
-  existing families in both orders, shared keys, longer forms, digits, splits,
-  copied Unicode, repetition and words. All older fixture files are unchanged.
-  Seven resolved partial assertions moved to passing coverage; the resolved bdd
-  reference probe was replaced by Gdh. Exposed uppercase-G overlaps/splits and
-  q/z/R/Rh following-r limits remain explicit gaps, outside supported fixtures.
-- **Reference checks run:** `node /tmp/jong-verify-conjunct-completion.mjs` — all
-  108,815 new rows plus 1,084 extra authored boundary/split/separate-call/priority/
-  long-input expectations passed. `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 353,674 rows passed against the SHA-256-verified pinned parser; five
-  remaining-gap probes printed exact reference outputs. Node v24.21.0.
-- **Rust checks run:** `cargo test --offline conjunct_completion` — 33 passed;
+- **2026-10-29 — Implement the 14 selective ASCII case aliases together.**
+  Added normalization only for ABCEFHKLMPQVWX before matching, preserving
+  other case distinctions, input ownership, Unicode passthrough, and rule priority.
+  All 15 targeted standalone discrepancies (the 14 letters plus AZ) now match.
+- **Behavior:** `AZ` → অ্যা, `kH` → খ, `SH` → ষ, `NgK` → ঙ্ক,
+  `KSHM` → ক্ষ্ম, `mB` → ম্ব. `SPL` → শপ্ল versus `sPL` → স্প্ল.
+  No upstream source, rules, fixtures, dependencies or normalization code imported.
+- **Evidence:** 109,246 new authored rows in 16 files, including independent
+  per-letter/context coverage, mixed-case combinations, and 113 resolved cases.
+  All 353,674 earlier rows are unchanged. Migrated 107 old partial assertions;
+  retained G/J, reph and escape gaps. Rust adds every internal split of 15
+  mixed-case spellings (25 positions), separate calls, Unicode boundaries,
+  preserved case distinctions, and long repeated input.
+- **Reference checks run:** `node /tmp/jong-verify-case-aliases.mjs` — all
+  109,133 initial new rows and 86,996 ASCII pair/triple normalization probes
+  passed; the 113 resolved rows passed in the full comparison below.
+  `node /tmp/jong-verify-case-extra.mjs` — 313 extra authored boundary/case
+  expectations passed; 43 Unicode-contract cases and one G/J gap excluded from parity.
+  `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
+  — all 462,920 rows passed against the SHA-256-verified pinned parser;
+  five remaining-gap probes printed exact reference outputs. Node v24.21.0.
+- **Rust checks run:** `cargo test --offline case_alias` — 18 passed;
   `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`;
-  `cargo test --offline` — 265 integration tests and 1 doctest passed;
+  `cargo test --offline` — 280 integration tests and 1 doctest passed;
   `cargo build --offline --release`;
   `RUSTDOCFLAGS='-D warnings' cargo doc --offline --no-deps` — passed.
   Rust/Cargo 1.99.1 were used.
-- **Smoke checks run:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট;
-  `cargo run --offline --example convert -- 'pt pT bd bdh bj cNG cch cc gdh jjh jNG jj mth NGch NGjh NGc NGj nch njh nj nc shch Sch shc Sc pthm pThm bjhm bdhm cchm jjhm mthm bdd cr chr jr jhr cNGr jNGr shobdo iccha jNGan nishcoy'`
-  — matched independently checked outputs, including শব্দ/ইচ্ছা/জ্ঞান/নিশ্চয়.
-- **Documentation checks:** `python /tmp/jong-check-conjunct-completion-docs.py --before-handoff`
-  and `python /tmp/jong-check-conjunct-completion-docs.py`
-  — local links/anchors, manifests/counts/code points, retained older fixtures,
-  repeated inputs, 25-row Unicode/evidence table, README examples and gap probes
-  passed, including the updated handoff and preserved history.
+- **Smoke checks run:** `cargo run --offline --example convert -- 'kh12T'`
+  — খ১২ট; `cargo run --offline --example convert -- 'A AZ B C E F H K L M P Q V W X kH SH NgK KSHM SPL CH PH KX WA QX G J Jh'`
+  — matched independently checked aliases; G/J/Jh retain documented partial output.
+- **Documentation checks:** `python /tmp/jong-check-case-docs.py` — links/anchors,
+  manifests/counts/code points, retained older fixtures, repeated inputs,
+  14-row Unicode/evidence table, examples/gaps, bounded handoff and history passed.
   `git diff --check` passed.
-- **Standalone audit:** 302 distinct pattern/uppercase probes were rerun; all
-  25 targeted conjuncts match, with 52 known standalone discrepancies remaining.
-  This does not establish full compatibility, performance, or platform support.
-- **Next action:** investigate uppercase/alternate spellings below. This batch's
-  implementation and full code checks are complete; alias work has not started.
+- **Standalone audit:** `python /tmp/jong-audit-case-aliases.py` — 302 distinct
+  inputs checked; 37 discrepancies remain. No full compatibility, performance,
+  or platform-support claim. Resolved ShM gap probe was replaced by explicit Jh.
+- **Remaining limits:** G/J cannot be folded: reference `Jh` → জহ differs
+  from `jh` → ঝ. q/Q following-r remains incomplete. Copied Unicode keeps the
+  existing passthrough contract (K stays K; reference gives ক).
+- **Next action:** investigate the explicit G/J forms below. This batch's
+  implementation and full checks are complete; G/J implementation has not started.
 
 ## Next small implementation step
 
-1. Audit the remaining uppercase/alternate spellings against the pinned parser,
-   distinguishing case normalization from explicit case-sensitive G/J behavior.
-   Investigate A/AZ and aliases exposed after consumed keys before fixing scope.
-2. Choose the largest coherent related batch supported by independent Unicode,
-   vowel/context, following-r, boundary and priority evidence for every spelling.
-   Preserve established case-sensitive distinctions; do not infer blanket folding.
-3. Implement only that verified batch, extend fixtures, run the full README checks,
+1. Independently reference-check the 12 remaining standalone G/J spellings:
+   Ghn/Gdh/GN/Gn/Gm/Gl/GG/Gg/gG/Gh/G/J. Include longer/fresh/consumed keys,
+   uppercase-H aliases, vowels/ya, following-r, and case-sensitive Ng/NG/nG behavior.
+2. Choose the largest coherent verified batch without blanket G/J folding.
+   Keep `Jh` distinct from `jh`, and investigate aliases exposed by earlier matches
+   (for example ShNG and internal splits of cNG/jNG).
+3. Implement that batch with independent fixtures, run the full README checks,
    update behavioral docs and this handoff, and commit the batch together.
    Keep reph, punctuation/escapes, composition and platform work separate.
 
-**Done when:** every selected spelling has independent reference evidence,
+**Done when:** every selected spelling has independent Unicode/context evidence,
 existing cases and interactions pass, actual checks and limits are recorded,
 and the batch is committed. The next batch has not started.
 

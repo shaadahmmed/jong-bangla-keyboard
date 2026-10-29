@@ -1,6 +1,178 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn case_alias_a_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-a.tsv"));
+}
+
+#[test]
+fn case_alias_b_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-b.tsv"));
+}
+
+#[test]
+fn case_alias_c_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-c.tsv"));
+}
+
+#[test]
+fn case_alias_e_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-e.tsv"));
+}
+
+#[test]
+fn case_alias_f_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-f.tsv"));
+}
+
+#[test]
+fn case_alias_h_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-h.tsv"));
+}
+
+#[test]
+fn case_alias_k_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-k.tsv"));
+}
+
+#[test]
+fn case_alias_l_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-l.tsv"));
+}
+
+#[test]
+fn case_alias_m_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-m.tsv"));
+}
+
+#[test]
+fn case_alias_mixed_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-mixed.tsv"));
+}
+
+#[test]
+fn case_alias_p_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-p.tsv"));
+}
+
+#[test]
+fn case_alias_q_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-q.tsv"));
+}
+
+#[test]
+fn case_alias_resolved_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-resolved.tsv"));
+}
+
+#[test]
+fn case_alias_v_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-v.tsv"));
+}
+
+#[test]
+fn case_alias_w_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-w.tsv"));
+}
+
+#[test]
+fn case_alias_x_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/case-alias-x.tsv"));
+}
+
+const CASE_ALIAS_SPLITS: [(&str, usize, &str, &str); 25] = [
+    ("CH", 1, "চ", "হ"),
+    ("PH", 1, "প", "হ"),
+    ("KH", 1, "ক", "হ"),
+    ("SH", 1, "শ", "হ"),
+    ("kSH", 1, "ক", "ষ"),
+    ("kSH", 2, "কশ", "হ"),
+    ("NgKH", 1, "ণ", "গখ"),
+    ("NgKH", 2, "ঙ", "খ"),
+    ("NgKH", 3, "ঙ্ক", "হ"),
+    ("KKHN", 1, "ক", "খণ"),
+    ("KKHN", 2, "ক্ক", "হ্ণ"),
+    ("KKHN", 3, "ক্ষ", "ণ"),
+    ("KSHM", 1, "ক", "ষ্ম"),
+    ("KSHM", 2, "কশ", "হ্ম"),
+    ("KSHM", 3, "ক্ষ", "ম"),
+    ("AZ", 1, "আ", "্য"),
+    ("EE", 1, "এ", "এ"),
+    ("MPH", 1, "ম", "ফ"),
+    ("MPH", 2, "ম্প", "হ"),
+    ("SPL", 1, "শ", "প্ল"),
+    ("SPL", 2, "শপ", "ল"),
+    ("KX", 1, "ক", "এক্স"),
+    ("kH", 1, "ক", "হ"),
+    ("lDH", 1, "ল", "ঢ"),
+    ("lDH", 2, "ল্ড", "হ"),
+];
+
+#[test]
+fn case_aliases_preserve_unicode_and_reset_at_boundaries() {
+    for (raw, bangla) in [
+        ("A", "আ"),
+        ("B", "ব"),
+        ("C", "চ"),
+        ("E", "এ"),
+        ("F", "ফ"),
+        ("H", "হ"),
+        ("K", "ক"),
+        ("L", "ল"),
+        ("M", "ম"),
+        ("P", "প"),
+        ("Q", "ক"),
+        ("V", "ভ"),
+        ("W", "ও"),
+        ("X", "এক্স"),
+    ] {
+        for boundary in [
+            " ",
+            "\n",
+            "\r",
+            "\t",
+            "\0",
+            "🙂",
+            "বাংলা",
+            "\u{301}",
+            "K",
+            "İ",
+            "Ａ",
+        ] {
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}A")),
+                format!("{bangla}{boundary}আ")
+            );
+        }
+    }
+    for (raw, split, first, tail) in CASE_ALIAS_SPLITS {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "বাংলা", "\u{301}"] {
+            assert_eq!(
+                transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
+                format!("{first}{boundary}{tail}")
+            );
+        }
+    }
+    assert_eq!(transliterate("I U O T D N R S Y Z"), "ঈ ঊ ও ট ড ণ ড় শ য় ্য");
+    // Explicit G/J rules remain gaps; do not normalize them to g/j.
+    assert_eq!(transliterate("G J Jh"), "G J Jহ");
+    // Preserve the existing Unicode passthrough contract, including lookalikes.
+    assert_eq!(transliterate("KＫİＡÉＡ🙂K"), "KＫİＡÉＡ🙂ক");
+}
+
+#[test]
+fn case_aliases_reset_between_calls_and_in_long_input() {
+    for (raw, split, first, tail) in CASE_ALIAS_SPLITS {
+        assert_eq!(transliterate(&raw[..split]), first);
+        assert_eq!(transliterate(&raw[split..]), tail);
+        assert_eq!(transliterate("A"), "আ");
+    }
+    let raw = "AZ KH SH NgK KSHM SPL CH PH KX WA X QX 🙂 KＡ ";
+    let expected = "অ্যা খ ষ ঙ্ক ক্ষ্ম শপ্ল ছ ফ ক্ষ ওয়া এক্স কক্স 🙂 KＡ ";
+    assert_eq!(transliterate(&raw.repeat(1024)), expected.repeat(1024));
+}
+
+#[test]
 fn conjunct_completion_resets_at_every_split_and_between_calls() {
     for (raw, bangla, parts) in [
         ("pt", "প্ত", &[("প", "ত")][..]),
@@ -108,10 +280,7 @@ fn conjunct_completion_aliases_reph_and_escapes_remain_explicit_gaps() {
         ("Gdh", "Gধ"),
         ("G", "G"),
         ("J", "J"),
-        ("P", "P"),
         ("bDh", "বঢ"),
-        ("bdH", "ব্দH"),
-        ("ccH", "চ্চH"),
         ("ShNGch", "ষ্ণGছ"),
         ("NNGch", "ণ্ণGছ"),
         ("gNGjh", "গ্ণGঝ"),
@@ -574,26 +743,6 @@ fn repeat_n_resets_at_every_split_boundary_and_between_calls() {
 }
 
 #[test]
-fn repeat_n_aliases_remain_explicit_gaps() {
-    // Partial output only: uppercase aliases are separate work.
-    for (raw, partial) in [
-        ("bB", "বB"),
-        ("Bb", "Bব"),
-        ("BB", "BB"),
-        ("bbH", "ব্বH"),
-        ("pP", "পP"),
-        ("Pp", "Pপ"),
-        ("PP", "PP"),
-        ("ppH", "প্পH"),
-        ("Pn", "Pন"),
-        ("sHn", "সHন"),
-        ("SHn", "শHন"),
-    ] {
-        assert_eq!(transliterate(raw), partial, "{raw}");
-    }
-}
-
-#[test]
 fn s_labial_sph_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/conjunct-sph.tsv"));
 }
@@ -676,27 +825,6 @@ fn s_labial_resets_at_every_split_boundary_and_between_calls() {
         assert_eq!(transliterate("y"), "ইয়");
     }
     assert_eq!(transliterate(&"sp sph sf spl Shp Shph Shf spll sphll sfll Shpll Shphll Shfll splg sphlg Shplg splm sphlm ksp kspl kShp NgkShp sphulingo sfUron puShpo niShphol niShfol 🙂 ".repeat(64)), "স্প স্ফ স্ফ স্প্ল ষ্প ষ্ফ ষ্ফ স্প্লল স্ফল্ল স্ফল্ল ষ্পল্ল ষ্ফল্ল ষ্ফল্ল স্প্লগ স্ফল্গ ষ্পল্গ স্প্লম স্ফল্ম ক্সপ ক্সপ্ল ক্ষপ ঙ্ক্ষপ স্ফুলিঙ্গ স্ফূরন পুষ্প নিষ্ফল নিষ্ফল 🙂 ".repeat(64));
-}
-
-#[test]
-fn s_labial_aliases_remain_explicit_gaps() {
-    // Partial engine outputs for aliases, not reference compatibility.
-    for (raw, partial) in [
-        ("sP", "সP"),
-        ("sF", "সF"),
-        ("sPh", "সPহ"),
-        ("spH", "স্পH"),
-        ("sPL", "সPL"),
-        ("SHp", "শHপ"),
-        ("ShP", "ষP"),
-        ("ShPh", "ষPহ"),
-        ("ShpH", "ষ্পH"),
-        ("SHph", "শHফ"),
-        ("SHf", "শHফ"),
-        ("ShF", "ষF"),
-    ] {
-        assert_eq!(transliterate(raw), partial, "{raw}");
-    }
 }
 
 #[test]
@@ -803,22 +931,8 @@ fn l_prefix_resets_at_every_split_boundary_and_between_calls() {
 }
 
 #[test]
-fn l_prefix_unimplemented_aliases_remain_explicit_gaps() {
-    // These expectations describe partial output, not reference compatibility.
-    for (raw, partial) in [
-        ("lG", "লG"),
-        ("lgH", "ল্গH"),
-        ("lB", "লB"),
-        ("lbH", "ল্বH"),
-        ("lV", "লV"),
-        ("lP", "লP"),
-        ("lpH", "ল্পH"),
-        ("LT", "Lট"),
-        ("lDH", "ল্ডH"),
-        ("ldH", "লদH"),
-    ] {
-        assert_eq!(transliterate(raw), partial, "{raw}");
-    }
+fn l_prefix_uppercase_g_remains_an_explicit_gap() {
+    assert_eq!(transliterate("lG"), "লG");
 }
 
 #[test]
@@ -928,25 +1042,6 @@ fn m_labial_resets_at_every_split_boundary_and_between_calls() {
         assert_eq!(transliterate("y"), "ইয়");
     }
     assert_eq!(transliterate(&"mb mbh mv mp mph mf mpl lm sm shm Sm mbl mbhl mvl mphl mfl mplk mpll mplTm smp shmpl Ngmb kkhmp sklm kshm mbbl mppl 🙂 ".repeat(64)), "ম্ব ম্ভ ম্ভ ম্প ম্ফ ম্ফ মপ্ল ল্ম স্ম শ্ম শ্ম ম্বল ম্ভল ম্ভল ম্ফল ম্ফল মপ্লক মপ্লল মপ্লট্ম স্মপ শ্মপ্ল ঙ্মব ক্ষ্মপ স্ক্লম কশম ম্বব্ল ম্পপ্ল 🙂 ".repeat(64));
-}
-
-#[test]
-fn m_labial_aliases_remain_explicit_gaps() {
-    // Partial engine outputs for aliases, not compatibility expectations.
-    for (raw, partial) in [
-        ("mB", "মB"),
-        ("mP", "মP"),
-        ("mV", "মV"),
-        ("mF", "মF"),
-        ("mbH", "ম্বH"),
-        ("mpH", "ম্পH"),
-        ("Mbh", "Mভ"),
-        ("Mph", "Mফ"),
-        ("Lm", "Lম"),
-        ("sHm", "সHম"),
-    ] {
-        assert_eq!(transliterate(raw), partial, "{raw}");
-    }
 }
 
 #[test]
@@ -2342,11 +2437,11 @@ fn check_fixture(fixture: &str) {
 
 #[test]
 fn empty_input_and_unmatched_unicode_are_preserved() {
-    for input in ["", "QX", "বাংলা", "é🙂\u{301}", "\t\n !`"] {
+    for input in ["", "বাংলা", "é🙂\u{301}", "\t\n !`"] {
         assert_eq!(transliterate(input), input);
     }
-    assert_eq!(transliterate("qXZ"), "কX্য");
-    assert_eq!(transliterate("qXYZ"), "কXয়্য");
+    assert_eq!(transliterate("qXZ"), "কক্স্য");
+    assert_eq!(transliterate("qXYZ"), "কক্সয়্য");
     assert_eq!(transliterate("🙂khবাংলা2é"), "🙂খবাংলা২é");
     // Only ASCII digits are converted; other scripts' digits are preserved.
     assert_eq!(transliterate("০১২৩৪৫৬৭৮৯ ١٢ １２"), "০১২৩৪৫৬৭৮৯ ١٢ １２");
@@ -2355,20 +2450,10 @@ fn empty_input_and_unmatched_unicode_are_preserved() {
 #[test]
 fn unsupported_rules_still_preserve_unmatched_characters() {
     for (input, expected) in [
-        ("E", "E"),
-        ("X", "X"),
-        ("Xa", "Xআ"),
-        ("kX", "কX"),
-        ("xA", "এক্সA"),
-        ("NgX", "ঙX"),
-        ("NgxA", "ঙ্ষA"),
         ("rrNgx", "ররঙ্ষ"),
         ("Ngx`a", "ঙ্ষ`আ"),
         ("Gg", "Gগ"),
         ("gNG", "গ্ণG"),
-        ("ddH", "দ্দH"),
-        ("dHn", "দHন"),
-        ("dV", "দV"),
         ("rrdd", "ররদ্দ"),
         ("dd`a", "দ্দ`আ"),
         ("Gm", "Gম"),
@@ -2379,18 +2464,9 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("rrkx", "ররক্ষ"),
         ("x`a", "এক্স`আ"),
         ("x`h", "এক্স`হ"),
-        ("W", "W"),
-        ("Wa", "Wআ"),
-        ("wA", "ওA"),
-        ("wE", "ওE"),
         ("rrw", "রর্ব"),
         ("w`a", "ও`আ"),
         ("w`h", "ও`হ"),
-        ("Q", "Q"),
-        ("Qa", "Qআ"),
-        ("V", "V"),
-        ("Va", "Vআ"),
-        ("vH", "ভH"),
         ("v`a", "ভ`আ"),
         ("v`h", "ভ`হ"),
         ("qr", "কর"),
@@ -2401,51 +2477,31 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Rri", "ড়রি"),
         ("Rr", "ড়র"),
         ("Rhr", "ঢ়র"),
-        ("RH", "ড়H"),
         ("R`h", "ড়`হ"),
-        ("AZ", "A্য"),
         ("Z`a", "্য`আ"),
         ("Z`h", "্য`হ"),
         ("zr", "যর"),
         ("z`h", "য`হ"),
         ("nG", "নG"),
         ("ng`a", "ং`আ"),
-        ("NgK", "ঙK"),
-        ("NgkH", "ঙ্কH"),
-        ("NgkA", "ঙ্কA"),
         ("rrNgk", "ররঙ্ক"),
         ("Ngk`a", "ঙ্ক`আ"),
         ("Ngk`h", "ঙ্ক`হ"),
         ("rrNgkh", "ররঙ্খ"),
-        ("NgKh", "ঙKহ"),
-        ("NgkhA", "ঙ্খA"),
         ("Ngkh`a", "ঙ্খ`আ"),
         ("Ngkh`h", "ঙ্খ`হ"),
         ("rrNgkx", "ররঙ্ক্ষ"),
-        ("NgkX", "ঙ্কX"),
-        ("NgKx", "ঙKএক্স"),
-        ("NgkxA", "ঙ্ক্ষA"),
         ("Ngkx`a", "ঙ্ক্ষ`আ"),
         ("Ngkx`h", "ঙ্ক্ষ`হ"),
         ("rrNgkkh", "ররঙ্ক্ষ"),
-        ("NgKkh", "ঙKখ"),
-        ("NgkkH", "ঙ্ককH"),
-        ("NgkkhA", "ঙ্ক্ষA"),
         ("Ngkkh`a", "ঙ্ক্ষ`আ"),
         ("Ngkkh`h", "ঙ্ক্ষ`হ"),
         ("rrNgkSh", "ররঙ্ক্ষ"),
-        ("NgKSh", "ঙKষ"),
-        ("NgkSH", "ঙ্কশH"),
-        ("NgkShA", "ঙ্ক্ষA"),
         ("NgkSh`a", "ঙ্ক্ষ`আ"),
         ("NgkSh`h", "ঙ্ক্ষ`হ"),
         ("kShNG", "ক্ষ্ণG"),
         ("rrkShN", "ররক্ষ্ণ"),
-        ("kSHN", "কশHণ"),
         ("kShN`a", "ক্ষ্ণ`আ"),
-        ("kSH", "কশH"),
-        ("KSh", "Kষ"),
-        ("kShA", "ক্ষA"),
         ("rrkSh", "ররক্ষ"),
         ("kSh`a", "ক্ষ`আ"),
         ("kSh`h", "ক্ষ`হ"),
@@ -2457,52 +2513,28 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("rrY", "ররয়"),
         ("Y`a", "য়`আ"),
         ("Y`h", "য়`হ"),
-        ("P", "P"),
-        ("Ph", "Pহ"),
-        ("F", "F"),
         ("p`h", "প`হ"),
-        ("C", "C"),
         ("J", "J"),
         ("Jh", "Jহ"),
         ("c`h", "চ`হ"),
-        ("dH", "দH"),
-        ("DH", "ডH"),
         ("d`h", "দ`হ"),
-        ("L", "L"),
-        ("H", "H"),
         ("l`h", "ল`হ"),
         ("h`", "হ`"),
-        ("sH", "সH"),
-        ("SH", "শH"),
         ("s`h", "স`হ"),
         ("kkhNG", "ক্ষ্ণG"),
         ("kxNG", "ক্ষ্ণG"),
-        ("kkH", "ক্কH"),
-        ("kkA", "ক্কA"),
-        ("kkE", "ক্কE"),
-        ("kkX", "ক্কX"),
-        ("kK", "কK"),
-        ("Kk", "Kক"),
-        ("KK", "KK"),
         ("ShNG", "ষ্ণG"),
-        ("ShM", "ষM"),
-        ("SHN", "শHণ"),
-        ("SHm", "শHম"),
         ("rrShN", "ররষ্ণ"),
         ("rrShm", "ররষ্ম"),
         ("Shm`a", "ষ্ম`আ"),
         ("ShN`a", "ষ্ণ`আ"),
         ("rrkk", "ররক্ক"),
         ("kk`a", "ক্ক`আ"),
-        ("Kkh", "Kখ"),
-        ("kKh", "কKহ"),
-        ("kkhA", "ক্ষA"),
         ("rrkkh", "ররক্ষ"),
         ("kkh`a", "ক্ষ`আ"),
         ("kkh`h", "ক্ষ`হ"),
         ("k`kh", "ক`খ"),
         ("kkh.", "ক্ষ."),
-        ("K", "K"),
         ("k`h", "ক`হ"),
         ("k`a", "ক`আ"),
         ("i`", "ই`"),
@@ -2528,7 +2560,7 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
     }
     for raw in ["kkhm", "kShm", "kxm"] {
         assert_eq!(transliterate(&format!("rr{raw}")), "ররক্ষ্ম");
-        assert_eq!(transliterate(&format!("{}M", &raw[..raw.len() - 1])), "ক্ষM");
+        assert_eq!(transliterate(&format!("{}M", &raw[..raw.len() - 1])), "ক্ষ্ম");
         assert_eq!(transliterate(&format!("{raw}`a")), "ক্ষ্ম`আ");
     }
 }
