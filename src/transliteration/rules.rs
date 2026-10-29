@@ -235,6 +235,19 @@ pub(super) const S_LABIAL_CONJUNCTS: [(&str, &str, char); 7] = [
     ("Shf", "ষ্ফ", 'f'),
 ];
 
+// Original s/Sh stop spellings, independently checked for context and overlaps.
+// Longer sth/ShTh consume h before st/ShT. In contrast, sTh/shth/Sth leave h
+// available after sT/sht/St. The consumed t/T cannot begin a later t/T rule.
+pub(super) const S_STOP_CONJUNCTS: [(&str, &str, char); 7] = [
+    ("sth", "স্থ", 'h'),
+    ("st", "স্ত", 't'),
+    ("sT", "স্ট", 'T'),
+    ("ShTh", "ষ্ঠ", 'h'),
+    ("ShT", "ষ্ট", 'T'),
+    ("sht", "শ্ত", 't'),
+    ("St", "শ্ত", 't'),
+];
+
 // Original repetition and n-ending spellings, each independently verified.
 // bb/pp consume both keys before bh/ph/bl/pl can reuse the second one;
 // following h/l remains available. pn/sn/shn/Sn consume n before nk/nn/etc.

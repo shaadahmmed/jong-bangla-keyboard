@@ -26,6 +26,14 @@ const codePoints = (text) =>
 
 let count = 0;
 for (const name of [
+  "conjunct-sth.tsv",
+  "conjunct-st.tsv",
+  "conjunct-s-t-retroflex.tsv",
+  "conjunct-sh-th-retroflex.tsv",
+  "conjunct-sh-t-retroflex.tsv",
+  "conjunct-sh-lowercase-t.tsv",
+  "conjunct-s-uppercase-t.tsv",
+  "s-stop-controls.tsv",
   "conjunct-ns.tsv",
   "conjunct-nsh.tsv",
   "conjunct-ps.tsv",

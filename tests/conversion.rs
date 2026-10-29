@@ -1,6 +1,118 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn s_stops_sth_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-sth.tsv"));
+}
+
+#[test]
+fn s_stops_st_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-st.tsv"));
+}
+
+#[test]
+fn s_stops_s_t_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-s-t-retroflex.tsv"));
+}
+
+#[test]
+fn s_stops_sh_th_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-sh-th-retroflex.tsv"));
+}
+
+#[test]
+fn s_stops_sh_t_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-sh-t-retroflex.tsv"));
+}
+
+#[test]
+fn s_stops_sh_lowercase_t_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-sh-lowercase-t.tsv"));
+}
+
+#[test]
+fn s_stops_s_uppercase_t_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-s-uppercase-t.tsv"));
+}
+
+#[test]
+fn s_stops_case_controls_and_consumed_keys_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/s-stop-controls.tsv"));
+}
+
+#[test]
+fn s_stops_longer_exceptions_and_priorities_match() {
+    for (raw, expected) in [
+        ("st sth sT ShT ShTh sht St", "স্ত স্থ স্ট ষ্ট ষ্ঠ শ্ত শ্ত"),
+        ("sTh shth Sth Shth", "স্টহ শ্তহ শ্তহ ষথ"),
+        ("sThm shthm Sthm sthm ShThm", "স্টহ্ম শ্তহ্ম শ্তহ্ম স্থম ষ্ঠম"),
+        ("stn stm stt stth sttn sttm", "স্তন স্তম স্তত স্তথ স্তত্ন স্তত্ম"),
+        ("sTm ShTm ShTT ShTTh ShTTm", "স্টম ষ্টম ষ্টট ষ্টঠ ষ্টট্ম"),
+        ("kst ksth ksht kSt", "ক্সত ক্সথ কশত কশ্ত"),
+        (
+            "nst nsth nsht nSt pst psth psht pSt",
+            "ন্সত ন্সথ নশত নশ্ত প্সত প্সথ পশত পশ্ত",
+        ),
+        ("kShT kShTh NgkShT NgkShTh", "ক্ষট ক্ষঠ ঙ্ক্ষট ঙ্ক্ষঠ"),
+        (
+            "str sthr sTr ShTr ShThr shtr Str",
+            "স্ত্র স্থ্র স্ট্র ষ্ট্র ষ্ঠ্র শ্ত্র শ্ত্র",
+        ),
+        (
+            "strri sthrry sTrrZ ShThry shtrri Strry",
+            "স্তৃ স্থরর\u{200d}্য স্টরর\u{200d}্য ষ্ঠ্র্য শ্তৃ শ্তরর\u{200d}্য",
+        ),
+    ] {
+        assert_eq!(transliterate(raw), expected, "{raw}");
+    }
+}
+
+#[test]
+fn s_stops_resets_at_every_split_boundary_and_between_calls() {
+    for (raw, bangla, parts) in [
+        ("st", "স্ত", vec![("স", "ত")]),
+        ("sth", "স্থ", vec![("স", "থ"), ("স্ত", "হ")]),
+        ("sT", "স্ট", vec![("স", "ট")]),
+        ("ShT", "ষ্ট", vec![("শ", "হট"), ("ষ", "ট")]),
+        ("ShTh", "ষ্ঠ", vec![("শ", "হঠ"), ("ষ", "ঠ"), ("ষ্ট", "হ")]),
+        ("sht", "শ্ত", vec![("স", "হত"), ("শ", "ত")]),
+        ("St", "শ্ত", vec![("শ", "ত")]),
+    ] {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "স্থ", "\u{301}"] {
+            for (index, (first, tail)) in parts.iter().enumerate() {
+                let split = index + 1;
+                assert_eq!(
+                    transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
+                    format!("{first}{boundary}{tail}")
+                );
+            }
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        for (index, (first, tail)) in parts.iter().enumerate() {
+            let split = index + 1;
+            assert_eq!(transliterate(&raw[..split]), *first);
+            assert_eq!(transliterate(&raw[split..]), *tail);
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    assert_eq!(transliterate(&"st sth sT ShT ShTh sht St sThm shthm Sthm sthm ShThm stn sttn ShTm ShTTm kst ksht nst nsht pst psht kShT NgkShTh Strry ShThrri rasta astha sTeshon koShTo niShTha proshtho 🙂 ".repeat(64)), "স্ত স্থ স্ট ষ্ট ষ্ঠ শ্ত শ্ত স্টহ্ম শ্তহ্ম শ্তহ্ম স্থম ষ্ঠম স্তন স্তত্ন ষ্টম ষ্টট্ম ক্সত কশত ন্সত নশত প্সত পশত ক্ষট ঙ্ক্ষঠ শ্তরর\u{200d}্য ষ্ঠৃ রাস্তা আস্থা স্টেশন কষ্ট নিষ্ঠা প্রশ্তহ 🙂 ".repeat(64));
+}
+
+#[test]
 fn ns_ps_ns_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/conjunct-ns.tsv"));
 }
@@ -2078,8 +2190,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("H", "H"),
         ("l`h", "ল`হ"),
         ("h`", "হ`"),
-        ("st", "সত"),
-        ("ShT", "ষট"),
         ("sH", "সH"),
         ("SH", "শH"),
         ("s`h", "স`হ"),

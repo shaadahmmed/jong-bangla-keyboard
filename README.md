@@ -74,7 +74,10 @@ priority. Longer `bbh`/`pph` leave `h` available; n-ending forms consume `n`
 before `nk` and other nasal rules can reuse it.
 Exact `ns`/`ps` → ন্স/প্স and longer `nsh`/`psh` → নশ/পশ are also
 implemented, including consuming priority and selected vowel/following-`r` forms.
-This is a partial engine with 224,769 reference-checked examples,
+Exact `st`/`sth`/`sT`/`ShT`/`ShTh`/`sht`/`St` are also implemented,
+including consuming priority and selected vowel/following-`r` forms. Longer
+`sth`/`ShTh` consume `h`; `sTh`/`shth`/`Sth` leave `h` available.
+This is a partial engine with 244,859 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Other
 letter forms, conjuncts, composition, and Fcitx5 integration are still missing.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
@@ -135,7 +138,8 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [the consuming l-prefix batch](docs/v1.md#consuming-l-prefix-batch), then
 [the s/Sh labial batch](docs/v1.md#s-and-sh-labial-conjunct-batch), then
 [the repetition and n-ending batch](docs/v1.md#repetition-and-n-ending-conjunct-batch), then
-[the consuming ns/ps batch](docs/v1.md#consuming-ns-and-ps-batch).
+[the consuming ns/ps batch](docs/v1.md#consuming-ns-and-ps-batch), then
+[the s/Sh stop batch](docs/v1.md#s-and-sh-stop-conjunct-batch).
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress handoff](docs/progress.md) for current state, the latest completed
@@ -145,8 +149,8 @@ that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
 update, and commit per completed batch. The next proposed batch investigates
-s/Sh dental and retroflex stop forms (`st`/`sth`/`sT`/`ShT`/`ShTh`/`sht`/`St`),
-including longer priorities and shared keys; scope remains unconfirmed.
+labial-prefix stop forms (`pt`/`pT`/`bd`/`bdh`/`bj`), including longer
+priorities and shared keys; scope remains unconfirmed.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
@@ -537,6 +541,19 @@ Vowels and following `r` retain their exceptions (`nsrri` → `ন্সৃ`,
 `pshrry` → `পশরর‍্য`). Copied Bangla resets context (`ন্সa` → `ন্সআ`).
 Case-sensitive controls stay distinct: `'nS nSh pS pSh'` → `নশ নষ পশ পষ`.
 Try `'mansik lipsa ipsito'` → `মান্সিক লিপ্সা ইপ্সিত`, without dictionary correction.
+Exact `'st sth sT ShT ShTh sht St'` → `স্ত স্থ স্ট ষ্ট ষ্ঠ শ্ত শ্ত` now match.
+Longer `'sTh shth Sth'` → `স্টহ শ্তহ শ্তহ` leave `h` available:
+`'sThm shthm Sthm sthm ShThm'` → `স্টহ্ম শ্তহ্ম শ্তহ্ম স্থম ষ্ঠম`.
+Consumed `t`/`T` cannot start another rule; fresh keys can:
+`'stn stm sttn sttm ShTm ShTTm'` → `স্তন স্তম স্তত্ন স্তত্ম ষ্টম ষ্টট্ম`.
+Earlier matches retain priority (`kst` → `ক্সত`, `ksht` → `কশত`, `kSt` → `কশ্ত`,
+`nst` → `ন্সত`, `nsht` → `নশত`, `kShT` → `ক্ষট`).
+Vowels and following `r` retain their checked exceptions (`strri` → `স্তৃ`,
+`sthrry` → `স্থরর‍্য`, `ShThry` → `ষ্ঠ্র্য`). Copied Bangla resets context
+(`স্থa` → `স্থআ`). Case controls stay separate:
+`'shT shTh ST STh Shth'` → `শট শঠ শট শঠ ষথ`.
+Try `'rasta astha sTeshon koShTo niShTha proshtho'`
+→ `রাস্তা আস্থা স্টেশন কষ্ট নিষ্ঠা প্রশ্তহ`, without dictionary correction.
 Uppercase aliases such as `mB` remain incomplete.
 Earlier b-prefixed matches (`bd`),
 other conjuncts and following-`r` forms, uppercase aliases, reph, and escapes
@@ -810,7 +827,15 @@ Our [initial fixtures](tests/fixtures/reference.tsv),
 [`nsh` fixtures](tests/fixtures/conjunct-nsh.tsv),
 [`ps` fixtures](tests/fixtures/conjunct-ps.tsv),
 [`psh` fixtures](tests/fixtures/conjunct-psh.tsv),
-and [ns/ps controls](tests/fixtures/ns-ps-controls.tsv) record the raw input,
+[ns/ps controls](tests/fixtures/ns-ps-controls.tsv),
+[`st` fixtures](tests/fixtures/conjunct-st.tsv),
+[`sth` fixtures](tests/fixtures/conjunct-sth.tsv),
+[`sT` fixtures](tests/fixtures/conjunct-s-t-retroflex.tsv),
+[`ShT` fixtures](tests/fixtures/conjunct-sh-t-retroflex.tsv),
+[`ShTh` fixtures](tests/fixtures/conjunct-sh-th-retroflex.tsv),
+[`sht` fixtures](tests/fixtures/conjunct-sh-lowercase-t.tsv),
+[`St` fixtures](tests/fixtures/conjunct-s-uppercase-t.tsv),
+and [s/Sh stop controls](tests/fixtures/s-stop-controls.tsv) record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
 or autocorrection.
@@ -826,7 +851,7 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 224,769 cases used by Rust tests and prints reference outputs for
+It checks the same 244,859 cases used by Rust tests and prints reference outputs for
 five known coverage gaps. The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
