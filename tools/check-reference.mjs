@@ -67,6 +67,9 @@ for (const name of [
   "conjunct-kkhn.tsv",
   "conjunct-kshn.tsv",
   "conjunct-kxn.tsv",
+  "conjunct-kkhm.tsv",
+  "conjunct-kshm.tsv",
+  "conjunct-kxm.tsv",
 ]) {
   const fixture = readFileSync(
     new URL(`../tests/fixtures/${name}`, import.meta.url),
@@ -90,7 +93,9 @@ for (const name of [
 console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
 // These probes expose missing behavior; they are not supported-slice fixtures.
-for (const input of ["kkShN", "kShm", "kShNG", "kShNkk", "rrkShN", "kSHN", "kShN`a"]) {
+for (const input of [
+  "kkShm", "kShmmm", "NgkShmr", "kShM", "kShmgr", "rrkShm", "kShm`a", "mng", "kShNG",
+]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);
 }

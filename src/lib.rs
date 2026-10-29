@@ -2,7 +2,7 @@
 //!
 //! Supports ASCII digits, contextual lowercase `y`/`w`/`x`, exact
 //! `kx`/`kkh`/`kSh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, uppercase `Z` and `aZ`/`oZ`,
-//! exact `kkhN`/`kShN`/`kxN`,
+//! exact `kkhN`/`kShN`/`kxN` and `kkhm`/`kShm`/`kxm`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -53,6 +53,7 @@
 //! assert_eq!(transliterate("kkh kkha kkhr kkhrri"), "ক্ষ ক্ষা ক্ষ্র ক্ষৃ");
 //! assert_eq!(transliterate("kSh kSha kShr kShrri"), "ক্ষ ক্ষা ক্ষ্র ক্ষৃ");
 //! assert_eq!(transliterate("kkhN kShNa kxNr kxNrri"), "ক্ষ্ণ ক্ষ্ণা ক্ষ্ণ্র ক্ষ্ণৃ");
+//! assert_eq!(transliterate("kkhm kShma kxmr kxmrri"), "ক্ষ্ম ক্ষ্মা ক্ষ্ম্র ক্ষ্মৃ");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -186,6 +187,10 @@ enum Context {
 /// kxNry -> ক্ষ্ণ্র্য. Earlier Ngkkh/NgkSh/Ngkx retain priority. Consuming N
 /// prevents a following Ng match: kShNgkSh -> ক্ষ্ণগক্ষ. A following uppercase
 /// G remains unsupported (kShNG -> ক্ষ্ণG).
+/// Exact kkhm/kShm/kxm produce ক্ষ্ম before shorter kkh/kSh/kx, with shared
+/// vowel context and single-r attachment: kxmr -> ক্ষ্ম্র, kxmrri -> ক্ষ্মৃ,
+/// kxmry -> ক্ষ্ম্র্য. Earlier Ngkkh/NgkSh/Ngkx still win (NgkShm -> ঙ্ক্ষম).
+/// Consuming m prevents it joining a following nasal: kShmng -> ক্ষ্মং.
 /// Earlier longer matches (such as gN in gNgx), kkx, and reph remain gaps;
 /// supported prefixes still convert inside them.
 /// Unsupported larger sequences can still contain supported parts: kkkh becomes
@@ -265,6 +270,14 @@ pub fn transliterate(input: &str) -> String {
         {
             output.push_str("ক্ষ্ণ");
             remaining = consume_following_r_prefix(after_conjunct, 'N', &mut output);
+            context = Context::Consonant { ya_joiner: false };
+        } else if let Some(after_conjunct) = remaining
+            .strip_prefix("kkhm")
+            .or_else(|| remaining.strip_prefix("kShm"))
+            .or_else(|| remaining.strip_prefix("kxm"))
+        {
+            output.push_str("ক্ষ্ম");
+            remaining = consume_following_r_prefix(after_conjunct, 'm', &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if let Some(after_kx) = remaining.strip_prefix("kx") {
             output.push_str("ক্ষ");
@@ -401,8 +414,8 @@ pub fn transliterate(input: &str) -> String {
 
 // Independently checked following-r prefixes depend on the final raw key,
 // including Z in aZ/oZ, x in kx/Ngx/Ngkx, k in Ngk, and h in Ngkh/Ngkkh/NgkSh/kkh/kSh.
-// The N in kkhN/kShN/kxN shares the selected single-r attachment.
-// Basic k/h/kh/N do not call this helper.
+// The N in kkhN/kShN/kxN and m in kkhm/kShm/kxm share single-r attachment.
+// Basic k/h/kh/N/m do not call this helper.
 // Do not infer them from copied Bangla.
 fn consume_following_r_prefix<'a>(
     remaining: &'a str,
@@ -416,12 +429,12 @@ fn consume_following_r_prefix<'a>(
     {
         output.push_str("্রর");
         &remaining[2..]
-    } else if (matches!(raw_key, 'Y' | 'k' | 'h' | 'N')
+    } else if (matches!(raw_key, 'Y' | 'k' | 'h' | 'N' | 'm')
         && remaining.starts_with('r')
         && !remaining.starts_with("rr"))
         || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))
     {
-        // Y and the selected k/h/N-ending conjuncts attach single r without a joiner.
+        // Y and the selected k/h/N/m-ending conjuncts attach single r without a joiner.
         // Z only does so before y/Z.
         output.push_str("্র");
         &remaining[1..]

@@ -206,6 +206,47 @@ fn kxn_conjunct_reference_cases_match_exact_unicode() {
 }
 
 #[test]
+fn kkhm_conjunct_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-kkhm.tsv"));
+}
+
+#[test]
+fn kshm_conjunct_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-kshm.tsv"));
+}
+
+#[test]
+fn kxm_conjunct_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-kxm.tsv"));
+}
+
+#[test]
+fn m_conjunct_context_resets_at_boundaries_and_between_calls() {
+    for raw in ["kkhm", "kShm", "kxm"] {
+        for boundary in ['\0', '\n', '\r', '\t', '🙂', 'ক', '\u{301}'] {
+            let shorter = &raw[..raw.len() - 1];
+            assert_eq!(
+                transliterate(&format!("{shorter}{boundary}m")),
+                format!("ক্ষ{boundary}ম")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("ক্ষ্ম{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("ক্ষ্ম্র{boundary}ইয়")
+            );
+        }
+        assert_eq!(transliterate(raw), "ক্ষ্ম");
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+        assert_eq!(transliterate("m"), "ম");
+    }
+}
+
+#[test]
 fn n_conjunct_context_resets_at_boundaries_and_between_calls() {
     for raw in ["kkhN", "kShN", "kxN"] {
         for boundary in ['\0', '\n', '\r', '\t', '🙂', 'ক', '\u{301}'] {
@@ -378,7 +419,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("skSh", "সক্ষ"),
         ("ShkSh", "ষক্ষ"),
         ("kShkk", "ক্ষকক"),
-        ("kShm", "ক্ষম"),
         ("kShNG", "ক্ষ্ণG"),
         ("kkShN", "কক্ষ্ণ"),
         ("kShNkk", "ক্ষ্ণকক"),
@@ -440,7 +480,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("skkh", "সক্ষ"),
         ("Shkkh", "ষক্ষ"),
         ("kkhkk", "ক্ষকক"),
-        ("kkhm", "ক্ষম"),
         ("kkhNG", "ক্ষ্ণG"),
         ("kxNG", "ক্ষ্ণG"),
         ("kkH", "ককH"),
@@ -483,6 +522,25 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         }
         assert_eq!(transliterate(&format!("{raw}G")), "ক্ষ্ণG");
     }
+    // The new forms do not implement earlier prefixes, basic m conjuncts,
+    // uppercase aliases, reph or escapes.
+    for raw in ["kkhm", "kShm", "kxm"] {
+        for (prefix, letter) in [("k", "ক"), ("n", "ন"), ("l", "ল"), ("s", "স"), ("Sh", "ষ")]
+        {
+            assert_eq!(
+                transliterate(&format!("{prefix}{raw}")),
+                format!("{letter}ক্ষ্ম")
+            );
+        }
+        assert_eq!(transliterate(&format!("Ng{raw}r")), "ঙ্ক্ষমর");
+        assert_eq!(transliterate(&format!("{raw}mm")), "ক্ষ্মমম");
+        assert_eq!(transliterate(&format!("{raw}mr")), "ক্ষ্মমর");
+        assert_eq!(transliterate(&format!("{raw}gr")), "ক্ষ্মগর");
+        assert_eq!(transliterate(&format!("rr{raw}")), "ররক্ষ্ম");
+        assert_eq!(transliterate(&format!("{}M", &raw[..raw.len() - 1])), "ক্ষM");
+        assert_eq!(transliterate(&format!("{raw}`a")), "ক্ষ্ম`আ");
+    }
+    assert_eq!(transliterate("mr mm mn mng"), "মর মম মন মং");
 }
 
 #[test]
@@ -516,6 +574,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let input = input + &"🙂kkha1kkhr2kkhrri3kkhry4kkhrry5kkhkkh".repeat(4096);
     let input = input + &"🙂kSha1kShr2kShrri3kShry4kShrry5kShkkh".repeat(4096);
     let input = input + &"🙂kkhNa1kShNr2kxNrri3kxNry4kkhNrry5kShNgkSh".repeat(4096);
+    let input = input + &"🙂kkhma1kShmr2kxmrri3kxmry4kkhmrry5kShmng6Ngkxm".repeat(4096);
     let expected = "🙂খ২আ\u{301}কূউয়াকীয়াকীএয়াকুঅয়াকোয়াকৈয়াকৌওকৃয়া".repeat(4096)
         + &"রররিররৃ".repeat(4096)
         + &"ফিফিপো".repeat(4096);
@@ -545,6 +604,7 @@ fn long_mixed_input_preserves_character_boundaries() {
     let expected = expected + &"🙂ক্ষা১ক্ষ্র২ক্ষৃ৩ক্ষ্র্য৪ক্ষরর\u{200D}্য৫ক্ষক্ষ".repeat(4096);
     let expected = expected + &"🙂ক্ষা১ক্ষ্র২ক্ষৃ৩ক্ষ্র্য৪ক্ষরর\u{200D}্য৫ক্ষক্ষ".repeat(4096);
     let expected = expected + &"🙂ক্ষ্ণা১ক্ষ্ণ্র২ক্ষ্ণৃ৩ক্ষ্ণ্র্য৪ক্ষ্ণরর\u{200D}্য৫ক্ষ্ণগক্ষ".repeat(4096);
+    let expected = expected + &"🙂ক্ষ্মা১ক্ষ্ম্র২ক্ষ্মৃ৩ক্ষ্ম্র্য৪ক্ষ্মরর\u{200D}্য৫ক্ষ্মং৬ঙ্ক্ষম".repeat(4096);
     assert_eq!(transliterate(&input), expected);
 }
 
