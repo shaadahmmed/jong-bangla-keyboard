@@ -1,6 +1,54 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn final_escape_t_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/final-escape-t.tsv"));
+}
+
+#[test]
+fn final_escape_consumption_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/final-escape-consumption.tsv"));
+}
+
+#[test]
+fn final_escape_controls_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/final-escape-controls.tsv"));
+}
+
+#[test]
+fn final_escape_splits_and_calls_do_not_share_state() {
+    for (left, right) in [("t", "``"), ("t`", "`")] {
+        assert_eq!(transliterate(left), "ত");
+        assert_eq!(transliterate(right), "");
+    }
+    assert_eq!(transliterate("t``"), "ৎ");
+    assert_eq!(transliterate("a"), "আ");
+    assert_eq!(transliterate("y"), "ইয়");
+    assert_eq!(transliterate("rri"), "ঋ");
+    assert_eq!(transliterate("t"), "ত");
+}
+
+#[test]
+fn final_escape_resets_context_at_utf8_and_control_boundaries() {
+    for boundary in ['\0', '\n', '\r', '\t', '🙂', 'ক', 'é', '\u{301}'] {
+        let input = format!("kit``{boundary}a{boundary}q{boundary}t``ry");
+        let original = input.clone();
+        assert_eq!(
+            transliterate(&input),
+            format!("কিৎ{boundary}আ{boundary}ক{boundary}ৎর\u{200D}্য")
+        );
+        assert_eq!(input, original);
+    }
+}
+
+#[test]
+fn final_escape_handles_long_repeated_mixed_input() {
+    let segment = "t``a1nt``a2ttt``y3t``rri`4t``o`a5T``a6t```ry7ktt``x8A`t``a9t``...0";
+    let expected = "ৎআ১ন্তআ২ত্তৎইয়৩ৎৃ৪ৎআ৫টআ৬ৎর\u{200D}্য৭ক্তৎএক্স৮াৎআ৯ৎ...০";
+    assert_eq!(transliterate(&segment.repeat(1024)), expected.repeat(1024));
+}
+
+#[test]
 fn vowel_escapes_keep_internal_splits_and_calls_distinct() {
     for (raw, parts) in [
         ("a`", &[("আ", "")][..]),
@@ -2855,7 +2903,7 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("rrShm", "ররষ্ম"),
         ("rrkk", "ররক্ক"),
         ("rrkkh", "ররক্ষ"),
-        ("t``", "ত"),
+        ("rrt``", "ররৎ"),
     ] {
         assert_eq!(transliterate(input), expected, "input: {input:?}");
     }

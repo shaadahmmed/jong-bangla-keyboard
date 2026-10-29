@@ -274,6 +274,12 @@ pub fn transliterate(input: &str) -> String {
             output.push_str(bangla);
             remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
             context = Context::Consonant { ya_joiner: false };
+        } else if let Some(after_escape) = remaining.strip_prefix("t``") {
+            // Emit the single khanda ta letter; earlier conjuncts may consume t.
+            // Both backticks belong to this match and reset following context.
+            output.push('ৎ');
+            remaining = after_escape;
+            context = Context::Other;
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];

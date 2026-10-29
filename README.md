@@ -97,10 +97,12 @@ double comma, dollar, symbol escapes, and standalone backtick removal. See the
 All 13 vowel-sign escape spellings and their five A/E case variants now match;
 the final backtick resets phonetic context, including when escaped o emits nothing.
 See the [vowel-escape batch](docs/v1.md#vowel-sign-escape-batch).
-This is a partial engine with 502,080 reference-checked examples,
+The final t-double-backtick escape now emits the single letter ৎ (U+09CE);
+see its [behavior and evidence](docs/v1.md#final-t-escape).
+This is a partial engine with 506,147 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Reph,
-the t-double-backtick form, some context interactions, composition, and Fcitx5
-integration are still incomplete.
+some context interactions, following-r gaps and reference Unicode lowercasing
+differences remain; composition and Fcitx5 integration are unimplemented.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
 [first vowel group](docs/v1.md#first-vowel-group) and
@@ -172,10 +174,11 @@ Rule coverage favors the [largest coherent related batches](docs/v1.md#small-dev
 that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
-update, and commit per completed batch. The latest batch implements 13 vowel-sign
-escapes plus five case variants, preserving earlier ng/nasal-r consumption and
-context resets. Next, investigate the remaining t-double-backtick form; reph,
-composition and platform integration remain separate work.
+update, and commit per completed batch. The latest step implements the final
+t-double-backtick escape, preserving consumed-key priority and context resets.
+The 302-input standalone inventory now has zero discrepancies, excluding context
+interactions. Next, investigate following-r behavior after q/z/R/Rh together;
+reph, composition and platform integration remain separate work.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
@@ -301,6 +304,10 @@ force signs: `` a` `` → া, `` i` `` → ি, and `` rri` `` → ৃ. Escaped
 o emits nothing: `` ko`a `` → কআ. Every escape ends at its backtick, so the
 following vowel starts independently. See the [escape table](docs/v1.md#vowel-sign-escape-batch)
 for all spellings and earlier-match exceptions.
+The separate escape ``` t`` ``` → ৎ uses one Unicode letter. It resets context:
+``` t``a ``` → ৎআ. Earlier conjuncts still consume their t:
+``` nt`` ``` → ন্ত; ``` ttt`` ``` → ত্তৎ. Uppercase T stays distinct:
+``` T`` ``` → ট. See the [final-escape record](docs/v1.md#final-t-escape).
 Uppercase `Q` now aliases `q`: `Qa` → `কা`; following `qr`/`Qr` still produce `কর`,
 against reference `ক্র`. Basic `r` produces `র`, and `rr`
 produces `রর`; `rri` is matched before either. This resolves `rrri` → `রররি` and
@@ -870,7 +877,8 @@ files linked in the [remaining conjunct batch](docs/v1.md#remaining-exact-conjun
 the 16 files linked in the [case-alias batch](docs/v1.md#selective-ascii-case-alias-batch),
 the 13 files linked in the [explicit G/J batch](docs/v1.md#explicit-gj-spelling-batch),
 the 12 files linked in the [symbol batch](docs/v1.md#punctuation-and-symbol-batch),
-and the 19 files linked in the [vowel-escape batch](docs/v1.md#vowel-sign-escape-batch)
+the 19 files linked in the [vowel-escape batch](docs/v1.md#vowel-sign-escape-batch),
+and the three files linked in the [final-escape record](docs/v1.md#final-t-escape)
 record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
@@ -887,9 +895,9 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 502,080 cases used by Rust tests and prints reference outputs for
-five known coverage gaps: `qr`, `zr`, `Rr`, `rrShN`, and ``` t`` ```.
-The resolved escaped-a probe has been replaced by the remaining t-double-backtick gap.
+It checks the same 506,147 cases used by Rust tests and prints reference outputs for
+five known coverage gaps: `qr`, `zr`, `Rr`, `rrShN`, and ``` rrt`` ```.
+The resolved t-escape probe has been replaced by its remaining reph interaction.
 The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

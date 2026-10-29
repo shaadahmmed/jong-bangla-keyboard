@@ -1,0 +1,1999 @@
+# MIT. Independently authored expectations; no upstream code, tables or fixtures copied.
+# Reference: jsAvroPhonetic v1.1.4, d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Exact U+09CE, fixed context reset, independent preceding/vowel/ya/r/conjunct/symbol/Unicode evidence.
+# Raw input	Expected UTF-8 output	Exact Unicode code points
+t``	ৎ	U+09CE
+t``a	ৎআ	U+09CE U+0986
+t``i	ৎই	U+09CE U+0987
+t``I	ৎঈ	U+09CE U+0988
+t``u	ৎউ	U+09CE U+0989
+t``U	ৎঊ	U+09CE U+098A
+t``e	ৎএ	U+09CE U+098F
+t``ee	ৎঈ	U+09CE U+0988
+t``o	ৎঅ	U+09CE U+0985
+t``O	ৎও	U+09CE U+0993
+t``oo	ৎউ	U+09CE U+0989
+t``OI	ৎঐ	U+09CE U+0990
+t``OU	ৎঔ	U+09CE U+0994
+t``rri	ৎঋ	U+09CE U+098B
+t``y	ৎইয়	U+09CE U+0987 U+09DF
+t``Z	ৎ্য	U+09CE U+09CD U+09AF
+t``w	ৎও	U+09CE U+0993
+t``wa	ৎওয়া	U+09CE U+0993 U+09DF U+09BE
+t``x	ৎএক্স	U+09CE U+098F U+0995 U+09CD U+09B8
+t``r	ৎর	U+09CE U+09B0
+t``rr	ৎরর	U+09CE U+09B0 U+09B0
+t``ry	ৎর‍্য	U+09CE U+09B0 U+200D U+09CD U+09AF
+t``rZ	ৎর‍্য	U+09CE U+09B0 U+200D U+09CD U+09AF
+t``rrri	ৎরররি	U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+t``rrrri	ৎররৃ	U+09CE U+09B0 U+09B0 U+09C3
+t``rry	ৎরর‍্য	U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+t``rrZ	ৎরর‍্য	U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+t``h	ৎহ	U+09CE U+09B9
+t``kh	ৎখ	U+09CE U+0996
+t``n	ৎন	U+09CE U+09A8
+t``ng	ৎং	U+09CE U+0982
+t``Shm	ৎষ্ম	U+09CE U+09B7 U+09CD U+09AE
+t``Ngk	ৎঙ্ক	U+09CE U+0999 U+09CD U+0995
+t``Gdh	ৎগ্ধ	U+09CE U+0997 U+09CD U+09A7
+t``t`	ৎত	U+09CE U+09A4
+t``t``	ৎৎ	U+09CE U+09CE
+t``T``	ৎট	U+09CE U+099F
+t``0	ৎ০	U+09CE U+09E6
+t``012	ৎ০১২	U+09CE U+09E6 U+09E7 U+09E8
+t``.	ৎ।	U+09CE U+0964
+t``..	ৎ।।	U+09CE U+0964 U+0964
+t``...	ৎ...	U+09CE U+002E U+002E U+002E
+t``.`	ৎ.	U+09CE U+002E
+t``:	ৎঃ	U+09CE U+0983
+t``:`	ৎ:	U+09CE U+003A
+t``^	ৎঁ	U+09CE U+0981
+t``^`	ৎ^	U+09CE U+005E
+t``,,	ৎ্‌	U+09CE U+09CD U+200C
+t``$	ৎ৳	U+09CE U+09F3
+t```	ৎ	U+09CE
+t``o`	ৎ	U+09CE
+t``a`	ৎা	U+09CE U+09BE
+t``rri`	ৎৃ	U+09CE U+09C3
+t``ক	ৎক	U+09CE U+0995
+t``é	ৎé	U+09CE U+00E9
+t``́	ৎ́	U+09CE U+0301
+t``🙂	ৎ🙂	U+09CE U+1F642
+at``	আৎ	U+0986 U+09CE
+at``a	আৎআ	U+0986 U+09CE U+0986
+at``i	আৎই	U+0986 U+09CE U+0987
+at``I	আৎঈ	U+0986 U+09CE U+0988
+at``u	আৎউ	U+0986 U+09CE U+0989
+at``U	আৎঊ	U+0986 U+09CE U+098A
+at``e	আৎএ	U+0986 U+09CE U+098F
+at``ee	আৎঈ	U+0986 U+09CE U+0988
+at``o	আৎঅ	U+0986 U+09CE U+0985
+at``O	আৎও	U+0986 U+09CE U+0993
+at``oo	আৎউ	U+0986 U+09CE U+0989
+at``OI	আৎঐ	U+0986 U+09CE U+0990
+at``OU	আৎঔ	U+0986 U+09CE U+0994
+at``rri	আৎঋ	U+0986 U+09CE U+098B
+at``y	আৎইয়	U+0986 U+09CE U+0987 U+09DF
+at``Z	আৎ্য	U+0986 U+09CE U+09CD U+09AF
+at``w	আৎও	U+0986 U+09CE U+0993
+at``wa	আৎওয়া	U+0986 U+09CE U+0993 U+09DF U+09BE
+at``x	আৎএক্স	U+0986 U+09CE U+098F U+0995 U+09CD U+09B8
+at``r	আৎর	U+0986 U+09CE U+09B0
+at``rr	আৎরর	U+0986 U+09CE U+09B0 U+09B0
+at``ry	আৎর‍্য	U+0986 U+09CE U+09B0 U+200D U+09CD U+09AF
+at``rZ	আৎর‍্য	U+0986 U+09CE U+09B0 U+200D U+09CD U+09AF
+at``rrri	আৎরররি	U+0986 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+at``rrrri	আৎররৃ	U+0986 U+09CE U+09B0 U+09B0 U+09C3
+at``rry	আৎরর‍্য	U+0986 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+at``rrZ	আৎরর‍্য	U+0986 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+at``h	আৎহ	U+0986 U+09CE U+09B9
+at``kh	আৎখ	U+0986 U+09CE U+0996
+at``n	আৎন	U+0986 U+09CE U+09A8
+at``ng	আৎং	U+0986 U+09CE U+0982
+at``Shm	আৎষ্ম	U+0986 U+09CE U+09B7 U+09CD U+09AE
+at``Ngk	আৎঙ্ক	U+0986 U+09CE U+0999 U+09CD U+0995
+at``Gdh	আৎগ্ধ	U+0986 U+09CE U+0997 U+09CD U+09A7
+at``t`	আৎত	U+0986 U+09CE U+09A4
+at``t``	আৎৎ	U+0986 U+09CE U+09CE
+at``T``	আৎট	U+0986 U+09CE U+099F
+at``0	আৎ০	U+0986 U+09CE U+09E6
+at``012	আৎ০১২	U+0986 U+09CE U+09E6 U+09E7 U+09E8
+at``.	আৎ।	U+0986 U+09CE U+0964
+at``..	আৎ।।	U+0986 U+09CE U+0964 U+0964
+at``...	আৎ...	U+0986 U+09CE U+002E U+002E U+002E
+at``.`	আৎ.	U+0986 U+09CE U+002E
+at``:	আৎঃ	U+0986 U+09CE U+0983
+at``:`	আৎ:	U+0986 U+09CE U+003A
+at``^	আৎঁ	U+0986 U+09CE U+0981
+at``^`	আৎ^	U+0986 U+09CE U+005E
+at``,,	আৎ্‌	U+0986 U+09CE U+09CD U+200C
+at``$	আৎ৳	U+0986 U+09CE U+09F3
+at```	আৎ	U+0986 U+09CE
+at``o`	আৎ	U+0986 U+09CE
+at``a`	আৎা	U+0986 U+09CE U+09BE
+at``rri`	আৎৃ	U+0986 U+09CE U+09C3
+at``ক	আৎক	U+0986 U+09CE U+0995
+at``é	আৎé	U+0986 U+09CE U+00E9
+at``́	আৎ́	U+0986 U+09CE U+0301
+at``🙂	আৎ🙂	U+0986 U+09CE U+1F642
+kit``	কিৎ	U+0995 U+09BF U+09CE
+kit``a	কিৎআ	U+0995 U+09BF U+09CE U+0986
+kit``i	কিৎই	U+0995 U+09BF U+09CE U+0987
+kit``I	কিৎঈ	U+0995 U+09BF U+09CE U+0988
+kit``u	কিৎউ	U+0995 U+09BF U+09CE U+0989
+kit``U	কিৎঊ	U+0995 U+09BF U+09CE U+098A
+kit``e	কিৎএ	U+0995 U+09BF U+09CE U+098F
+kit``ee	কিৎঈ	U+0995 U+09BF U+09CE U+0988
+kit``o	কিৎঅ	U+0995 U+09BF U+09CE U+0985
+kit``O	কিৎও	U+0995 U+09BF U+09CE U+0993
+kit``oo	কিৎউ	U+0995 U+09BF U+09CE U+0989
+kit``OI	কিৎঐ	U+0995 U+09BF U+09CE U+0990
+kit``OU	কিৎঔ	U+0995 U+09BF U+09CE U+0994
+kit``rri	কিৎঋ	U+0995 U+09BF U+09CE U+098B
+kit``y	কিৎইয়	U+0995 U+09BF U+09CE U+0987 U+09DF
+kit``Z	কিৎ্য	U+0995 U+09BF U+09CE U+09CD U+09AF
+kit``w	কিৎও	U+0995 U+09BF U+09CE U+0993
+kit``wa	কিৎওয়া	U+0995 U+09BF U+09CE U+0993 U+09DF U+09BE
+kit``x	কিৎএক্স	U+0995 U+09BF U+09CE U+098F U+0995 U+09CD U+09B8
+kit``r	কিৎর	U+0995 U+09BF U+09CE U+09B0
+kit``rr	কিৎরর	U+0995 U+09BF U+09CE U+09B0 U+09B0
+kit``ry	কিৎর‍্য	U+0995 U+09BF U+09CE U+09B0 U+200D U+09CD U+09AF
+kit``rZ	কিৎর‍্য	U+0995 U+09BF U+09CE U+09B0 U+200D U+09CD U+09AF
+kit``rrri	কিৎরররি	U+0995 U+09BF U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+kit``rrrri	কিৎররৃ	U+0995 U+09BF U+09CE U+09B0 U+09B0 U+09C3
+kit``rry	কিৎরর‍্য	U+0995 U+09BF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+kit``rrZ	কিৎরর‍্য	U+0995 U+09BF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+kit``h	কিৎহ	U+0995 U+09BF U+09CE U+09B9
+kit``kh	কিৎখ	U+0995 U+09BF U+09CE U+0996
+kit``n	কিৎন	U+0995 U+09BF U+09CE U+09A8
+kit``ng	কিৎং	U+0995 U+09BF U+09CE U+0982
+kit``Shm	কিৎষ্ম	U+0995 U+09BF U+09CE U+09B7 U+09CD U+09AE
+kit``Ngk	কিৎঙ্ক	U+0995 U+09BF U+09CE U+0999 U+09CD U+0995
+kit``Gdh	কিৎগ্ধ	U+0995 U+09BF U+09CE U+0997 U+09CD U+09A7
+kit``t`	কিৎত	U+0995 U+09BF U+09CE U+09A4
+kit``t``	কিৎৎ	U+0995 U+09BF U+09CE U+09CE
+kit``T``	কিৎট	U+0995 U+09BF U+09CE U+099F
+kit``0	কিৎ০	U+0995 U+09BF U+09CE U+09E6
+kit``012	কিৎ০১২	U+0995 U+09BF U+09CE U+09E6 U+09E7 U+09E8
+kit``.	কিৎ।	U+0995 U+09BF U+09CE U+0964
+kit``..	কিৎ।।	U+0995 U+09BF U+09CE U+0964 U+0964
+kit``...	কিৎ...	U+0995 U+09BF U+09CE U+002E U+002E U+002E
+kit``.`	কিৎ.	U+0995 U+09BF U+09CE U+002E
+kit``:	কিৎঃ	U+0995 U+09BF U+09CE U+0983
+kit``:`	কিৎ:	U+0995 U+09BF U+09CE U+003A
+kit``^	কিৎঁ	U+0995 U+09BF U+09CE U+0981
+kit``^`	কিৎ^	U+0995 U+09BF U+09CE U+005E
+kit``,,	কিৎ্‌	U+0995 U+09BF U+09CE U+09CD U+200C
+kit``$	কিৎ৳	U+0995 U+09BF U+09CE U+09F3
+kit```	কিৎ	U+0995 U+09BF U+09CE
+kit``o`	কিৎ	U+0995 U+09BF U+09CE
+kit``a`	কিৎা	U+0995 U+09BF U+09CE U+09BE
+kit``rri`	কিৎৃ	U+0995 U+09BF U+09CE U+09C3
+kit``ক	কিৎক	U+0995 U+09BF U+09CE U+0995
+kit``é	কিৎé	U+0995 U+09BF U+09CE U+00E9
+kit``́	কিৎ́	U+0995 U+09BF U+09CE U+0301
+kit``🙂	কিৎ🙂	U+0995 U+09BF U+09CE U+1F642
+kot``	কৎ	U+0995 U+09CE
+kot``a	কৎআ	U+0995 U+09CE U+0986
+kot``i	কৎই	U+0995 U+09CE U+0987
+kot``I	কৎঈ	U+0995 U+09CE U+0988
+kot``u	কৎউ	U+0995 U+09CE U+0989
+kot``U	কৎঊ	U+0995 U+09CE U+098A
+kot``e	কৎএ	U+0995 U+09CE U+098F
+kot``ee	কৎঈ	U+0995 U+09CE U+0988
+kot``o	কৎঅ	U+0995 U+09CE U+0985
+kot``O	কৎও	U+0995 U+09CE U+0993
+kot``oo	কৎউ	U+0995 U+09CE U+0989
+kot``OI	কৎঐ	U+0995 U+09CE U+0990
+kot``OU	কৎঔ	U+0995 U+09CE U+0994
+kot``rri	কৎঋ	U+0995 U+09CE U+098B
+kot``y	কৎইয়	U+0995 U+09CE U+0987 U+09DF
+kot``Z	কৎ্য	U+0995 U+09CE U+09CD U+09AF
+kot``w	কৎও	U+0995 U+09CE U+0993
+kot``wa	কৎওয়া	U+0995 U+09CE U+0993 U+09DF U+09BE
+kot``x	কৎএক্স	U+0995 U+09CE U+098F U+0995 U+09CD U+09B8
+kot``r	কৎর	U+0995 U+09CE U+09B0
+kot``rr	কৎরর	U+0995 U+09CE U+09B0 U+09B0
+kot``ry	কৎর‍্য	U+0995 U+09CE U+09B0 U+200D U+09CD U+09AF
+kot``rZ	কৎর‍্য	U+0995 U+09CE U+09B0 U+200D U+09CD U+09AF
+kot``rrri	কৎরররি	U+0995 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+kot``rrrri	কৎররৃ	U+0995 U+09CE U+09B0 U+09B0 U+09C3
+kot``rry	কৎরর‍্য	U+0995 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+kot``rrZ	কৎরর‍্য	U+0995 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+kot``h	কৎহ	U+0995 U+09CE U+09B9
+kot``kh	কৎখ	U+0995 U+09CE U+0996
+kot``n	কৎন	U+0995 U+09CE U+09A8
+kot``ng	কৎং	U+0995 U+09CE U+0982
+kot``Shm	কৎষ্ম	U+0995 U+09CE U+09B7 U+09CD U+09AE
+kot``Ngk	কৎঙ্ক	U+0995 U+09CE U+0999 U+09CD U+0995
+kot``Gdh	কৎগ্ধ	U+0995 U+09CE U+0997 U+09CD U+09A7
+kot``t`	কৎত	U+0995 U+09CE U+09A4
+kot``t``	কৎৎ	U+0995 U+09CE U+09CE
+kot``T``	কৎট	U+0995 U+09CE U+099F
+kot``0	কৎ০	U+0995 U+09CE U+09E6
+kot``012	কৎ০১২	U+0995 U+09CE U+09E6 U+09E7 U+09E8
+kot``.	কৎ।	U+0995 U+09CE U+0964
+kot``..	কৎ।।	U+0995 U+09CE U+0964 U+0964
+kot``...	কৎ...	U+0995 U+09CE U+002E U+002E U+002E
+kot``.`	কৎ.	U+0995 U+09CE U+002E
+kot``:	কৎঃ	U+0995 U+09CE U+0983
+kot``:`	কৎ:	U+0995 U+09CE U+003A
+kot``^	কৎঁ	U+0995 U+09CE U+0981
+kot``^`	কৎ^	U+0995 U+09CE U+005E
+kot``,,	কৎ্‌	U+0995 U+09CE U+09CD U+200C
+kot``$	কৎ৳	U+0995 U+09CE U+09F3
+kot```	কৎ	U+0995 U+09CE
+kot``o`	কৎ	U+0995 U+09CE
+kot``a`	কৎা	U+0995 U+09CE U+09BE
+kot``rri`	কৎৃ	U+0995 U+09CE U+09C3
+kot``ক	কৎক	U+0995 U+09CE U+0995
+kot``é	কৎé	U+0995 U+09CE U+00E9
+kot``́	কৎ́	U+0995 U+09CE U+0301
+kot``🙂	কৎ🙂	U+0995 U+09CE U+1F642
+Ot``	ওৎ	U+0993 U+09CE
+Ot``a	ওৎআ	U+0993 U+09CE U+0986
+Ot``i	ওৎই	U+0993 U+09CE U+0987
+Ot``I	ওৎঈ	U+0993 U+09CE U+0988
+Ot``u	ওৎউ	U+0993 U+09CE U+0989
+Ot``U	ওৎঊ	U+0993 U+09CE U+098A
+Ot``e	ওৎএ	U+0993 U+09CE U+098F
+Ot``ee	ওৎঈ	U+0993 U+09CE U+0988
+Ot``o	ওৎঅ	U+0993 U+09CE U+0985
+Ot``O	ওৎও	U+0993 U+09CE U+0993
+Ot``oo	ওৎউ	U+0993 U+09CE U+0989
+Ot``OI	ওৎঐ	U+0993 U+09CE U+0990
+Ot``OU	ওৎঔ	U+0993 U+09CE U+0994
+Ot``rri	ওৎঋ	U+0993 U+09CE U+098B
+Ot``y	ওৎইয়	U+0993 U+09CE U+0987 U+09DF
+Ot``Z	ওৎ্য	U+0993 U+09CE U+09CD U+09AF
+Ot``w	ওৎও	U+0993 U+09CE U+0993
+Ot``wa	ওৎওয়া	U+0993 U+09CE U+0993 U+09DF U+09BE
+Ot``x	ওৎএক্স	U+0993 U+09CE U+098F U+0995 U+09CD U+09B8
+Ot``r	ওৎর	U+0993 U+09CE U+09B0
+Ot``rr	ওৎরর	U+0993 U+09CE U+09B0 U+09B0
+Ot``ry	ওৎর‍্য	U+0993 U+09CE U+09B0 U+200D U+09CD U+09AF
+Ot``rZ	ওৎর‍্য	U+0993 U+09CE U+09B0 U+200D U+09CD U+09AF
+Ot``rrri	ওৎরররি	U+0993 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+Ot``rrrri	ওৎররৃ	U+0993 U+09CE U+09B0 U+09B0 U+09C3
+Ot``rry	ওৎরর‍্য	U+0993 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Ot``rrZ	ওৎরর‍্য	U+0993 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Ot``h	ওৎহ	U+0993 U+09CE U+09B9
+Ot``kh	ওৎখ	U+0993 U+09CE U+0996
+Ot``n	ওৎন	U+0993 U+09CE U+09A8
+Ot``ng	ওৎং	U+0993 U+09CE U+0982
+Ot``Shm	ওৎষ্ম	U+0993 U+09CE U+09B7 U+09CD U+09AE
+Ot``Ngk	ওৎঙ্ক	U+0993 U+09CE U+0999 U+09CD U+0995
+Ot``Gdh	ওৎগ্ধ	U+0993 U+09CE U+0997 U+09CD U+09A7
+Ot``t`	ওৎত	U+0993 U+09CE U+09A4
+Ot``t``	ওৎৎ	U+0993 U+09CE U+09CE
+Ot``T``	ওৎট	U+0993 U+09CE U+099F
+Ot``0	ওৎ০	U+0993 U+09CE U+09E6
+Ot``012	ওৎ০১২	U+0993 U+09CE U+09E6 U+09E7 U+09E8
+Ot``.	ওৎ।	U+0993 U+09CE U+0964
+Ot``..	ওৎ।।	U+0993 U+09CE U+0964 U+0964
+Ot``...	ওৎ...	U+0993 U+09CE U+002E U+002E U+002E
+Ot``.`	ওৎ.	U+0993 U+09CE U+002E
+Ot``:	ওৎঃ	U+0993 U+09CE U+0983
+Ot``:`	ওৎ:	U+0993 U+09CE U+003A
+Ot``^	ওৎঁ	U+0993 U+09CE U+0981
+Ot``^`	ওৎ^	U+0993 U+09CE U+005E
+Ot``,,	ওৎ্‌	U+0993 U+09CE U+09CD U+200C
+Ot``$	ওৎ৳	U+0993 U+09CE U+09F3
+Ot```	ওৎ	U+0993 U+09CE
+Ot``o`	ওৎ	U+0993 U+09CE
+Ot``a`	ওৎা	U+0993 U+09CE U+09BE
+Ot``rri`	ওৎৃ	U+0993 U+09CE U+09C3
+Ot``ক	ওৎক	U+0993 U+09CE U+0995
+Ot``é	ওৎé	U+0993 U+09CE U+00E9
+Ot``́	ওৎ́	U+0993 U+09CE U+0301
+Ot``🙂	ওৎ🙂	U+0993 U+09CE U+1F642
+eet``	ঈৎ	U+0988 U+09CE
+eet``a	ঈৎআ	U+0988 U+09CE U+0986
+eet``i	ঈৎই	U+0988 U+09CE U+0987
+eet``I	ঈৎঈ	U+0988 U+09CE U+0988
+eet``u	ঈৎউ	U+0988 U+09CE U+0989
+eet``U	ঈৎঊ	U+0988 U+09CE U+098A
+eet``e	ঈৎএ	U+0988 U+09CE U+098F
+eet``ee	ঈৎঈ	U+0988 U+09CE U+0988
+eet``o	ঈৎঅ	U+0988 U+09CE U+0985
+eet``O	ঈৎও	U+0988 U+09CE U+0993
+eet``oo	ঈৎউ	U+0988 U+09CE U+0989
+eet``OI	ঈৎঐ	U+0988 U+09CE U+0990
+eet``OU	ঈৎঔ	U+0988 U+09CE U+0994
+eet``rri	ঈৎঋ	U+0988 U+09CE U+098B
+eet``y	ঈৎইয়	U+0988 U+09CE U+0987 U+09DF
+eet``Z	ঈৎ্য	U+0988 U+09CE U+09CD U+09AF
+eet``w	ঈৎও	U+0988 U+09CE U+0993
+eet``wa	ঈৎওয়া	U+0988 U+09CE U+0993 U+09DF U+09BE
+eet``x	ঈৎএক্স	U+0988 U+09CE U+098F U+0995 U+09CD U+09B8
+eet``r	ঈৎর	U+0988 U+09CE U+09B0
+eet``rr	ঈৎরর	U+0988 U+09CE U+09B0 U+09B0
+eet``ry	ঈৎর‍্য	U+0988 U+09CE U+09B0 U+200D U+09CD U+09AF
+eet``rZ	ঈৎর‍্য	U+0988 U+09CE U+09B0 U+200D U+09CD U+09AF
+eet``rrri	ঈৎরররি	U+0988 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+eet``rrrri	ঈৎররৃ	U+0988 U+09CE U+09B0 U+09B0 U+09C3
+eet``rry	ঈৎরর‍্য	U+0988 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+eet``rrZ	ঈৎরর‍্য	U+0988 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+eet``h	ঈৎহ	U+0988 U+09CE U+09B9
+eet``kh	ঈৎখ	U+0988 U+09CE U+0996
+eet``n	ঈৎন	U+0988 U+09CE U+09A8
+eet``ng	ঈৎং	U+0988 U+09CE U+0982
+eet``Shm	ঈৎষ্ম	U+0988 U+09CE U+09B7 U+09CD U+09AE
+eet``Ngk	ঈৎঙ্ক	U+0988 U+09CE U+0999 U+09CD U+0995
+eet``Gdh	ঈৎগ্ধ	U+0988 U+09CE U+0997 U+09CD U+09A7
+eet``t`	ঈৎত	U+0988 U+09CE U+09A4
+eet``t``	ঈৎৎ	U+0988 U+09CE U+09CE
+eet``T``	ঈৎট	U+0988 U+09CE U+099F
+eet``0	ঈৎ০	U+0988 U+09CE U+09E6
+eet``012	ঈৎ০১২	U+0988 U+09CE U+09E6 U+09E7 U+09E8
+eet``.	ঈৎ।	U+0988 U+09CE U+0964
+eet``..	ঈৎ।।	U+0988 U+09CE U+0964 U+0964
+eet``...	ঈৎ...	U+0988 U+09CE U+002E U+002E U+002E
+eet``.`	ঈৎ.	U+0988 U+09CE U+002E
+eet``:	ঈৎঃ	U+0988 U+09CE U+0983
+eet``:`	ঈৎ:	U+0988 U+09CE U+003A
+eet``^	ঈৎঁ	U+0988 U+09CE U+0981
+eet``^`	ঈৎ^	U+0988 U+09CE U+005E
+eet``,,	ঈৎ্‌	U+0988 U+09CE U+09CD U+200C
+eet``$	ঈৎ৳	U+0988 U+09CE U+09F3
+eet```	ঈৎ	U+0988 U+09CE
+eet``o`	ঈৎ	U+0988 U+09CE
+eet``a`	ঈৎা	U+0988 U+09CE U+09BE
+eet``rri`	ঈৎৃ	U+0988 U+09CE U+09C3
+eet``ক	ঈৎক	U+0988 U+09CE U+0995
+eet``é	ঈৎé	U+0988 U+09CE U+00E9
+eet``́	ঈৎ́	U+0988 U+09CE U+0301
+eet``🙂	ঈৎ🙂	U+0988 U+09CE U+1F642
+rrit``	ঋৎ	U+098B U+09CE
+rrit``a	ঋৎআ	U+098B U+09CE U+0986
+rrit``i	ঋৎই	U+098B U+09CE U+0987
+rrit``I	ঋৎঈ	U+098B U+09CE U+0988
+rrit``u	ঋৎউ	U+098B U+09CE U+0989
+rrit``U	ঋৎঊ	U+098B U+09CE U+098A
+rrit``e	ঋৎএ	U+098B U+09CE U+098F
+rrit``ee	ঋৎঈ	U+098B U+09CE U+0988
+rrit``o	ঋৎঅ	U+098B U+09CE U+0985
+rrit``O	ঋৎও	U+098B U+09CE U+0993
+rrit``oo	ঋৎউ	U+098B U+09CE U+0989
+rrit``OI	ঋৎঐ	U+098B U+09CE U+0990
+rrit``OU	ঋৎঔ	U+098B U+09CE U+0994
+rrit``rri	ঋৎঋ	U+098B U+09CE U+098B
+rrit``y	ঋৎইয়	U+098B U+09CE U+0987 U+09DF
+rrit``Z	ঋৎ্য	U+098B U+09CE U+09CD U+09AF
+rrit``w	ঋৎও	U+098B U+09CE U+0993
+rrit``wa	ঋৎওয়া	U+098B U+09CE U+0993 U+09DF U+09BE
+rrit``x	ঋৎএক্স	U+098B U+09CE U+098F U+0995 U+09CD U+09B8
+rrit``r	ঋৎর	U+098B U+09CE U+09B0
+rrit``rr	ঋৎরর	U+098B U+09CE U+09B0 U+09B0
+rrit``ry	ঋৎর‍্য	U+098B U+09CE U+09B0 U+200D U+09CD U+09AF
+rrit``rZ	ঋৎর‍্য	U+098B U+09CE U+09B0 U+200D U+09CD U+09AF
+rrit``rrri	ঋৎরররি	U+098B U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+rrit``rrrri	ঋৎররৃ	U+098B U+09CE U+09B0 U+09B0 U+09C3
+rrit``rry	ঋৎরর‍্য	U+098B U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+rrit``rrZ	ঋৎরর‍্য	U+098B U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+rrit``h	ঋৎহ	U+098B U+09CE U+09B9
+rrit``kh	ঋৎখ	U+098B U+09CE U+0996
+rrit``n	ঋৎন	U+098B U+09CE U+09A8
+rrit``ng	ঋৎং	U+098B U+09CE U+0982
+rrit``Shm	ঋৎষ্ম	U+098B U+09CE U+09B7 U+09CD U+09AE
+rrit``Ngk	ঋৎঙ্ক	U+098B U+09CE U+0999 U+09CD U+0995
+rrit``Gdh	ঋৎগ্ধ	U+098B U+09CE U+0997 U+09CD U+09A7
+rrit``t`	ঋৎত	U+098B U+09CE U+09A4
+rrit``t``	ঋৎৎ	U+098B U+09CE U+09CE
+rrit``T``	ঋৎট	U+098B U+09CE U+099F
+rrit``0	ঋৎ০	U+098B U+09CE U+09E6
+rrit``012	ঋৎ০১২	U+098B U+09CE U+09E6 U+09E7 U+09E8
+rrit``.	ঋৎ।	U+098B U+09CE U+0964
+rrit``..	ঋৎ।।	U+098B U+09CE U+0964 U+0964
+rrit``...	ঋৎ...	U+098B U+09CE U+002E U+002E U+002E
+rrit``.`	ঋৎ.	U+098B U+09CE U+002E
+rrit``:	ঋৎঃ	U+098B U+09CE U+0983
+rrit``:`	ঋৎ:	U+098B U+09CE U+003A
+rrit``^	ঋৎঁ	U+098B U+09CE U+0981
+rrit``^`	ঋৎ^	U+098B U+09CE U+005E
+rrit``,,	ঋৎ্‌	U+098B U+09CE U+09CD U+200C
+rrit``$	ঋৎ৳	U+098B U+09CE U+09F3
+rrit```	ঋৎ	U+098B U+09CE
+rrit``o`	ঋৎ	U+098B U+09CE
+rrit``a`	ঋৎা	U+098B U+09CE U+09BE
+rrit``rri`	ঋৎৃ	U+098B U+09CE U+09C3
+rrit``ক	ঋৎক	U+098B U+09CE U+0995
+rrit``é	ঋৎé	U+098B U+09CE U+00E9
+rrit``́	ঋৎ́	U+098B U+09CE U+0301
+rrit``🙂	ঋৎ🙂	U+098B U+09CE U+1F642
+aZt``	অ্যাৎ	U+0985 U+09CD U+09AF U+09BE U+09CE
+aZt``a	অ্যাৎআ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0986
+aZt``i	অ্যাৎই	U+0985 U+09CD U+09AF U+09BE U+09CE U+0987
+aZt``I	অ্যাৎঈ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0988
+aZt``u	অ্যাৎউ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0989
+aZt``U	অ্যাৎঊ	U+0985 U+09CD U+09AF U+09BE U+09CE U+098A
+aZt``e	অ্যাৎএ	U+0985 U+09CD U+09AF U+09BE U+09CE U+098F
+aZt``ee	অ্যাৎঈ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0988
+aZt``o	অ্যাৎঅ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0985
+aZt``O	অ্যাৎও	U+0985 U+09CD U+09AF U+09BE U+09CE U+0993
+aZt``oo	অ্যাৎউ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0989
+aZt``OI	অ্যাৎঐ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0990
+aZt``OU	অ্যাৎঔ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0994
+aZt``rri	অ্যাৎঋ	U+0985 U+09CD U+09AF U+09BE U+09CE U+098B
+aZt``y	অ্যাৎইয়	U+0985 U+09CD U+09AF U+09BE U+09CE U+0987 U+09DF
+aZt``Z	অ্যাৎ্য	U+0985 U+09CD U+09AF U+09BE U+09CE U+09CD U+09AF
+aZt``w	অ্যাৎও	U+0985 U+09CD U+09AF U+09BE U+09CE U+0993
+aZt``wa	অ্যাৎওয়া	U+0985 U+09CD U+09AF U+09BE U+09CE U+0993 U+09DF U+09BE
+aZt``x	অ্যাৎএক্স	U+0985 U+09CD U+09AF U+09BE U+09CE U+098F U+0995 U+09CD U+09B8
+aZt``r	অ্যাৎর	U+0985 U+09CD U+09AF U+09BE U+09CE U+09B0
+aZt``rr	অ্যাৎরর	U+0985 U+09CD U+09AF U+09BE U+09CE U+09B0 U+09B0
+aZt``ry	অ্যাৎর‍্য	U+0985 U+09CD U+09AF U+09BE U+09CE U+09B0 U+200D U+09CD U+09AF
+aZt``rZ	অ্যাৎর‍্য	U+0985 U+09CD U+09AF U+09BE U+09CE U+09B0 U+200D U+09CD U+09AF
+aZt``rrri	অ্যাৎরররি	U+0985 U+09CD U+09AF U+09BE U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+aZt``rrrri	অ্যাৎররৃ	U+0985 U+09CD U+09AF U+09BE U+09CE U+09B0 U+09B0 U+09C3
+aZt``rry	অ্যাৎরর‍্য	U+0985 U+09CD U+09AF U+09BE U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+aZt``rrZ	অ্যাৎরর‍্য	U+0985 U+09CD U+09AF U+09BE U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+aZt``h	অ্যাৎহ	U+0985 U+09CD U+09AF U+09BE U+09CE U+09B9
+aZt``kh	অ্যাৎখ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0996
+aZt``n	অ্যাৎন	U+0985 U+09CD U+09AF U+09BE U+09CE U+09A8
+aZt``ng	অ্যাৎং	U+0985 U+09CD U+09AF U+09BE U+09CE U+0982
+aZt``Shm	অ্যাৎষ্ম	U+0985 U+09CD U+09AF U+09BE U+09CE U+09B7 U+09CD U+09AE
+aZt``Ngk	অ্যাৎঙ্ক	U+0985 U+09CD U+09AF U+09BE U+09CE U+0999 U+09CD U+0995
+aZt``Gdh	অ্যাৎগ্ধ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0997 U+09CD U+09A7
+aZt``t`	অ্যাৎত	U+0985 U+09CD U+09AF U+09BE U+09CE U+09A4
+aZt``t``	অ্যাৎৎ	U+0985 U+09CD U+09AF U+09BE U+09CE U+09CE
+aZt``T``	অ্যাৎট	U+0985 U+09CD U+09AF U+09BE U+09CE U+099F
+aZt``0	অ্যাৎ০	U+0985 U+09CD U+09AF U+09BE U+09CE U+09E6
+aZt``012	অ্যাৎ০১২	U+0985 U+09CD U+09AF U+09BE U+09CE U+09E6 U+09E7 U+09E8
+aZt``.	অ্যাৎ।	U+0985 U+09CD U+09AF U+09BE U+09CE U+0964
+aZt``..	অ্যাৎ।।	U+0985 U+09CD U+09AF U+09BE U+09CE U+0964 U+0964
+aZt``...	অ্যাৎ...	U+0985 U+09CD U+09AF U+09BE U+09CE U+002E U+002E U+002E
+aZt``.`	অ্যাৎ.	U+0985 U+09CD U+09AF U+09BE U+09CE U+002E
+aZt``:	অ্যাৎঃ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0983
+aZt``:`	অ্যাৎ:	U+0985 U+09CD U+09AF U+09BE U+09CE U+003A
+aZt``^	অ্যাৎঁ	U+0985 U+09CD U+09AF U+09BE U+09CE U+0981
+aZt``^`	অ্যাৎ^	U+0985 U+09CD U+09AF U+09BE U+09CE U+005E
+aZt``,,	অ্যাৎ্‌	U+0985 U+09CD U+09AF U+09BE U+09CE U+09CD U+200C
+aZt``$	অ্যাৎ৳	U+0985 U+09CD U+09AF U+09BE U+09CE U+09F3
+aZt```	অ্যাৎ	U+0985 U+09CD U+09AF U+09BE U+09CE
+aZt``o`	অ্যাৎ	U+0985 U+09CD U+09AF U+09BE U+09CE
+aZt``a`	অ্যাৎা	U+0985 U+09CD U+09AF U+09BE U+09CE U+09BE
+aZt``rri`	অ্যাৎৃ	U+0985 U+09CD U+09AF U+09BE U+09CE U+09C3
+aZt``ক	অ্যাৎক	U+0985 U+09CD U+09AF U+09BE U+09CE U+0995
+aZt``é	অ্যাৎé	U+0985 U+09CD U+09AF U+09BE U+09CE U+00E9
+aZt``́	অ্যাৎ́	U+0985 U+09CD U+09AF U+09BE U+09CE U+0301
+aZt``🙂	অ্যাৎ🙂	U+0985 U+09CD U+09AF U+09BE U+09CE U+1F642
+oZt``	অ্যৎ	U+0985 U+09CD U+09AF U+09CE
+oZt``a	অ্যৎআ	U+0985 U+09CD U+09AF U+09CE U+0986
+oZt``i	অ্যৎই	U+0985 U+09CD U+09AF U+09CE U+0987
+oZt``I	অ্যৎঈ	U+0985 U+09CD U+09AF U+09CE U+0988
+oZt``u	অ্যৎউ	U+0985 U+09CD U+09AF U+09CE U+0989
+oZt``U	অ্যৎঊ	U+0985 U+09CD U+09AF U+09CE U+098A
+oZt``e	অ্যৎএ	U+0985 U+09CD U+09AF U+09CE U+098F
+oZt``ee	অ্যৎঈ	U+0985 U+09CD U+09AF U+09CE U+0988
+oZt``o	অ্যৎঅ	U+0985 U+09CD U+09AF U+09CE U+0985
+oZt``O	অ্যৎও	U+0985 U+09CD U+09AF U+09CE U+0993
+oZt``oo	অ্যৎউ	U+0985 U+09CD U+09AF U+09CE U+0989
+oZt``OI	অ্যৎঐ	U+0985 U+09CD U+09AF U+09CE U+0990
+oZt``OU	অ্যৎঔ	U+0985 U+09CD U+09AF U+09CE U+0994
+oZt``rri	অ্যৎঋ	U+0985 U+09CD U+09AF U+09CE U+098B
+oZt``y	অ্যৎইয়	U+0985 U+09CD U+09AF U+09CE U+0987 U+09DF
+oZt``Z	অ্যৎ্য	U+0985 U+09CD U+09AF U+09CE U+09CD U+09AF
+oZt``w	অ্যৎও	U+0985 U+09CD U+09AF U+09CE U+0993
+oZt``wa	অ্যৎওয়া	U+0985 U+09CD U+09AF U+09CE U+0993 U+09DF U+09BE
+oZt``x	অ্যৎএক্স	U+0985 U+09CD U+09AF U+09CE U+098F U+0995 U+09CD U+09B8
+oZt``r	অ্যৎর	U+0985 U+09CD U+09AF U+09CE U+09B0
+oZt``rr	অ্যৎরর	U+0985 U+09CD U+09AF U+09CE U+09B0 U+09B0
+oZt``ry	অ্যৎর‍্য	U+0985 U+09CD U+09AF U+09CE U+09B0 U+200D U+09CD U+09AF
+oZt``rZ	অ্যৎর‍্য	U+0985 U+09CD U+09AF U+09CE U+09B0 U+200D U+09CD U+09AF
+oZt``rrri	অ্যৎরররি	U+0985 U+09CD U+09AF U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+oZt``rrrri	অ্যৎররৃ	U+0985 U+09CD U+09AF U+09CE U+09B0 U+09B0 U+09C3
+oZt``rry	অ্যৎরর‍্য	U+0985 U+09CD U+09AF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+oZt``rrZ	অ্যৎরর‍্য	U+0985 U+09CD U+09AF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+oZt``h	অ্যৎহ	U+0985 U+09CD U+09AF U+09CE U+09B9
+oZt``kh	অ্যৎখ	U+0985 U+09CD U+09AF U+09CE U+0996
+oZt``n	অ্যৎন	U+0985 U+09CD U+09AF U+09CE U+09A8
+oZt``ng	অ্যৎং	U+0985 U+09CD U+09AF U+09CE U+0982
+oZt``Shm	অ্যৎষ্ম	U+0985 U+09CD U+09AF U+09CE U+09B7 U+09CD U+09AE
+oZt``Ngk	অ্যৎঙ্ক	U+0985 U+09CD U+09AF U+09CE U+0999 U+09CD U+0995
+oZt``Gdh	অ্যৎগ্ধ	U+0985 U+09CD U+09AF U+09CE U+0997 U+09CD U+09A7
+oZt``t`	অ্যৎত	U+0985 U+09CD U+09AF U+09CE U+09A4
+oZt``t``	অ্যৎৎ	U+0985 U+09CD U+09AF U+09CE U+09CE
+oZt``T``	অ্যৎট	U+0985 U+09CD U+09AF U+09CE U+099F
+oZt``0	অ্যৎ০	U+0985 U+09CD U+09AF U+09CE U+09E6
+oZt``012	অ্যৎ০১২	U+0985 U+09CD U+09AF U+09CE U+09E6 U+09E7 U+09E8
+oZt``.	অ্যৎ।	U+0985 U+09CD U+09AF U+09CE U+0964
+oZt``..	অ্যৎ।।	U+0985 U+09CD U+09AF U+09CE U+0964 U+0964
+oZt``...	অ্যৎ...	U+0985 U+09CD U+09AF U+09CE U+002E U+002E U+002E
+oZt``.`	অ্যৎ.	U+0985 U+09CD U+09AF U+09CE U+002E
+oZt``:	অ্যৎঃ	U+0985 U+09CD U+09AF U+09CE U+0983
+oZt``:`	অ্যৎ:	U+0985 U+09CD U+09AF U+09CE U+003A
+oZt``^	অ্যৎঁ	U+0985 U+09CD U+09AF U+09CE U+0981
+oZt``^`	অ্যৎ^	U+0985 U+09CD U+09AF U+09CE U+005E
+oZt``,,	অ্যৎ্‌	U+0985 U+09CD U+09AF U+09CE U+09CD U+200C
+oZt``$	অ্যৎ৳	U+0985 U+09CD U+09AF U+09CE U+09F3
+oZt```	অ্যৎ	U+0985 U+09CD U+09AF U+09CE
+oZt``o`	অ্যৎ	U+0985 U+09CD U+09AF U+09CE
+oZt``a`	অ্যৎা	U+0985 U+09CD U+09AF U+09CE U+09BE
+oZt``rri`	অ্যৎৃ	U+0985 U+09CD U+09AF U+09CE U+09C3
+oZt``ক	অ্যৎক	U+0985 U+09CD U+09AF U+09CE U+0995
+oZt``é	অ্যৎé	U+0985 U+09CD U+09AF U+09CE U+00E9
+oZt``́	অ্যৎ́	U+0985 U+09CD U+09AF U+09CE U+0301
+oZt``🙂	অ্যৎ🙂	U+0985 U+09CD U+09AF U+09CE U+1F642
+Gt``	গৎ	U+0997 U+09CE
+Gt``a	গৎআ	U+0997 U+09CE U+0986
+Gt``i	গৎই	U+0997 U+09CE U+0987
+Gt``I	গৎঈ	U+0997 U+09CE U+0988
+Gt``u	গৎউ	U+0997 U+09CE U+0989
+Gt``U	গৎঊ	U+0997 U+09CE U+098A
+Gt``e	গৎএ	U+0997 U+09CE U+098F
+Gt``ee	গৎঈ	U+0997 U+09CE U+0988
+Gt``o	গৎঅ	U+0997 U+09CE U+0985
+Gt``O	গৎও	U+0997 U+09CE U+0993
+Gt``oo	গৎউ	U+0997 U+09CE U+0989
+Gt``OI	গৎঐ	U+0997 U+09CE U+0990
+Gt``OU	গৎঔ	U+0997 U+09CE U+0994
+Gt``rri	গৎঋ	U+0997 U+09CE U+098B
+Gt``y	গৎইয়	U+0997 U+09CE U+0987 U+09DF
+Gt``Z	গৎ্য	U+0997 U+09CE U+09CD U+09AF
+Gt``w	গৎও	U+0997 U+09CE U+0993
+Gt``wa	গৎওয়া	U+0997 U+09CE U+0993 U+09DF U+09BE
+Gt``x	গৎএক্স	U+0997 U+09CE U+098F U+0995 U+09CD U+09B8
+Gt``r	গৎর	U+0997 U+09CE U+09B0
+Gt``rr	গৎরর	U+0997 U+09CE U+09B0 U+09B0
+Gt``ry	গৎর‍্য	U+0997 U+09CE U+09B0 U+200D U+09CD U+09AF
+Gt``rZ	গৎর‍্য	U+0997 U+09CE U+09B0 U+200D U+09CD U+09AF
+Gt``rrri	গৎরররি	U+0997 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+Gt``rrrri	গৎররৃ	U+0997 U+09CE U+09B0 U+09B0 U+09C3
+Gt``rry	গৎরর‍্য	U+0997 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Gt``rrZ	গৎরর‍্য	U+0997 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Gt``h	গৎহ	U+0997 U+09CE U+09B9
+Gt``kh	গৎখ	U+0997 U+09CE U+0996
+Gt``n	গৎন	U+0997 U+09CE U+09A8
+Gt``ng	গৎং	U+0997 U+09CE U+0982
+Gt``Shm	গৎষ্ম	U+0997 U+09CE U+09B7 U+09CD U+09AE
+Gt``Ngk	গৎঙ্ক	U+0997 U+09CE U+0999 U+09CD U+0995
+Gt``Gdh	গৎগ্ধ	U+0997 U+09CE U+0997 U+09CD U+09A7
+Gt``t`	গৎত	U+0997 U+09CE U+09A4
+Gt``t``	গৎৎ	U+0997 U+09CE U+09CE
+Gt``T``	গৎট	U+0997 U+09CE U+099F
+Gt``0	গৎ০	U+0997 U+09CE U+09E6
+Gt``012	গৎ০১২	U+0997 U+09CE U+09E6 U+09E7 U+09E8
+Gt``.	গৎ।	U+0997 U+09CE U+0964
+Gt``..	গৎ।।	U+0997 U+09CE U+0964 U+0964
+Gt``...	গৎ...	U+0997 U+09CE U+002E U+002E U+002E
+Gt``.`	গৎ.	U+0997 U+09CE U+002E
+Gt``:	গৎঃ	U+0997 U+09CE U+0983
+Gt``:`	গৎ:	U+0997 U+09CE U+003A
+Gt``^	গৎঁ	U+0997 U+09CE U+0981
+Gt``^`	গৎ^	U+0997 U+09CE U+005E
+Gt``,,	গৎ্‌	U+0997 U+09CE U+09CD U+200C
+Gt``$	গৎ৳	U+0997 U+09CE U+09F3
+Gt```	গৎ	U+0997 U+09CE
+Gt``o`	গৎ	U+0997 U+09CE
+Gt``a`	গৎা	U+0997 U+09CE U+09BE
+Gt``rri`	গৎৃ	U+0997 U+09CE U+09C3
+Gt``ক	গৎক	U+0997 U+09CE U+0995
+Gt``é	গৎé	U+0997 U+09CE U+00E9
+Gt``́	গৎ́	U+0997 U+09CE U+0301
+Gt``🙂	গৎ🙂	U+0997 U+09CE U+1F642
+Jt``	জৎ	U+099C U+09CE
+Jt``a	জৎআ	U+099C U+09CE U+0986
+Jt``i	জৎই	U+099C U+09CE U+0987
+Jt``I	জৎঈ	U+099C U+09CE U+0988
+Jt``u	জৎউ	U+099C U+09CE U+0989
+Jt``U	জৎঊ	U+099C U+09CE U+098A
+Jt``e	জৎএ	U+099C U+09CE U+098F
+Jt``ee	জৎঈ	U+099C U+09CE U+0988
+Jt``o	জৎঅ	U+099C U+09CE U+0985
+Jt``O	জৎও	U+099C U+09CE U+0993
+Jt``oo	জৎউ	U+099C U+09CE U+0989
+Jt``OI	জৎঐ	U+099C U+09CE U+0990
+Jt``OU	জৎঔ	U+099C U+09CE U+0994
+Jt``rri	জৎঋ	U+099C U+09CE U+098B
+Jt``y	জৎইয়	U+099C U+09CE U+0987 U+09DF
+Jt``Z	জৎ্য	U+099C U+09CE U+09CD U+09AF
+Jt``w	জৎও	U+099C U+09CE U+0993
+Jt``wa	জৎওয়া	U+099C U+09CE U+0993 U+09DF U+09BE
+Jt``x	জৎএক্স	U+099C U+09CE U+098F U+0995 U+09CD U+09B8
+Jt``r	জৎর	U+099C U+09CE U+09B0
+Jt``rr	জৎরর	U+099C U+09CE U+09B0 U+09B0
+Jt``ry	জৎর‍্য	U+099C U+09CE U+09B0 U+200D U+09CD U+09AF
+Jt``rZ	জৎর‍্য	U+099C U+09CE U+09B0 U+200D U+09CD U+09AF
+Jt``rrri	জৎরররি	U+099C U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+Jt``rrrri	জৎররৃ	U+099C U+09CE U+09B0 U+09B0 U+09C3
+Jt``rry	জৎরর‍্য	U+099C U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Jt``rrZ	জৎরর‍্য	U+099C U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Jt``h	জৎহ	U+099C U+09CE U+09B9
+Jt``kh	জৎখ	U+099C U+09CE U+0996
+Jt``n	জৎন	U+099C U+09CE U+09A8
+Jt``ng	জৎং	U+099C U+09CE U+0982
+Jt``Shm	জৎষ্ম	U+099C U+09CE U+09B7 U+09CD U+09AE
+Jt``Ngk	জৎঙ্ক	U+099C U+09CE U+0999 U+09CD U+0995
+Jt``Gdh	জৎগ্ধ	U+099C U+09CE U+0997 U+09CD U+09A7
+Jt``t`	জৎত	U+099C U+09CE U+09A4
+Jt``t``	জৎৎ	U+099C U+09CE U+09CE
+Jt``T``	জৎট	U+099C U+09CE U+099F
+Jt``0	জৎ০	U+099C U+09CE U+09E6
+Jt``012	জৎ০১২	U+099C U+09CE U+09E6 U+09E7 U+09E8
+Jt``.	জৎ।	U+099C U+09CE U+0964
+Jt``..	জৎ।।	U+099C U+09CE U+0964 U+0964
+Jt``...	জৎ...	U+099C U+09CE U+002E U+002E U+002E
+Jt``.`	জৎ.	U+099C U+09CE U+002E
+Jt``:	জৎঃ	U+099C U+09CE U+0983
+Jt``:`	জৎ:	U+099C U+09CE U+003A
+Jt``^	জৎঁ	U+099C U+09CE U+0981
+Jt``^`	জৎ^	U+099C U+09CE U+005E
+Jt``,,	জৎ্‌	U+099C U+09CE U+09CD U+200C
+Jt``$	জৎ৳	U+099C U+09CE U+09F3
+Jt```	জৎ	U+099C U+09CE
+Jt``o`	জৎ	U+099C U+09CE
+Jt``a`	জৎা	U+099C U+09CE U+09BE
+Jt``rri`	জৎৃ	U+099C U+09CE U+09C3
+Jt``ক	জৎক	U+099C U+09CE U+0995
+Jt``é	জৎé	U+099C U+09CE U+00E9
+Jt``́	জৎ́	U+099C U+09CE U+0301
+Jt``🙂	জৎ🙂	U+099C U+09CE U+1F642
+Ngt``	ঙৎ	U+0999 U+09CE
+Ngt``a	ঙৎআ	U+0999 U+09CE U+0986
+Ngt``i	ঙৎই	U+0999 U+09CE U+0987
+Ngt``I	ঙৎঈ	U+0999 U+09CE U+0988
+Ngt``u	ঙৎউ	U+0999 U+09CE U+0989
+Ngt``U	ঙৎঊ	U+0999 U+09CE U+098A
+Ngt``e	ঙৎএ	U+0999 U+09CE U+098F
+Ngt``ee	ঙৎঈ	U+0999 U+09CE U+0988
+Ngt``o	ঙৎঅ	U+0999 U+09CE U+0985
+Ngt``O	ঙৎও	U+0999 U+09CE U+0993
+Ngt``oo	ঙৎউ	U+0999 U+09CE U+0989
+Ngt``OI	ঙৎঐ	U+0999 U+09CE U+0990
+Ngt``OU	ঙৎঔ	U+0999 U+09CE U+0994
+Ngt``rri	ঙৎঋ	U+0999 U+09CE U+098B
+Ngt``y	ঙৎইয়	U+0999 U+09CE U+0987 U+09DF
+Ngt``Z	ঙৎ্য	U+0999 U+09CE U+09CD U+09AF
+Ngt``w	ঙৎও	U+0999 U+09CE U+0993
+Ngt``wa	ঙৎওয়া	U+0999 U+09CE U+0993 U+09DF U+09BE
+Ngt``x	ঙৎএক্স	U+0999 U+09CE U+098F U+0995 U+09CD U+09B8
+Ngt``r	ঙৎর	U+0999 U+09CE U+09B0
+Ngt``rr	ঙৎরর	U+0999 U+09CE U+09B0 U+09B0
+Ngt``ry	ঙৎর‍্য	U+0999 U+09CE U+09B0 U+200D U+09CD U+09AF
+Ngt``rZ	ঙৎর‍্য	U+0999 U+09CE U+09B0 U+200D U+09CD U+09AF
+Ngt``rrri	ঙৎরররি	U+0999 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+Ngt``rrrri	ঙৎররৃ	U+0999 U+09CE U+09B0 U+09B0 U+09C3
+Ngt``rry	ঙৎরর‍্য	U+0999 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Ngt``rrZ	ঙৎরর‍্য	U+0999 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Ngt``h	ঙৎহ	U+0999 U+09CE U+09B9
+Ngt``kh	ঙৎখ	U+0999 U+09CE U+0996
+Ngt``n	ঙৎন	U+0999 U+09CE U+09A8
+Ngt``ng	ঙৎং	U+0999 U+09CE U+0982
+Ngt``Shm	ঙৎষ্ম	U+0999 U+09CE U+09B7 U+09CD U+09AE
+Ngt``Ngk	ঙৎঙ্ক	U+0999 U+09CE U+0999 U+09CD U+0995
+Ngt``Gdh	ঙৎগ্ধ	U+0999 U+09CE U+0997 U+09CD U+09A7
+Ngt``t`	ঙৎত	U+0999 U+09CE U+09A4
+Ngt``t``	ঙৎৎ	U+0999 U+09CE U+09CE
+Ngt``T``	ঙৎট	U+0999 U+09CE U+099F
+Ngt``0	ঙৎ০	U+0999 U+09CE U+09E6
+Ngt``012	ঙৎ০১২	U+0999 U+09CE U+09E6 U+09E7 U+09E8
+Ngt``.	ঙৎ।	U+0999 U+09CE U+0964
+Ngt``..	ঙৎ।।	U+0999 U+09CE U+0964 U+0964
+Ngt``...	ঙৎ...	U+0999 U+09CE U+002E U+002E U+002E
+Ngt``.`	ঙৎ.	U+0999 U+09CE U+002E
+Ngt``:	ঙৎঃ	U+0999 U+09CE U+0983
+Ngt``:`	ঙৎ:	U+0999 U+09CE U+003A
+Ngt``^	ঙৎঁ	U+0999 U+09CE U+0981
+Ngt``^`	ঙৎ^	U+0999 U+09CE U+005E
+Ngt``,,	ঙৎ্‌	U+0999 U+09CE U+09CD U+200C
+Ngt``$	ঙৎ৳	U+0999 U+09CE U+09F3
+Ngt```	ঙৎ	U+0999 U+09CE
+Ngt``o`	ঙৎ	U+0999 U+09CE
+Ngt``a`	ঙৎা	U+0999 U+09CE U+09BE
+Ngt``rri`	ঙৎৃ	U+0999 U+09CE U+09C3
+Ngt``ক	ঙৎক	U+0999 U+09CE U+0995
+Ngt``é	ঙৎé	U+0999 U+09CE U+00E9
+Ngt``́	ঙৎ́	U+0999 U+09CE U+0301
+Ngt``🙂	ঙৎ🙂	U+0999 U+09CE U+1F642
+NGt``	ঞৎ	U+099E U+09CE
+NGt``a	ঞৎআ	U+099E U+09CE U+0986
+NGt``i	ঞৎই	U+099E U+09CE U+0987
+NGt``I	ঞৎঈ	U+099E U+09CE U+0988
+NGt``u	ঞৎউ	U+099E U+09CE U+0989
+NGt``U	ঞৎঊ	U+099E U+09CE U+098A
+NGt``e	ঞৎএ	U+099E U+09CE U+098F
+NGt``ee	ঞৎঈ	U+099E U+09CE U+0988
+NGt``o	ঞৎঅ	U+099E U+09CE U+0985
+NGt``O	ঞৎও	U+099E U+09CE U+0993
+NGt``oo	ঞৎউ	U+099E U+09CE U+0989
+NGt``OI	ঞৎঐ	U+099E U+09CE U+0990
+NGt``OU	ঞৎঔ	U+099E U+09CE U+0994
+NGt``rri	ঞৎঋ	U+099E U+09CE U+098B
+NGt``y	ঞৎইয়	U+099E U+09CE U+0987 U+09DF
+NGt``Z	ঞৎ্য	U+099E U+09CE U+09CD U+09AF
+NGt``w	ঞৎও	U+099E U+09CE U+0993
+NGt``wa	ঞৎওয়া	U+099E U+09CE U+0993 U+09DF U+09BE
+NGt``x	ঞৎএক্স	U+099E U+09CE U+098F U+0995 U+09CD U+09B8
+NGt``r	ঞৎর	U+099E U+09CE U+09B0
+NGt``rr	ঞৎরর	U+099E U+09CE U+09B0 U+09B0
+NGt``ry	ঞৎর‍্য	U+099E U+09CE U+09B0 U+200D U+09CD U+09AF
+NGt``rZ	ঞৎর‍্য	U+099E U+09CE U+09B0 U+200D U+09CD U+09AF
+NGt``rrri	ঞৎরররি	U+099E U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+NGt``rrrri	ঞৎররৃ	U+099E U+09CE U+09B0 U+09B0 U+09C3
+NGt``rry	ঞৎরর‍্য	U+099E U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+NGt``rrZ	ঞৎরর‍্য	U+099E U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+NGt``h	ঞৎহ	U+099E U+09CE U+09B9
+NGt``kh	ঞৎখ	U+099E U+09CE U+0996
+NGt``n	ঞৎন	U+099E U+09CE U+09A8
+NGt``ng	ঞৎং	U+099E U+09CE U+0982
+NGt``Shm	ঞৎষ্ম	U+099E U+09CE U+09B7 U+09CD U+09AE
+NGt``Ngk	ঞৎঙ্ক	U+099E U+09CE U+0999 U+09CD U+0995
+NGt``Gdh	ঞৎগ্ধ	U+099E U+09CE U+0997 U+09CD U+09A7
+NGt``t`	ঞৎত	U+099E U+09CE U+09A4
+NGt``t``	ঞৎৎ	U+099E U+09CE U+09CE
+NGt``T``	ঞৎট	U+099E U+09CE U+099F
+NGt``0	ঞৎ০	U+099E U+09CE U+09E6
+NGt``012	ঞৎ০১২	U+099E U+09CE U+09E6 U+09E7 U+09E8
+NGt``.	ঞৎ।	U+099E U+09CE U+0964
+NGt``..	ঞৎ।।	U+099E U+09CE U+0964 U+0964
+NGt``...	ঞৎ...	U+099E U+09CE U+002E U+002E U+002E
+NGt``.`	ঞৎ.	U+099E U+09CE U+002E
+NGt``:	ঞৎঃ	U+099E U+09CE U+0983
+NGt``:`	ঞৎ:	U+099E U+09CE U+003A
+NGt``^	ঞৎঁ	U+099E U+09CE U+0981
+NGt``^`	ঞৎ^	U+099E U+09CE U+005E
+NGt``,,	ঞৎ্‌	U+099E U+09CE U+09CD U+200C
+NGt``$	ঞৎ৳	U+099E U+09CE U+09F3
+NGt```	ঞৎ	U+099E U+09CE
+NGt``o`	ঞৎ	U+099E U+09CE
+NGt``a`	ঞৎা	U+099E U+09CE U+09BE
+NGt``rri`	ঞৎৃ	U+099E U+09CE U+09C3
+NGt``ক	ঞৎক	U+099E U+09CE U+0995
+NGt``é	ঞৎé	U+099E U+09CE U+00E9
+NGt``́	ঞৎ́	U+099E U+09CE U+0301
+NGt``🙂	ঞৎ🙂	U+099E U+09CE U+1F642
+ngt``	ংৎ	U+0982 U+09CE
+ngt``a	ংৎআ	U+0982 U+09CE U+0986
+ngt``i	ংৎই	U+0982 U+09CE U+0987
+ngt``I	ংৎঈ	U+0982 U+09CE U+0988
+ngt``u	ংৎউ	U+0982 U+09CE U+0989
+ngt``U	ংৎঊ	U+0982 U+09CE U+098A
+ngt``e	ংৎএ	U+0982 U+09CE U+098F
+ngt``ee	ংৎঈ	U+0982 U+09CE U+0988
+ngt``o	ংৎঅ	U+0982 U+09CE U+0985
+ngt``O	ংৎও	U+0982 U+09CE U+0993
+ngt``oo	ংৎউ	U+0982 U+09CE U+0989
+ngt``OI	ংৎঐ	U+0982 U+09CE U+0990
+ngt``OU	ংৎঔ	U+0982 U+09CE U+0994
+ngt``rri	ংৎঋ	U+0982 U+09CE U+098B
+ngt``y	ংৎইয়	U+0982 U+09CE U+0987 U+09DF
+ngt``Z	ংৎ্য	U+0982 U+09CE U+09CD U+09AF
+ngt``w	ংৎও	U+0982 U+09CE U+0993
+ngt``wa	ংৎওয়া	U+0982 U+09CE U+0993 U+09DF U+09BE
+ngt``x	ংৎএক্স	U+0982 U+09CE U+098F U+0995 U+09CD U+09B8
+ngt``r	ংৎর	U+0982 U+09CE U+09B0
+ngt``rr	ংৎরর	U+0982 U+09CE U+09B0 U+09B0
+ngt``ry	ংৎর‍্য	U+0982 U+09CE U+09B0 U+200D U+09CD U+09AF
+ngt``rZ	ংৎর‍্য	U+0982 U+09CE U+09B0 U+200D U+09CD U+09AF
+ngt``rrri	ংৎরররি	U+0982 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+ngt``rrrri	ংৎররৃ	U+0982 U+09CE U+09B0 U+09B0 U+09C3
+ngt``rry	ংৎরর‍্য	U+0982 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+ngt``rrZ	ংৎরর‍্য	U+0982 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+ngt``h	ংৎহ	U+0982 U+09CE U+09B9
+ngt``kh	ংৎখ	U+0982 U+09CE U+0996
+ngt``n	ংৎন	U+0982 U+09CE U+09A8
+ngt``ng	ংৎং	U+0982 U+09CE U+0982
+ngt``Shm	ংৎষ্ম	U+0982 U+09CE U+09B7 U+09CD U+09AE
+ngt``Ngk	ংৎঙ্ক	U+0982 U+09CE U+0999 U+09CD U+0995
+ngt``Gdh	ংৎগ্ধ	U+0982 U+09CE U+0997 U+09CD U+09A7
+ngt``t`	ংৎত	U+0982 U+09CE U+09A4
+ngt``t``	ংৎৎ	U+0982 U+09CE U+09CE
+ngt``T``	ংৎট	U+0982 U+09CE U+099F
+ngt``0	ংৎ০	U+0982 U+09CE U+09E6
+ngt``012	ংৎ০১২	U+0982 U+09CE U+09E6 U+09E7 U+09E8
+ngt``.	ংৎ।	U+0982 U+09CE U+0964
+ngt``..	ংৎ।।	U+0982 U+09CE U+0964 U+0964
+ngt``...	ংৎ...	U+0982 U+09CE U+002E U+002E U+002E
+ngt``.`	ংৎ.	U+0982 U+09CE U+002E
+ngt``:	ংৎঃ	U+0982 U+09CE U+0983
+ngt``:`	ংৎ:	U+0982 U+09CE U+003A
+ngt``^	ংৎঁ	U+0982 U+09CE U+0981
+ngt``^`	ংৎ^	U+0982 U+09CE U+005E
+ngt``,,	ংৎ্‌	U+0982 U+09CE U+09CD U+200C
+ngt``$	ংৎ৳	U+0982 U+09CE U+09F3
+ngt```	ংৎ	U+0982 U+09CE
+ngt``o`	ংৎ	U+0982 U+09CE
+ngt``a`	ংৎা	U+0982 U+09CE U+09BE
+ngt``rri`	ংৎৃ	U+0982 U+09CE U+09C3
+ngt``ক	ংৎক	U+0982 U+09CE U+0995
+ngt``é	ংৎé	U+0982 U+09CE U+00E9
+ngt``́	ংৎ́	U+0982 U+09CE U+0301
+ngt``🙂	ংৎ🙂	U+0982 U+09CE U+1F642
+lt``	লৎ	U+09B2 U+09CE
+lt``a	লৎআ	U+09B2 U+09CE U+0986
+lt``i	লৎই	U+09B2 U+09CE U+0987
+lt``I	লৎঈ	U+09B2 U+09CE U+0988
+lt``u	লৎউ	U+09B2 U+09CE U+0989
+lt``U	লৎঊ	U+09B2 U+09CE U+098A
+lt``e	লৎএ	U+09B2 U+09CE U+098F
+lt``ee	লৎঈ	U+09B2 U+09CE U+0988
+lt``o	লৎঅ	U+09B2 U+09CE U+0985
+lt``O	লৎও	U+09B2 U+09CE U+0993
+lt``oo	লৎউ	U+09B2 U+09CE U+0989
+lt``OI	লৎঐ	U+09B2 U+09CE U+0990
+lt``OU	লৎঔ	U+09B2 U+09CE U+0994
+lt``rri	লৎঋ	U+09B2 U+09CE U+098B
+lt``y	লৎইয়	U+09B2 U+09CE U+0987 U+09DF
+lt``Z	লৎ্য	U+09B2 U+09CE U+09CD U+09AF
+lt``w	লৎও	U+09B2 U+09CE U+0993
+lt``wa	লৎওয়া	U+09B2 U+09CE U+0993 U+09DF U+09BE
+lt``x	লৎএক্স	U+09B2 U+09CE U+098F U+0995 U+09CD U+09B8
+lt``r	লৎর	U+09B2 U+09CE U+09B0
+lt``rr	লৎরর	U+09B2 U+09CE U+09B0 U+09B0
+lt``ry	লৎর‍্য	U+09B2 U+09CE U+09B0 U+200D U+09CD U+09AF
+lt``rZ	লৎর‍্য	U+09B2 U+09CE U+09B0 U+200D U+09CD U+09AF
+lt``rrri	লৎরররি	U+09B2 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+lt``rrrri	লৎররৃ	U+09B2 U+09CE U+09B0 U+09B0 U+09C3
+lt``rry	লৎরর‍্য	U+09B2 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+lt``rrZ	লৎরর‍্য	U+09B2 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+lt``h	লৎহ	U+09B2 U+09CE U+09B9
+lt``kh	লৎখ	U+09B2 U+09CE U+0996
+lt``n	লৎন	U+09B2 U+09CE U+09A8
+lt``ng	লৎং	U+09B2 U+09CE U+0982
+lt``Shm	লৎষ্ম	U+09B2 U+09CE U+09B7 U+09CD U+09AE
+lt``Ngk	লৎঙ্ক	U+09B2 U+09CE U+0999 U+09CD U+0995
+lt``Gdh	লৎগ্ধ	U+09B2 U+09CE U+0997 U+09CD U+09A7
+lt``t`	লৎত	U+09B2 U+09CE U+09A4
+lt``t``	লৎৎ	U+09B2 U+09CE U+09CE
+lt``T``	লৎট	U+09B2 U+09CE U+099F
+lt``0	লৎ০	U+09B2 U+09CE U+09E6
+lt``012	লৎ০১২	U+09B2 U+09CE U+09E6 U+09E7 U+09E8
+lt``.	লৎ।	U+09B2 U+09CE U+0964
+lt``..	লৎ।।	U+09B2 U+09CE U+0964 U+0964
+lt``...	লৎ...	U+09B2 U+09CE U+002E U+002E U+002E
+lt``.`	লৎ.	U+09B2 U+09CE U+002E
+lt``:	লৎঃ	U+09B2 U+09CE U+0983
+lt``:`	লৎ:	U+09B2 U+09CE U+003A
+lt``^	লৎঁ	U+09B2 U+09CE U+0981
+lt``^`	লৎ^	U+09B2 U+09CE U+005E
+lt``,,	লৎ্‌	U+09B2 U+09CE U+09CD U+200C
+lt``$	লৎ৳	U+09B2 U+09CE U+09F3
+lt```	লৎ	U+09B2 U+09CE
+lt``o`	লৎ	U+09B2 U+09CE
+lt``a`	লৎা	U+09B2 U+09CE U+09BE
+lt``rri`	লৎৃ	U+09B2 U+09CE U+09C3
+lt``ক	লৎক	U+09B2 U+09CE U+0995
+lt``é	লৎé	U+09B2 U+09CE U+00E9
+lt``́	লৎ́	U+09B2 U+09CE U+0301
+lt``🙂	লৎ🙂	U+09B2 U+09CE U+1F642
+qt``	কৎ	U+0995 U+09CE
+qt``a	কৎআ	U+0995 U+09CE U+0986
+qt``i	কৎই	U+0995 U+09CE U+0987
+qt``I	কৎঈ	U+0995 U+09CE U+0988
+qt``u	কৎউ	U+0995 U+09CE U+0989
+qt``U	কৎঊ	U+0995 U+09CE U+098A
+qt``e	কৎএ	U+0995 U+09CE U+098F
+qt``ee	কৎঈ	U+0995 U+09CE U+0988
+qt``o	কৎঅ	U+0995 U+09CE U+0985
+qt``O	কৎও	U+0995 U+09CE U+0993
+qt``oo	কৎউ	U+0995 U+09CE U+0989
+qt``OI	কৎঐ	U+0995 U+09CE U+0990
+qt``OU	কৎঔ	U+0995 U+09CE U+0994
+qt``rri	কৎঋ	U+0995 U+09CE U+098B
+qt``y	কৎইয়	U+0995 U+09CE U+0987 U+09DF
+qt``Z	কৎ্য	U+0995 U+09CE U+09CD U+09AF
+qt``w	কৎও	U+0995 U+09CE U+0993
+qt``wa	কৎওয়া	U+0995 U+09CE U+0993 U+09DF U+09BE
+qt``x	কৎএক্স	U+0995 U+09CE U+098F U+0995 U+09CD U+09B8
+qt``r	কৎর	U+0995 U+09CE U+09B0
+qt``rr	কৎরর	U+0995 U+09CE U+09B0 U+09B0
+qt``ry	কৎর‍্য	U+0995 U+09CE U+09B0 U+200D U+09CD U+09AF
+qt``rZ	কৎর‍্য	U+0995 U+09CE U+09B0 U+200D U+09CD U+09AF
+qt``rrri	কৎরররি	U+0995 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+qt``rrrri	কৎররৃ	U+0995 U+09CE U+09B0 U+09B0 U+09C3
+qt``rry	কৎরর‍্য	U+0995 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+qt``rrZ	কৎরর‍্য	U+0995 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+qt``h	কৎহ	U+0995 U+09CE U+09B9
+qt``kh	কৎখ	U+0995 U+09CE U+0996
+qt``n	কৎন	U+0995 U+09CE U+09A8
+qt``ng	কৎং	U+0995 U+09CE U+0982
+qt``Shm	কৎষ্ম	U+0995 U+09CE U+09B7 U+09CD U+09AE
+qt``Ngk	কৎঙ্ক	U+0995 U+09CE U+0999 U+09CD U+0995
+qt``Gdh	কৎগ্ধ	U+0995 U+09CE U+0997 U+09CD U+09A7
+qt``t`	কৎত	U+0995 U+09CE U+09A4
+qt``t``	কৎৎ	U+0995 U+09CE U+09CE
+qt``T``	কৎট	U+0995 U+09CE U+099F
+qt``0	কৎ০	U+0995 U+09CE U+09E6
+qt``012	কৎ০১২	U+0995 U+09CE U+09E6 U+09E7 U+09E8
+qt``.	কৎ।	U+0995 U+09CE U+0964
+qt``..	কৎ।।	U+0995 U+09CE U+0964 U+0964
+qt``...	কৎ...	U+0995 U+09CE U+002E U+002E U+002E
+qt``.`	কৎ.	U+0995 U+09CE U+002E
+qt``:	কৎঃ	U+0995 U+09CE U+0983
+qt``:`	কৎ:	U+0995 U+09CE U+003A
+qt``^	কৎঁ	U+0995 U+09CE U+0981
+qt``^`	কৎ^	U+0995 U+09CE U+005E
+qt``,,	কৎ্‌	U+0995 U+09CE U+09CD U+200C
+qt``$	কৎ৳	U+0995 U+09CE U+09F3
+qt```	কৎ	U+0995 U+09CE
+qt``o`	কৎ	U+0995 U+09CE
+qt``a`	কৎা	U+0995 U+09CE U+09BE
+qt``rri`	কৎৃ	U+0995 U+09CE U+09C3
+qt``ক	কৎক	U+0995 U+09CE U+0995
+qt``é	কৎé	U+0995 U+09CE U+00E9
+qt``́	কৎ́	U+0995 U+09CE U+0301
+qt``🙂	কৎ🙂	U+0995 U+09CE U+1F642
+vt``	ভৎ	U+09AD U+09CE
+vt``a	ভৎআ	U+09AD U+09CE U+0986
+vt``i	ভৎই	U+09AD U+09CE U+0987
+vt``I	ভৎঈ	U+09AD U+09CE U+0988
+vt``u	ভৎউ	U+09AD U+09CE U+0989
+vt``U	ভৎঊ	U+09AD U+09CE U+098A
+vt``e	ভৎএ	U+09AD U+09CE U+098F
+vt``ee	ভৎঈ	U+09AD U+09CE U+0988
+vt``o	ভৎঅ	U+09AD U+09CE U+0985
+vt``O	ভৎও	U+09AD U+09CE U+0993
+vt``oo	ভৎউ	U+09AD U+09CE U+0989
+vt``OI	ভৎঐ	U+09AD U+09CE U+0990
+vt``OU	ভৎঔ	U+09AD U+09CE U+0994
+vt``rri	ভৎঋ	U+09AD U+09CE U+098B
+vt``y	ভৎইয়	U+09AD U+09CE U+0987 U+09DF
+vt``Z	ভৎ্য	U+09AD U+09CE U+09CD U+09AF
+vt``w	ভৎও	U+09AD U+09CE U+0993
+vt``wa	ভৎওয়া	U+09AD U+09CE U+0993 U+09DF U+09BE
+vt``x	ভৎএক্স	U+09AD U+09CE U+098F U+0995 U+09CD U+09B8
+vt``r	ভৎর	U+09AD U+09CE U+09B0
+vt``rr	ভৎরর	U+09AD U+09CE U+09B0 U+09B0
+vt``ry	ভৎর‍্য	U+09AD U+09CE U+09B0 U+200D U+09CD U+09AF
+vt``rZ	ভৎর‍্য	U+09AD U+09CE U+09B0 U+200D U+09CD U+09AF
+vt``rrri	ভৎরররি	U+09AD U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+vt``rrrri	ভৎররৃ	U+09AD U+09CE U+09B0 U+09B0 U+09C3
+vt``rry	ভৎরর‍্য	U+09AD U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+vt``rrZ	ভৎরর‍্য	U+09AD U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+vt``h	ভৎহ	U+09AD U+09CE U+09B9
+vt``kh	ভৎখ	U+09AD U+09CE U+0996
+vt``n	ভৎন	U+09AD U+09CE U+09A8
+vt``ng	ভৎং	U+09AD U+09CE U+0982
+vt``Shm	ভৎষ্ম	U+09AD U+09CE U+09B7 U+09CD U+09AE
+vt``Ngk	ভৎঙ্ক	U+09AD U+09CE U+0999 U+09CD U+0995
+vt``Gdh	ভৎগ্ধ	U+09AD U+09CE U+0997 U+09CD U+09A7
+vt``t`	ভৎত	U+09AD U+09CE U+09A4
+vt``t``	ভৎৎ	U+09AD U+09CE U+09CE
+vt``T``	ভৎট	U+09AD U+09CE U+099F
+vt``0	ভৎ০	U+09AD U+09CE U+09E6
+vt``012	ভৎ০১২	U+09AD U+09CE U+09E6 U+09E7 U+09E8
+vt``.	ভৎ।	U+09AD U+09CE U+0964
+vt``..	ভৎ।।	U+09AD U+09CE U+0964 U+0964
+vt``...	ভৎ...	U+09AD U+09CE U+002E U+002E U+002E
+vt``.`	ভৎ.	U+09AD U+09CE U+002E
+vt``:	ভৎঃ	U+09AD U+09CE U+0983
+vt``:`	ভৎ:	U+09AD U+09CE U+003A
+vt``^	ভৎঁ	U+09AD U+09CE U+0981
+vt``^`	ভৎ^	U+09AD U+09CE U+005E
+vt``,,	ভৎ্‌	U+09AD U+09CE U+09CD U+200C
+vt``$	ভৎ৳	U+09AD U+09CE U+09F3
+vt```	ভৎ	U+09AD U+09CE
+vt``o`	ভৎ	U+09AD U+09CE
+vt``a`	ভৎা	U+09AD U+09CE U+09BE
+vt``rri`	ভৎৃ	U+09AD U+09CE U+09C3
+vt``ক	ভৎক	U+09AD U+09CE U+0995
+vt``é	ভৎé	U+09AD U+09CE U+00E9
+vt``́	ভৎ́	U+09AD U+09CE U+0301
+vt``🙂	ভৎ🙂	U+09AD U+09CE U+1F642
+Rt``	ড়ৎ	U+09DC U+09CE
+Rt``a	ড়ৎআ	U+09DC U+09CE U+0986
+Rt``i	ড়ৎই	U+09DC U+09CE U+0987
+Rt``I	ড়ৎঈ	U+09DC U+09CE U+0988
+Rt``u	ড়ৎউ	U+09DC U+09CE U+0989
+Rt``U	ড়ৎঊ	U+09DC U+09CE U+098A
+Rt``e	ড়ৎএ	U+09DC U+09CE U+098F
+Rt``ee	ড়ৎঈ	U+09DC U+09CE U+0988
+Rt``o	ড়ৎঅ	U+09DC U+09CE U+0985
+Rt``O	ড়ৎও	U+09DC U+09CE U+0993
+Rt``oo	ড়ৎউ	U+09DC U+09CE U+0989
+Rt``OI	ড়ৎঐ	U+09DC U+09CE U+0990
+Rt``OU	ড়ৎঔ	U+09DC U+09CE U+0994
+Rt``rri	ড়ৎঋ	U+09DC U+09CE U+098B
+Rt``y	ড়ৎইয়	U+09DC U+09CE U+0987 U+09DF
+Rt``Z	ড়ৎ্য	U+09DC U+09CE U+09CD U+09AF
+Rt``w	ড়ৎও	U+09DC U+09CE U+0993
+Rt``wa	ড়ৎওয়া	U+09DC U+09CE U+0993 U+09DF U+09BE
+Rt``x	ড়ৎএক্স	U+09DC U+09CE U+098F U+0995 U+09CD U+09B8
+Rt``r	ড়ৎর	U+09DC U+09CE U+09B0
+Rt``rr	ড়ৎরর	U+09DC U+09CE U+09B0 U+09B0
+Rt``ry	ড়ৎর‍্য	U+09DC U+09CE U+09B0 U+200D U+09CD U+09AF
+Rt``rZ	ড়ৎর‍্য	U+09DC U+09CE U+09B0 U+200D U+09CD U+09AF
+Rt``rrri	ড়ৎরররি	U+09DC U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+Rt``rrrri	ড়ৎররৃ	U+09DC U+09CE U+09B0 U+09B0 U+09C3
+Rt``rry	ড়ৎরর‍্য	U+09DC U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Rt``rrZ	ড়ৎরর‍্য	U+09DC U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Rt``h	ড়ৎহ	U+09DC U+09CE U+09B9
+Rt``kh	ড়ৎখ	U+09DC U+09CE U+0996
+Rt``n	ড়ৎন	U+09DC U+09CE U+09A8
+Rt``ng	ড়ৎং	U+09DC U+09CE U+0982
+Rt``Shm	ড়ৎষ্ম	U+09DC U+09CE U+09B7 U+09CD U+09AE
+Rt``Ngk	ড়ৎঙ্ক	U+09DC U+09CE U+0999 U+09CD U+0995
+Rt``Gdh	ড়ৎগ্ধ	U+09DC U+09CE U+0997 U+09CD U+09A7
+Rt``t`	ড়ৎত	U+09DC U+09CE U+09A4
+Rt``t``	ড়ৎৎ	U+09DC U+09CE U+09CE
+Rt``T``	ড়ৎট	U+09DC U+09CE U+099F
+Rt``0	ড়ৎ০	U+09DC U+09CE U+09E6
+Rt``012	ড়ৎ০১২	U+09DC U+09CE U+09E6 U+09E7 U+09E8
+Rt``.	ড়ৎ।	U+09DC U+09CE U+0964
+Rt``..	ড়ৎ।।	U+09DC U+09CE U+0964 U+0964
+Rt``...	ড়ৎ...	U+09DC U+09CE U+002E U+002E U+002E
+Rt``.`	ড়ৎ.	U+09DC U+09CE U+002E
+Rt``:	ড়ৎঃ	U+09DC U+09CE U+0983
+Rt``:`	ড়ৎ:	U+09DC U+09CE U+003A
+Rt``^	ড়ৎঁ	U+09DC U+09CE U+0981
+Rt``^`	ড়ৎ^	U+09DC U+09CE U+005E
+Rt``,,	ড়ৎ্‌	U+09DC U+09CE U+09CD U+200C
+Rt``$	ড়ৎ৳	U+09DC U+09CE U+09F3
+Rt```	ড়ৎ	U+09DC U+09CE
+Rt``o`	ড়ৎ	U+09DC U+09CE
+Rt``a`	ড়ৎা	U+09DC U+09CE U+09BE
+Rt``rri`	ড়ৎৃ	U+09DC U+09CE U+09C3
+Rt``ক	ড়ৎক	U+09DC U+09CE U+0995
+Rt``é	ড়ৎé	U+09DC U+09CE U+00E9
+Rt``́	ড়ৎ́	U+09DC U+09CE U+0301
+Rt``🙂	ড়ৎ🙂	U+09DC U+09CE U+1F642
+Rht``	ঢ়ৎ	U+09DD U+09CE
+Rht``a	ঢ়ৎআ	U+09DD U+09CE U+0986
+Rht``i	ঢ়ৎই	U+09DD U+09CE U+0987
+Rht``I	ঢ়ৎঈ	U+09DD U+09CE U+0988
+Rht``u	ঢ়ৎউ	U+09DD U+09CE U+0989
+Rht``U	ঢ়ৎঊ	U+09DD U+09CE U+098A
+Rht``e	ঢ়ৎএ	U+09DD U+09CE U+098F
+Rht``ee	ঢ়ৎঈ	U+09DD U+09CE U+0988
+Rht``o	ঢ়ৎঅ	U+09DD U+09CE U+0985
+Rht``O	ঢ়ৎও	U+09DD U+09CE U+0993
+Rht``oo	ঢ়ৎউ	U+09DD U+09CE U+0989
+Rht``OI	ঢ়ৎঐ	U+09DD U+09CE U+0990
+Rht``OU	ঢ়ৎঔ	U+09DD U+09CE U+0994
+Rht``rri	ঢ়ৎঋ	U+09DD U+09CE U+098B
+Rht``y	ঢ়ৎইয়	U+09DD U+09CE U+0987 U+09DF
+Rht``Z	ঢ়ৎ্য	U+09DD U+09CE U+09CD U+09AF
+Rht``w	ঢ়ৎও	U+09DD U+09CE U+0993
+Rht``wa	ঢ়ৎওয়া	U+09DD U+09CE U+0993 U+09DF U+09BE
+Rht``x	ঢ়ৎএক্স	U+09DD U+09CE U+098F U+0995 U+09CD U+09B8
+Rht``r	ঢ়ৎর	U+09DD U+09CE U+09B0
+Rht``rr	ঢ়ৎরর	U+09DD U+09CE U+09B0 U+09B0
+Rht``ry	ঢ়ৎর‍্য	U+09DD U+09CE U+09B0 U+200D U+09CD U+09AF
+Rht``rZ	ঢ়ৎর‍্য	U+09DD U+09CE U+09B0 U+200D U+09CD U+09AF
+Rht``rrri	ঢ়ৎরররি	U+09DD U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+Rht``rrrri	ঢ়ৎররৃ	U+09DD U+09CE U+09B0 U+09B0 U+09C3
+Rht``rry	ঢ়ৎরর‍্য	U+09DD U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Rht``rrZ	ঢ়ৎরর‍্য	U+09DD U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Rht``h	ঢ়ৎহ	U+09DD U+09CE U+09B9
+Rht``kh	ঢ়ৎখ	U+09DD U+09CE U+0996
+Rht``n	ঢ়ৎন	U+09DD U+09CE U+09A8
+Rht``ng	ঢ়ৎং	U+09DD U+09CE U+0982
+Rht``Shm	ঢ়ৎষ্ম	U+09DD U+09CE U+09B7 U+09CD U+09AE
+Rht``Ngk	ঢ়ৎঙ্ক	U+09DD U+09CE U+0999 U+09CD U+0995
+Rht``Gdh	ঢ়ৎগ্ধ	U+09DD U+09CE U+0997 U+09CD U+09A7
+Rht``t`	ঢ়ৎত	U+09DD U+09CE U+09A4
+Rht``t``	ঢ়ৎৎ	U+09DD U+09CE U+09CE
+Rht``T``	ঢ়ৎট	U+09DD U+09CE U+099F
+Rht``0	ঢ়ৎ০	U+09DD U+09CE U+09E6
+Rht``012	ঢ়ৎ০১২	U+09DD U+09CE U+09E6 U+09E7 U+09E8
+Rht``.	ঢ়ৎ।	U+09DD U+09CE U+0964
+Rht``..	ঢ়ৎ।।	U+09DD U+09CE U+0964 U+0964
+Rht``...	ঢ়ৎ...	U+09DD U+09CE U+002E U+002E U+002E
+Rht``.`	ঢ়ৎ.	U+09DD U+09CE U+002E
+Rht``:	ঢ়ৎঃ	U+09DD U+09CE U+0983
+Rht``:`	ঢ়ৎ:	U+09DD U+09CE U+003A
+Rht``^	ঢ়ৎঁ	U+09DD U+09CE U+0981
+Rht``^`	ঢ়ৎ^	U+09DD U+09CE U+005E
+Rht``,,	ঢ়ৎ্‌	U+09DD U+09CE U+09CD U+200C
+Rht``$	ঢ়ৎ৳	U+09DD U+09CE U+09F3
+Rht```	ঢ়ৎ	U+09DD U+09CE
+Rht``o`	ঢ়ৎ	U+09DD U+09CE
+Rht``a`	ঢ়ৎা	U+09DD U+09CE U+09BE
+Rht``rri`	ঢ়ৎৃ	U+09DD U+09CE U+09C3
+Rht``ক	ঢ়ৎক	U+09DD U+09CE U+0995
+Rht``é	ঢ়ৎé	U+09DD U+09CE U+00E9
+Rht``́	ঢ়ৎ́	U+09DD U+09CE U+0301
+Rht``🙂	ঢ়ৎ🙂	U+09DD U+09CE U+1F642
+wt``	ওৎ	U+0993 U+09CE
+wt``a	ওৎআ	U+0993 U+09CE U+0986
+wt``i	ওৎই	U+0993 U+09CE U+0987
+wt``I	ওৎঈ	U+0993 U+09CE U+0988
+wt``u	ওৎউ	U+0993 U+09CE U+0989
+wt``U	ওৎঊ	U+0993 U+09CE U+098A
+wt``e	ওৎএ	U+0993 U+09CE U+098F
+wt``ee	ওৎঈ	U+0993 U+09CE U+0988
+wt``o	ওৎঅ	U+0993 U+09CE U+0985
+wt``O	ওৎও	U+0993 U+09CE U+0993
+wt``oo	ওৎউ	U+0993 U+09CE U+0989
+wt``OI	ওৎঐ	U+0993 U+09CE U+0990
+wt``OU	ওৎঔ	U+0993 U+09CE U+0994
+wt``rri	ওৎঋ	U+0993 U+09CE U+098B
+wt``y	ওৎইয়	U+0993 U+09CE U+0987 U+09DF
+wt``Z	ওৎ্য	U+0993 U+09CE U+09CD U+09AF
+wt``w	ওৎও	U+0993 U+09CE U+0993
+wt``wa	ওৎওয়া	U+0993 U+09CE U+0993 U+09DF U+09BE
+wt``x	ওৎএক্স	U+0993 U+09CE U+098F U+0995 U+09CD U+09B8
+wt``r	ওৎর	U+0993 U+09CE U+09B0
+wt``rr	ওৎরর	U+0993 U+09CE U+09B0 U+09B0
+wt``ry	ওৎর‍্য	U+0993 U+09CE U+09B0 U+200D U+09CD U+09AF
+wt``rZ	ওৎর‍্য	U+0993 U+09CE U+09B0 U+200D U+09CD U+09AF
+wt``rrri	ওৎরররি	U+0993 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+wt``rrrri	ওৎররৃ	U+0993 U+09CE U+09B0 U+09B0 U+09C3
+wt``rry	ওৎরর‍্য	U+0993 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+wt``rrZ	ওৎরর‍্য	U+0993 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+wt``h	ওৎহ	U+0993 U+09CE U+09B9
+wt``kh	ওৎখ	U+0993 U+09CE U+0996
+wt``n	ওৎন	U+0993 U+09CE U+09A8
+wt``ng	ওৎং	U+0993 U+09CE U+0982
+wt``Shm	ওৎষ্ম	U+0993 U+09CE U+09B7 U+09CD U+09AE
+wt``Ngk	ওৎঙ্ক	U+0993 U+09CE U+0999 U+09CD U+0995
+wt``Gdh	ওৎগ্ধ	U+0993 U+09CE U+0997 U+09CD U+09A7
+wt``t`	ওৎত	U+0993 U+09CE U+09A4
+wt``t``	ওৎৎ	U+0993 U+09CE U+09CE
+wt``T``	ওৎট	U+0993 U+09CE U+099F
+wt``0	ওৎ০	U+0993 U+09CE U+09E6
+wt``012	ওৎ০১২	U+0993 U+09CE U+09E6 U+09E7 U+09E8
+wt``.	ওৎ।	U+0993 U+09CE U+0964
+wt``..	ওৎ।।	U+0993 U+09CE U+0964 U+0964
+wt``...	ওৎ...	U+0993 U+09CE U+002E U+002E U+002E
+wt``.`	ওৎ.	U+0993 U+09CE U+002E
+wt``:	ওৎঃ	U+0993 U+09CE U+0983
+wt``:`	ওৎ:	U+0993 U+09CE U+003A
+wt``^	ওৎঁ	U+0993 U+09CE U+0981
+wt``^`	ওৎ^	U+0993 U+09CE U+005E
+wt``,,	ওৎ্‌	U+0993 U+09CE U+09CD U+200C
+wt``$	ওৎ৳	U+0993 U+09CE U+09F3
+wt```	ওৎ	U+0993 U+09CE
+wt``o`	ওৎ	U+0993 U+09CE
+wt``a`	ওৎা	U+0993 U+09CE U+09BE
+wt``rri`	ওৎৃ	U+0993 U+09CE U+09C3
+wt``ক	ওৎক	U+0993 U+09CE U+0995
+wt``é	ওৎé	U+0993 U+09CE U+00E9
+wt``́	ওৎ́	U+0993 U+09CE U+0301
+wt``🙂	ওৎ🙂	U+0993 U+09CE U+1F642
+xt``	এক্সৎ	U+098F U+0995 U+09CD U+09B8 U+09CE
+xt``a	এক্সৎআ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0986
+xt``i	এক্সৎই	U+098F U+0995 U+09CD U+09B8 U+09CE U+0987
+xt``I	এক্সৎঈ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0988
+xt``u	এক্সৎউ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0989
+xt``U	এক্সৎঊ	U+098F U+0995 U+09CD U+09B8 U+09CE U+098A
+xt``e	এক্সৎএ	U+098F U+0995 U+09CD U+09B8 U+09CE U+098F
+xt``ee	এক্সৎঈ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0988
+xt``o	এক্সৎঅ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0985
+xt``O	এক্সৎও	U+098F U+0995 U+09CD U+09B8 U+09CE U+0993
+xt``oo	এক্সৎউ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0989
+xt``OI	এক্সৎঐ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0990
+xt``OU	এক্সৎঔ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0994
+xt``rri	এক্সৎঋ	U+098F U+0995 U+09CD U+09B8 U+09CE U+098B
+xt``y	এক্সৎইয়	U+098F U+0995 U+09CD U+09B8 U+09CE U+0987 U+09DF
+xt``Z	এক্সৎ্য	U+098F U+0995 U+09CD U+09B8 U+09CE U+09CD U+09AF
+xt``w	এক্সৎও	U+098F U+0995 U+09CD U+09B8 U+09CE U+0993
+xt``wa	এক্সৎওয়া	U+098F U+0995 U+09CD U+09B8 U+09CE U+0993 U+09DF U+09BE
+xt``x	এক্সৎএক্স	U+098F U+0995 U+09CD U+09B8 U+09CE U+098F U+0995 U+09CD U+09B8
+xt``r	এক্সৎর	U+098F U+0995 U+09CD U+09B8 U+09CE U+09B0
+xt``rr	এক্সৎরর	U+098F U+0995 U+09CD U+09B8 U+09CE U+09B0 U+09B0
+xt``ry	এক্সৎর‍্য	U+098F U+0995 U+09CD U+09B8 U+09CE U+09B0 U+200D U+09CD U+09AF
+xt``rZ	এক্সৎর‍্য	U+098F U+0995 U+09CD U+09B8 U+09CE U+09B0 U+200D U+09CD U+09AF
+xt``rrri	এক্সৎরররি	U+098F U+0995 U+09CD U+09B8 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+xt``rrrri	এক্সৎররৃ	U+098F U+0995 U+09CD U+09B8 U+09CE U+09B0 U+09B0 U+09C3
+xt``rry	এক্সৎরর‍্য	U+098F U+0995 U+09CD U+09B8 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+xt``rrZ	এক্সৎরর‍্য	U+098F U+0995 U+09CD U+09B8 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+xt``h	এক্সৎহ	U+098F U+0995 U+09CD U+09B8 U+09CE U+09B9
+xt``kh	এক্সৎখ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0996
+xt``n	এক্সৎন	U+098F U+0995 U+09CD U+09B8 U+09CE U+09A8
+xt``ng	এক্সৎং	U+098F U+0995 U+09CD U+09B8 U+09CE U+0982
+xt``Shm	এক্সৎষ্ম	U+098F U+0995 U+09CD U+09B8 U+09CE U+09B7 U+09CD U+09AE
+xt``Ngk	এক্সৎঙ্ক	U+098F U+0995 U+09CD U+09B8 U+09CE U+0999 U+09CD U+0995
+xt``Gdh	এক্সৎগ্ধ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0997 U+09CD U+09A7
+xt``t`	এক্সৎত	U+098F U+0995 U+09CD U+09B8 U+09CE U+09A4
+xt``t``	এক্সৎৎ	U+098F U+0995 U+09CD U+09B8 U+09CE U+09CE
+xt``T``	এক্সৎট	U+098F U+0995 U+09CD U+09B8 U+09CE U+099F
+xt``0	এক্সৎ০	U+098F U+0995 U+09CD U+09B8 U+09CE U+09E6
+xt``012	এক্সৎ০১২	U+098F U+0995 U+09CD U+09B8 U+09CE U+09E6 U+09E7 U+09E8
+xt``.	এক্সৎ।	U+098F U+0995 U+09CD U+09B8 U+09CE U+0964
+xt``..	এক্সৎ।।	U+098F U+0995 U+09CD U+09B8 U+09CE U+0964 U+0964
+xt``...	এক্সৎ...	U+098F U+0995 U+09CD U+09B8 U+09CE U+002E U+002E U+002E
+xt``.`	এক্সৎ.	U+098F U+0995 U+09CD U+09B8 U+09CE U+002E
+xt``:	এক্সৎঃ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0983
+xt``:`	এক্সৎ:	U+098F U+0995 U+09CD U+09B8 U+09CE U+003A
+xt``^	এক্সৎঁ	U+098F U+0995 U+09CD U+09B8 U+09CE U+0981
+xt``^`	এক্সৎ^	U+098F U+0995 U+09CD U+09B8 U+09CE U+005E
+xt``,,	এক্সৎ্‌	U+098F U+0995 U+09CD U+09B8 U+09CE U+09CD U+200C
+xt``$	এক্সৎ৳	U+098F U+0995 U+09CD U+09B8 U+09CE U+09F3
+xt```	এক্সৎ	U+098F U+0995 U+09CD U+09B8 U+09CE
+xt``o`	এক্সৎ	U+098F U+0995 U+09CD U+09B8 U+09CE
+xt``a`	এক্সৎা	U+098F U+0995 U+09CD U+09B8 U+09CE U+09BE
+xt``rri`	এক্সৎৃ	U+098F U+0995 U+09CD U+09B8 U+09CE U+09C3
+xt``ক	এক্সৎক	U+098F U+0995 U+09CD U+09B8 U+09CE U+0995
+xt``é	এক্সৎé	U+098F U+0995 U+09CD U+09B8 U+09CE U+00E9
+xt``́	এক্সৎ́	U+098F U+0995 U+09CD U+09B8 U+09CE U+0301
+xt``🙂	এক্সৎ🙂	U+098F U+0995 U+09CD U+09B8 U+09CE U+1F642
+Yt``	য়ৎ	U+09DF U+09CE
+Yt``a	য়ৎআ	U+09DF U+09CE U+0986
+Yt``i	য়ৎই	U+09DF U+09CE U+0987
+Yt``I	য়ৎঈ	U+09DF U+09CE U+0988
+Yt``u	য়ৎউ	U+09DF U+09CE U+0989
+Yt``U	য়ৎঊ	U+09DF U+09CE U+098A
+Yt``e	য়ৎএ	U+09DF U+09CE U+098F
+Yt``ee	য়ৎঈ	U+09DF U+09CE U+0988
+Yt``o	য়ৎঅ	U+09DF U+09CE U+0985
+Yt``O	য়ৎও	U+09DF U+09CE U+0993
+Yt``oo	য়ৎউ	U+09DF U+09CE U+0989
+Yt``OI	য়ৎঐ	U+09DF U+09CE U+0990
+Yt``OU	য়ৎঔ	U+09DF U+09CE U+0994
+Yt``rri	য়ৎঋ	U+09DF U+09CE U+098B
+Yt``y	য়ৎইয়	U+09DF U+09CE U+0987 U+09DF
+Yt``Z	য়ৎ্য	U+09DF U+09CE U+09CD U+09AF
+Yt``w	য়ৎও	U+09DF U+09CE U+0993
+Yt``wa	য়ৎওয়া	U+09DF U+09CE U+0993 U+09DF U+09BE
+Yt``x	য়ৎএক্স	U+09DF U+09CE U+098F U+0995 U+09CD U+09B8
+Yt``r	য়ৎর	U+09DF U+09CE U+09B0
+Yt``rr	য়ৎরর	U+09DF U+09CE U+09B0 U+09B0
+Yt``ry	য়ৎর‍্য	U+09DF U+09CE U+09B0 U+200D U+09CD U+09AF
+Yt``rZ	য়ৎর‍্য	U+09DF U+09CE U+09B0 U+200D U+09CD U+09AF
+Yt``rrri	য়ৎরররি	U+09DF U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+Yt``rrrri	য়ৎররৃ	U+09DF U+09CE U+09B0 U+09B0 U+09C3
+Yt``rry	য়ৎরর‍্য	U+09DF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Yt``rrZ	য়ৎরর‍্য	U+09DF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Yt``h	য়ৎহ	U+09DF U+09CE U+09B9
+Yt``kh	য়ৎখ	U+09DF U+09CE U+0996
+Yt``n	য়ৎন	U+09DF U+09CE U+09A8
+Yt``ng	য়ৎং	U+09DF U+09CE U+0982
+Yt``Shm	য়ৎষ্ম	U+09DF U+09CE U+09B7 U+09CD U+09AE
+Yt``Ngk	য়ৎঙ্ক	U+09DF U+09CE U+0999 U+09CD U+0995
+Yt``Gdh	য়ৎগ্ধ	U+09DF U+09CE U+0997 U+09CD U+09A7
+Yt``t`	য়ৎত	U+09DF U+09CE U+09A4
+Yt``t``	য়ৎৎ	U+09DF U+09CE U+09CE
+Yt``T``	য়ৎট	U+09DF U+09CE U+099F
+Yt``0	য়ৎ০	U+09DF U+09CE U+09E6
+Yt``012	য়ৎ০১২	U+09DF U+09CE U+09E6 U+09E7 U+09E8
+Yt``.	য়ৎ।	U+09DF U+09CE U+0964
+Yt``..	য়ৎ।।	U+09DF U+09CE U+0964 U+0964
+Yt``...	য়ৎ...	U+09DF U+09CE U+002E U+002E U+002E
+Yt``.`	য়ৎ.	U+09DF U+09CE U+002E
+Yt``:	য়ৎঃ	U+09DF U+09CE U+0983
+Yt``:`	য়ৎ:	U+09DF U+09CE U+003A
+Yt``^	য়ৎঁ	U+09DF U+09CE U+0981
+Yt``^`	য়ৎ^	U+09DF U+09CE U+005E
+Yt``,,	য়ৎ্‌	U+09DF U+09CE U+09CD U+200C
+Yt``$	য়ৎ৳	U+09DF U+09CE U+09F3
+Yt```	য়ৎ	U+09DF U+09CE
+Yt``o`	য়ৎ	U+09DF U+09CE
+Yt``a`	য়ৎা	U+09DF U+09CE U+09BE
+Yt``rri`	য়ৎৃ	U+09DF U+09CE U+09C3
+Yt``ক	য়ৎক	U+09DF U+09CE U+0995
+Yt``é	য়ৎé	U+09DF U+09CE U+00E9
+Yt``́	য়ৎ́	U+09DF U+09CE U+0301
+Yt``🙂	য়ৎ🙂	U+09DF U+09CE U+1F642
+yt``	ইয়ৎ	U+0987 U+09DF U+09CE
+yt``a	ইয়ৎআ	U+0987 U+09DF U+09CE U+0986
+yt``i	ইয়ৎই	U+0987 U+09DF U+09CE U+0987
+yt``I	ইয়ৎঈ	U+0987 U+09DF U+09CE U+0988
+yt``u	ইয়ৎউ	U+0987 U+09DF U+09CE U+0989
+yt``U	ইয়ৎঊ	U+0987 U+09DF U+09CE U+098A
+yt``e	ইয়ৎএ	U+0987 U+09DF U+09CE U+098F
+yt``ee	ইয়ৎঈ	U+0987 U+09DF U+09CE U+0988
+yt``o	ইয়ৎঅ	U+0987 U+09DF U+09CE U+0985
+yt``O	ইয়ৎও	U+0987 U+09DF U+09CE U+0993
+yt``oo	ইয়ৎউ	U+0987 U+09DF U+09CE U+0989
+yt``OI	ইয়ৎঐ	U+0987 U+09DF U+09CE U+0990
+yt``OU	ইয়ৎঔ	U+0987 U+09DF U+09CE U+0994
+yt``rri	ইয়ৎঋ	U+0987 U+09DF U+09CE U+098B
+yt``y	ইয়ৎইয়	U+0987 U+09DF U+09CE U+0987 U+09DF
+yt``Z	ইয়ৎ্য	U+0987 U+09DF U+09CE U+09CD U+09AF
+yt``w	ইয়ৎও	U+0987 U+09DF U+09CE U+0993
+yt``wa	ইয়ৎওয়া	U+0987 U+09DF U+09CE U+0993 U+09DF U+09BE
+yt``x	ইয়ৎএক্স	U+0987 U+09DF U+09CE U+098F U+0995 U+09CD U+09B8
+yt``r	ইয়ৎর	U+0987 U+09DF U+09CE U+09B0
+yt``rr	ইয়ৎরর	U+0987 U+09DF U+09CE U+09B0 U+09B0
+yt``ry	ইয়ৎর‍্য	U+0987 U+09DF U+09CE U+09B0 U+200D U+09CD U+09AF
+yt``rZ	ইয়ৎর‍্য	U+0987 U+09DF U+09CE U+09B0 U+200D U+09CD U+09AF
+yt``rrri	ইয়ৎরররি	U+0987 U+09DF U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+yt``rrrri	ইয়ৎররৃ	U+0987 U+09DF U+09CE U+09B0 U+09B0 U+09C3
+yt``rry	ইয়ৎরর‍্য	U+0987 U+09DF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+yt``rrZ	ইয়ৎরর‍্য	U+0987 U+09DF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+yt``h	ইয়ৎহ	U+0987 U+09DF U+09CE U+09B9
+yt``kh	ইয়ৎখ	U+0987 U+09DF U+09CE U+0996
+yt``n	ইয়ৎন	U+0987 U+09DF U+09CE U+09A8
+yt``ng	ইয়ৎং	U+0987 U+09DF U+09CE U+0982
+yt``Shm	ইয়ৎষ্ম	U+0987 U+09DF U+09CE U+09B7 U+09CD U+09AE
+yt``Ngk	ইয়ৎঙ্ক	U+0987 U+09DF U+09CE U+0999 U+09CD U+0995
+yt``Gdh	ইয়ৎগ্ধ	U+0987 U+09DF U+09CE U+0997 U+09CD U+09A7
+yt``t`	ইয়ৎত	U+0987 U+09DF U+09CE U+09A4
+yt``t``	ইয়ৎৎ	U+0987 U+09DF U+09CE U+09CE
+yt``T``	ইয়ৎট	U+0987 U+09DF U+09CE U+099F
+yt``0	ইয়ৎ০	U+0987 U+09DF U+09CE U+09E6
+yt``012	ইয়ৎ০১২	U+0987 U+09DF U+09CE U+09E6 U+09E7 U+09E8
+yt``.	ইয়ৎ।	U+0987 U+09DF U+09CE U+0964
+yt``..	ইয়ৎ।।	U+0987 U+09DF U+09CE U+0964 U+0964
+yt``...	ইয়ৎ...	U+0987 U+09DF U+09CE U+002E U+002E U+002E
+yt``.`	ইয়ৎ.	U+0987 U+09DF U+09CE U+002E
+yt``:	ইয়ৎঃ	U+0987 U+09DF U+09CE U+0983
+yt``:`	ইয়ৎ:	U+0987 U+09DF U+09CE U+003A
+yt``^	ইয়ৎঁ	U+0987 U+09DF U+09CE U+0981
+yt``^`	ইয়ৎ^	U+0987 U+09DF U+09CE U+005E
+yt``,,	ইয়ৎ্‌	U+0987 U+09DF U+09CE U+09CD U+200C
+yt``$	ইয়ৎ৳	U+0987 U+09DF U+09CE U+09F3
+yt```	ইয়ৎ	U+0987 U+09DF U+09CE
+yt``o`	ইয়ৎ	U+0987 U+09DF U+09CE
+yt``a`	ইয়ৎা	U+0987 U+09DF U+09CE U+09BE
+yt``rri`	ইয়ৎৃ	U+0987 U+09DF U+09CE U+09C3
+yt``ক	ইয়ৎক	U+0987 U+09DF U+09CE U+0995
+yt``é	ইয়ৎé	U+0987 U+09DF U+09CE U+00E9
+yt``́	ইয়ৎ́	U+0987 U+09DF U+09CE U+0301
+yt``🙂	ইয়ৎ🙂	U+0987 U+09DF U+09CE U+1F642
+Zt``	্যৎ	U+09CD U+09AF U+09CE
+Zt``a	্যৎআ	U+09CD U+09AF U+09CE U+0986
+Zt``i	্যৎই	U+09CD U+09AF U+09CE U+0987
+Zt``I	্যৎঈ	U+09CD U+09AF U+09CE U+0988
+Zt``u	্যৎউ	U+09CD U+09AF U+09CE U+0989
+Zt``U	্যৎঊ	U+09CD U+09AF U+09CE U+098A
+Zt``e	্যৎএ	U+09CD U+09AF U+09CE U+098F
+Zt``ee	্যৎঈ	U+09CD U+09AF U+09CE U+0988
+Zt``o	্যৎঅ	U+09CD U+09AF U+09CE U+0985
+Zt``O	্যৎও	U+09CD U+09AF U+09CE U+0993
+Zt``oo	্যৎউ	U+09CD U+09AF U+09CE U+0989
+Zt``OI	্যৎঐ	U+09CD U+09AF U+09CE U+0990
+Zt``OU	্যৎঔ	U+09CD U+09AF U+09CE U+0994
+Zt``rri	্যৎঋ	U+09CD U+09AF U+09CE U+098B
+Zt``y	্যৎইয়	U+09CD U+09AF U+09CE U+0987 U+09DF
+Zt``Z	্যৎ্য	U+09CD U+09AF U+09CE U+09CD U+09AF
+Zt``w	্যৎও	U+09CD U+09AF U+09CE U+0993
+Zt``wa	্যৎওয়া	U+09CD U+09AF U+09CE U+0993 U+09DF U+09BE
+Zt``x	্যৎএক্স	U+09CD U+09AF U+09CE U+098F U+0995 U+09CD U+09B8
+Zt``r	্যৎর	U+09CD U+09AF U+09CE U+09B0
+Zt``rr	্যৎরর	U+09CD U+09AF U+09CE U+09B0 U+09B0
+Zt``ry	্যৎর‍্য	U+09CD U+09AF U+09CE U+09B0 U+200D U+09CD U+09AF
+Zt``rZ	্যৎর‍্য	U+09CD U+09AF U+09CE U+09B0 U+200D U+09CD U+09AF
+Zt``rrri	্যৎরররি	U+09CD U+09AF U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+Zt``rrrri	্যৎররৃ	U+09CD U+09AF U+09CE U+09B0 U+09B0 U+09C3
+Zt``rry	্যৎরর‍্য	U+09CD U+09AF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Zt``rrZ	্যৎরর‍্য	U+09CD U+09AF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Zt``h	্যৎহ	U+09CD U+09AF U+09CE U+09B9
+Zt``kh	্যৎখ	U+09CD U+09AF U+09CE U+0996
+Zt``n	্যৎন	U+09CD U+09AF U+09CE U+09A8
+Zt``ng	্যৎং	U+09CD U+09AF U+09CE U+0982
+Zt``Shm	্যৎষ্ম	U+09CD U+09AF U+09CE U+09B7 U+09CD U+09AE
+Zt``Ngk	্যৎঙ্ক	U+09CD U+09AF U+09CE U+0999 U+09CD U+0995
+Zt``Gdh	্যৎগ্ধ	U+09CD U+09AF U+09CE U+0997 U+09CD U+09A7
+Zt``t`	্যৎত	U+09CD U+09AF U+09CE U+09A4
+Zt``t``	্যৎৎ	U+09CD U+09AF U+09CE U+09CE
+Zt``T``	্যৎট	U+09CD U+09AF U+09CE U+099F
+Zt``0	্যৎ০	U+09CD U+09AF U+09CE U+09E6
+Zt``012	্যৎ০১২	U+09CD U+09AF U+09CE U+09E6 U+09E7 U+09E8
+Zt``.	্যৎ।	U+09CD U+09AF U+09CE U+0964
+Zt``..	্যৎ।।	U+09CD U+09AF U+09CE U+0964 U+0964
+Zt``...	্যৎ...	U+09CD U+09AF U+09CE U+002E U+002E U+002E
+Zt``.`	্যৎ.	U+09CD U+09AF U+09CE U+002E
+Zt``:	্যৎঃ	U+09CD U+09AF U+09CE U+0983
+Zt``:`	্যৎ:	U+09CD U+09AF U+09CE U+003A
+Zt``^	্যৎঁ	U+09CD U+09AF U+09CE U+0981
+Zt``^`	্যৎ^	U+09CD U+09AF U+09CE U+005E
+Zt``,,	্যৎ্‌	U+09CD U+09AF U+09CE U+09CD U+200C
+Zt``$	্যৎ৳	U+09CD U+09AF U+09CE U+09F3
+Zt```	্যৎ	U+09CD U+09AF U+09CE
+Zt``o`	্যৎ	U+09CD U+09AF U+09CE
+Zt``a`	্যৎা	U+09CD U+09AF U+09CE U+09BE
+Zt``rri`	্যৎৃ	U+09CD U+09AF U+09CE U+09C3
+Zt``ক	্যৎক	U+09CD U+09AF U+09CE U+0995
+Zt``é	্যৎé	U+09CD U+09AF U+09CE U+00E9
+Zt``́	্যৎ́	U+09CD U+09AF U+09CE U+0301
+Zt``🙂	্যৎ🙂	U+09CD U+09AF U+09CE U+1F642
+Shmt``	ষ্মৎ	U+09B7 U+09CD U+09AE U+09CE
+Shmt``a	ষ্মৎআ	U+09B7 U+09CD U+09AE U+09CE U+0986
+Shmt``i	ষ্মৎই	U+09B7 U+09CD U+09AE U+09CE U+0987
+Shmt``I	ষ্মৎঈ	U+09B7 U+09CD U+09AE U+09CE U+0988
+Shmt``u	ষ্মৎউ	U+09B7 U+09CD U+09AE U+09CE U+0989
+Shmt``U	ষ্মৎঊ	U+09B7 U+09CD U+09AE U+09CE U+098A
+Shmt``e	ষ্মৎএ	U+09B7 U+09CD U+09AE U+09CE U+098F
+Shmt``ee	ষ্মৎঈ	U+09B7 U+09CD U+09AE U+09CE U+0988
+Shmt``o	ষ্মৎঅ	U+09B7 U+09CD U+09AE U+09CE U+0985
+Shmt``O	ষ্মৎও	U+09B7 U+09CD U+09AE U+09CE U+0993
+Shmt``oo	ষ্মৎউ	U+09B7 U+09CD U+09AE U+09CE U+0989
+Shmt``OI	ষ্মৎঐ	U+09B7 U+09CD U+09AE U+09CE U+0990
+Shmt``OU	ষ্মৎঔ	U+09B7 U+09CD U+09AE U+09CE U+0994
+Shmt``rri	ষ্মৎঋ	U+09B7 U+09CD U+09AE U+09CE U+098B
+Shmt``y	ষ্মৎইয়	U+09B7 U+09CD U+09AE U+09CE U+0987 U+09DF
+Shmt``Z	ষ্মৎ্য	U+09B7 U+09CD U+09AE U+09CE U+09CD U+09AF
+Shmt``w	ষ্মৎও	U+09B7 U+09CD U+09AE U+09CE U+0993
+Shmt``wa	ষ্মৎওয়া	U+09B7 U+09CD U+09AE U+09CE U+0993 U+09DF U+09BE
+Shmt``x	ষ্মৎএক্স	U+09B7 U+09CD U+09AE U+09CE U+098F U+0995 U+09CD U+09B8
+Shmt``r	ষ্মৎর	U+09B7 U+09CD U+09AE U+09CE U+09B0
+Shmt``rr	ষ্মৎরর	U+09B7 U+09CD U+09AE U+09CE U+09B0 U+09B0
+Shmt``ry	ষ্মৎর‍্য	U+09B7 U+09CD U+09AE U+09CE U+09B0 U+200D U+09CD U+09AF
+Shmt``rZ	ষ্মৎর‍্য	U+09B7 U+09CD U+09AE U+09CE U+09B0 U+200D U+09CD U+09AF
+Shmt``rrri	ষ্মৎরররি	U+09B7 U+09CD U+09AE U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+Shmt``rrrri	ষ্মৎররৃ	U+09B7 U+09CD U+09AE U+09CE U+09B0 U+09B0 U+09C3
+Shmt``rry	ষ্মৎরর‍্য	U+09B7 U+09CD U+09AE U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Shmt``rrZ	ষ্মৎরর‍্য	U+09B7 U+09CD U+09AE U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Shmt``h	ষ্মৎহ	U+09B7 U+09CD U+09AE U+09CE U+09B9
+Shmt``kh	ষ্মৎখ	U+09B7 U+09CD U+09AE U+09CE U+0996
+Shmt``n	ষ্মৎন	U+09B7 U+09CD U+09AE U+09CE U+09A8
+Shmt``ng	ষ্মৎং	U+09B7 U+09CD U+09AE U+09CE U+0982
+Shmt``Shm	ষ্মৎষ্ম	U+09B7 U+09CD U+09AE U+09CE U+09B7 U+09CD U+09AE
+Shmt``Ngk	ষ্মৎঙ্ক	U+09B7 U+09CD U+09AE U+09CE U+0999 U+09CD U+0995
+Shmt``Gdh	ষ্মৎগ্ধ	U+09B7 U+09CD U+09AE U+09CE U+0997 U+09CD U+09A7
+Shmt``t`	ষ্মৎত	U+09B7 U+09CD U+09AE U+09CE U+09A4
+Shmt``t``	ষ্মৎৎ	U+09B7 U+09CD U+09AE U+09CE U+09CE
+Shmt``T``	ষ্মৎট	U+09B7 U+09CD U+09AE U+09CE U+099F
+Shmt``0	ষ্মৎ০	U+09B7 U+09CD U+09AE U+09CE U+09E6
+Shmt``012	ষ্মৎ০১২	U+09B7 U+09CD U+09AE U+09CE U+09E6 U+09E7 U+09E8
+Shmt``.	ষ্মৎ।	U+09B7 U+09CD U+09AE U+09CE U+0964
+Shmt``..	ষ্মৎ।।	U+09B7 U+09CD U+09AE U+09CE U+0964 U+0964
+Shmt``...	ষ্মৎ...	U+09B7 U+09CD U+09AE U+09CE U+002E U+002E U+002E
+Shmt``.`	ষ্মৎ.	U+09B7 U+09CD U+09AE U+09CE U+002E
+Shmt``:	ষ্মৎঃ	U+09B7 U+09CD U+09AE U+09CE U+0983
+Shmt``:`	ষ্মৎ:	U+09B7 U+09CD U+09AE U+09CE U+003A
+Shmt``^	ষ্মৎঁ	U+09B7 U+09CD U+09AE U+09CE U+0981
+Shmt``^`	ষ্মৎ^	U+09B7 U+09CD U+09AE U+09CE U+005E
+Shmt``,,	ষ্মৎ্‌	U+09B7 U+09CD U+09AE U+09CE U+09CD U+200C
+Shmt``$	ষ্মৎ৳	U+09B7 U+09CD U+09AE U+09CE U+09F3
+Shmt```	ষ্মৎ	U+09B7 U+09CD U+09AE U+09CE
+Shmt``o`	ষ্মৎ	U+09B7 U+09CD U+09AE U+09CE
+Shmt``a`	ষ্মৎা	U+09B7 U+09CD U+09AE U+09CE U+09BE
+Shmt``rri`	ষ্মৎৃ	U+09B7 U+09CD U+09AE U+09CE U+09C3
+Shmt``ক	ষ্মৎক	U+09B7 U+09CD U+09AE U+09CE U+0995
+Shmt``é	ষ্মৎé	U+09B7 U+09CD U+09AE U+09CE U+00E9
+Shmt``́	ষ্মৎ́	U+09B7 U+09CD U+09AE U+09CE U+0301
+Shmt``🙂	ষ্মৎ🙂	U+09B7 U+09CD U+09AE U+09CE U+1F642
+kkhNt``	ক্ষ্ণৎ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE
+kkhNt``a	ক্ষ্ণৎআ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0986
+kkhNt``i	ক্ষ্ণৎই	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0987
+kkhNt``I	ক্ষ্ণৎঈ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0988
+kkhNt``u	ক্ষ্ণৎউ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0989
+kkhNt``U	ক্ষ্ণৎঊ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+098A
+kkhNt``e	ক্ষ্ণৎএ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+098F
+kkhNt``ee	ক্ষ্ণৎঈ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0988
+kkhNt``o	ক্ষ্ণৎঅ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0985
+kkhNt``O	ক্ষ্ণৎও	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0993
+kkhNt``oo	ক্ষ্ণৎউ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0989
+kkhNt``OI	ক্ষ্ণৎঐ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0990
+kkhNt``OU	ক্ষ্ণৎঔ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0994
+kkhNt``rri	ক্ষ্ণৎঋ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+098B
+kkhNt``y	ক্ষ্ণৎইয়	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0987 U+09DF
+kkhNt``Z	ক্ষ্ণৎ্য	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09CD U+09AF
+kkhNt``w	ক্ষ্ণৎও	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0993
+kkhNt``wa	ক্ষ্ণৎওয়া	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0993 U+09DF U+09BE
+kkhNt``x	ক্ষ্ণৎএক্স	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+098F U+0995 U+09CD U+09B8
+kkhNt``r	ক্ষ্ণৎর	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09B0
+kkhNt``rr	ক্ষ্ণৎরর	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09B0 U+09B0
+kkhNt``ry	ক্ষ্ণৎর‍্য	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09B0 U+200D U+09CD U+09AF
+kkhNt``rZ	ক্ষ্ণৎর‍্য	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09B0 U+200D U+09CD U+09AF
+kkhNt``rrri	ক্ষ্ণৎরররি	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+kkhNt``rrrri	ক্ষ্ণৎররৃ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09B0 U+09B0 U+09C3
+kkhNt``rry	ক্ষ্ণৎরর‍্য	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+kkhNt``rrZ	ক্ষ্ণৎরর‍্য	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+kkhNt``h	ক্ষ্ণৎহ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09B9
+kkhNt``kh	ক্ষ্ণৎখ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0996
+kkhNt``n	ক্ষ্ণৎন	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09A8
+kkhNt``ng	ক্ষ্ণৎং	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0982
+kkhNt``Shm	ক্ষ্ণৎষ্ম	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09B7 U+09CD U+09AE
+kkhNt``Ngk	ক্ষ্ণৎঙ্ক	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0999 U+09CD U+0995
+kkhNt``Gdh	ক্ষ্ণৎগ্ধ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0997 U+09CD U+09A7
+kkhNt``t`	ক্ষ্ণৎত	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09A4
+kkhNt``t``	ক্ষ্ণৎৎ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09CE
+kkhNt``T``	ক্ষ্ণৎট	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+099F
+kkhNt``0	ক্ষ্ণৎ০	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09E6
+kkhNt``012	ক্ষ্ণৎ০১২	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09E6 U+09E7 U+09E8
+kkhNt``.	ক্ষ্ণৎ।	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0964
+kkhNt``..	ক্ষ্ণৎ।।	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0964 U+0964
+kkhNt``...	ক্ষ্ণৎ...	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+002E U+002E U+002E
+kkhNt``.`	ক্ষ্ণৎ.	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+002E
+kkhNt``:	ক্ষ্ণৎঃ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0983
+kkhNt``:`	ক্ষ্ণৎ:	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+003A
+kkhNt``^	ক্ষ্ণৎঁ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0981
+kkhNt``^`	ক্ষ্ণৎ^	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+005E
+kkhNt``,,	ক্ষ্ণৎ্‌	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09CD U+200C
+kkhNt``$	ক্ষ্ণৎ৳	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09F3
+kkhNt```	ক্ষ্ণৎ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE
+kkhNt``o`	ক্ষ্ণৎ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE
+kkhNt``a`	ক্ষ্ণৎা	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09BE
+kkhNt``rri`	ক্ষ্ণৎৃ	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+09C3
+kkhNt``ক	ক্ষ্ণৎক	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0995
+kkhNt``é	ক্ষ্ণৎé	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+00E9
+kkhNt``́	ক্ষ্ণৎ́	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+0301
+kkhNt``🙂	ক্ষ্ণৎ🙂	U+0995 U+09CD U+09B7 U+09CD U+09A3 U+09CE U+1F642
+Gdht``	গ্ধৎ	U+0997 U+09CD U+09A7 U+09CE
+Gdht``a	গ্ধৎআ	U+0997 U+09CD U+09A7 U+09CE U+0986
+Gdht``i	গ্ধৎই	U+0997 U+09CD U+09A7 U+09CE U+0987
+Gdht``I	গ্ধৎঈ	U+0997 U+09CD U+09A7 U+09CE U+0988
+Gdht``u	গ্ধৎউ	U+0997 U+09CD U+09A7 U+09CE U+0989
+Gdht``U	গ্ধৎঊ	U+0997 U+09CD U+09A7 U+09CE U+098A
+Gdht``e	গ্ধৎএ	U+0997 U+09CD U+09A7 U+09CE U+098F
+Gdht``ee	গ্ধৎঈ	U+0997 U+09CD U+09A7 U+09CE U+0988
+Gdht``o	গ্ধৎঅ	U+0997 U+09CD U+09A7 U+09CE U+0985
+Gdht``O	গ্ধৎও	U+0997 U+09CD U+09A7 U+09CE U+0993
+Gdht``oo	গ্ধৎউ	U+0997 U+09CD U+09A7 U+09CE U+0989
+Gdht``OI	গ্ধৎঐ	U+0997 U+09CD U+09A7 U+09CE U+0990
+Gdht``OU	গ্ধৎঔ	U+0997 U+09CD U+09A7 U+09CE U+0994
+Gdht``rri	গ্ধৎঋ	U+0997 U+09CD U+09A7 U+09CE U+098B
+Gdht``y	গ্ধৎইয়	U+0997 U+09CD U+09A7 U+09CE U+0987 U+09DF
+Gdht``Z	গ্ধৎ্য	U+0997 U+09CD U+09A7 U+09CE U+09CD U+09AF
+Gdht``w	গ্ধৎও	U+0997 U+09CD U+09A7 U+09CE U+0993
+Gdht``wa	গ্ধৎওয়া	U+0997 U+09CD U+09A7 U+09CE U+0993 U+09DF U+09BE
+Gdht``x	গ্ধৎএক্স	U+0997 U+09CD U+09A7 U+09CE U+098F U+0995 U+09CD U+09B8
+Gdht``r	গ্ধৎর	U+0997 U+09CD U+09A7 U+09CE U+09B0
+Gdht``rr	গ্ধৎরর	U+0997 U+09CD U+09A7 U+09CE U+09B0 U+09B0
+Gdht``ry	গ্ধৎর‍্য	U+0997 U+09CD U+09A7 U+09CE U+09B0 U+200D U+09CD U+09AF
+Gdht``rZ	গ্ধৎর‍্য	U+0997 U+09CD U+09A7 U+09CE U+09B0 U+200D U+09CD U+09AF
+Gdht``rrri	গ্ধৎরররি	U+0997 U+09CD U+09A7 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+Gdht``rrrri	গ্ধৎররৃ	U+0997 U+09CD U+09A7 U+09CE U+09B0 U+09B0 U+09C3
+Gdht``rry	গ্ধৎরর‍্য	U+0997 U+09CD U+09A7 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Gdht``rrZ	গ্ধৎরর‍্য	U+0997 U+09CD U+09A7 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+Gdht``h	গ্ধৎহ	U+0997 U+09CD U+09A7 U+09CE U+09B9
+Gdht``kh	গ্ধৎখ	U+0997 U+09CD U+09A7 U+09CE U+0996
+Gdht``n	গ্ধৎন	U+0997 U+09CD U+09A7 U+09CE U+09A8
+Gdht``ng	গ্ধৎং	U+0997 U+09CD U+09A7 U+09CE U+0982
+Gdht``Shm	গ্ধৎষ্ম	U+0997 U+09CD U+09A7 U+09CE U+09B7 U+09CD U+09AE
+Gdht``Ngk	গ্ধৎঙ্ক	U+0997 U+09CD U+09A7 U+09CE U+0999 U+09CD U+0995
+Gdht``Gdh	গ্ধৎগ্ধ	U+0997 U+09CD U+09A7 U+09CE U+0997 U+09CD U+09A7
+Gdht``t`	গ্ধৎত	U+0997 U+09CD U+09A7 U+09CE U+09A4
+Gdht``t``	গ্ধৎৎ	U+0997 U+09CD U+09A7 U+09CE U+09CE
+Gdht``T``	গ্ধৎট	U+0997 U+09CD U+09A7 U+09CE U+099F
+Gdht``0	গ্ধৎ০	U+0997 U+09CD U+09A7 U+09CE U+09E6
+Gdht``012	গ্ধৎ০১২	U+0997 U+09CD U+09A7 U+09CE U+09E6 U+09E7 U+09E8
+Gdht``.	গ্ধৎ।	U+0997 U+09CD U+09A7 U+09CE U+0964
+Gdht``..	গ্ধৎ।।	U+0997 U+09CD U+09A7 U+09CE U+0964 U+0964
+Gdht``...	গ্ধৎ...	U+0997 U+09CD U+09A7 U+09CE U+002E U+002E U+002E
+Gdht``.`	গ্ধৎ.	U+0997 U+09CD U+09A7 U+09CE U+002E
+Gdht``:	গ্ধৎঃ	U+0997 U+09CD U+09A7 U+09CE U+0983
+Gdht``:`	গ্ধৎ:	U+0997 U+09CD U+09A7 U+09CE U+003A
+Gdht``^	গ্ধৎঁ	U+0997 U+09CD U+09A7 U+09CE U+0981
+Gdht``^`	গ্ধৎ^	U+0997 U+09CD U+09A7 U+09CE U+005E
+Gdht``,,	গ্ধৎ্‌	U+0997 U+09CD U+09A7 U+09CE U+09CD U+200C
+Gdht``$	গ্ধৎ৳	U+0997 U+09CD U+09A7 U+09CE U+09F3
+Gdht```	গ্ধৎ	U+0997 U+09CD U+09A7 U+09CE
+Gdht``o`	গ্ধৎ	U+0997 U+09CD U+09A7 U+09CE
+Gdht``a`	গ্ধৎা	U+0997 U+09CD U+09A7 U+09CE U+09BE
+Gdht``rri`	গ্ধৎৃ	U+0997 U+09CD U+09A7 U+09CE U+09C3
+Gdht``ক	গ্ধৎক	U+0997 U+09CD U+09A7 U+09CE U+0995
+Gdht``é	গ্ধৎé	U+0997 U+09CD U+09A7 U+09CE U+00E9
+Gdht``́	গ্ধৎ́	U+0997 U+09CD U+09A7 U+09CE U+0301
+Gdht``🙂	গ্ধৎ🙂	U+0997 U+09CD U+09A7 U+09CE U+1F642
+rt``	রৎ	U+09B0 U+09CE
+rt``a	রৎআ	U+09B0 U+09CE U+0986
+rt``i	রৎই	U+09B0 U+09CE U+0987
+rt``I	রৎঈ	U+09B0 U+09CE U+0988
+rt``u	রৎউ	U+09B0 U+09CE U+0989
+rt``U	রৎঊ	U+09B0 U+09CE U+098A
+rt``e	রৎএ	U+09B0 U+09CE U+098F
+rt``ee	রৎঈ	U+09B0 U+09CE U+0988
+rt``o	রৎঅ	U+09B0 U+09CE U+0985
+rt``O	রৎও	U+09B0 U+09CE U+0993
+rt``oo	রৎউ	U+09B0 U+09CE U+0989
+rt``OI	রৎঐ	U+09B0 U+09CE U+0990
+rt``OU	রৎঔ	U+09B0 U+09CE U+0994
+rt``rri	রৎঋ	U+09B0 U+09CE U+098B
+rt``y	রৎইয়	U+09B0 U+09CE U+0987 U+09DF
+rt``Z	রৎ্য	U+09B0 U+09CE U+09CD U+09AF
+rt``w	রৎও	U+09B0 U+09CE U+0993
+rt``wa	রৎওয়া	U+09B0 U+09CE U+0993 U+09DF U+09BE
+rt``x	রৎএক্স	U+09B0 U+09CE U+098F U+0995 U+09CD U+09B8
+rt``r	রৎর	U+09B0 U+09CE U+09B0
+rt``rr	রৎরর	U+09B0 U+09CE U+09B0 U+09B0
+rt``ry	রৎর‍্য	U+09B0 U+09CE U+09B0 U+200D U+09CD U+09AF
+rt``rZ	রৎর‍্য	U+09B0 U+09CE U+09B0 U+200D U+09CD U+09AF
+rt``rrri	রৎরররি	U+09B0 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+rt``rrrri	রৎররৃ	U+09B0 U+09CE U+09B0 U+09B0 U+09C3
+rt``rry	রৎরর‍্য	U+09B0 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+rt``rrZ	রৎরর‍্য	U+09B0 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+rt``h	রৎহ	U+09B0 U+09CE U+09B9
+rt``kh	রৎখ	U+09B0 U+09CE U+0996
+rt``n	রৎন	U+09B0 U+09CE U+09A8
+rt``ng	রৎং	U+09B0 U+09CE U+0982
+rt``Shm	রৎষ্ম	U+09B0 U+09CE U+09B7 U+09CD U+09AE
+rt``Ngk	রৎঙ্ক	U+09B0 U+09CE U+0999 U+09CD U+0995
+rt``Gdh	রৎগ্ধ	U+09B0 U+09CE U+0997 U+09CD U+09A7
+rt``t`	রৎত	U+09B0 U+09CE U+09A4
+rt``t``	রৎৎ	U+09B0 U+09CE U+09CE
+rt``T``	রৎট	U+09B0 U+09CE U+099F
+rt``0	রৎ০	U+09B0 U+09CE U+09E6
+rt``012	রৎ০১২	U+09B0 U+09CE U+09E6 U+09E7 U+09E8
+rt``.	রৎ।	U+09B0 U+09CE U+0964
+rt``..	রৎ।।	U+09B0 U+09CE U+0964 U+0964
+rt``...	রৎ...	U+09B0 U+09CE U+002E U+002E U+002E
+rt``.`	রৎ.	U+09B0 U+09CE U+002E
+rt``:	রৎঃ	U+09B0 U+09CE U+0983
+rt``:`	রৎ:	U+09B0 U+09CE U+003A
+rt``^	রৎঁ	U+09B0 U+09CE U+0981
+rt``^`	রৎ^	U+09B0 U+09CE U+005E
+rt``,,	রৎ্‌	U+09B0 U+09CE U+09CD U+200C
+rt``$	রৎ৳	U+09B0 U+09CE U+09F3
+rt```	রৎ	U+09B0 U+09CE
+rt``o`	রৎ	U+09B0 U+09CE
+rt``a`	রৎা	U+09B0 U+09CE U+09BE
+rt``rri`	রৎৃ	U+09B0 U+09CE U+09C3
+rt``ক	রৎক	U+09B0 U+09CE U+0995
+rt``é	রৎé	U+09B0 U+09CE U+00E9
+rt``́	রৎ́	U+09B0 U+09CE U+0301
+rt``🙂	রৎ🙂	U+09B0 U+09CE U+1F642
+krt``	ক্রৎ	U+0995 U+09CD U+09B0 U+09CE
+krt``a	ক্রৎআ	U+0995 U+09CD U+09B0 U+09CE U+0986
+krt``i	ক্রৎই	U+0995 U+09CD U+09B0 U+09CE U+0987
+krt``I	ক্রৎঈ	U+0995 U+09CD U+09B0 U+09CE U+0988
+krt``u	ক্রৎউ	U+0995 U+09CD U+09B0 U+09CE U+0989
+krt``U	ক্রৎঊ	U+0995 U+09CD U+09B0 U+09CE U+098A
+krt``e	ক্রৎএ	U+0995 U+09CD U+09B0 U+09CE U+098F
+krt``ee	ক্রৎঈ	U+0995 U+09CD U+09B0 U+09CE U+0988
+krt``o	ক্রৎঅ	U+0995 U+09CD U+09B0 U+09CE U+0985
+krt``O	ক্রৎও	U+0995 U+09CD U+09B0 U+09CE U+0993
+krt``oo	ক্রৎউ	U+0995 U+09CD U+09B0 U+09CE U+0989
+krt``OI	ক্রৎঐ	U+0995 U+09CD U+09B0 U+09CE U+0990
+krt``OU	ক্রৎঔ	U+0995 U+09CD U+09B0 U+09CE U+0994
+krt``rri	ক্রৎঋ	U+0995 U+09CD U+09B0 U+09CE U+098B
+krt``y	ক্রৎইয়	U+0995 U+09CD U+09B0 U+09CE U+0987 U+09DF
+krt``Z	ক্রৎ্য	U+0995 U+09CD U+09B0 U+09CE U+09CD U+09AF
+krt``w	ক্রৎও	U+0995 U+09CD U+09B0 U+09CE U+0993
+krt``wa	ক্রৎওয়া	U+0995 U+09CD U+09B0 U+09CE U+0993 U+09DF U+09BE
+krt``x	ক্রৎএক্স	U+0995 U+09CD U+09B0 U+09CE U+098F U+0995 U+09CD U+09B8
+krt``r	ক্রৎর	U+0995 U+09CD U+09B0 U+09CE U+09B0
+krt``rr	ক্রৎরর	U+0995 U+09CD U+09B0 U+09CE U+09B0 U+09B0
+krt``ry	ক্রৎর‍্য	U+0995 U+09CD U+09B0 U+09CE U+09B0 U+200D U+09CD U+09AF
+krt``rZ	ক্রৎর‍্য	U+0995 U+09CD U+09B0 U+09CE U+09B0 U+200D U+09CD U+09AF
+krt``rrri	ক্রৎরররি	U+0995 U+09CD U+09B0 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+krt``rrrri	ক্রৎররৃ	U+0995 U+09CD U+09B0 U+09CE U+09B0 U+09B0 U+09C3
+krt``rry	ক্রৎরর‍্য	U+0995 U+09CD U+09B0 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+krt``rrZ	ক্রৎরর‍্য	U+0995 U+09CD U+09B0 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+krt``h	ক্রৎহ	U+0995 U+09CD U+09B0 U+09CE U+09B9
+krt``kh	ক্রৎখ	U+0995 U+09CD U+09B0 U+09CE U+0996
+krt``n	ক্রৎন	U+0995 U+09CD U+09B0 U+09CE U+09A8
+krt``ng	ক্রৎং	U+0995 U+09CD U+09B0 U+09CE U+0982
+krt``Shm	ক্রৎষ্ম	U+0995 U+09CD U+09B0 U+09CE U+09B7 U+09CD U+09AE
+krt``Ngk	ক্রৎঙ্ক	U+0995 U+09CD U+09B0 U+09CE U+0999 U+09CD U+0995
+krt``Gdh	ক্রৎগ্ধ	U+0995 U+09CD U+09B0 U+09CE U+0997 U+09CD U+09A7
+krt``t`	ক্রৎত	U+0995 U+09CD U+09B0 U+09CE U+09A4
+krt``t``	ক্রৎৎ	U+0995 U+09CD U+09B0 U+09CE U+09CE
+krt``T``	ক্রৎট	U+0995 U+09CD U+09B0 U+09CE U+099F
+krt``0	ক্রৎ০	U+0995 U+09CD U+09B0 U+09CE U+09E6
+krt``012	ক্রৎ০১২	U+0995 U+09CD U+09B0 U+09CE U+09E6 U+09E7 U+09E8
+krt``.	ক্রৎ।	U+0995 U+09CD U+09B0 U+09CE U+0964
+krt``..	ক্রৎ।।	U+0995 U+09CD U+09B0 U+09CE U+0964 U+0964
+krt``...	ক্রৎ...	U+0995 U+09CD U+09B0 U+09CE U+002E U+002E U+002E
+krt``.`	ক্রৎ.	U+0995 U+09CD U+09B0 U+09CE U+002E
+krt``:	ক্রৎঃ	U+0995 U+09CD U+09B0 U+09CE U+0983
+krt``:`	ক্রৎ:	U+0995 U+09CD U+09B0 U+09CE U+003A
+krt``^	ক্রৎঁ	U+0995 U+09CD U+09B0 U+09CE U+0981
+krt``^`	ক্রৎ^	U+0995 U+09CD U+09B0 U+09CE U+005E
+krt``,,	ক্রৎ্‌	U+0995 U+09CD U+09B0 U+09CE U+09CD U+200C
+krt``$	ক্রৎ৳	U+0995 U+09CD U+09B0 U+09CE U+09F3
+krt```	ক্রৎ	U+0995 U+09CD U+09B0 U+09CE
+krt``o`	ক্রৎ	U+0995 U+09CD U+09B0 U+09CE
+krt``a`	ক্রৎা	U+0995 U+09CD U+09B0 U+09CE U+09BE
+krt``rri`	ক্রৎৃ	U+0995 U+09CD U+09B0 U+09CE U+09C3
+krt``ক	ক্রৎক	U+0995 U+09CD U+09B0 U+09CE U+0995
+krt``é	ক্রৎé	U+0995 U+09CD U+09B0 U+09CE U+00E9
+krt``́	ক্রৎ́	U+0995 U+09CD U+09B0 U+09CE U+0301
+krt``🙂	ক্রৎ🙂	U+0995 U+09CD U+09B0 U+09CE U+1F642
+1t``	১ৎ	U+09E7 U+09CE
+1t``a	১ৎআ	U+09E7 U+09CE U+0986
+1t``i	১ৎই	U+09E7 U+09CE U+0987
+1t``I	১ৎঈ	U+09E7 U+09CE U+0988
+1t``u	১ৎউ	U+09E7 U+09CE U+0989
+1t``U	১ৎঊ	U+09E7 U+09CE U+098A
+1t``e	১ৎএ	U+09E7 U+09CE U+098F
+1t``ee	১ৎঈ	U+09E7 U+09CE U+0988
+1t``o	১ৎঅ	U+09E7 U+09CE U+0985
+1t``O	১ৎও	U+09E7 U+09CE U+0993
+1t``oo	১ৎউ	U+09E7 U+09CE U+0989
+1t``OI	১ৎঐ	U+09E7 U+09CE U+0990
+1t``OU	১ৎঔ	U+09E7 U+09CE U+0994
+1t``rri	১ৎঋ	U+09E7 U+09CE U+098B
+1t``y	১ৎইয়	U+09E7 U+09CE U+0987 U+09DF
+1t``Z	১ৎ্য	U+09E7 U+09CE U+09CD U+09AF
+1t``w	১ৎও	U+09E7 U+09CE U+0993
+1t``wa	১ৎওয়া	U+09E7 U+09CE U+0993 U+09DF U+09BE
+1t``x	১ৎএক্স	U+09E7 U+09CE U+098F U+0995 U+09CD U+09B8
+1t``r	১ৎর	U+09E7 U+09CE U+09B0
+1t``rr	১ৎরর	U+09E7 U+09CE U+09B0 U+09B0
+1t``ry	১ৎর‍্য	U+09E7 U+09CE U+09B0 U+200D U+09CD U+09AF
+1t``rZ	১ৎর‍্য	U+09E7 U+09CE U+09B0 U+200D U+09CD U+09AF
+1t``rrri	১ৎরররি	U+09E7 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+1t``rrrri	১ৎররৃ	U+09E7 U+09CE U+09B0 U+09B0 U+09C3
+1t``rry	১ৎরর‍্য	U+09E7 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+1t``rrZ	১ৎরর‍্য	U+09E7 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+1t``h	১ৎহ	U+09E7 U+09CE U+09B9
+1t``kh	১ৎখ	U+09E7 U+09CE U+0996
+1t``n	১ৎন	U+09E7 U+09CE U+09A8
+1t``ng	১ৎং	U+09E7 U+09CE U+0982
+1t``Shm	১ৎষ্ম	U+09E7 U+09CE U+09B7 U+09CD U+09AE
+1t``Ngk	১ৎঙ্ক	U+09E7 U+09CE U+0999 U+09CD U+0995
+1t``Gdh	১ৎগ্ধ	U+09E7 U+09CE U+0997 U+09CD U+09A7
+1t``t`	১ৎত	U+09E7 U+09CE U+09A4
+1t``t``	১ৎৎ	U+09E7 U+09CE U+09CE
+1t``T``	১ৎট	U+09E7 U+09CE U+099F
+1t``0	১ৎ০	U+09E7 U+09CE U+09E6
+1t``012	১ৎ০১২	U+09E7 U+09CE U+09E6 U+09E7 U+09E8
+1t``.	১ৎ।	U+09E7 U+09CE U+0964
+1t``..	১ৎ।।	U+09E7 U+09CE U+0964 U+0964
+1t``...	১ৎ...	U+09E7 U+09CE U+002E U+002E U+002E
+1t``.`	১ৎ.	U+09E7 U+09CE U+002E
+1t``:	১ৎঃ	U+09E7 U+09CE U+0983
+1t``:`	১ৎ:	U+09E7 U+09CE U+003A
+1t``^	১ৎঁ	U+09E7 U+09CE U+0981
+1t``^`	১ৎ^	U+09E7 U+09CE U+005E
+1t``,,	১ৎ্‌	U+09E7 U+09CE U+09CD U+200C
+1t``$	১ৎ৳	U+09E7 U+09CE U+09F3
+1t```	১ৎ	U+09E7 U+09CE
+1t``o`	১ৎ	U+09E7 U+09CE
+1t``a`	১ৎা	U+09E7 U+09CE U+09BE
+1t``rri`	১ৎৃ	U+09E7 U+09CE U+09C3
+1t``ক	১ৎক	U+09E7 U+09CE U+0995
+1t``é	১ৎé	U+09E7 U+09CE U+00E9
+1t``́	১ৎ́	U+09E7 U+09CE U+0301
+1t``🙂	১ৎ🙂	U+09E7 U+09CE U+1F642
+09t``	০৯ৎ	U+09E6 U+09EF U+09CE
+09t``a	০৯ৎআ	U+09E6 U+09EF U+09CE U+0986
+09t``i	০৯ৎই	U+09E6 U+09EF U+09CE U+0987
+09t``I	০৯ৎঈ	U+09E6 U+09EF U+09CE U+0988
+09t``u	০৯ৎউ	U+09E6 U+09EF U+09CE U+0989
+09t``U	০৯ৎঊ	U+09E6 U+09EF U+09CE U+098A
+09t``e	০৯ৎএ	U+09E6 U+09EF U+09CE U+098F
+09t``ee	০৯ৎঈ	U+09E6 U+09EF U+09CE U+0988
+09t``o	০৯ৎঅ	U+09E6 U+09EF U+09CE U+0985
+09t``O	০৯ৎও	U+09E6 U+09EF U+09CE U+0993
+09t``oo	০৯ৎউ	U+09E6 U+09EF U+09CE U+0989
+09t``OI	০৯ৎঐ	U+09E6 U+09EF U+09CE U+0990
+09t``OU	০৯ৎঔ	U+09E6 U+09EF U+09CE U+0994
+09t``rri	০৯ৎঋ	U+09E6 U+09EF U+09CE U+098B
+09t``y	০৯ৎইয়	U+09E6 U+09EF U+09CE U+0987 U+09DF
+09t``Z	০৯ৎ্য	U+09E6 U+09EF U+09CE U+09CD U+09AF
+09t``w	০৯ৎও	U+09E6 U+09EF U+09CE U+0993
+09t``wa	০৯ৎওয়া	U+09E6 U+09EF U+09CE U+0993 U+09DF U+09BE
+09t``x	০৯ৎএক্স	U+09E6 U+09EF U+09CE U+098F U+0995 U+09CD U+09B8
+09t``r	০৯ৎর	U+09E6 U+09EF U+09CE U+09B0
+09t``rr	০৯ৎরর	U+09E6 U+09EF U+09CE U+09B0 U+09B0
+09t``ry	০৯ৎর‍্য	U+09E6 U+09EF U+09CE U+09B0 U+200D U+09CD U+09AF
+09t``rZ	০৯ৎর‍্য	U+09E6 U+09EF U+09CE U+09B0 U+200D U+09CD U+09AF
+09t``rrri	০৯ৎরররি	U+09E6 U+09EF U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+09t``rrrri	০৯ৎররৃ	U+09E6 U+09EF U+09CE U+09B0 U+09B0 U+09C3
+09t``rry	০৯ৎরর‍্য	U+09E6 U+09EF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+09t``rrZ	০৯ৎরর‍্য	U+09E6 U+09EF U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+09t``h	০৯ৎহ	U+09E6 U+09EF U+09CE U+09B9
+09t``kh	০৯ৎখ	U+09E6 U+09EF U+09CE U+0996
+09t``n	০৯ৎন	U+09E6 U+09EF U+09CE U+09A8
+09t``ng	০৯ৎং	U+09E6 U+09EF U+09CE U+0982
+09t``Shm	০৯ৎষ্ম	U+09E6 U+09EF U+09CE U+09B7 U+09CD U+09AE
+09t``Ngk	০৯ৎঙ্ক	U+09E6 U+09EF U+09CE U+0999 U+09CD U+0995
+09t``Gdh	০৯ৎগ্ধ	U+09E6 U+09EF U+09CE U+0997 U+09CD U+09A7
+09t``t`	০৯ৎত	U+09E6 U+09EF U+09CE U+09A4
+09t``t``	০৯ৎৎ	U+09E6 U+09EF U+09CE U+09CE
+09t``T``	০৯ৎট	U+09E6 U+09EF U+09CE U+099F
+09t``0	০৯ৎ০	U+09E6 U+09EF U+09CE U+09E6
+09t``012	০৯ৎ০১২	U+09E6 U+09EF U+09CE U+09E6 U+09E7 U+09E8
+09t``.	০৯ৎ।	U+09E6 U+09EF U+09CE U+0964
+09t``..	০৯ৎ।।	U+09E6 U+09EF U+09CE U+0964 U+0964
+09t``...	০৯ৎ...	U+09E6 U+09EF U+09CE U+002E U+002E U+002E
+09t``.`	০৯ৎ.	U+09E6 U+09EF U+09CE U+002E
+09t``:	০৯ৎঃ	U+09E6 U+09EF U+09CE U+0983
+09t``:`	০৯ৎ:	U+09E6 U+09EF U+09CE U+003A
+09t``^	০৯ৎঁ	U+09E6 U+09EF U+09CE U+0981
+09t``^`	০৯ৎ^	U+09E6 U+09EF U+09CE U+005E
+09t``,,	০৯ৎ্‌	U+09E6 U+09EF U+09CE U+09CD U+200C
+09t``$	০৯ৎ৳	U+09E6 U+09EF U+09CE U+09F3
+09t```	০৯ৎ	U+09E6 U+09EF U+09CE
+09t``o`	০৯ৎ	U+09E6 U+09EF U+09CE
+09t``a`	০৯ৎা	U+09E6 U+09EF U+09CE U+09BE
+09t``rri`	০৯ৎৃ	U+09E6 U+09EF U+09CE U+09C3
+09t``ক	০৯ৎক	U+09E6 U+09EF U+09CE U+0995
+09t``é	০৯ৎé	U+09E6 U+09EF U+09CE U+00E9
+09t``́	০৯ৎ́	U+09E6 U+09EF U+09CE U+0301
+09t``🙂	০৯ৎ🙂	U+09E6 U+09EF U+09CE U+1F642
+🙂t``	🙂ৎ	U+1F642 U+09CE
+🙂t``a	🙂ৎআ	U+1F642 U+09CE U+0986
+🙂t``i	🙂ৎই	U+1F642 U+09CE U+0987
+🙂t``I	🙂ৎঈ	U+1F642 U+09CE U+0988
+🙂t``u	🙂ৎউ	U+1F642 U+09CE U+0989
+🙂t``U	🙂ৎঊ	U+1F642 U+09CE U+098A
+🙂t``e	🙂ৎএ	U+1F642 U+09CE U+098F
+🙂t``ee	🙂ৎঈ	U+1F642 U+09CE U+0988
+🙂t``o	🙂ৎঅ	U+1F642 U+09CE U+0985
+🙂t``O	🙂ৎও	U+1F642 U+09CE U+0993
+🙂t``oo	🙂ৎউ	U+1F642 U+09CE U+0989
+🙂t``OI	🙂ৎঐ	U+1F642 U+09CE U+0990
+🙂t``OU	🙂ৎঔ	U+1F642 U+09CE U+0994
+🙂t``rri	🙂ৎঋ	U+1F642 U+09CE U+098B
+🙂t``y	🙂ৎইয়	U+1F642 U+09CE U+0987 U+09DF
+🙂t``Z	🙂ৎ্য	U+1F642 U+09CE U+09CD U+09AF
+🙂t``w	🙂ৎও	U+1F642 U+09CE U+0993
+🙂t``wa	🙂ৎওয়া	U+1F642 U+09CE U+0993 U+09DF U+09BE
+🙂t``x	🙂ৎএক্স	U+1F642 U+09CE U+098F U+0995 U+09CD U+09B8
+🙂t``r	🙂ৎর	U+1F642 U+09CE U+09B0
+🙂t``rr	🙂ৎরর	U+1F642 U+09CE U+09B0 U+09B0
+🙂t``ry	🙂ৎর‍্য	U+1F642 U+09CE U+09B0 U+200D U+09CD U+09AF
+🙂t``rZ	🙂ৎর‍্য	U+1F642 U+09CE U+09B0 U+200D U+09CD U+09AF
+🙂t``rrri	🙂ৎরররি	U+1F642 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+🙂t``rrrri	🙂ৎররৃ	U+1F642 U+09CE U+09B0 U+09B0 U+09C3
+🙂t``rry	🙂ৎরর‍্য	U+1F642 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+🙂t``rrZ	🙂ৎরর‍্য	U+1F642 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+🙂t``h	🙂ৎহ	U+1F642 U+09CE U+09B9
+🙂t``kh	🙂ৎখ	U+1F642 U+09CE U+0996
+🙂t``n	🙂ৎন	U+1F642 U+09CE U+09A8
+🙂t``ng	🙂ৎং	U+1F642 U+09CE U+0982
+🙂t``Shm	🙂ৎষ্ম	U+1F642 U+09CE U+09B7 U+09CD U+09AE
+🙂t``Ngk	🙂ৎঙ্ক	U+1F642 U+09CE U+0999 U+09CD U+0995
+🙂t``Gdh	🙂ৎগ্ধ	U+1F642 U+09CE U+0997 U+09CD U+09A7
+🙂t``t`	🙂ৎত	U+1F642 U+09CE U+09A4
+🙂t``t``	🙂ৎৎ	U+1F642 U+09CE U+09CE
+🙂t``T``	🙂ৎট	U+1F642 U+09CE U+099F
+🙂t``0	🙂ৎ০	U+1F642 U+09CE U+09E6
+🙂t``012	🙂ৎ০১২	U+1F642 U+09CE U+09E6 U+09E7 U+09E8
+🙂t``.	🙂ৎ।	U+1F642 U+09CE U+0964
+🙂t``..	🙂ৎ।।	U+1F642 U+09CE U+0964 U+0964
+🙂t``...	🙂ৎ...	U+1F642 U+09CE U+002E U+002E U+002E
+🙂t``.`	🙂ৎ.	U+1F642 U+09CE U+002E
+🙂t``:	🙂ৎঃ	U+1F642 U+09CE U+0983
+🙂t``:`	🙂ৎ:	U+1F642 U+09CE U+003A
+🙂t``^	🙂ৎঁ	U+1F642 U+09CE U+0981
+🙂t``^`	🙂ৎ^	U+1F642 U+09CE U+005E
+🙂t``,,	🙂ৎ্‌	U+1F642 U+09CE U+09CD U+200C
+🙂t``$	🙂ৎ৳	U+1F642 U+09CE U+09F3
+🙂t```	🙂ৎ	U+1F642 U+09CE
+🙂t``o`	🙂ৎ	U+1F642 U+09CE
+🙂t``a`	🙂ৎা	U+1F642 U+09CE U+09BE
+🙂t``rri`	🙂ৎৃ	U+1F642 U+09CE U+09C3
+🙂t``ক	🙂ৎক	U+1F642 U+09CE U+0995
+🙂t``é	🙂ৎé	U+1F642 U+09CE U+00E9
+🙂t``́	🙂ৎ́	U+1F642 U+09CE U+0301
+🙂t``🙂	🙂ৎ🙂	U+1F642 U+09CE U+1F642
+কt``	কৎ	U+0995 U+09CE
+কt``a	কৎআ	U+0995 U+09CE U+0986
+কt``i	কৎই	U+0995 U+09CE U+0987
+কt``I	কৎঈ	U+0995 U+09CE U+0988
+কt``u	কৎউ	U+0995 U+09CE U+0989
+কt``U	কৎঊ	U+0995 U+09CE U+098A
+কt``e	কৎএ	U+0995 U+09CE U+098F
+কt``ee	কৎঈ	U+0995 U+09CE U+0988
+কt``o	কৎঅ	U+0995 U+09CE U+0985
+কt``O	কৎও	U+0995 U+09CE U+0993
+কt``oo	কৎউ	U+0995 U+09CE U+0989
+কt``OI	কৎঐ	U+0995 U+09CE U+0990
+কt``OU	কৎঔ	U+0995 U+09CE U+0994
+কt``rri	কৎঋ	U+0995 U+09CE U+098B
+কt``y	কৎইয়	U+0995 U+09CE U+0987 U+09DF
+কt``Z	কৎ্য	U+0995 U+09CE U+09CD U+09AF
+কt``w	কৎও	U+0995 U+09CE U+0993
+কt``wa	কৎওয়া	U+0995 U+09CE U+0993 U+09DF U+09BE
+কt``x	কৎএক্স	U+0995 U+09CE U+098F U+0995 U+09CD U+09B8
+কt``r	কৎর	U+0995 U+09CE U+09B0
+কt``rr	কৎরর	U+0995 U+09CE U+09B0 U+09B0
+কt``ry	কৎর‍্য	U+0995 U+09CE U+09B0 U+200D U+09CD U+09AF
+কt``rZ	কৎর‍্য	U+0995 U+09CE U+09B0 U+200D U+09CD U+09AF
+কt``rrri	কৎরররি	U+0995 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+কt``rrrri	কৎররৃ	U+0995 U+09CE U+09B0 U+09B0 U+09C3
+কt``rry	কৎরর‍্য	U+0995 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+কt``rrZ	কৎরর‍্য	U+0995 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+কt``h	কৎহ	U+0995 U+09CE U+09B9
+কt``kh	কৎখ	U+0995 U+09CE U+0996
+কt``n	কৎন	U+0995 U+09CE U+09A8
+কt``ng	কৎং	U+0995 U+09CE U+0982
+কt``Shm	কৎষ্ম	U+0995 U+09CE U+09B7 U+09CD U+09AE
+কt``Ngk	কৎঙ্ক	U+0995 U+09CE U+0999 U+09CD U+0995
+কt``Gdh	কৎগ্ধ	U+0995 U+09CE U+0997 U+09CD U+09A7
+কt``t`	কৎত	U+0995 U+09CE U+09A4
+কt``t``	কৎৎ	U+0995 U+09CE U+09CE
+কt``T``	কৎট	U+0995 U+09CE U+099F
+কt``0	কৎ০	U+0995 U+09CE U+09E6
+কt``012	কৎ০১২	U+0995 U+09CE U+09E6 U+09E7 U+09E8
+কt``.	কৎ।	U+0995 U+09CE U+0964
+কt``..	কৎ।।	U+0995 U+09CE U+0964 U+0964
+কt``...	কৎ...	U+0995 U+09CE U+002E U+002E U+002E
+কt``.`	কৎ.	U+0995 U+09CE U+002E
+কt``:	কৎঃ	U+0995 U+09CE U+0983
+কt``:`	কৎ:	U+0995 U+09CE U+003A
+কt``^	কৎঁ	U+0995 U+09CE U+0981
+কt``^`	কৎ^	U+0995 U+09CE U+005E
+কt``,,	কৎ্‌	U+0995 U+09CE U+09CD U+200C
+কt``$	কৎ৳	U+0995 U+09CE U+09F3
+কt```	কৎ	U+0995 U+09CE
+কt``o`	কৎ	U+0995 U+09CE
+কt``a`	কৎা	U+0995 U+09CE U+09BE
+কt``rri`	কৎৃ	U+0995 U+09CE U+09C3
+কt``ক	কৎক	U+0995 U+09CE U+0995
+কt``é	কৎé	U+0995 U+09CE U+00E9
+কt``́	কৎ́	U+0995 U+09CE U+0301
+কt``🙂	কৎ🙂	U+0995 U+09CE U+1F642
+ét``	éৎ	U+00E9 U+09CE
+ét``a	éৎআ	U+00E9 U+09CE U+0986
+ét``i	éৎই	U+00E9 U+09CE U+0987
+ét``I	éৎঈ	U+00E9 U+09CE U+0988
+ét``u	éৎউ	U+00E9 U+09CE U+0989
+ét``U	éৎঊ	U+00E9 U+09CE U+098A
+ét``e	éৎএ	U+00E9 U+09CE U+098F
+ét``ee	éৎঈ	U+00E9 U+09CE U+0988
+ét``o	éৎঅ	U+00E9 U+09CE U+0985
+ét``O	éৎও	U+00E9 U+09CE U+0993
+ét``oo	éৎউ	U+00E9 U+09CE U+0989
+ét``OI	éৎঐ	U+00E9 U+09CE U+0990
+ét``OU	éৎঔ	U+00E9 U+09CE U+0994
+ét``rri	éৎঋ	U+00E9 U+09CE U+098B
+ét``y	éৎইয়	U+00E9 U+09CE U+0987 U+09DF
+ét``Z	éৎ্য	U+00E9 U+09CE U+09CD U+09AF
+ét``w	éৎও	U+00E9 U+09CE U+0993
+ét``wa	éৎওয়া	U+00E9 U+09CE U+0993 U+09DF U+09BE
+ét``x	éৎএক্স	U+00E9 U+09CE U+098F U+0995 U+09CD U+09B8
+ét``r	éৎর	U+00E9 U+09CE U+09B0
+ét``rr	éৎরর	U+00E9 U+09CE U+09B0 U+09B0
+ét``ry	éৎর‍্য	U+00E9 U+09CE U+09B0 U+200D U+09CD U+09AF
+ét``rZ	éৎর‍্য	U+00E9 U+09CE U+09B0 U+200D U+09CD U+09AF
+ét``rrri	éৎরররি	U+00E9 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+ét``rrrri	éৎররৃ	U+00E9 U+09CE U+09B0 U+09B0 U+09C3
+ét``rry	éৎরর‍্য	U+00E9 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+ét``rrZ	éৎরর‍্য	U+00E9 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+ét``h	éৎহ	U+00E9 U+09CE U+09B9
+ét``kh	éৎখ	U+00E9 U+09CE U+0996
+ét``n	éৎন	U+00E9 U+09CE U+09A8
+ét``ng	éৎং	U+00E9 U+09CE U+0982
+ét``Shm	éৎষ্ম	U+00E9 U+09CE U+09B7 U+09CD U+09AE
+ét``Ngk	éৎঙ্ক	U+00E9 U+09CE U+0999 U+09CD U+0995
+ét``Gdh	éৎগ্ধ	U+00E9 U+09CE U+0997 U+09CD U+09A7
+ét``t`	éৎত	U+00E9 U+09CE U+09A4
+ét``t``	éৎৎ	U+00E9 U+09CE U+09CE
+ét``T``	éৎট	U+00E9 U+09CE U+099F
+ét``0	éৎ০	U+00E9 U+09CE U+09E6
+ét``012	éৎ০১২	U+00E9 U+09CE U+09E6 U+09E7 U+09E8
+ét``.	éৎ।	U+00E9 U+09CE U+0964
+ét``..	éৎ।।	U+00E9 U+09CE U+0964 U+0964
+ét``...	éৎ...	U+00E9 U+09CE U+002E U+002E U+002E
+ét``.`	éৎ.	U+00E9 U+09CE U+002E
+ét``:	éৎঃ	U+00E9 U+09CE U+0983
+ét``:`	éৎ:	U+00E9 U+09CE U+003A
+ét``^	éৎঁ	U+00E9 U+09CE U+0981
+ét``^`	éৎ^	U+00E9 U+09CE U+005E
+ét``,,	éৎ্‌	U+00E9 U+09CE U+09CD U+200C
+ét``$	éৎ৳	U+00E9 U+09CE U+09F3
+ét```	éৎ	U+00E9 U+09CE
+ét``o`	éৎ	U+00E9 U+09CE
+ét``a`	éৎা	U+00E9 U+09CE U+09BE
+ét``rri`	éৎৃ	U+00E9 U+09CE U+09C3
+ét``ক	éৎক	U+00E9 U+09CE U+0995
+ét``é	éৎé	U+00E9 U+09CE U+00E9
+ét``́	éৎ́	U+00E9 U+09CE U+0301
+ét``🙂	éৎ🙂	U+00E9 U+09CE U+1F642
+́t``	́ৎ	U+0301 U+09CE
+́t``a	́ৎআ	U+0301 U+09CE U+0986
+́t``i	́ৎই	U+0301 U+09CE U+0987
+́t``I	́ৎঈ	U+0301 U+09CE U+0988
+́t``u	́ৎউ	U+0301 U+09CE U+0989
+́t``U	́ৎঊ	U+0301 U+09CE U+098A
+́t``e	́ৎএ	U+0301 U+09CE U+098F
+́t``ee	́ৎঈ	U+0301 U+09CE U+0988
+́t``o	́ৎঅ	U+0301 U+09CE U+0985
+́t``O	́ৎও	U+0301 U+09CE U+0993
+́t``oo	́ৎউ	U+0301 U+09CE U+0989
+́t``OI	́ৎঐ	U+0301 U+09CE U+0990
+́t``OU	́ৎঔ	U+0301 U+09CE U+0994
+́t``rri	́ৎঋ	U+0301 U+09CE U+098B
+́t``y	́ৎইয়	U+0301 U+09CE U+0987 U+09DF
+́t``Z	́ৎ্য	U+0301 U+09CE U+09CD U+09AF
+́t``w	́ৎও	U+0301 U+09CE U+0993
+́t``wa	́ৎওয়া	U+0301 U+09CE U+0993 U+09DF U+09BE
+́t``x	́ৎএক্স	U+0301 U+09CE U+098F U+0995 U+09CD U+09B8
+́t``r	́ৎর	U+0301 U+09CE U+09B0
+́t``rr	́ৎরর	U+0301 U+09CE U+09B0 U+09B0
+́t``ry	́ৎর‍্য	U+0301 U+09CE U+09B0 U+200D U+09CD U+09AF
+́t``rZ	́ৎর‍্য	U+0301 U+09CE U+09B0 U+200D U+09CD U+09AF
+́t``rrri	́ৎরররি	U+0301 U+09CE U+09B0 U+09B0 U+09B0 U+09BF
+́t``rrrri	́ৎররৃ	U+0301 U+09CE U+09B0 U+09B0 U+09C3
+́t``rry	́ৎরর‍্য	U+0301 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+́t``rrZ	́ৎরর‍্য	U+0301 U+09CE U+09B0 U+09B0 U+200D U+09CD U+09AF
+́t``h	́ৎহ	U+0301 U+09CE U+09B9
+́t``kh	́ৎখ	U+0301 U+09CE U+0996
+́t``n	́ৎন	U+0301 U+09CE U+09A8
+́t``ng	́ৎং	U+0301 U+09CE U+0982
+́t``Shm	́ৎষ্ম	U+0301 U+09CE U+09B7 U+09CD U+09AE
+́t``Ngk	́ৎঙ্ক	U+0301 U+09CE U+0999 U+09CD U+0995
+́t``Gdh	́ৎগ্ধ	U+0301 U+09CE U+0997 U+09CD U+09A7
+́t``t`	́ৎত	U+0301 U+09CE U+09A4
+́t``t``	́ৎৎ	U+0301 U+09CE U+09CE
+́t``T``	́ৎট	U+0301 U+09CE U+099F
+́t``0	́ৎ০	U+0301 U+09CE U+09E6
+́t``012	́ৎ০১২	U+0301 U+09CE U+09E6 U+09E7 U+09E8
+́t``.	́ৎ।	U+0301 U+09CE U+0964
+́t``..	́ৎ।।	U+0301 U+09CE U+0964 U+0964
+́t``...	́ৎ...	U+0301 U+09CE U+002E U+002E U+002E
+́t``.`	́ৎ.	U+0301 U+09CE U+002E
+́t``:	́ৎঃ	U+0301 U+09CE U+0983
+́t``:`	́ৎ:	U+0301 U+09CE U+003A
+́t``^	́ৎঁ	U+0301 U+09CE U+0981
+́t``^`	́ৎ^	U+0301 U+09CE U+005E
+́t``,,	́ৎ্‌	U+0301 U+09CE U+09CD U+200C
+́t``$	́ৎ৳	U+0301 U+09CE U+09F3
+́t```	́ৎ	U+0301 U+09CE
+́t``o`	́ৎ	U+0301 U+09CE
+́t``a`	́ৎা	U+0301 U+09CE U+09BE
+́t``rri`	́ৎৃ	U+0301 U+09CE U+09C3
+́t``ক	́ৎক	U+0301 U+09CE U+0995
+́t``é	́ৎé	U+0301 U+09CE U+00E9
+́t``́	́ৎ́	U+0301 U+09CE U+0301
+́t``🙂	́ৎ🙂	U+0301 U+09CE U+1F642
