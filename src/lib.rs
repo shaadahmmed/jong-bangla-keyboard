@@ -3,6 +3,7 @@
 //! Supports ASCII digits, contextual lowercase `y`/`w`/`x`, exact
 //! `kx`/`kkh`/`kSh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, uppercase `Z` and `aZ`/`oZ`,
 //! exact `kkhN`/`kShN`/`kxN`, `kkhm`/`kShm`/`kxm`, `kk`, `ShN`/`Shm`, `Ngg`/`Nggh`,
+//! `gg`/`gN`/`NN`/`hN`/`gn`/`ghn`/`hn`/`dg`/`dgh`/`Rg`,
 //! lowercase `ng` with selected vowel forms, the consonant sequences below, and
 //! `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`.
 //! Unmatched Unicode characters pass through unchanged. This is not yet a
@@ -59,6 +60,7 @@
 //! assert_eq!(transliterate("kr khr Shr kry krry kkkhr kkShr Ngkkr"), "ক্র খ্র ষ্র ক্র্য করর‍্য ক্কখ্র ক্কষ্র ঙ্কক্র");
 //! assert_eq!(transliterate("gr ghr gry ghrry grri ShNgr Shmgr"), "গ্র ঘ্র গ্র্য ঘরর‍্য গৃ ষ্ণগ্র ষ্মগ্র");
 //! assert_eq!(transliterate("Ngg Nggh Nggr Ngghr Nggrri Ngghry"), "ঙ্গ ঙ্ঘ ঙ্গ্র ঙ্ঘ্র ঙ্গৃ ঙ্ঘ্র্য");
+//! assert_eq!(transliterate("gg gN NN hN gn ghn hn dg dgh Rg"), "জ্ঞ গ্ণ ণ্ণ হ্ণ গ্ন ঘ্ন হ্ন দ্গ দ্ঘ ড়্গ");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -123,6 +125,22 @@ const NG_VOWELS: [(&str, &str, char); 10] = [
 // Consume the first r with these nasal forms before matching the remaining rri.
 // All three independently checked prefixes have the same ASCII length.
 const NASAL_R_FORMS: [(&str, &str); 3] = [("Ngr", "ঙর"), ("NGr", "ঞর"), ("ngr", "ংর")];
+
+// Original exact spellings, independently checked for context and overlaps.
+// The final raw key controls following-r attachment. Longer dgh precedes dg;
+// earlier Ng/k/Sh matches still consume their keys before reaching this table.
+const G_NASAL_CONJUNCTS: [(&str, &str, char); 10] = [
+    ("gg", "জ্ঞ", 'g'),
+    ("gN", "গ্ণ", 'N'),
+    ("NN", "ণ্ণ", 'N'),
+    ("hN", "হ্ণ", 'N'),
+    ("gn", "গ্ন", 'n'),
+    ("ghn", "ঘ্ন", 'n'),
+    ("hn", "হ্ন", 'n'),
+    ("dgh", "দ্ঘ", 'h'),
+    ("dg", "দ্গ", 'g'),
+    ("Rg", "ড়্গ", 'g'),
+];
 
 #[derive(Clone, Copy)]
 enum Context {
@@ -209,11 +227,16 @@ enum Context {
 /// Basic k/kh/Sh also attach following r: kr -> ক্র, khr -> খ্র, Shr -> ষ্র.
 /// They retain rri/rry/rrZ exceptions and resolve kkkhr/kkShr/Ngkkr overlaps.
 /// Basic g/gh share attachment and exceptions: gr -> গ্র, ghr -> ঘ্র, grri -> গৃ.
-/// ShNgr/Shmgr/kShmgr now attach the exposed g before r; earlier dg/Rg/gg/gN remain gaps.
+/// ShNgr/Shmgr/kShmgr attach the exposed g before r.
 /// Exact Nggh/Ngg produce ঙ্ঘ/ঙ্গ before basic Ng and g/gh, using the same vowel
 /// context and following-r helper: Ngghr -> ঙ্ঘ্র, Nggrri -> ঙ্গৃ. Nggh wins over
-/// Ngg followed by h. Earlier ShN/kShN consume N first, leaving gg as a separate gap.
-/// Earlier longer matches (such as gN in gNgx) and reph remain gaps;
+/// Ngg followed by h. Earlier ShN/kShN consume N first, leaving a separate gg.
+/// Exact gg/gN/NN/hN/gn/ghn/hn/dg/dgh/Rg produce জ্ঞ/গ্ণ/ণ্ণ/হ্ণ/গ্ন/ঘ্ন/হ্ন/দ্গ/দ্ঘ/ড়্গ.
+/// They share consonant context and following-r attachment, with dgh before dg
+/// and ghn before basic gh. Consumed keys cannot start another match:
+/// gNgg -> গ্ণজ্ঞ, dgn -> দ্গন, dggh -> দ্গঘ, kShNggh -> ক্ষ্ণজ্ঞহ.
+/// Basic h/n/N also attach following r, including the exposed h in gghr -> জ্ঞহ্র.
+/// Earlier longer matches such as ngh, dd, and mn, and reph remain gaps;
 /// supported prefixes still convert inside them.
 /// Backtick escapes remain unsupported.
 /// The input is borrowed and never modified or retained.
@@ -332,6 +355,13 @@ pub fn transliterate(input: &str) -> String {
             output.push_str("ষ্ম");
             remaining = consume_following_r_prefix(after_shm, 'm', &mut output);
             context = Context::Consonant { ya_joiner: false };
+        } else if let Some((raw, bangla, last_key)) = G_NASAL_CONJUNCTS
+            .iter()
+            .find(|(raw, _, _)| remaining.starts_with(raw))
+        {
+            output.push_str(bangla);
+            remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
+            context = Context::Consonant { ya_joiner: false };
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
@@ -340,7 +370,9 @@ pub fn transliterate(input: &str) -> String {
                 "Y" => Some('Y'),
                 "k" => Some('k'),
                 "g" => Some('g'),
-                "kh" | "Sh" | "gh" => Some('h'),
+                "kh" | "Sh" | "gh" | "h" => Some('h'),
+                "n" => Some('n'),
+                "N" => Some('N'),
                 _ => None,
             };
             if let Some(last_key) = following_r_key {
@@ -465,7 +497,7 @@ pub fn transliterate(input: &str) -> String {
 // Independently checked following-r prefixes depend on the final raw key,
 // including Z in aZ/oZ, x in kx/Ngx/Ngkx, k in Ngk/kk, and h in Ngkh/Ngkkh/NgkSh/kkh/kSh.
 // The N in kkhN/kShN/kxN/ShN and m in kkhm/kShm/kxm/Shm share single-r attachment.
-// Basic k/kh/Sh/g/gh also call this helper; basic h/N/m remain separate gaps.
+// Basic k/kh/Sh/g/gh/h/n/N also call this helper; basic m remains a gap.
 // Do not infer them from copied Bangla.
 fn consume_following_r_prefix<'a>(
     remaining: &'a str,
@@ -479,12 +511,12 @@ fn consume_following_r_prefix<'a>(
     {
         output.push_str("্রর");
         &remaining[2..]
-    } else if (matches!(raw_key, 'Y' | 'k' | 'g' | 'h' | 'N' | 'm')
+    } else if (matches!(raw_key, 'Y' | 'k' | 'g' | 'h' | 'n' | 'N' | 'm')
         && remaining.starts_with('r')
         && !remaining.starts_with("rr"))
         || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))
     {
-        // Selected basic spellings and k/g/h/N/m-ending conjuncts attach single r without a joiner.
+        // Selected basic spellings and k/g/h/n/N/m-ending conjuncts attach single r without a joiner.
         // Z only does so before y/Z.
         output.push_str("্র");
         &remaining[1..]

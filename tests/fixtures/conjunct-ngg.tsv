@@ -2,7 +2,7 @@
 # Behavior reference: jsAvroPhonetic v1.1.4, d3790172ebff92d43f0294bc51fed1fca7c80039.
 # Exact Ngg: Unicode, vowels/ya, r runs/exceptions, preceding matches,
 # adjacent consonants/nasals, raw spelling, digits, boundaries and copied Unicode.
-# Earlier gN/NN/ShN and gg matches are separate coverage gaps.
+# Overlapping gN/NN/ShN and gg matches are covered in the later batch fixtures.
 # Columns: raw input, expected UTF-8 output, exact Unicode code points.
 Ngg	ঙ্গ	U+0999 U+09CD U+0997
 Ngga	ঙ্গা	U+0999 U+09CD U+0997 U+09BE

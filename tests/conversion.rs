@@ -1,6 +1,114 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn g_nasal_batch_resets_at_boundaries_and_between_calls() {
+    for (raw, bangla, first, tail) in [
+        ("gg", "জ্ঞ", "গ", "গ"),
+        ("gN", "গ্ণ", "গ", "ণ"),
+        ("NN", "ণ্ণ", "ণ", "ণ"),
+        ("hN", "হ্ণ", "হ", "ণ"),
+        ("gn", "গ্ন", "গ", "ন"),
+        ("ghn", "ঘ্ন", "গ", "হ্ন"),
+        ("hn", "হ্ন", "হ", "ন"),
+        ("dg", "দ্গ", "দ", "গ"),
+        ("dgh", "দ্ঘ", "দ", "ঘ"),
+        ("Rg", "ড়্গ", "ড়", "গ"),
+    ] {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "জ্ঞ", "\u{301}"] {
+            assert_eq!(
+                transliterate(&format!("{}{boundary}{}", &raw[..1], &raw[1..])),
+                format!("{first}{boundary}{tail}")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    assert_eq!(
+        transliterate(&"gNgg NNgg hNgg ShNggr kShNgghr dgn Rghn gn ghn hn hr nr Nr 🙂 ".repeat(64)),
+        "গ্ণজ্ঞ ণ্ণজ্ঞ হ্ণজ্ঞ ষ্ণজ্ঞ্র ক্ষ্ণজ্ঞহ্র দ্গন ড়্গহ্ন গ্ন ঘ্ন হ্ন হ্র ন্র ণ্র 🙂 ".repeat(64)
+    );
+}
+
+#[test]
+fn conjunct_gg_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-gg.tsv"));
+}
+
+#[test]
+fn conjunct_g_n_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-g-n.tsv"));
+}
+
+#[test]
+fn conjunct_nn_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-nn.tsv"));
+}
+
+#[test]
+fn conjunct_h_n_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-h-n.tsv"));
+}
+
+#[test]
+fn conjunct_gn_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-gn.tsv"));
+}
+
+#[test]
+fn conjunct_ghn_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ghn.tsv"));
+}
+
+#[test]
+fn conjunct_hn_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-hn.tsv"));
+}
+
+#[test]
+fn conjunct_dg_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-dg.tsv"));
+}
+
+#[test]
+fn conjunct_dgh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-dgh.tsv"));
+}
+
+#[test]
+fn conjunct_r_g_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-r-g.tsv"));
+}
+
+#[test]
+fn h_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/h-following-r.tsv"));
+}
+
+#[test]
+fn n_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/n-following-r.tsv"));
+}
+
+#[test]
+fn n_retroflex_following_r_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/n-retroflex-following-r.tsv"));
+}
+
+#[test]
 fn ngg_conjunct_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/conjunct-ngg.tsv"));
 }
@@ -75,6 +183,9 @@ fn basic_following_r_resets_at_boundaries_and_between_calls() {
         ("Sh", "ষ"),
         ("g", "গ"),
         ("gh", "ঘ"),
+        ("h", "হ"),
+        ("n", "ন"),
+        ("N", "ণ"),
     ] {
         for boundary in [' ', '\n', '\r', '\t', '\0', '🙂', 'ক', '\u{301}'] {
             assert_eq!(
@@ -477,24 +588,13 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("xA", "এক্সA"),
         ("NgX", "ঙX"),
         ("NgxA", "ঙ্ষA"),
-        ("gNgx", "গঙ্ষ"),
-        ("dgr", "দগ্র"),
-        ("Rghr", "ড়ঘ্র"),
-        ("ggr", "গগ্র"),
-        ("gNgr", "গঙর"),
-        ("gNgg", "গঙ্গ"),
-        ("gNggh", "গঙ্ঘ"),
-        ("NNgg", "ণঙ্গ"),
-        ("hNgg", "হঙ্গ"),
-        ("ShNgg", "ষ্ণগগ"),
-        ("ShNggr", "ষ্ণগগ্র"),
-        ("kkhNggr", "ক্ষ্ণগগ্র"),
-        ("kShNgghr", "ক্ষ্ণগঘ্র"),
-        ("kxNgghr", "ক্ষ্ণগঘ্র"),
-        ("NNgx", "ণঙ্ষ"),
-        ("hNgx", "হঙ্ষ"),
         ("rrNgx", "ররঙ্ষ"),
         ("Ngx`a", "ঙ্ষ`আ"),
+        ("Gg", "Gগ"),
+        ("gNG", "গ্ণG"),
+        ("nghnr", "ংহ্ন্র"),
+        ("ddghr", "দদ্ঘ্র"),
+        ("mnry", "মন্র্য"),
         ("Ngx`h", "ঙ্ষ`হ"),
         ("rrx", "ররক্স"),
         ("rrkx", "ররক্ষ"),
@@ -518,7 +618,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("qr", "কর"),
         ("q`a", "ক`আ"),
         ("q`h", "ক`হ"),
-        ("hr", "হর"),
         ("rrk", "ররক"),
         ("rrr", "ররর"),
         ("Rri", "ড়রি"),
@@ -538,41 +637,26 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("NgK", "ঙK"),
         ("NgkH", "ঙ্কH"),
         ("NgkA", "ঙ্কA"),
-        ("gNgk", "গঙ্ক"),
-        ("NNgk", "ণঙ্ক"),
-        ("hNgk", "হঙ্ক"),
         ("rrNgk", "ররঙ্ক"),
         ("Ngk`a", "ঙ্ক`আ"),
         ("Ngk`h", "ঙ্ক`হ"),
-        ("gNgkh", "গঙ্খ"),
-        ("NNgkh", "ণঙ্খ"),
-        ("hNgkh", "হঙ্খ"),
         ("rrNgkh", "ররঙ্খ"),
         ("NgKh", "ঙKহ"),
         ("NgkhA", "ঙ্খA"),
         ("Ngkh`a", "ঙ্খ`আ"),
         ("Ngkh`h", "ঙ্খ`হ"),
-        ("gNgkx", "গঙ্ক্ষ"),
-        ("NNgkx", "ণঙ্ক্ষ"),
-        ("hNgkx", "হঙ্ক্ষ"),
         ("rrNgkx", "ররঙ্ক্ষ"),
         ("NgkX", "ঙ্কX"),
         ("NgKx", "ঙKএক্স"),
         ("NgkxA", "ঙ্ক্ষA"),
         ("Ngkx`a", "ঙ্ক্ষ`আ"),
         ("Ngkx`h", "ঙ্ক্ষ`হ"),
-        ("gNgkkh", "গঙ্ক্ষ"),
-        ("NNgkkh", "ণঙ্ক্ষ"),
-        ("hNgkkh", "হঙ্ক্ষ"),
         ("rrNgkkh", "ররঙ্ক্ষ"),
         ("NgKkh", "ঙKখ"),
         ("NgkkH", "ঙ্ককH"),
         ("NgkkhA", "ঙ্ক্ষA"),
         ("Ngkkh`a", "ঙ্ক্ষ`আ"),
         ("Ngkkh`h", "ঙ্ক্ষ`হ"),
-        ("gNgkSh", "গঙ্ক্ষ"),
-        ("NNgkSh", "ণঙ্ক্ষ"),
-        ("hNgkSh", "হঙ্ক্ষ"),
         ("rrNgkSh", "ররঙ্ক্ষ"),
         ("NgKSh", "ঙKষ"),
         ("NgkSH", "ঙ্কশH"),
