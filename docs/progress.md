@@ -54,16 +54,19 @@ Dates use the project's Asia/Dhaka timezone.
   sequences. Exact `kk` → ক্ক now shares verified vowel context and single-`r`
   attachment, preserving longer `kkh`/`kkhN`/`kkhm` and earlier `Ng` priority.
   It corrects `kkkh`/`kkSh`/`kkx` overlaps by consuming both initial keys.
-  Separate `ShN`/`Shm` and basic following-`r` gaps remain exposed in longer
-  forms. There are 12,000 reference-checked cases.
+  Exact `ShN` → ষ্ণ and `Shm` → ষ্ম now share verified vowel context and
+  following-`r` attachment. They resolve `kkShN`/`kkShm` and selected `ShNg…`
+  overlaps while preserving earlier `kShN`/`kShm`/`NgkSh` priority. Basic
+  following-`r` and uppercase/escape gaps remain. There are 12,933
+  reference-checked cases.
 - **Implementation:** a dependency-free library and terminal example exist.
   Principal forms for all 11 basic vowels and 40 basic consonant sequences (35 letters)
   exist, plus lowercase `ng`, its selected vowel forms, three nasal-plus-`r`
   matching prefixes, contextual lowercase `y`/`w`/`x`, uppercase `Z`/`aZ`/`oZ`,
-  exact `kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`kkhm`/`kShm`/`kxm`/`kk`,
+  exact `kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`kkhm`/`kShm`/`kxm`/`kk`/`ShN`/`Shm`,
   `Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`, and selected
   following-`r` forms after
-  `y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`kkhm`/`kShm`/`kxm`/`kk`
+  `y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`kkhN`/`kShN`/`kxN`/`kkhm`/`kShm`/`kxm`/`kk`/`ShN`/`Shm`
   and `Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
@@ -71,29 +74,31 @@ Dates use the project's Asia/Dhaka timezone.
 - **Workflow:** use small batches of related conjuncts, with independent
   reference checks for each spelling and one checked, documented commit per
   completed batch. This replaces the previous one-spelling next-step plan.
-- **Next:** check exact `ShN`/`Shm` → ষ্ণ/ষ্ম independently, including
-  vowel/following-`r` context, exposed `kkShN`/`kkShm` gaps, and priority
-  against existing `kShN`/`kShm` and `Ng` forms.
+- **Next:** independently check following `r` after basic `k`/`kh`/`Sh`,
+  including single attachment, longer `r` runs, vowel/ya context, and priority
+  against the existing conjuncts.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author cases for exact `ShN` → ষ্ণ (U+09B7 U+09CD U+09A3)
-   and `Shm` → ষ্ম (U+09B7 U+09CD U+09AE), including supported vowels/aliases,
-   preceding contexts, following-`r` overlaps, repetition, nasal overlaps,
-   digits, boundaries, copied Unicode, and raw-spelling controls. Check each
-   spelling's expected output and Unicode against the
+1. Independently author cases for following `r` after basic `k`/`kh`/`Sh`
+   (`kr` → ক্র, `khr` → খ্র, `Shr` → ষ্র), including exact Unicode,
+   vowels/aliases, preceding contexts, longer `r` runs, `rri`/`rry`/`rrZ`
+   exceptions, ya joiners, digits, boundaries, copied Unicode, and raw-spelling
+   controls. Check each spelling against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-2. Define priority from reference evidence: investigate `kkShN`/`kkShm`,
-   longer/adjacent nasal forms, and earlier `kShN`/`kShm`/`NgkSh` matches.
-   Preserve existing supported forms. Share code only if independent evidence
-   confirms the same behavior; split the batch if differences make it hard to review.
-3. Implement only the verified slice and its following-`r` behavior. Keep
-   basic `kr`/`khr`/`Shr`, unrelated `nk`/`lk`/`sk`/`Shk`, basic `mr`/`mm`/`mn`,
-   reph, uppercase aliases (including `kkhNG`/`kShNG`/`kxNG`), and
-   punctuation/escapes separate. No composition or platform work.
+2. Define priority from reference evidence: check existing `kk`, `kkh`/`kSh`,
+   `kkhN`/`kShN`/`kxN`, `kkhm`/`kShm`/`kxm`, `ShN`/`Shm`, and `Ng` forms.
+   Investigate `kkkhr`, `kkShr`, and `Ngkkr`; preserve earlier matches and
+   their independently verified following-`r` behavior. Share helpers only if
+   each spelling's evidence supports it; split the batch if needed.
+3. Implement only the verified slice. Keep basic `qr`/`gr`/`mr` and other
+   consonant-plus-`r` forms, `mm`/`mn`, unrelated `nk`/`lk`/`sk`/`Shk`,
+   lowercase `shn`/`shm` and `Sm`, reph, uppercase aliases (including
+   `ShNG` and `kkhNG`/`kShNG`/`kxNG`), and punctuation/escapes separate.
+   No composition or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
    commit the completed step.
 
@@ -103,6 +108,59 @@ limitations are documented, and this log records actual results. Composition
 and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-29 — Related ShN and Shm conjunct batch
+
+**Result:** exact `ShN` → ষ্ণ (U+09B7 U+09CD U+09A3) and `Shm` → ষ্ম
+(U+09B7 U+09CD U+09AE) now match before basic `Sh`. Independent checks
+confirmed their vowel context and following-`r` behavior; two small branches
+reuse the existing helper with final raw `N` and `m`. Single `r` attaches
+without U+200D (`ShNry` → `ষ্ণ্র্য`); `rri`/`rry`/`rrZ` retain priority.
+
+The batch resolves `kkShN` → `ক্কষ্ণ` and `kkShm` → `ক্কষ্ম`. Consuming
+`N` before the following `g` also resolves the selected `ShNg…` gaps:
+`ShNgx` → `ষ্ণগক্স`, `ShNgk` → `ষ্ণগক`, `ShNgkh` → `ষ্ণগখ`, and
+`ShNgkx`/`ShNgkkh`/`ShNgkSh` → `ষ্ণগক্ষ`. Earlier `kShN`/`kShm` and
+`NgkSh` retain priority. Consuming `m` keeps a following nasal separate
+(`Shmng` → `ষ্মং`, `Shmn` → `ষ্মন`). Resolved partial-output assertions were
+replaced by reference fixtures; remaining gaps retain explicit assertions.
+No third-party source, tables, fixtures, or dependencies were imported; the
+existing external parser and license in `/tmp` were reused.
+
+**Checks and outcomes:**
+
+- Independently authored and reference-checked **465 `ShN`** and **468 `Shm`**
+  cases before changing Rust: Unicode, vowels/aliases and transitions,
+  preceding contexts, one through eight following `r` keys, nasal overlaps,
+  earlier/adjacent matches, repetition, all digits, boundaries, copied Unicode,
+  raw spelling, and words (`biShNu` → `বিষ্ণু`, `uShma` → `উষ্মা`).
+- `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
+  — all **12,933** authored cases matched the SHA-256-checked pinned parser;
+  nine remaining-gap probes printed exact reference output. Node **v24.21.0**.
+- `cargo fmt --all -- --check` — passed.
+- `cargo clippy --offline --all-targets -- -D warnings` — passed.
+- `cargo test --offline` — passed: **55 integration tests** and **1 doctest**,
+  including fixtures, control boundaries, separate calls, long mixed input,
+  unchanged supported forms, and explicit remaining-gap assertions.
+- `cargo build --offline --release` — passed.
+- `cargo run --offline --example convert -- 'biShNu uShNo uShma ShNr Shmrri kkShN kkShm ShNgx'`
+  — printed `বিষ্ণু উষ্ণ উষ্মা ষ্ণ্র ষ্মৃ ক্কষ্ণ ক্কষ্ম ষ্ণগক্স`.
+- Documentation links/anchors, fixture registration/totals and exact code points,
+  55 new documented examples/gaps against Rust and the reference, and
+  `git diff --check` — passed.
+- Toolchain: Rust/Cargo **1.99.1**. No performance or platform test was run.
+
+**Limitations:** basic consonant-plus-`r` forms (`kr`/`khr`/`Shr`/`gr`/`mr`),
+`mm`/`mn`, earlier `nk`/`lk`/`sk`/`Shk`, lowercase `shn`/`shm` and `Sm`,
+uppercase aliases (including `ShNG`), reph, and punctuation/escapes remain
+incomplete. Current probes cover `ShNG`, `ShNgr`, `Shmgr`, `Shmmm`, `ShNmng`,
+`NgkShmr`, `ShM`, `rrShN`, and `` Shm`a ``. Composition and Fcitx5 remain
+later work; full Avro compatibility is not established.
+
+**Next action:** independently check the following-`r` batch after basic
+`k`/`kh`/`Sh`, including longer `r` runs, vowel/ya context, and priority against
+existing conjuncts. Investigate `kkkhr`, `kkShr`, and `Ngkkr` without adding
+other consonants or platform work.
 
 ### 2026-10-29 — Exact kk conjunct and k-conjunct priority
 
