@@ -111,8 +111,10 @@ not a usable desktop keyboard or a full Avro compatibility claim. Further
 context auditing and a decision about reference Unicode lowercasing remain;
 the platform-independent composition controller is implemented. A minimal Fcitx5
 addon now builds and passes a synthetic dispatcher harness. The user reports
-successful basic typing/field switching and GTK3 Ctrl+Backspace, with KWrite
-word-shortcut issues still under investigation. See the [local experiment](#build-and-check-the-fcitx5-experiment).
+successful basic typing/field switching across GTK3, Firefox, KWrite and Kate.
+GTK3/Firefox behaved as expected; pending Ctrl+Backspace also works in KWrite.
+KWrite/Kate Bangla word-navigation/deletion issues are documented and deferred
+for v1 at the user's request. See the [local experiment](#build-and-check-the-fcitx5-experiment).
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
 [first vowel group](docs/v1.md#first-vowel-group) and
