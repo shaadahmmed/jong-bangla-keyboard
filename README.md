@@ -74,6 +74,9 @@ See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 
 Start with [v1 requirements and development steps](docs/v1.md).
 See [the progress log](docs/progress.md) for completed work, checks, and the next task.
+Rule coverage now proceeds in [small batches of related conjuncts](docs/v1.md#small-development-steps),
+with checks, documentation, and a commit for each batch. The next planned batch is
+`kkhN`/`kShN`/`kxN` → ক্ষ্ণ; these forms are not implemented yet.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Build and try the conversion slice

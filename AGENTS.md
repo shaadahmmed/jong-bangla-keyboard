@@ -39,6 +39,13 @@ User instructions take precedence over this guide; update the docs when they cha
 - Explain the purpose and expected result of the next small step before editing.
 - Complete one coherent, reviewable increment at a time. Avoid combining engine
   changes, platform integration, packaging, and unrelated cleanup in one change.
+- For phonetic rule coverage, prefer small batches of related conjuncts or
+  spellings that share matching or context behavior. One increment can cover a
+  batch; do not require a separate step or commit for every spelling.
+- Define each batch's scope before editing. Check each spelling's exact Unicode,
+  vowel/context behavior, following-`r` behavior, and overlapping matches against
+  the pinned reference independently; shared output alone does not establish
+  shared behavior. Split a batch if differences make it hard to review.
 - Walk the user through the result in plain language: what changed, why it matters,
   how it was checked, and what comes next. Explain unfamiliar terms when introduced.
 - Update `docs/progress.md` after each coherent step: record the date, result,

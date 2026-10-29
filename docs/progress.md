@@ -57,36 +57,68 @@ Dates use the project's Asia/Dhaka timezone.
   Full vowel context, remaining consonants, conjuncts, composition, Fcitx5
   integration, and a usable desktop keyboard remain incomplete. Full Avro
   compatibility is not established.
-- **Next:** check exact `kkhN` → ক্ষ্ণ and its supported vowel/context
-  interactions against the pinned reference as a separate conjunct increment.
+- **Workflow:** use small batches of related conjuncts, with independent
+  reference checks for each spelling and one checked, documented commit per
+  completed batch. This replaces the previous one-spelling next-step plan.
+- **Next:** check exact `kkhN`/`kShN`/`kxN` → ক্ষ্ণ and their supported
+  vowel/context interactions against the pinned reference as one related batch.
 - **Version history:** Git is available. Each completed step is committed after
   checks and the progress update. Initial entries below describing unavailable
   Git refer to the earlier workspace state.
 
 ## Next small implementation step
 
-1. Independently author cases for exact `kkhN` → ক্ষ্ণ, preceding contexts,
+1. Independently author cases for each of exact `kkhN`/`kShN`/`kxN` → ক্ষ্ণ
+   (U+0995 U+09CD U+09B7 U+09CD U+09A3), preceding contexts,
    supported vowels/aliases, following-`r` overlaps, repetition, digits,
    boundaries, copied Unicode, and raw-spelling controls. Check earlier and
    longer matches before defining the supported slice, including interaction
-   with existing `Ngkkh` and following `g`/`G` (`kkhNg`/`kkhNG`).
+   with existing `Ngkkh`/`NgkSh`/`Ngkx` and following `g`/`G`
+   (`kkhNg`/`kkhNG`, `kShNg`/`kShNG`, and `kxNg`/`kxNG`).
 2. Check expected output and exact Unicode against the
    [pinned reference](v1.md#phonetic-behavior-reference) before implementation.
-   Currently `kkhN` produces ক্ষণ instead of ক্ষ্ণ.
-3. Match the selected conjunct before shorter `kkh`, preserving `kSh`, `Ng`/`NG`/`ng`,
+   These forms remain unimplemented; shared output does not prove shared
+   context behavior. Define each spelling's supported slice from those checks.
+3. Match the selected forms before shorter `kkh`/`kSh`/`kx`, preserving `Ng`/`NG`/`ng`,
    `NgkSh`, `Ngkkh`, `Ngkx`, `Ngkh`, `Ngk`, `Ngx`, `x`/`kx`, and existing
-   following-`r` behavior. Check its own following-`r` behavior independently;
-   do not infer it from the shared output of other conjuncts. Keep `kShN`,
-   `kkhm`/`kShm`, earlier-prefix conflicts, other conjuncts, reph, uppercase
-   aliases, and escapes separate. No composition or platform work.
+   following-`r` behavior outside the batch. Check each spelling's own
+   following-`r` behavior independently; share implementation only where
+   verified. Cover priority changes caused by consuming `N` before a following
+   nasal sequence. Keep `kkhm`/`kShm`/`kxm`, unrelated earlier-prefix conflicts,
+   other conjuncts, reph, uppercase aliases, and escapes separate. No composition
+   or platform work.
 4. Extend regression fixtures, run the README checks, update documentation, and
-   commit the completed increment.
+   commit the completed batch.
 
-**Done when:** selected `kkhN` cases match the reference, existing conversion
-cases still pass, limitations are documented, and this log records actual
-results. Composition and Fcitx5 integration remain later steps.
+**Done when:** selected cases for all three spellings match the reference,
+existing conversion cases still pass, limitations are documented, and this log
+records actual results. Composition and Fcitx5 integration remain later steps.
 
 ## Completed steps
+
+### 2026-10-29 — Use related conjunct batches for rule coverage
+
+- The user chose small batches of related conjuncts instead of a separate
+  increment for every spelling. Updated `AGENTS.md`, `README.md`, and
+  `docs/v1.md` to make this the default workflow, with scope defined before
+  editing and checks, documentation, and a commit for each completed batch.
+- Each spelling still needs independent reference checks for exact Unicode,
+  vowel/context behavior, following-`r` behavior, and match priority. Shared
+  output alone does not justify shared implementation. Split batches when
+  behavioral differences make review difficult; no fixed batch size is required.
+- Replaced the single-`kkhN` handoff with the planned
+  `kkhN`/`kShN`/`kxN` → ক্ষ্ণ batch, including shorter matches and conflicts
+  caused by consuming `N` before a following nasal sequence. Historical
+  implementation entries retain the plans recorded at their dates.
+- Checks: UTF-8, local Markdown links/anchors across all four edited documents,
+  final newlines, trailing whitespace, manual consistency review, and
+  `git diff --check` passed. No engine, fixture, dependency, or platform changes;
+  Cargo and reference comparisons were not rerun for this documentation step.
+  The pre-existing untracked `.vscode/` is untouched.
+- Limitations: the planned batch remains unimplemented; the documented 9,072
+  reference-checked cases and compatibility limitations are unchanged.
+- Next: independently author and reference-check cases for each of
+  `kkhN`/`kShN`/`kxN`, then implement and validate that batch.
 
 ### 2026-10-29 — Exact standalone kSh conjunct
 
