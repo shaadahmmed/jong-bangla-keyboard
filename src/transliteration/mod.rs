@@ -291,7 +291,7 @@ pub fn transliterate(input: &str) -> String {
                 "G" => Some('G'),
                 "J" => Some('J'),
                 "kh" | "Sh" | "gh" | "Gh" | "h" | "dh" | "Dh" | "bh" | "th" | "Th" | "sh"
-                | "ph" | "ch" | "jh" => Some('h'),
+                | "ph" | "ch" | "jh" | "Rh" => Some('h'),
                 "n" => Some('n'),
                 "N" => Some('N'),
                 "m" => Some('m'),
@@ -308,6 +308,9 @@ pub fn transliterate(input: &str) -> String {
                 "f" => Some('f'),
                 "c" => Some('c'),
                 "j" => Some('j'),
+                "q" => Some('q'),
+                "z" => Some('z'),
+                "R" => Some('R'),
                 _ => None,
             };
             if let Some(last_key) = following_r_key {

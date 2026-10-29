@@ -3,7 +3,8 @@
 // Independently checked following-r prefixes depend on the final raw key,
 // including Z in aZ/oZ, x in kx/Ngx/Ngkx, k in Ngk/kk, and h in Ngkh/Ngkkh/NgkSh/kkh/kSh.
 // The N in kkhN/kShN/kxN/ShN and m in kkhm/kShm/kxm/Shm share single-r attachment.
-// Selected basic consonants and all exact conjunct tables call this helper.
+// Selected basic consonants, including q/z/R/Rh, and all exact conjunct tables
+// call this helper. Rh uses its final raw h, not the shape of its Bangla letter.
 // Exact cNG/jNG end in G; c/ch/j/jh and c/j-ending conjuncts attach single r.
 // Do not infer them from copied Bangla.
 pub(super) fn consume_following_r_prefix<'a>(
@@ -41,6 +42,9 @@ pub(super) fn consume_following_r_prefix<'a>(
             | 'j'
             | 'G'
             | 'J'
+            | 'q'
+            | 'z'
+            | 'R'
     ) && remaining.starts_with('r')
         && !remaining.starts_with("rr"))
         || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))

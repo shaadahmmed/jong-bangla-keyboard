@@ -25,7 +25,7 @@ through 43 basic sequences, lowercase `ng` with selected vowel forms, and
 `a`/`i`/`I`/`u`/`U`/`e`/`ee`/`o`/`O`/`oo`/`OI`/`OU`/`rri`
 with context, including `rri` after `Ng`/`NG`/`ng`, plus contextual lowercase `y`/`w`/`x`
 and uppercase `Z` with selected `aZ`/`oZ` forms. Following-`r` matching after
-`g`/`gh`/`k`/`kh`/`Sh`/`y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`/`Ngg`/`Nggh`
+`q`/`z`/`R`/`Rh`/`g`/`gh`/`k`/`kh`/`Sh`/`y`/`Z`/`Y`/`w`/`x`/`kx`/`kkh`/`kSh`/`Ngx`/`Ngk`/`Ngkh`/`Ngkx`/`Ngkkh`/`NgkSh`/`Ngg`/`Nggh`
 is also implemented. Exact
 `kx`/`kkh`/`kSh` → `ক্ষ`, `Ngx` → `ঙ্ষ`, `Ngk` → `ঙ্ক`, `Ngkh` → `ঙ্খ`, and
 `Ngkx`/`Ngkkh`/`NgkSh` → `ঙ্ক্ষ` are implemented.
@@ -99,9 +99,11 @@ the final backtick resets phonetic context, including when escaped o emits nothi
 See the [vowel-escape batch](docs/v1.md#vowel-sign-escape-batch).
 The final t-double-backtick escape now emits the single letter ৎ (U+09CE);
 see its [behavior and evidence](docs/v1.md#final-t-escape).
-This is a partial engine with 506,147 reference-checked examples,
+Following `r` after `q`/`z`/`R`/`Rh` now attaches, including their repeated-r
+and vowel/ya exceptions; see the [batch record](docs/v1.md#following-r-after-q-z-r-and-rh).
+This is a partial engine with 509,530 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Reph,
-some context interactions, following-r gaps and reference Unicode lowercasing
+some context interactions and reference Unicode lowercasing
 differences remain; composition and Fcitx5 integration are unimplemented.
 See the [reference decision](docs/v1.md#phonetic-behavior-reference) and
 [initial slice](docs/v1.md#first-conversion-slice) plus the
@@ -174,11 +176,12 @@ Rule coverage favors the [largest coherent related batches](docs/v1.md#small-dev
 that remain reliable to validate and review. Look for 3–6 related spellings
 initially and expand when practical; there is no fixed upper cap. Each spelling
 needs independent reference evidence, with one full validation, documentation
-update, and commit per completed batch. The latest step implements the final
-t-double-backtick escape, preserving consumed-key priority and context resets.
-The 302-input standalone inventory now has zero discrepancies, excluding context
-interactions. Next, investigate following-r behavior after q/z/R/Rh together;
-reph, composition and platform integration remain separate work.
+update, and commit per completed batch. The latest step implements following r
+after q/z/R/Rh, with independent Unicode evidence for each spelling and its
+exceptions. The prior 302-input standalone inventory had zero discrepancies;
+context cases have their own fixtures. Next, investigate reph (a leading rr
+that attaches to a following consonant). Composition and platform integration
+remain separate work.
 Developers and coding agents should also read [AGENTS.md](AGENTS.md).
 
 ## Library structure
@@ -255,6 +258,8 @@ Try `'y ay ky kiya'` → `ইয় আয় ক্য কিয়া` for contextual l
 Try `'kZa aZ oZ baZ'` → `ক্যা অ্যা অ্য বঅ্যা` for uppercase `Z` and its longer forms.
 Try `'yrr yrri yry Zry'` → `ইয়্রর ইয়ৃ ইয়র‍্য ্য্র্য` for following-`r` distinctions.
 Try `'Yr Yrri Yry Yrry'` → `য়্র য়ৃ য়্র্য য়রর‍্য` for uppercase `Y` and its exceptions.
+Try `'qr zr Rr Rhr qry zrry Rrri RHrr'` → `ক্র য্র ড়্র ঢ়্র ক্র্য যরর‍্য ড়ৃ ঢ়্রর`
+for the latest following-r batch.
 Try `'q qa qi qOI qotha'` → `ক কা কি কৈ কথা` for lowercase `q` and vowel context.
 Try `'v vi vU valO vUmi'` → `ভ ভি ভূ ভালো ভূমি` for lowercase `v` and vowel context.
 Try `'w wa awa kw kwa'` → `ও ওয়া আওা ক্ব ক্বা` for contextual lowercase `w`.
@@ -308,8 +313,8 @@ The separate escape ``` t`` ``` → ৎ uses one Unicode letter. It resets conte
 ``` t``a ``` → ৎআ. Earlier conjuncts still consume their t:
 ``` nt`` ``` → ন্ত; ``` ttt`` ``` → ত্তৎ. Uppercase T stays distinct:
 ``` T`` ``` → ট. See the [final-escape record](docs/v1.md#final-t-escape).
-Uppercase `Q` now aliases `q`: `Qa` → `কা`; following `qr`/`Qr` still produce `কর`,
-against reference `ক্র`. Basic `r` produces `র`, and `rr`
+Uppercase `Q` aliases `q`: `Qa` → `কা`; following `qr`/`Qr` produce `ক্র`.
+Basic `r` produces `র`, and `rr`
 produces `রর`; `rri` is matched before either. This resolves `rrri` → `রররি` and
 `rrrri` → `ররৃ`. Basic `kr` now produces `ক্র`; reph remains incomplete
 (`rrk` produces `ররক` instead of `র্ক`).
@@ -333,11 +338,12 @@ Exact `s` → স, `sh`/`S` → শ, and `Sh` → ষ follow the confirmed mappi
 Uppercase-`H` aliases now match (`sH` → `শ`, `SH` → `ষ`).
 Exact `R`/`Rh` produce ড়/ঢ় (U+09DC/U+09DD), with `Rh` matched before `R`.
 They support vowel signs, and `Rrri` → `ড়ৃ` preserves the existing `rri` vowel.
-Uppercase `H` also matches (`RH` → `ঢ়`). Conjuncts such as `Rri` → `ড়্রি`
-remain incomplete.
+Uppercase `H` also matches (`RH` → `ঢ়`). Following `r` attaches:
+`Rri` → `ড়্রি`, `Rhr` → `ঢ়্র`, and `Rhry` → `ঢ়্র্য` (without U+200D).
 Lowercase `z` produces য (U+09AF), with supported vowel signs (`zi` → `যি`).
 It remains distinct from uppercase `Z` → ্য (U+09CD U+09AF).
-Related conjuncts remain incomplete.
+Following `r` attaches: `zr` → `য্র`, `zry` → `য্র্য`, while `zrry` → `যরর‍্য`
+retains U+200D.
 Exact `Ng`/`NG` produce ঙ/ঞ (U+0999/U+099E), matching before single `N` → ণ.
 They support vowel signs (`Ngi` → `ঙি`, `NGU` → `ঞূ`). Exact `Ngk` → `ঙ্ক`
 now matches before `Ng` and supports vowels and aliases (`Ngki` → `ঙ্কি`).
@@ -416,8 +422,8 @@ Vowels and ya forms work (`kri` → `ক্রি`, `khry` → `খ্র্য`
 The `rri` and `rry`/`rrZ` exceptions remain (`krri` → `কৃ`, `krry` → `করর‍্য`);
 `krr` → `ক্রর`. Existing longer matches retain priority, while exposed basic
 spellings now attach: `kkkhr` → `ক্কখ্র`, `kkShr` → `ক্কষ্র`, `Ngkkr` → `ঙ্কক্র`.
-Copied Bangla does not supply raw context (`কr` → `কর`); raw `qr` still gives
-`কর`. Other basic following-`r` forms and reph remain incomplete.
+Copied Bangla does not supply raw context (`কr` → `কর`); raw `qr` gives `ক্র`.
+Reph remains incomplete.
 Basic `g`/`gh` now attach following `r`: `'gr ghr'` → `গ্র ঘ্র`.
 Vowels and ya forms keep consonant context (`grI` → `গ্রী`, `ghry` → `ঘ্র্য`).
 The exceptions remain (`grri` → `গৃ`, `ghrry` → `ঘরর‍্য`), while `grr` → `গ্রর`.
@@ -635,8 +641,9 @@ without a U+200D joiner. Its longer runs share the two-`r` matching priority:
 remains incomplete.
 Lowercase `q` produces ক (U+0995) and establishes consonant context for vowels:
 `qi` → `কি`, `qOI` → `কৈ`, `qrri` → `কৃ`. Raw sequences keep their own matching:
-`qh` → `কহ`, `qq` → `কক`, and existing `kh` → `খ`. Uppercase `Q` aliases `q`; conjuncts
-such as `qr` → `ক্র` remain incomplete.
+`qh` → `কহ`, `qq` → `কক`, and existing `kh` → `খ`. Uppercase `Q` aliases `q`;
+following `qr` → `ক্র`, `qry` → `ক্র্য`, `qrr` → `ক্রর`, and `qrry` → `করর‍্য`
+match, with U+200D only in the last example.
 Lowercase `v` produces ভ (U+09AD), sharing basic vowel context with `bh`:
 `vi` → `ভি`, `vU` → `ভূ`, `vrri` → `ভৃ`. Repeated `v` and following `h`
 stay separate (`vv` → `ভভ`, `vh` → `ভহ`). Following `r` now attaches
@@ -878,7 +885,8 @@ the 16 files linked in the [case-alias batch](docs/v1.md#selective-ascii-case-al
 the 13 files linked in the [explicit G/J batch](docs/v1.md#explicit-gj-spelling-batch),
 the 12 files linked in the [symbol batch](docs/v1.md#punctuation-and-symbol-batch),
 the 19 files linked in the [vowel-escape batch](docs/v1.md#vowel-sign-escape-batch),
-and the three files linked in the [final-escape record](docs/v1.md#final-t-escape)
+the three files linked in the [final-escape record](docs/v1.md#final-t-escape),
+and the five files linked in the [q/z/R/Rh following-r record](docs/v1.md#following-r-after-q-z-r-and-rh)
 record the raw input,
 expected UTF-8 output, and exact Unicode code points. The comparison calls
 `OmicronLab.Avro.Phonetic.parse(input)` directly, without browser UI, dictionaries,
@@ -895,9 +903,9 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 506,147 cases used by Rust tests and prints reference outputs for
-five known coverage gaps: `qr`, `zr`, `Rr`, `rrShN`, and ``` rrt`` ```.
-The resolved t-escape probe has been replaced by its remaining reph interaction.
+It checks the same 509,530 cases used by Rust tests and prints reference outputs for
+five known reph gaps: `rrqr`, `rrzr`, `rrRr`, `rrShN`, and ``` rrt`` ```.
+The resolved standalone following-r probes now check their remaining reph interactions.
 The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 

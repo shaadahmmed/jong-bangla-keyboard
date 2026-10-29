@@ -11,83 +11,82 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Implemented:** a dependency-free Rust transliteration library and terminal
   example; principal vowels/consonants, contextual forms, selected conjuncts,
-  following-r forms, selective ASCII aliases, explicit G/J, symbols, vowel-sign
-  escapes and the final t-double-backtick escape. See the
-  [coverage overview](../README.md#current-status).
-- **Latest coverage:** t followed by two backticks emits the single letter ৎ
-  (U+09CE), resets context and preserves earlier consumed-key priority.
-  See the [batch record](v1.md#final-t-escape).
+  following-r forms, selective ASCII aliases, explicit G/J, symbols and escapes.
+  See the [coverage overview](../README.md#current-status).
+- **Latest coverage:** following r after q/z/R/Rh, with independent Unicode,
+  repeated-r, vowel/ya and matching-priority evidence for each spelling and alias.
+  See the [batch record](v1.md#following-r-after-q-z-r-and-rh).
 - **Library:** private case/scanner/rules/vowels/following-r/symbols modules remain
   independent of platforms; the public `transliterate` API is unchanged.
-- **Validation:** all 506,147 fixture rows match the pinned parser; formatting,
-  Clippy, 337 integration tests, 1 doctest, release/documentation builds,
-  default/final-escape smoke checks and documentation consistency checks passed.
-- **Limitations:** the 302-input standalone inventory now has zero discrepancies,
-  excluding context interactions; this is not full compatibility. Reph,
-  vowel-context edges, following-r gaps after q/z/R/Rh and reference Unicode
-  lowercasing remain. Composition, Fcitx5, desktop use and performance are
-  unimplemented or unverified.
+- **Validation:** all 509,530 fixture rows match the pinned parser; formatting,
+  Clippy, 345 integration tests, 1 doctest, release/documentation builds,
+  default/batch smoke checks and documentation consistency checks passed.
+- **Limitations:** reph, vowel-context edges and reference Unicode lowercasing
+  remain. The prior standalone inventory had zero discrepancies in 302 inputs;
+  that excludes context interactions and is not full compatibility. Composition,
+  Fcitx5, desktop use and performance are unimplemented or unverified.
 
 ## Latest completed step
 
-- **2026-10-29 — Implement the final standalone t escape.**
-  Added lowercase t followed by two backticks; output is U+09CE, not a decomposed
-  ta/virama sequence. The consumed backticks reset raw phonetic context. No
-  upstream source, rule tables, fixtures or dependencies imported.
-- **Behavior:** ``` t``a ``` → ৎআ; ``` t``ry ``` → ৎর‍্য;
-  ``` nt`` ``` → ন্ত because nt consumes t; ``` ttt`` ``` → ত্তৎ because
-  the final t remains fresh. Uppercase T stays distinct and extra ticks disappear.
-  Reph remains separate: reference ``` rrt`` ``` → র্ৎ versus current ররৎ.
-- **Evidence:** 4,067 authored rows in three files. Independent Unicode/context,
-  vowel/ya/r, digit, symbol, vowel-escape, case, repeated-tick and consumed/fresh-key
-  checks; 28 consumption forms each have 57 suffixes. All 502,080 earlier fixture
-  rows are unchanged. Migrated the old partial t-escape assertion to exact fixtures;
-  retained the reph interaction as an explicit partial assertion. Rust covers both
-  internal splits, separate calls, input ownership, UTF-8/control boundaries and
+- **2026-10-29 — Following r after q/z/R/Rh.** Extended the existing helper's
+  independently verified callers; Rh uses final raw h. No upstream source,
+  rule tables, fixtures or dependencies imported.
+- **Behavior:** qr/zr/Rr/Rhr → ক্র/য্র/ড়্র/ঢ়্র; single r attaches without U+200D,
+  while rry/rrZ keep the basic rr/ya joiner. rri remains a vowel; longer runs,
+  aliases Q/RH, consumed R in Rg, fresh R after Rg and nasal priority are preserved.
+  Backticks still reset context. Reph remains separate, with three newly explicit
+  partial assertions and replacement probes for rrqr/rrzr/rrRr.
+- **Evidence:** 3,383 authored rows in five files plus 45 extra boundary, split,
+  independent-call and repeated-input expectations. All 506,147 earlier fixture
+  rows are unchanged. Six old partial assertions are replaced by exact fixtures.
+  Rust checks UTF-8/control boundaries, ownership, internal Rhry splits and
   1,024 repeated mixed-input segments.
-- **Reference checks run:** `node /tmp/jong-verify-final-escape.mjs` — all 4,067
-  new rows and 13 extra authored boundary/split/repeated-input expectations passed;
-  the reph gap was independently confirmed.
+- **Reference checks run:** `node /tmp/jong-verify-four-r.mjs` — all 3,383 rows
+  and 45 extra expectations passed. Initial authored expectations were corrected
+  for independent rri after a vowel and existing Ngrr priority before coding.
   `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 506,147 rows passed against the SHA-256-verified pinned parser;
-  five remaining-gap probes printed exact outputs. Node v24.21.0.
-- **Rust checks run:** `cargo test --offline final_escape` — six targeted tests passed;
-  `cargo fmt --all -- --check`;
+  — all 509,530 rows passed against the SHA-256-verified pinned parser;
+  five reph probes printed exact outputs. Node v24.21.0.
+- **Rust checks run:** `cargo test --offline four_following_r` — eight targeted
+  tests passed; `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`;
-  `cargo test --offline` — 337 integration tests and 1 doctest passed;
+  `cargo test --offline` — 345 integration tests and 1 doctest passed;
   `cargo build --offline --release`;
   `RUSTDOCFLAGS='-D warnings' cargo doc --offline --no-deps`;
   `cargo build --offline --example convert` — passed. Rust/Cargo 1.99.1.
+  The first full test run found one stale cchqr partial assertion; removed it
+  because the new fixtures independently cover its correct output, then reran
+  all listed format/lint/test/build checks successfully.
 - **Smoke checks run:** `cargo run --offline --example convert -- 'kh12T'`
-  — খ১২ট; ``` cargo run --offline --example convert -- 't`` t``a t``ry t``rri` nt``a ttt``y T``a ktt``x' ```
-  — matched independently checked khanda ta, context resets and consumption cases.
-- **Documentation checks:** `python /tmp/jong-check-final-escape-docs.py` — local
-  links/anchors, manifests/counts/code points, unchanged older fixtures, examples,
-  migrated assertion, known gaps and bounded handoff/history passed.
-  `git diff --check` passed.
-- **Standalone audit:** `python /tmp/jong-audit-case-aliases.py` — all 302 distinct
-  inputs matched, down from one discrepancy. Context interactions remain excluded;
-  no full compatibility, performance or platform-support claim follows.
-- **Next action:** independently investigate the four following-r families below.
-  The final escape is complete; following-r work has not started.
+  — খ১২ট; `cargo run --offline --example convert -- 'qr zr Rr Rhr qry zrry Rrri RHrr'`
+  — ক্র য্র ড়্র ঢ়্র ক্র্য যরর‍্য ড়ৃ ঢ়্রর.
+  ``` cargo run --offline --example convert -- 'qrrirri Rgr RgRr RhrNgrr q`ry qr`a qrri`a' ```
+  — কৃঋ ড়্গ্র ড়্গড়্র ঢ়্রঙরর কর‍্য ক্রআ কৃআ, matching authored vowel,
+  consumed/fresh-key, nasal and backtick expectations.
+- **Documentation checks:** `python /tmp/jong-check-four-r-docs.py` — local
+  links/anchors, manifests/counts/code points, unchanged earlier fixtures,
+  examples, migrated assertions, known gaps and bounded handoff/history passed.
+  `git diff --check` passed. The 302-input standalone audit is prior evidence
+  from the t-escape step, not a check rerun in this batch.
+- **Next action:** independently investigate reph as described below.
+  This following-r batch is complete; reph implementation has not started.
 
 ## Next small implementation step
 
-1. Independently reference-check following r after basic q/z/R/Rh as a related
-   batch: single/double/longer r runs, rri/rry/rrZ exceptions, vowels/ya, case
-   aliases, consuming versus exposed keys, symbols/escapes and Unicode boundaries.
-   Check exact Unicode, including any U+200D differences, for each spelling.
-2. Implement the largest coherent verified group; do not assume identical behavior
-   from similar outputs. Keep reph and unrelated vowel-context fixes separate
-   unless reference evidence establishes a necessary shared dependency.
+1. Reference-check reph (leading rr attaching to the next consonant) as a related
+   batch, starting with q/z/R/Rh and overlaps with existing conjuncts and the
+   t escape. Check exact Unicode, raw preceding context, r runs, vowels/ya,
+   case aliases, consumed/exposed keys, symbols/escapes and Unicode boundaries.
+2. Implement the largest coherent verified group. Determine whether shared
+   scanner context is needed before choosing scope; do not infer compatibility
+   from matching Bangla shapes. Keep unrelated vowel-context fixes separate.
 3. Run the full README checks, update behavioral docs and this handoff, and commit.
-   The standalone inventory is already clear, so measure these context cases with
-   their own fixtures; a zero inventory count is not evidence for them.
+   Use new context fixtures; the standalone inventory does not measure reph.
    Keep composition, platform integration and performance work separate.
 
-**Done when:** every selected spelling has independent Unicode/context evidence,
-existing cases and interactions pass, actual checks and limits are recorded,
-and the batch is committed. The next batch has not started.
+**Done when:** selected forms have independent Unicode/context evidence, existing
+cases and interactions pass, actual checks/limits are recorded, and the batch is
+committed. Reph investigation and implementation have not started.
 
 ## Completed steps
 

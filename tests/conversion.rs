@@ -1,6 +1,73 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn four_following_r_q_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/following-r-q.tsv"));
+}
+
+#[test]
+fn four_following_r_z_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/following-r-z.tsv"));
+}
+
+#[test]
+fn four_following_r_retroflex_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/following-r-r-retroflex.tsv"));
+}
+
+#[test]
+fn four_following_r_rh_matches_exact_unicode() {
+    check_fixture(include_str!("fixtures/following-r-rh-retroflex.tsv"));
+}
+
+#[test]
+fn four_following_r_controls_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/following-r-four-controls.tsv"));
+}
+
+#[test]
+fn four_following_r_respects_utf8_and_control_boundaries() {
+    for (raw, base) in [("q", "ক"), ("z", "য"), ("R", "ড়"), ("Rh", "ঢ়")] {
+        for boundary in ['\0', '\n', '\r', '\t', '🙂', 'ক', 'é', '\u{301}'] {
+            let input = format!("{raw}r{boundary}a{boundary}{raw}ry");
+            let original = input.clone();
+            assert_eq!(
+                transliterate(&input),
+                format!("{base}্র{boundary}আ{boundary}{base}্র্য")
+            );
+            assert_eq!(input, original);
+        }
+    }
+}
+
+#[test]
+fn four_following_r_calls_and_internal_splits_are_independent() {
+    for (raw, base) in [("q", "ক"), ("z", "য"), ("R", "ড়"), ("Rh", "ঢ়")] {
+        assert_eq!(transliterate(raw), base);
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate(&format!("{raw}r")), format!("{base}্র"));
+        assert_eq!(transliterate("y"), "ইয়");
+        assert_eq!(transliterate("ry"), "র\u{200D}্য");
+    }
+    for (left, right, left_out, right_out) in [
+        ("R", "hry", "ড়", "হ্র্য"),
+        ("Rh", "ry", "ঢ়", "র\u{200D}্য"),
+        ("Rhr", "y", "ঢ়্র", "ইয়"),
+    ] {
+        assert_eq!(transliterate(left), left_out);
+        assert_eq!(transliterate(right), right_out);
+    }
+    assert_eq!(transliterate("Rhry"), "ঢ়্র্য");
+}
+
+#[test]
+fn four_following_r_handles_long_mixed_input() {
+    let input = "qry1zrry2Rrri3RHrr4Rgr5q`ry6Rhr🙂a7";
+    let expected = "ক্র্য১যরর\u{200D}্য২ড়ৃ৩ঢ়্রর৪ড়্গ্র৫কর\u{200D}্য৬ঢ়্র🙂আ৭";
+    assert_eq!(transliterate(&input.repeat(1024)), expected.repeat(1024));
+}
+
+#[test]
 fn final_escape_t_matches_exact_unicode() {
     check_fixture(include_str!("fixtures/final-escape-t.tsv"));
 }
@@ -714,10 +781,9 @@ fn conjunct_completion_consumed_and_fresh_keys_keep_their_priorities() {
 }
 
 #[test]
-fn conjunct_completion_reph_and_following_r_remain_explicit_gaps() {
+fn conjunct_completion_case_and_reph_remain_explicit_gaps() {
     // These are partial engine outputs, not claims of reference compatibility.
-    for (raw, partial) in [("bDh", "বঢ"), ("rrcch", "ররচ্ছ"), ("cchqr", "চ্ছকর")]
-    {
+    for (raw, partial) in [("bDh", "বঢ"), ("rrcch", "ররচ্ছ")] {
         assert_eq!(transliterate(raw), partial, "{raw}");
     }
 }
@@ -2878,19 +2944,17 @@ fn empty_input_and_unmatched_unicode_are_preserved() {
 #[test]
 fn unsupported_rules_still_preserve_unmatched_characters() {
     for (input, expected) in [
+        ("rrqr", "ররক্র"),
+        ("rrzr", "ররয্র"),
+        ("rrRr", "ররড়্র"),
         ("rrNgx", "ররঙ্ষ"),
         ("rrdd", "ররদ্দ"),
         ("rrhm", "ররহ্ম"),
         ("rrx", "ররক্স"),
         ("rrkx", "ররক্ষ"),
         ("rrw", "রর্ব"),
-        ("qr", "কর"),
         ("rrk", "ররক"),
         ("rrr", "ররর"),
-        ("Rri", "ড়রি"),
-        ("Rr", "ড়র"),
-        ("Rhr", "ঢ়র"),
-        ("zr", "যর"),
         ("rrNgk", "ররঙ্ক"),
         ("rrNgkh", "ররঙ্খ"),
         ("rrNgkx", "ররঙ্ক্ষ"),
