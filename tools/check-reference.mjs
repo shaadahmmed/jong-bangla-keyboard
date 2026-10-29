@@ -73,6 +73,9 @@ for (const name of [
   "conjunct-kk.tsv",
   "conjunct-shn.tsv",
   "conjunct-shm.tsv",
+  "k-following-r.tsv",
+  "kh-following-r.tsv",
+  "sh-following-r.tsv",
 ]) {
   const fixture = readFileSync(
     new URL(`../tests/fixtures/${name}`, import.meta.url),

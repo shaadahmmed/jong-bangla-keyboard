@@ -15,53 +15,58 @@ Dates use the project's Asia/Dhaka timezone.
   conjuncts, and selected following-`r` forms. See the
   [coverage overview](../README.md#current-status) and linked rule sections for
   exact supported spellings and context behavior.
-- **Latest engine change:** `ShN` → ষ্ণ and `Shm` → ষ্ম with verified vowel,
-  following-`r`, and overlapping-match behavior (`5f165a4`, 2026-10-29).
-- **Last engine validation:** 12,933 cases matched the pinned reference;
-  formatting, Clippy, 55 integration tests, 1 doctest, release build, and a
-  conversion smoke check passed in that step. These are recorded prior results,
-  not checks rerun for later documentation changes.
+- **Latest engine change:** basic `kr` → ক্র, `khr` → খ্র, and `Shr` → ষ্র,
+  including vowel/ya context, longer `r` runs, and the verified
+  `kkkhr`/`kkShr`/`Ngkkr` overlaps (2026-10-29).
+- **Validation:** 14,360 cases match the pinned reference; formatting, Clippy,
+  59 integration tests, 1 doctest, release build, and conversion smoke check
+  passed in this step. Exact case coverage is recorded in fixtures.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete,
-  including basic consonant-plus-`r`, other conjuncts, uppercase aliases, reph,
-  and punctuation/escapes. Composition, Fcitx5 integration, and a usable desktop
-  keyboard are not implemented. Performance and platform support are unverified.
+  including other basic consonant-plus-`r` forms, other conjuncts, uppercase
+  aliases, reph, and punctuation/escapes. Composition, Fcitx5 integration, and a
+  usable desktop keyboard are not implemented. Performance/platform support
+  remain unverified.
 - **Workflow:** implement small related rule batches, independently reference-
   check each spelling, validate, update this handoff, and commit each step.
   No known blocker to the next batch is recorded.
 
 ## Latest completed step
 
-- **2026-10-29 — Simplify progress tracking (documentation only).** Replaced the
-  growing coverage narrative with a concise state summary, rolling latest-step
-  record, and bounded next task. Updated contributor instructions to maintain
-  this format; preserved all existing historical entries below.
-- **Checks:** `python /tmp/jong-check-progress-docs.py` — passed: 225 local
-  links/anchors, handoff size/section alignment, next-batch scope, unchanged
-  historical entries, and prior commit existence. `git diff --check` — passed.
-- **Limitations:** no engine or platform behavior changed; no Cargo or reference
-  checks are needed for this documentation-only step.
-- **Next action:** resume the rule batch below.
+- **2026-10-29 — Following `r` after basic `k`/`kh`/`Sh`.** Independently authored
+  and reference-checked 1,427 new cases (475/476/476 respectively), then extended
+  the existing following-`r` helper to those three basic spellings. Kept
+  `rri`/`rry`/`rrZ` priority and longer conjunct matches; resolved the three
+  overlaps above. Updated regressions, usage, and behavioral documentation.
+- **Checks:** `node tools/check-reference.mjs
+  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` — all 14,360 cases matched the
+  SHA-256-verified pinned parser. `cargo fmt --all -- --check` and
+  `cargo clippy --offline --all-targets -- -D warnings` — passed.
+  `cargo test --offline` — 59 integration tests and 1 doctest passed.
+  `cargo build --offline --release` — passed. `cargo run --offline --example
+  convert -- 'kr khr Shr kry krry kkkhr kkShr Ngkkr'` — expected output.
+  `python /tmp/jong-check-basic-r-docs.py` and `git diff --check` — passed.
+- **Limitations:** other following-`r` spellings, earlier-prefix gaps, aliases,
+  reph, escapes, composition, and platform behavior remain separate. Nine
+  existing reference gap probes remain; no performance claim added.
+- **Next action:** independently investigate basic `g`/`gh` following `r`.
 
 ## Next small implementation step
 
-1. Independently author and check following-`r` cases after basic `k`/`kh`/`Sh`
-   (`kr` → ক্র, `khr` → খ্র, `Shr` → ষ্র) against the
-   [pinned reference](v1.md#phonetic-behavior-reference). Cover exact Unicode,
-   vowel/ya context, preceding contexts, longer `r` runs, `rri`/`rry`/`rrZ`
-   exceptions, digits, boundaries, copied Unicode, and raw-spelling controls.
-2. Verify priority against existing `kk`, `kkh`/`kSh`, their `N`/`m` conjuncts,
-   `kxN`/`kxm`, `ShN`/`Shm`, and `Ng` forms. Investigate `kkkhr`, `kkShr`,
-   and `Ngkkr`; share helpers only when each spelling's evidence supports it.
-3. Implement only that verified slice. Keep other consonant-plus-`r` forms,
-   unrelated conjuncts, uppercase aliases, reph, punctuation/escapes,
-   composition, and platform work separate. Split the batch if behavior differs
-   enough to need separate review.
-4. Extend regression fixtures, run the README checks, update relevant behavioral
-   documentation and this handoff, and commit the completed step.
+1. Independently author and check following-`r` cases after basic `g`/`gh`
+   against the [pinned reference](v1.md#phonetic-behavior-reference). Cover exact
+   Unicode, vowel/ya context, preceding contexts, longer `r` runs,
+   `rri`/`rry`/`rrZ` exceptions, digits, boundaries, copied Unicode, and raw controls.
+2. Verify priority against existing `Ng` forms and k-conjuncts, including the
+   exposed `ShNgr`/`Shmgr` gaps. Identify earlier `gN` matches separately;
+   share helpers only when each spelling's evidence supports it.
+3. Implement only that verified slice. Keep unrelated conjuncts, uppercase
+   aliases, reph, punctuation/escapes, composition, and platform work separate.
+4. Extend fixtures, run README checks, update behavioral documentation and this
+   handoff, and commit the completed step.
 
 **Done when:** selected cases match the reference, supported cases still pass
 (or verified priority corrections are documented), and actual checks and
-remaining limitations are recorded. This batch has not started.
+remaining limitations are recorded. This next batch has not started.
 
 ## Completed steps
 

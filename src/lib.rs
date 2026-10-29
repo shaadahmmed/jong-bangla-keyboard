@@ -56,6 +56,7 @@
 //! assert_eq!(transliterate("kkhm kShma kxmr kxmrri"), "ক্ষ্ম ক্ষ্মা ক্ষ্ম্র ক্ষ্মৃ");
 //! assert_eq!(transliterate("kk kka kkr kkrri kkkh kkx"), "ক্ক ক্কা ক্ক্র ক্কৃ ক্কখ ক্কক্স");
 //! assert_eq!(transliterate("ShN Shm ShNr Shmrri kkShN ShNgx"), "ষ্ণ ষ্ম ষ্ণ্র ষ্মৃ ক্কষ্ণ ষ্ণগক্স");
+//! assert_eq!(transliterate("kr khr Shr kry krry kkkhr kkShr Ngkkr"), "ক্র খ্র ষ্র ক্র্য করর‍্য ক্কখ্র ক্কষ্র ঙ্কক্র");
 //! ```
 
 // Independently authored initial mappings; not an imported upstream rule table.
@@ -203,7 +204,8 @@ enum Context {
 /// Consuming N prevents a following Ng match (ShNgx -> ষ্ণগক্স); consuming m
 /// keeps a following nasal separate (Shmng -> ষ্মং). Earlier kShN/kShm and
 /// NgkSh keep priority; kkShN/kkShm now produce ক্কষ্ণ/ক্কষ্ম.
-/// Basic kh/Sh/k following-r attachment remains incomplete.
+/// Basic k/kh/Sh also attach following r: kr -> ক্র, khr -> খ্র, Shr -> ষ্র.
+/// They retain rri/rry/rrZ exceptions and resolve kkkhr/kkShr/Ngkkr overlaps.
 /// Earlier longer matches (such as gN in gNgx) and reph remain gaps;
 /// supported prefixes still convert inside them.
 /// Backtick escapes remain unsupported.
@@ -318,8 +320,15 @@ pub fn transliterate(input: &str) -> String {
         } else if let Some((raw, bangla)) = matched {
             output.push_str(bangla);
             remaining = &remaining[raw.len()..];
-            if *raw == "Y" {
-                remaining = consume_following_r_prefix(remaining, 'Y', &mut output);
+            // Only these basic spellings have independently verified attachment.
+            let following_r_key = match *raw {
+                "Y" => Some('Y'),
+                "k" => Some('k'),
+                "kh" | "Sh" => Some('h'),
+                _ => None,
+            };
+            if let Some(last_key) = following_r_key {
+                remaining = consume_following_r_prefix(remaining, last_key, &mut output);
             }
             context = Context::Consonant {
                 ya_joiner: matches!(*raw, "r" | "rr"),
@@ -440,7 +449,7 @@ pub fn transliterate(input: &str) -> String {
 // Independently checked following-r prefixes depend on the final raw key,
 // including Z in aZ/oZ, x in kx/Ngx/Ngkx, k in Ngk/kk, and h in Ngkh/Ngkkh/NgkSh/kkh/kSh.
 // The N in kkhN/kShN/kxN/ShN and m in kkhm/kShm/kxm/Shm share single-r attachment.
-// Basic k/h/kh/N/m do not call this helper.
+// Basic k/kh/Sh also call this helper; basic h/N/m remain separate gaps.
 // Do not infer them from copied Bangla.
 fn consume_following_r_prefix<'a>(
     remaining: &'a str,
@@ -459,7 +468,7 @@ fn consume_following_r_prefix<'a>(
         && !remaining.starts_with("rr"))
         || (raw_key == 'Z' && (remaining.starts_with("ry") || remaining.starts_with("rZ")))
     {
-        // Y and the selected k/h/N/m-ending conjuncts attach single r without a joiner.
+        // Selected basic spellings and k/h/N/m-ending conjuncts attach single r without a joiner.
         // Z only does so before y/Z.
         output.push_str("্র");
         &remaining[1..]
