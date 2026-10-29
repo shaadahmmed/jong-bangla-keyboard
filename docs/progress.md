@@ -13,77 +13,80 @@ Dates use the project's Asia/Dhaka timezone.
   example; principal forms for all 11 basic vowels and 40 basic consonant
   sequences (35 letters), contextual forms, selected conjuncts, and selected
   following-`r` forms. See the [coverage overview](../README.md#current-status).
-- **Latest coverage:** the seven s/Sh labial spellings `sp`/`sph`/`sf`/`spl`
-  and `Shp`/`Shph`/`Shf`, with independent Unicode/context/priority evidence.
-  Only `spl` consumes the final `l`; the other longer l-ending inputs leave
-  `l` available. See the [batch decision](v1.md#s-and-sh-labial-conjunct-batch).
+- **Latest coverage:** six repetition/n-ending spellings `bb`/`pp` and
+  `pn`/`sn`/`shn`/`Sn`, independently checked for Unicode/context/priority.
+  `bbh`/`pph` leave `h` available; n-ending forms consume `n` before nasal
+  rules can reuse it. See the [batch decision](v1.md#repetition-and-n-ending-conjunct-batch).
 - **Library organization:** `src/lib.rs` exposes `transliterate`; private
   modules separate the scanner, authored rules, vowels, and following `r`.
   Cross-family priority stays explicit. See [layout](../README.md#library-structure).
-- **Validation:** all 197,645 fixture rows match the pinned parser; formatting,
-  Clippy, 207 integration tests, 1 doctest, release/documentation builds,
+- **Validation:** all 213,673 fixture rows match the pinned parser; formatting,
+  Clippy, 216 integration tests, 1 doctest, release/documentation builds,
   default/batch smoke checks, and documentation consistency checks passed.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete.
-  Earlier `bb`/`pp`, `pn`/`sn`/`shn`/`Sn`, and `ns`/`ps` remain explicit
-  gaps; other conjuncts, aliases, reph, and escapes are incomplete.
-  Composition, Fcitx5, and a usable desktop keyboard are not implemented.
-  Performance and platform support remain unverified.
+  Earlier `ns`/`ps` and longer `nsh`/`psh` remain explicit gaps; other conjuncts,
+  aliases, `mth`, reph, and escapes are incomplete. Composition, Fcitx5, and a
+  usable desktop keyboard are not implemented. Performance and platform support
+  remain unverified.
 
 ## Latest completed step
 
-- **2026-10-29 — Add verified s/Sh labial conjuncts.** Implemented all seven
-  planned exact spellings. Longer `sph`/`spl` and `Shph` precede `sp`/`Shp`.
-  No extra rules are needed for `sphl`/`sfl`/`Shpl`/`Shphl`/`Shfl`:
-  each leaves `l` available for a fresh subsequent match.
+- **2026-10-29 — Add verified repetition and n-ending conjuncts.** Implemented
+  all six planned spellings. No extra longer rules are needed for `bbh`/`pph`,
+  `bbl`/`ppl`/`bbhl`/`pphl`, or `pnk`/`snk`/`shnk`/`Snk`: consuming the
+  matched keys leaves only fresh following keys available for later matches.
 - **Behavior:** shared vowel/following-`r` helpers preserve context/exceptions.
-  `spll` → স্প্লল but `sphll` → স্ফল্ল; `splm` → স্প্লম but
-  `sphlm` → স্ফল্ম. Earlier matches retain priority (`ksp` → ক্সপ,
-  `kspl` → ক্সপ্ল, `kShp` → ক্ষপ, `NgkShp` → ঙ্ক্ষপ).
-  No upstream source/tables/fixtures, dependencies, or normalization were added.
-- **Evidence:** 17,703 new authored fixture rows independently cover each
-  spelling's Unicode, vowels/ya/context, `r` runs/exceptions, ordered pairs,
-  existing families and shared keys, digits, splits, copied Unicode,
-  boundaries, repetition, and words. All earlier fixture files remain unchanged.
-  Six resolved partial-output assertions moved into passing fixtures;
-  twenty-two reference gap probes remain. Rust regressions also cover controls,
-  separate calls, long mixed Unicode, and explicit ns/ps and alias gaps.
-- **Reference checks run:** `node /tmp/jong-verify-s-labial.mjs` — all 17,703
-  new rows passed; `node /tmp/jong-verify-s-labial-extra.mjs` — all 315 extra
+  `bbhl` → ব্বহ্ল, `pphl` → প্পহ্ল, `pnk` → প্নক, `pnnk` → প্নঙ্ক.
+  Earlier matches retain priority (`mbb` → ম্বব, `ppn` → প্পন,
+  `ksn` → ক্সন, `kshn` → কশন, `spn` → স্পন, `Shpn` → ষ্পন).
+  Exact `shn`/`Sn` both give শ্ন; `Shn` stays ষন. No upstream source,
+  rule tables, fixtures, dependencies, or normalization were imported.
+- **Evidence:** 16,028 new authored fixture rows independently cover all six
+  spellings and controls: Unicode, vowels/ya/context, `r` runs/exceptions,
+  ordered pairs, existing families and shared keys, longer forms, digits,
+  splits, copied Unicode, boundaries, repetition, and words. All earlier fixture
+  files remain unchanged. Ten resolved partial-output assertions moved into
+  passing coverage. Seven resolved reference gap probes were replaced by four
+  ns/ps interaction probes, leaving nineteen. Rust tests add controls,
+  separate calls, long mixed Unicode, and explicit alias/ns/ps gaps.
+- **Reference checks run:** `node /tmp/jong-verify-repeat-n.mjs` — all 16,028
+  new rows passed; `node /tmp/jong-verify-repeat-n-extra.mjs` — all 232 extra
   boundary/separate-call/long-input/gap expectations passed;
   `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 197,645 fixture rows passed against the SHA-256-verified pinned parser.
-- **Rust checks run:** `cargo test --offline s_labial` — 10 tests passed;
-  `cargo test --offline` — 207 integration tests and 1 doctest passed;
+  — all 213,673 fixture rows passed against the SHA-256-verified pinned parser.
+- **Rust checks run:** `cargo test --offline repeat_n` — 9 tests passed;
+  `cargo test --offline` — 216 integration tests and 1 doctest passed;
   `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`;
   `cargo build --offline --release`;
   `RUSTDOCFLAGS='-D warnings' cargo doc --offline --no-deps` — passed.
 - **Smoke checks run:** `cargo run --offline --example convert -- 'kh12T'`
-  — খ১২ট; `cargo run --offline --example convert -- 'sp sph sf spl Shp Shph Shf spll sphll sfll Shpll Shphll Shfll splg sphlg Shplg splm sphlm ksp kspl kShp NgkShp sphulingo sfUron puShpo niShphol niShfol'`
-  — matched all independently checked outputs, including স্ফুলিঙ্গ/পুষ্প/নিষ্ফল.
-- **Documentation checks:** `python /tmp/jong-check-s-labial-docs.py` — local
+  — খ১২ট; `cargo run --offline --example convert -- 'bb pp pn sn shn Sn bbh pph bbl ppl bbhl pphl pnk snk shnk Snk pnnk snnk shnnk Snnk ksn kshn spn Shpn abbas dhappa shopno snan sneho proshno proSno'`
+  — matched all independently checked outputs, including আব্বাস/ধাপ্পা/প্রশ্ন.
+  `shopno` gives শপ্ন without dictionary correction.
+- **Documentation checks:** `python /tmp/jong-check-repeat-n-docs.py` — local
   links/anchors, fixture manifests/code points/counts, retained old fixtures,
-  repeated-input consistency, behavior table, README examples, gap probes,
-  bounded handoff, and preserved history passed. `git diff --check` passed.
-  Rust/Cargo 1.99.1 and Node v24.21.0 were used.
-- **Remaining limitations:** ns/ps consume keys differently in the reference;
-  uppercase aliases, other phonetic gaps, composition/platform work, and
-  performance validation remain incomplete.
-- **Next action:** investigate the b/p repetition and n-ending candidates below.
-  This s/Sh labial batch is complete; the next batch has not started.
+  repeated-input consistency, behavior table/examples, README examples, gap
+  probes, bounded handoff, and preserved history passed. `git diff --check`
+  passed. Rust/Cargo 1.99.1 and Node v24.21.0 were used.
+- **Remaining limitations:** earlier ns/ps consume keys differently in the
+  reference (`nsn`/`nshn`/`psn`/`pshn`); uppercase aliases, other phonetic gaps,
+  composition/platform work, and performance validation remain incomplete.
+- **Next action:** investigate the ns/ps candidates below. This repetition and
+  n-ending batch is complete; the next batch has not started.
 
 ## Next small implementation step
 
-1. Investigate `bb`/`pp` and `pn`/`sn`/`shn`/`Sn` as a related consuming
-   batch, including `bbh`/`pph`, `bbl`/`bbhl`/`ppl`/`pphl`, and
-   `pnk`/`snk`/`shnk`/`Snk`. Inspect further longer forms before confirming scope.
+1. Investigate exact `ns`/`ps` and longer `nsh`/`psh` exceptions as a proposed
+   consuming batch. Inspect further longer forms before confirming scope.
 2. Independently check each spelling against the
    [pinned reference](v1.md#phonetic-behavior-reference): Unicode, vowels/ya,
    preceding contexts, following `r`, longer `r` runs, `rri`/`rry`/`rrZ`
    exceptions, digits, boundaries, copied Unicode, controls, and priorities.
-3. Check existing Ng/k/Sh/nasal/d/t/l/m/s-labial families and shared-key overlaps.
-   Keep `ns`/`ps`, `mth`, aliases, and unrelated forms separate unless deliberately
-   included with independent evidence; split only for behavioral complexity.
+3. Check existing s/Sh, k/l/m/labial, repetition/n-ending, and nasal families,
+   including `nsk`/`psk`, `nsl`/`psl`, `nsm`/`psm`, `nsp`/`psp`,
+   `nsn`/`psn`, and the corresponding longer h forms. Keep `mth`, aliases,
+   and unrelated forms separate unless deliberately included with evidence.
 4. Implement the verified batch, extend fixtures, run the full README checks,
    update behavioral docs and this handoff once, and commit the batch together.
    Keep composition, platform integration, packaging, and unrelated work separate.

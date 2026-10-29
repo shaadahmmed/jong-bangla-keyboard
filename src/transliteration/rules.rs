@@ -225,3 +225,16 @@ pub(super) const S_LABIAL_CONJUNCTS: [(&str, &str, char); 7] = [
     ("Shp", "ষ্প", 'p'),
     ("Shf", "ষ্ফ", 'f'),
 ];
+
+// Original repetition and n-ending spellings, each independently verified.
+// bb/pp consume both keys before bh/ph/bl/pl can reuse the second one;
+// following h/l remains available. pn/sn/shn/Sn consume n before nk/nn/etc.
+// Exact Shn stays separate; equal shn/Sn output does not imply case folding.
+pub(super) const REPEAT_N_CONJUNCTS: [(&str, &str, char); 6] = [
+    ("bb", "ব্ব", 'b'),
+    ("pp", "প্প", 'p'),
+    ("pn", "প্ন", 'n'),
+    ("sn", "স্ন", 'n'),
+    ("shn", "শ্ন", 'n'),
+    ("Sn", "শ্ন", 'n'),
+];

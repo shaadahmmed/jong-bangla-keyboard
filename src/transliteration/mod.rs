@@ -11,7 +11,7 @@ use following_r::consume_following_r_prefix;
 use rules::{
     CONSONANTS, CONSUMING_K_FORMS, CONSUMING_L_FORMS, CONSUMING_M_FORMS, D_CONJUNCTS,
     G_NASAL_CONJUNCTS, K_CONJUNCTS, L_CONJUNCTS, NASAL_H_CONJUNCTS, NASAL_R_FORMS,
-    NASAL_STOP_CONJUNCTS, NG_VOWELS, S_LABIAL_CONJUNCTS, T_CONJUNCTS,
+    NASAL_STOP_CONJUNCTS, NG_VOWELS, REPEAT_N_CONJUNCTS, S_LABIAL_CONJUNCTS, T_CONJUNCTS,
 };
 
 #[derive(Clone, Copy)]
@@ -192,6 +192,13 @@ pub fn transliterate(input: &str) -> String {
             remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
             context = Context::Consonant { ya_joiner: false };
         } else if let Some((raw, bangla, last_key)) = T_CONJUNCTS
+            .iter()
+            .find(|(raw, _, _)| remaining.starts_with(raw))
+        {
+            output.push_str(bangla);
+            remaining = consume_following_r_prefix(&remaining[raw.len()..], *last_key, &mut output);
+            context = Context::Consonant { ya_joiner: false };
+        } else if let Some((raw, bangla, last_key)) = REPEAT_N_CONJUNCTS
             .iter()
             .find(|(raw, _, _)| remaining.starts_with(raw))
         {
