@@ -18,11 +18,15 @@ Dates use the project's Asia/Dhaka timezone.
   rule tables, ordinary vowels, and following-`r` handling. Cross-family
   matching priority stays centralized. See [layout](../README.md#library-structure).
 - **Latest coverage:** the m-prefix and m-ending batch from commit `5ad840f`;
-  this refactor adds no rules or fixtures. Exact Unicode and scope:
+  this documentation cleanup adds no rules or fixtures. Exact Unicode and scope:
   [batch decision](v1.md#m-prefix-and-m-ending-conjunct-batch).
-- **Validation:** all 157,340 authored fixture cases match the SHA-256-verified
-  pinned parser. Formatting, Clippy, 183 integration tests, 1 doctest, release
-  build, and default/mixed-input smoke checks passed after the module split.
+- **Source documentation:** short crate/function contracts and three doctest
+  examples; detailed behavior stays in v1. All 53 removed crate examples remain
+  executable in an integration test. Local implementation notes are retained.
+- **Validation:** formatting, Clippy, 184 integration tests, 1 doctest, release
+  build, documentation build with warnings denied, and a smoke check passed.
+  The 157,340-case pinned-parser comparison passed in the prior module refactor
+  (`8b8ed7c`); it was not rerun for this documentation cleanup.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete.
   Earlier l/s/Sh labial rules, `bb`/`pp`, `pn`/`sn`/`shn`, `ns`/`ps`, and `lT`
   remain explicit gaps; other conjuncts, aliases, reph, and escapes are incomplete.
@@ -31,34 +35,35 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Latest completed step
 
-- **2026-10-29 — Modularize the transliteration library.** Reduced `src/lib.rs`
-  from 784 to 83 lines, preserving the public import and documentation.
-  `transliteration/mod.rs` owns the scanner and per-call context; `rules.rs`
-  owns mapping tables; `vowels.rs` handles ordinary vowel matching and output;
-  `following_r.rs` owns shared attachment and exceptions. Helpers and tables
-  are private to the implementation. No dependencies or behavior were added.
-- **Priority:** retained branch ordering and high-priority `rri`, ng-vowel,
-  and `aZ`/`oZ` handling in the scanner. Table contents, provenance comments,
-  following-r helper, and existing public documentation were retained.
+- **2026-10-29 — Focus source documentation on API contracts.** Reduced
+  `src/lib.rs` to 23 lines with an overview, limitations, documentation links,
+  and three executable examples. Replaced the function's rule catalog with
+  a short contract covering case sensitivity, Unicode preservation, raw-token
+  context, supported substrings, and stateless calls.
+- **Developer notes:** kept comments about matching priority, Unicode
+  boundaries, raw keys, and joiners beside the implementation. Detailed rules
+  remain in v1; its new API section explains shared behavior and documentation
+  responsibilities. README links that section. No runtime code changed.
+- **Coverage retained:** all 56 original doctest assertions keep their exact
+  inputs, outputs, and Unicode escapes: three stay in the doctest, and 53 moved
+  to `grouped_rule_examples_match_exact_output` in `tests/conversion.rs`.
+  Existing tests, fixtures, and the scanner body were unchanged.
 - **Checks run:** `cargo fmt --all -- --check`;
   `cargo clippy --offline --all-targets -- -D warnings`; `cargo test --offline`
-  (183 integration tests and 1 doctest); `cargo build --offline --release` — passed.
-  `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  — all 157,340 authored cases passed; thirty-five existing gaps printed
-  separately. Existing fixtures and tests were unchanged.
-- **Smoke checks:** `cargo run --offline --example convert -- 'kh12T'` — খ১২ট.
-  `cargo run --offline --example convert -- 'mb mbh mpl smp NgkShm kxNrri yrr wrry OI OU ngee ngoo aZ oZ ee oo ooo 0123456789 🙂'`
-  — selected overlaps, r exceptions, vowel priorities, digits, and Unicode
-  produced their existing expected output. Rust/Cargo 1.99.1 and Node.js
-  v24.21.0 were used; no performance claim is made.
-- **Documentation checks:** `python /tmp/jong-check-module-docs.py` — local
-  links/anchors, bounded handoff, and preserved historical entries passed.
-  `git diff --check` — passed. README documents the module responsibilities;
-  v1 records the implemented split separately from proposed future layers.
+  (184 integration tests and 1 doctest); `cargo build --offline --release`;
+  `RUSTDOCFLAGS='-D warnings' cargo doc --offline --no-deps` — passed.
+  `cargo run --offline --example convert -- 'kh12T'` — খ১২ট.
+- **Documentation checks:** `python /tmp/jong-check-api-docs.py` — local
+  links/anchors, generated documentation links, retained examples, unchanged
+  runtime code, bounded handoff, and preserved history passed.
+  `git diff --check` — passed. Rust/Cargo 1.99.1 were used.
+- **Prior evidence:** commit `8b8ed7c` passed the pinned-parser comparison for
+  all 157,340 authored cases. That comparison was not rerun because no rules,
+  fixtures, or runtime code changed in this step.
 - **Remaining limitations:** unchanged compatibility gaps and incomplete
-  composition/platform work. No new reference investigation was needed for
-  this organizational change. The l-prefix batch below has not started.
-- **Next action:** investigate l-prefix spellings and their longer exceptions.
+  composition/platform work; no broader compatibility or performance claim.
+- **Next action:** resume the l-prefix investigation below using the focused
+  source comments and linked behavior notes. This batch has not started.
 
 ## Next small implementation step
 
@@ -81,7 +86,8 @@ Dates use the project's Asia/Dhaka timezone.
 
 **Done when:** every selected spelling has independent reference evidence,
 interactions and existing supported cases pass, actual checks and limitations
-are recorded, and the batch is committed. This next batch has not started.
+are recorded, and the batch is committed. Documentation cleanup is complete;
+this next batch has not started.
 
 ## Completed steps
 

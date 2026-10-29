@@ -152,6 +152,11 @@ This split preserves the public API and existing conversion behavior. Compositio
 and platform adapters remain future work, with the boundaries described in
 [the architecture plan](docs/v1.md#proposed-architecture).
 
+Source comments keep the API contract and reasons for non-obvious matching
+choices close to the code. Detailed rule behavior belongs in
+[the behavior notes](docs/v1.md#transliteration-api); exhaustive examples live
+in tests and fixtures. The crate documentation keeps three usage examples.
+
 ## Build and try the conversion slice
 
 Use Rust/Cargo **1.99.1 or newer**, with rustfmt and Clippy. This initial baseline
