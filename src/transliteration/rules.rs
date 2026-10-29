@@ -1,5 +1,14 @@
 //! Independently authored mappings; table order preserves verified priorities.
 
+// Longer nsh/psh consume h without a conjunct. Their shorter ns/ps forms must
+// not leave s available to later s-family matches. Final keys govern following r.
+pub(super) const CONSUMING_S_FORMS: [(&str, &str, char); 4] = [
+    ("nsh", "নশ", 'h'),
+    ("ns", "ন্স", 's'),
+    ("psh", "পশ", 'h'),
+    ("ps", "প্স", 's'),
+];
+
 // Independently authored initial mappings; not an imported upstream rule table.
 pub(super) const CONSONANTS: [(&str, &str); 40] = [
     ("k", "ক"),

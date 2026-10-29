@@ -1,6 +1,99 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn ns_ps_ns_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ns.tsv"));
+}
+
+#[test]
+fn ns_ps_nsh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-nsh.tsv"));
+}
+
+#[test]
+fn ns_ps_ps_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ps.tsv"));
+}
+
+#[test]
+fn ns_ps_psh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-psh.tsv"));
+}
+
+#[test]
+fn ns_ps_case_controls_and_consumed_keys_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/ns-ps-controls.tsv"));
+}
+
+#[test]
+fn ns_ps_longer_exceptions_and_priorities_match() {
+    for (raw, expected) in [
+        ("nsk nsl nsm nsp nsn", "ন্সক ন্সল ন্সম ন্সপ ন্সন"),
+        ("psk psl psm psp psn", "প্সক প্সল প্সম প্সপ প্সন"),
+        ("nshk nshl nshm nshp nshn", "নশক নশল নশম নশপ নশন"),
+        ("pshk pshl pshm pshp pshn", "পশক পশল পশম পশপ পশন"),
+        ("nshhl pshhl nssn pssn", "নশহ্ল পশহ্ল ন্সস্ন প্সস্ন"),
+        ("nns pnsh snsh shnsh Sns", "ন্নস প্নশ স্নশ শ্নশ শ্নস"),
+        ("pps sps Shps mps lps", "প্পস স্পস ষ্পস ম্পস ল্পস"),
+        ("nsr nshr psr pshr", "ন্স্র নশ্র প্স্র পশ্র"),
+        (
+            "nsrri nshrri psrry pshrrZ",
+            "ন্সৃ নশৃ প্সরর\u{200d}্য পশরর\u{200d}্য",
+        ),
+    ] {
+        assert_eq!(transliterate(raw), expected, "{raw}");
+    }
+}
+
+#[test]
+fn ns_ps_resets_at_every_split_boundary_and_between_calls() {
+    for (raw, bangla, parts) in [
+        ("ns", "ন্স", vec![("ন", "স")]),
+        ("nsh", "নশ", vec![("ন", "শ"), ("ন্স", "হ")]),
+        ("ps", "প্স", vec![("প", "স")]),
+        ("psh", "পশ", vec![("প", "শ"), ("প্স", "হ")]),
+    ] {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "ন্স", "\u{301}"] {
+            for (index, (first, tail)) in parts.iter().enumerate() {
+                let split = index + 1;
+                assert_eq!(
+                    transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
+                    format!("{first}{boundary}{tail}")
+                );
+            }
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        for (index, (first, tail)) in parts.iter().enumerate() {
+            let split = index + 1;
+            assert_eq!(transliterate(&raw[..split]), *first);
+            assert_eq!(transliterate(&raw[split..]), *tail);
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    assert_eq!(
+        transliterate(
+            &"ns nsh ps psh nsk nshl psm pshn nshhl pshhm nssn pssm pnsh mps nsrri pshrry 🙂 "
+                .repeat(64)
+        ),
+        "ন্স নশ প্স পশ ন্সক নশল প্সম পশন নশহ্ল পশহ্ম ন্সস্ন প্সস্ম প্নশ ম্পস ন্সৃ পশরর\u{200d}্য 🙂 ".repeat(64)
+    );
+}
+
+#[test]
 fn repeat_n_bb_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/conjunct-bb.tsv"));
 }
@@ -80,8 +173,8 @@ fn repeat_n_resets_at_every_split_boundary_and_between_calls() {
 }
 
 #[test]
-fn repeat_n_aliases_and_earlier_ns_ps_remain_explicit_gaps() {
-    // Partial output only: uppercase aliases and earlier ns/ps are separate work.
+fn repeat_n_aliases_remain_explicit_gaps() {
+    // Partial output only: uppercase aliases are separate work.
     for (raw, partial) in [
         ("bB", "বB"),
         ("Bb", "Bব"),
@@ -94,10 +187,6 @@ fn repeat_n_aliases_and_earlier_ns_ps_remain_explicit_gaps() {
         ("Pn", "Pন"),
         ("sHn", "সHন"),
         ("SHn", "শHন"),
-        ("nsn", "নস্ন"),
-        ("nshn", "নশ্ন"),
-        ("psn", "পস্ন"),
-        ("pshn", "পশ্ন"),
     ] {
         assert_eq!(transliterate(raw), partial, "{raw}");
     }
@@ -189,9 +278,8 @@ fn s_labial_resets_at_every_split_boundary_and_between_calls() {
 }
 
 #[test]
-fn s_labial_aliases_and_earlier_ns_ps_remain_explicit_gaps() {
-    // These describe partial output, not reference compatibility. Earlier ns/ps
-    // consume s before sp/sph/sf/spl can begin in the reference.
+fn s_labial_aliases_remain_explicit_gaps() {
+    // Partial engine outputs for aliases, not reference compatibility.
     for (raw, partial) in [
         ("sP", "সP"),
         ("sF", "সF"),
@@ -205,14 +293,6 @@ fn s_labial_aliases_and_earlier_ns_ps_remain_explicit_gaps() {
         ("SHph", "শHফ"),
         ("SHf", "শHফ"),
         ("ShF", "ষF"),
-        ("nsp", "নস্প"),
-        ("nsph", "নস্ফ"),
-        ("nsf", "নস্ফ"),
-        ("nspl", "নস্প্ল"),
-        ("psp", "পস্প"),
-        ("psph", "পস্ফ"),
-        ("psf", "পস্ফ"),
-        ("pspl", "পস্প্ল"),
     ] {
         assert_eq!(transliterate(raw), partial, "{raw}");
     }
@@ -450,14 +530,9 @@ fn m_labial_resets_at_every_split_boundary_and_between_calls() {
 }
 
 #[test]
-fn m_labial_unimplemented_prefixes_and_aliases_remain_explicit_gaps() {
-    // Partial engine outputs, not compatibility expectations. Earlier ns/ps
-    // and their longer nsh/psh forms consume keys in the reference.
+fn m_labial_aliases_remain_explicit_gaps() {
+    // Partial engine outputs for aliases, not compatibility expectations.
     for (raw, partial) in [
-        ("nsm", "নস্ম"),
-        ("psm", "পস্ম"),
-        ("nshm", "নশ্ম"),
-        ("pshm", "পশ্ম"),
         ("mB", "মB"),
         ("mP", "মP"),
         ("mV", "মV"),
@@ -601,20 +676,6 @@ fn l_batch_resets_at_every_split_boundary_and_between_calls() {
         transliterate(&"gl ll bl pl sl shl bhl phl vl fl Sl pr phr fr blk glk llk slk glpr glphr glfr ggl Nggl kshl skll 🙂 ".repeat(64)),
         "গ্ল ল্ল ব্ল প্ল স্ল শ্ল ভ্ল ফ্ল ভ্ল ফ্ল শ্ল প্র ফ্র ফ্র ব্লক গ্লক ল্লক স্লক গ্লপ্র গ্লফ্র গ্লফ্র জ্ঞল ঙ্গল কশল স্ক্লল 🙂 ".repeat(64)
     );
-}
-
-#[test]
-fn l_batch_earlier_unimplemented_matches_remain_explicit_gaps() {
-    // These assert the partial engine, not reference compatibility. The earlier
-    // match consumes keys before an l-ending form could begin in the reference.
-    for (input, partial) in [
-        ("nshl", "নশ্ল"),
-        ("nsl", "নস্ল"),
-        ("pshl", "পশ্ল"),
-        ("psl", "পস্ল"),
-    ] {
-        assert_eq!(transliterate(input), partial, "{input}");
-    }
 }
 
 #[test]
@@ -1905,8 +1966,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Gg", "Gগ"),
         ("gNG", "গ্ণG"),
         ("bdd", "বদ্দ"),
-        ("nsk", "নস্ক"),
-        ("psk", "পস্ক"),
         ("ddH", "দ্দH"),
         ("dHn", "দHন"),
         ("dV", "দV"),
