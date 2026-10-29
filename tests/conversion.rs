@@ -1,6 +1,128 @@
 use jong_bangla_core::transliterate;
 
 #[test]
+fn l_prefix_lgh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-lgh.tsv"));
+}
+
+#[test]
+fn l_prefix_lg_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-lg.tsv"));
+}
+
+#[test]
+fn l_prefix_lbh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-lbh.tsv"));
+}
+
+#[test]
+fn l_prefix_lb_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-lb.tsv"));
+}
+
+#[test]
+fn l_prefix_lv_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-lv.tsv"));
+}
+
+#[test]
+fn l_prefix_lph_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-lph.tsv"));
+}
+
+#[test]
+fn l_prefix_lp_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-lp.tsv"));
+}
+
+#[test]
+fn l_prefix_l_t_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-l-t-retroflex.tsv"));
+}
+
+#[test]
+fn l_prefix_l_d_retroflex_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-l-d-retroflex.tsv"));
+}
+
+#[test]
+fn l_prefix_ldh_reference_cases_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/conjunct-ldh.tsv"));
+}
+
+#[test]
+fn l_prefix_nonconjunct_controls_match_exact_unicode() {
+    check_fixture(include_str!("fixtures/l-prefix-controls.tsv"));
+}
+
+#[test]
+fn l_prefix_resets_at_every_split_boundary_and_between_calls() {
+    for (raw, bangla, parts) in [
+        ("lgh", "লঘ", vec![("ল", "ঘ"), ("ল্গ", "হ")]),
+        ("lg", "ল্গ", vec![("ল", "গ")]),
+        ("lbh", "ল্ভ", vec![("ল", "ভ"), ("ল্ব", "হ")]),
+        ("lb", "ল্ব", vec![("ল", "ব")]),
+        ("lv", "ল্ভ", vec![("ল", "ভ")]),
+        ("lph", "লফ", vec![("ল", "ফ"), ("ল্প", "হ")]),
+        ("lp", "ল্প", vec![("ল", "প")]),
+        ("lT", "ল্ট", vec![("ল", "ট")]),
+        ("lD", "ল্ড", vec![("ল", "ড")]),
+        ("ldh", "ল্ধ", vec![("ল", "ধ"), ("লদ", "হ")]),
+    ] {
+        for boundary in [" ", "\n", "\r", "\t", "\0", "🙂", "ল্প", "\u{301}"] {
+            for (index, (first, tail)) in parts.iter().enumerate() {
+                let split = index + 1;
+                assert_eq!(
+                    transliterate(&format!("{}{boundary}{}", &raw[..split], &raw[split..])),
+                    format!("{first}{boundary}{tail}")
+                );
+            }
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}a")),
+                format!("{bangla}{boundary}আ")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}{boundary}r")),
+                format!("{bangla}{boundary}র")
+            );
+            assert_eq!(
+                transliterate(&format!("{raw}r{boundary}y")),
+                format!("{bangla}্র{boundary}ইয়")
+            );
+        }
+        for (index, (first, tail)) in parts.iter().enumerate() {
+            let split = index + 1;
+            assert_eq!(transliterate(&raw[..split]), *first);
+            assert_eq!(transliterate(&raw[split..]), *tail);
+        }
+        assert_eq!(transliterate(raw), bangla);
+        assert_eq!(transliterate("a"), "আ");
+        assert_eq!(transliterate("r"), "র");
+        assert_eq!(transliterate("y"), "ইয়");
+    }
+    assert_eq!(transliterate(&"lg lgh lb lbh lv lp lph lT lD ldh lgl lghl lbl lbhl lvl lpl lphl lTm lTh lDD lDh ldhn lghn glg mlg sklgl lfl golpo olpo ulTa 🙂 ".repeat(64)), "ল্গ লঘ ল্ব ল্ভ ল্ভ ল্প লফ ল্ট ল্ড ল্ধ ল্গল লঘল ল্বল ল্ভল ল্ভল ল্পল লফল ল্টম ল্টহ ল্ডড ল্ডহ ল্ধন লঘন গ্লগ ম্লগ স্ক্লগ্ল লফ্ল গল্প অল্প উল্টা 🙂 ".repeat(64));
+}
+
+#[test]
+fn l_prefix_unimplemented_aliases_remain_explicit_gaps() {
+    // These expectations describe partial output, not reference compatibility.
+    for (raw, partial) in [
+        ("lG", "লG"),
+        ("lgH", "ল্গH"),
+        ("lB", "লB"),
+        ("lbH", "ল্বH"),
+        ("lV", "লV"),
+        ("lP", "লP"),
+        ("lpH", "ল্পH"),
+        ("LT", "Lট"),
+        ("lDH", "ল্ডH"),
+        ("ldH", "লদH"),
+    ] {
+        assert_eq!(transliterate(raw), partial, "{raw}");
+    }
+}
+
+#[test]
 fn m_labial_mbh_reference_cases_match_exact_unicode() {
     check_fixture(include_str!("fixtures/conjunct-mbh.tsv"));
 }
@@ -273,12 +395,6 @@ fn l_batch_earlier_unimplemented_matches_remain_explicit_gaps() {
         ("Shpl", "ষপ্ল"),
         ("bbhl", "বভ্ল"),
         ("bbl", "বব্ল"),
-        ("lbhl", "লভ্ল"),
-        ("lbl", "লব্ল"),
-        ("lgl", "লগ্ল"),
-        ("lphl", "লফ্ল"),
-        ("lpl", "লপ্ল"),
-        ("lvl", "লভ্ল"),
         ("nshl", "নশ্ল"),
         ("nsl", "নস্ল"),
         ("pphl", "পফ্ল"),
@@ -1581,7 +1697,6 @@ fn unsupported_rules_still_preserve_unmatched_characters() {
         ("Gg", "Gগ"),
         ("gNG", "গ্ণG"),
         ("bdd", "বদ্দ"),
-        ("lTm", "লট্ম"),
         ("pnk", "পঙ্ক"),
         ("snk", "সঙ্ক"),
         ("shnk", "শঙ্ক"),

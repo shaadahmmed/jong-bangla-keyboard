@@ -160,6 +160,24 @@ pub(super) const CONSUMING_K_FORMS: [(&str, &str, char); 10] = [
     ("ks", "ক্স", 's'),
 ];
 
+// Original l-prefix forms, independently checked for context and priority.
+// Longer lgh/lph preserve separate consonants before lg/lp could join them;
+// both consume h (lghl -> লঘল, lphl -> লফল). lbh precedes lb.
+// Earlier l-ending forms consume l first; these consume their final key before
+// later g/l/labial/d/t-family matches can reuse it (lgl -> ল্গল, lTm -> ল্টম).
+pub(super) const CONSUMING_L_FORMS: [(&str, &str, char); 10] = [
+    ("lgh", "লঘ", 'h'),
+    ("lg", "ল্গ", 'g'),
+    ("lbh", "ল্ভ", 'h'),
+    ("lb", "ল্ব", 'b'),
+    ("lv", "ল্ভ", 'v'),
+    ("lph", "লফ", 'h'),
+    ("lp", "ল্প", 'p'),
+    ("lT", "ল্ট", 'T'),
+    ("lD", "ল্ড", 'D'),
+    ("ldh", "ল্ধ", 'h'),
+];
+
 // Original exact l-ending spellings, each checked for context and priorities.
 // Earlier gg/Ng/dg/dbh/dv/ks/ksh/skl matches consume shared keys first.
 // Shl is separate consonants; Sl is an exact spelling, not case normalization.

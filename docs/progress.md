@@ -13,81 +13,83 @@ Dates use the project's Asia/Dhaka timezone.
   example; principal forms for all 11 basic vowels and 40 basic consonant
   sequences (35 letters), contextual forms, selected conjuncts, and selected
   following-`r` forms. See the [coverage overview](../README.md#current-status).
-- **Library organization:** `src/lib.rs` exposes the unchanged `transliterate`
-  API. Private modules separate the scanner and per-call context, authored
-  rule tables, ordinary vowels, and following-`r` handling. Cross-family
-  matching priority stays centralized. See [layout](../README.md#library-structure).
-- **Latest coverage:** the m-prefix and m-ending batch from commit `5ad840f`;
-  this documentation cleanup adds no rules or fixtures. Exact Unicode and scope:
-  [batch decision](v1.md#m-prefix-and-m-ending-conjunct-batch).
-- **Source documentation:** short crate/function contracts and three doctest
-  examples; detailed behavior stays in v1. All 53 removed crate examples remain
-  executable in an integration test. Local implementation notes are retained.
-- **Validation:** formatting, Clippy, 184 integration tests, 1 doctest, release
-  build, documentation build with warnings denied, and a smoke check passed.
-  The 157,340-case pinned-parser comparison passed in the prior module refactor
-  (`8b8ed7c`); it was not rerun for this documentation cleanup.
+- **Latest coverage:** the consuming l-prefix batch: `lg`/`lb`/`lbh`/`lv`/`lp`,
+  longer `lgh`/`lph` nonconjunct exceptions, and `lT`/`lD`/`ldh`. Each has
+  independent Unicode/context/priority evidence. See the
+  [batch decision](v1.md#consuming-l-prefix-batch).
+- **Library organization:** `src/lib.rs` exposes `transliterate`; private
+  modules separate the scanner, authored rules, vowels, and following `r`.
+  Cross-family priority stays explicit. See [layout](../README.md#library-structure).
+- **Validation:** all 179,942 fixture rows match the pinned parser; formatting,
+  Clippy, 197 integration tests, 1 doctest, release/documentation builds,
+  default/batch smoke checks, and documentation consistency checks passed.
 - **Limitations:** full vowel context and Avro compatibility remain incomplete.
-  Earlier l/s/Sh labial rules, `bb`/`pp`, `pn`/`sn`/`shn`, `ns`/`ps`, and `lT`
-  remain explicit gaps; other conjuncts, aliases, reph, and escapes are incomplete.
+  Earlier s/Sh labial rules, `bb`/`pp`, `pn`/`sn`/`shn`, and `ns`/`ps` remain
+  explicit gaps; other conjuncts, aliases, reph, and escapes are incomplete.
   Composition, Fcitx5, and a usable desktop keyboard are not implemented.
   Performance and platform support remain unverified.
 
 ## Latest completed step
 
-- **2026-10-29 — Focus source documentation on API contracts.** Reduced
-  `src/lib.rs` to 23 lines with an overview, limitations, documentation links,
-  and three executable examples. Replaced the function's rule catalog with
-  a short contract covering case sensitivity, Unicode preservation, raw-token
-  context, supported substrings, and stateless calls.
-- **Developer notes:** kept comments about matching priority, Unicode
-  boundaries, raw keys, and joiners beside the implementation. Detailed rules
-  remain in v1; its new API section explains shared behavior and documentation
-  responsibilities. README links that section. No runtime code changed.
-- **Coverage retained:** all 56 original doctest assertions keep their exact
-  inputs, outputs, and Unicode escapes: three stay in the doctest, and 53 moved
-  to `grouped_rule_examples_match_exact_output` in `tests/conversion.rs`.
-  Existing tests, fixtures, and the scanner body were unchanged.
-- **Checks run:** `cargo fmt --all -- --check`;
-  `cargo clippy --offline --all-targets -- -D warnings`; `cargo test --offline`
-  (184 integration tests and 1 doctest); `cargo build --offline --release`;
+- **2026-10-29 — Add verified consuming l-prefix forms.** Implemented ten exact
+  spellings with independent reference evidence, expanding the planned six with
+  necessary longer `lgh` and related `lT`/`lD`/`ldh`. `lgh`/`lph` keep separate
+  consonants but consume the whole spelling; `lbh` precedes `lb`.
+- **Behavior:** shared vowel/following-`r` helpers preserve context and exceptions.
+  Consumed keys cannot start another conjunct: `lgl` → ল্গল, `lphl` → লফল,
+  `lTm` → ল্টম, `lDh` → ল্ডহ. Earlier l-ending matches retain priority
+  (`blg` → ব্লগ, `mlg` → ম্লগ). `lf` stays separate; `lfl` → লফ্ল.
+  No upstream source/tables/fixtures, dependencies, or normalization were added.
+- **Evidence:** 22,602 new authored fixture rows cover each spelling's Unicode,
+  vowels/ya/context, `r` runs/exceptions, ordered pairs and existing families,
+  shared keys, digits, splits, copied Unicode, boundaries, repetition, and words.
+  All prior fixture files remain unchanged. Seven resolved partial-output
+  assertions moved into passing fixtures; twenty-eight reference gap probes
+  remain. Rust tests also cover control boundaries, separate calls, long mixed
+  Unicode, and explicit alias gaps.
+- **Reference checks run:** `node /tmp/jong-verify-l-prefix.mjs` — all 22,602
+  new rows passed; `node /tmp/jong-verify-l-prefix-extra.mjs` — all 389 extra
+  boundary/separate-call/long-input/alias expectations passed;
+  `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
+  — all 179,942 fixture rows passed against the SHA-256-verified pinned parser.
+- **Rust checks run:** `cargo test --offline l_prefix` — 13 tests passed;
+  `cargo test --offline` — 197 integration tests and 1 doctest passed;
+  `cargo fmt --all -- --check`;
+  `cargo clippy --offline --all-targets -- -D warnings`;
+  `cargo build --offline --release`;
   `RUSTDOCFLAGS='-D warnings' cargo doc --offline --no-deps` — passed.
-  `cargo run --offline --example convert -- 'kh12T'` — খ১২ট.
-- **Documentation checks:** `python /tmp/jong-check-api-docs.py` — local
-  links/anchors, generated documentation links, retained examples, unchanged
-  runtime code, bounded handoff, and preserved history passed.
-  `git diff --check` — passed. Rust/Cargo 1.99.1 were used.
-- **Prior evidence:** commit `8b8ed7c` passed the pinned-parser comparison for
-  all 157,340 authored cases. That comparison was not rerun because no rules,
-  fixtures, or runtime code changed in this step.
-- **Remaining limitations:** unchanged compatibility gaps and incomplete
-  composition/platform work; no broader compatibility or performance claim.
-- **Next action:** resume the l-prefix investigation below using the focused
-  source comments and linked behavior notes. This batch has not started.
+- **Smoke checks run:** `cargo run --offline --example convert -- 'kh12T'`
+  — খ১২ট; `cargo run --offline --example convert -- 'lg lgh lb lbh lv lp lph lT lD ldh lgl lghl lbl lbhl lvl lpl lphl lTm lDh golpo olpo ulTa'`
+  — matched all independently checked outputs, including গল্প/অল্প/উল্টা.
+- **Documentation checks:** `python /tmp/jong-check-l-prefix-docs.py` — local
+  links/anchors, fixture manifests/code points/counts, retained old fixtures,
+  repeated-input consistency, behavior table, README examples, gap probes,
+  bounded handoff, and preserved history passed. `git diff --check` passed.
+  Rust/Cargo 1.99.1 and Node v24.21.0 were used.
+- **Remaining limitations:** uppercase aliases and other compatibility gaps,
+  composition/platform work, and performance validation remain incomplete.
+- **Next action:** investigate the s/Sh labial candidates below. This l-prefix
+  batch is complete; the next batch has not started.
 
 ## Next small implementation step
 
-1. Investigate `lg`/`lb`/`lbh`/`lv`/`lp`/`lph` as a related batch, including
-   `lgl`/`lbl`/`lbhl`/`lvl`/`lpl`/`lphl`. `lph` is লফ in the pinned reference,
-   a longer nonconjunct exception before `lp`; check its exact consuming behavior.
-   Evaluate `lT` when independent evidence fits the review. These are candidates,
-   not confirmed implementation scope; inspect any further longer forms first.
-2. Independently check every selected spelling against the
+1. Investigate `sp`/`sph`/`sf`/`spl` and `Shp`/`Shph`/`Shf` as a related
+   batch, including `spl` versus `sphl`/`sfl` and `Shpl`/`Shphl`/`Shfl`.
+   Inspect further longer forms before confirming implementation scope.
+2. Independently check each spelling against the
    [pinned reference](v1.md#phonetic-behavior-reference): Unicode, vowels/ya,
    preceding contexts, following `r`, longer `r` runs, `rri`/`rry`/`rrZ`
-   exceptions, digits, boundaries, copied Unicode, controls, and longer priorities.
+   exceptions, digits, boundaries, copied Unicode, controls, and priorities.
 3. Check existing Ng/k/Sh/nasal/d/t/l/m-family priorities and shared-key overlaps.
-   Keep s/Sh labial families, `bb`/`pp`, `pn`/`sn`/`shn`, `ns`/`ps`, `mth`,
-   and unrelated forms separate unless deliberately included with independent
-   evidence. Do not generalize `lph` behavior from `lp` or its aliases.
+   Keep `bb`/`pp`, `pn`/`sn`/`shn`, `ns`/`ps`, `mth`, and unrelated forms
+   separate unless deliberately included with independent evidence.
 4. Implement the verified batch, extend fixtures, run the full README checks,
    update behavioral docs and this handoff once, and commit the batch together.
    Keep composition, platform integration, packaging, and unrelated work separate.
 
 **Done when:** every selected spelling has independent reference evidence,
 interactions and existing supported cases pass, actual checks and limitations
-are recorded, and the batch is committed. Documentation cleanup is complete;
-this next batch has not started.
+are recorded, and the batch is committed. The s/Sh labial batch has not started.
 
 ## Completed steps
 

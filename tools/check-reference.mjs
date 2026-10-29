@@ -53,6 +53,17 @@ for (const name of [
   "conjunct-sh-lowercase-m.tsv",
   "conjunct-s-uppercase-m.tsv",
   "m-labial-controls.tsv",
+  "conjunct-lgh.tsv",
+  "conjunct-lg.tsv",
+  "conjunct-lbh.tsv",
+  "conjunct-lb.tsv",
+  "conjunct-lv.tsv",
+  "conjunct-lph.tsv",
+  "conjunct-lp.tsv",
+  "conjunct-l-t-retroflex.tsv",
+  "conjunct-l-d-retroflex.tsv",
+  "conjunct-ldh.tsv",
+  "l-prefix-controls.tsv",
   "reference.tsv",
   "vowels.tsv",
   "vowels-u.tsv",
@@ -213,11 +224,10 @@ console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 // These probes expose missing behavior; they are not supported-slice fixtures.
 for (const input of [
   "ShNG", "bdd", "shn", "ShM", "rrShN", "Shm`a",
-  "lgl", "lbl", "lbhl", "lvl",
-  "lpl", "lphl", "spl", "sphl", "sfl", "Shpl", "Shphl", "Shfl", "bbl", "bbhl", "ppl", "pphl",
+  "spl", "sphl", "sfl", "Shpl", "Shphl", "Shfl", "bbl", "bbhl", "ppl", "pphl",
   "nsl", "nshl", "psl", "pshl",
   "nsm", "psm", "nshm", "pshm",
-  "lTm", "pnk", "snk", "nsk", "psk",
+  "pnk", "snk", "nsk", "psk",
 ]) {
   const actual = parse(input);
   console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);
