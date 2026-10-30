@@ -736,6 +736,8 @@ preedit/commit/application-key effects, including framework-owned shortcuts and
 both focus-out commit owners. A simulated frontend commit is not evidence that a
 real toolkit honors that path. Actual AltGr/compose completion, document relocation,
 Wayland/XWayland delivery and desktop UI still need systematic smoke tests.
+Use the [remaining desktop checklist](docs/v1.md#remaining-desktop-smoke-checklist)
+to report those observations and application runtime details.
 The user has manually confirmed that the updated Escape behavior works. For
 repeat tests, `ki` then Escape should keep কি, and the next `i` should start a
 fresh ই. Restart the private test daemon

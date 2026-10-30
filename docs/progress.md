@@ -12,69 +12,89 @@ Dates use the project's Asia/Dhaka timezone.
 - **Implemented:** Rust transliteration/composition APIs, separate C-ABI wrapper
   and experimental C++ Fcitx5 addon with a real-dispatcher harness. Core rules and
   composition logic remain independent of platform APIs.
-- **Escape confirmed manually:** the user reports that the updated Escape behavior
-  works. It commits pending Bangla, clears the raw buffer and consumes the press,
-  preserving the word without a space/newline. Idle/repeat/invisible-input details
-  have synthetic coverage; no detailed per-app manual edge-case matrix was supplied.
-  Reset/destruction/cancel still discard.
-- **Other behavior:** Ctrl+Backspace clears active raw input and otherwise forwards;
-  Space/Enter/navigation/application shortcuts commit before the original action.
-  Per-context state is not copied; focus-out commit ownership stays with Fcitx/
-  frontend, ordinary focused switching commits once and restrictions/reset discard.
-- **Manual smoke evidence:** GTK3, Firefox, KWrite and Kate were tested via the
-  private-session procedure. Basic typing and field isolation worked; GTK3 and
-  Firefox behaved as expected. Pending Ctrl+Backspace works in KWrite too.
+- **Automated baseline refreshed (2026-10-30):** Rust format/Clippy/workspace tests,
+  release build, C++ format, normal/sanitized dispatcher harnesses and all 522,933
+  pinned reference fixtures passed. No engine or adapter source changed.
+- **Manual evidence retained:** basic typing/field isolation in GTK3, Firefox,
+  KWrite and Kate; pending Ctrl+Backspace in KWrite; user-confirmed Escape commit.
+  Escape preserves the pending word without a space/newline and clears raw input.
+  Reset/destruction/cancel still discard; manual Escape edge cases are not inferred.
+- **Adapter contract:** Ctrl+Backspace clears active raw input and otherwise
+  forwards. Space/Enter/navigation/application shortcuts commit before the action.
+  Fcitx/frontend own focus-out delivery; ordinary focused switching commits once,
+  while restrictions/reset discard. Per-context raw state is not copied.
 - **Deferred for v1 by user:** KWrite/Kate Bangla word navigation and committed-word
-  deletion. Ctrl+Arrows fail while Bangla is pending; committed আমার reportedly
-  takes three Ctrl+Backspace presses (র, then া, then আম). English shortcuts work;
-  user sees similar behavior with OpenBangla. Cause is unproven, not fixed, and
-  not a release blocker. Keep adapter behavior; no application-specific workaround.
-- **Limits:** exact runtime/protocol versions, full frontend checklist, AltGr/
-  compose/mouse delivery, Unicode case policy and performance remain incompletely
-  validated. No installation/global settings changes. See the
-  [evidence](v1.md#fcitx5-local-feasibility-result).
+  deletion. Cause remains unproven; no application-specific workaround or new
+  investigation. The accepted limitation does not block the first release.
+- **Desktop readiness:** installed versions refreshed; private D-Bus/Fcitx startup
+  and Jong metadata discovery checked. A temporary helper prepares disposable
+  GTK3/Firefox fields and a KWrite file. No agent-run GUI smoke evidence exists.
+  Requested native Wayland windows use explicit Fcitx IM modules over private
+  D-Bus, not a validated KWin text-input protocol or XWayland route.
+- **Limits:** actual per-app runtime/protocol details, remaining desktop checklist,
+  Unicode case policy and performance remain incomplete. No installation or
+  global settings changes. See the [checklist](v1.md#remaining-desktop-smoke-checklist)
+  and [evidence](v1.md#fcitx5-local-feasibility-result).
 
 ## Latest completed step
 
-- **2026-10-29 — Record successful manual Escape retest.** The user confirmed the
-  requested Escape behavior now works. Updated README/spec/handoff to close that
-  pending retest; did not infer per-application or edge-case coverage beyond the
-  report. Implementation in `69eea1a` and v1 deferral in `7de899e` are unchanged.
-- **Scope:** documentation only. No source, tests, build artifacts, running test
-  sessions or input-method settings changed. KWrite/Kate word editing stays deferred.
-- **Checks this step:** `python /tmp/jong-check-escape-confirmation-docs.py` — local
-  links/anchors, confirmed Escape evidence, removal of stale retest requirements,
-  unchanged adapter policy/v1 deferral, documentation-only scope and unchanged
-  historical entries passed. `git diff --check` passed. No Cargo, CMake, sanitizer
-  or reference checks rerun for this documentation-only evidence update.
-- **Prior evidence, not rerun:** commit `69eea1a` passed Rust format/Clippy/workspace
-  tests/release builds: 20 composition, 352 conversion, three FFI tests, two
-  doctests and 522,933 unchanged fixture rows. Ten dispatcher suites and C++
-  ASan/UBSan passed with `ASAN_OPTIONS=detect_leaks=0`; LeakSanitizer cannot run
-  under sandbox ptrace, and Rust/system libraries were not instrumented.
-- **Prior investigation, not continued:** matching KTextEditor/Fcitx Qt source
-  inspection identified shortcut/forwarding layers but did not establish a cause.
-  Further work is deferred by the user and is not a routine v1 blocker.
-- **Prior compatibility audits:** 83,353 mixed-context inputs, 1,350 vowel-pair
-  inputs and 302 standalone inputs remain bounded evidence; three known Unicode
-  case differences remain. These audits were not rerun.
-- **Next action:** finish the remaining scoped frontend smoke evidence without
-  revisiting confirmed Escape behavior or deferred KWrite/Kate word editing.
+- **2026-10-30 — Refresh automated baseline and prepare desktop handoff.** All
+  checks below passed; installed environment and remaining manual observations are
+  recorded in README/spec. Source, fixture expectations and adapter policy are
+  unchanged. The user will perform the GUI checks next; they are not complete.
+- **Rust commands:** `cargo fmt --all -- --check`;
+  `cargo clippy --offline --workspace --all-targets -- -D warnings`;
+  `cargo test --offline --workspace` (20 composition, 352 conversion, three FFI
+  tests, two doctests); `cargo build --offline --workspace --release` — all passed.
+- **C++ format:** `clang-format --dry-run --Werror adapters/fcitx5/addon.cpp
+  adapters/fcitx5/jong.h adapters/fcitx5/tests/harness.cpp` — passed.
+- **Normal harness:** `cmake -S adapters/fcitx5 -B target/fcitx5 -G Ninja
+  -DCMAKE_BUILD_TYPE=Debug`; `cmake --build target/fcitx5`;
+  `ctest --test-dir target/fcitx5 --output-on-failure` — passed, ten suites.
+- **Sanitized harness:** `cmake -S adapters/fcitx5 -B target/fcitx5-sanitized
+  -G Ninja -DCMAKE_BUILD_TYPE=Debug
+  -DCMAKE_CXX_FLAGS='-fsanitize=address,undefined -fno-omit-frame-pointer'
+  -DCMAKE_SHARED_LINKER_FLAGS='-fsanitize=address,undefined'
+  -DCMAKE_EXE_LINKER_FLAGS='-fsanitize=address,undefined'`;
+  `cmake --build target/fcitx5-sanitized`;
+  `ASAN_OPTIONS=detect_leaks=0 ctest --test-dir target/fcitx5-sanitized
+  --output-on-failure` — passed, ten suites. C++ ASan/UBSan only; leak detection
+  disabled, Rust/system libraries uninstrumented.
+- **Reference:** `node tools/check-reference.mjs
+  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` — passed all 522,933 authored rows;
+  parser hash verified by checker. Three known Unicode case differences remain.
+- **Setup check:** `bash -n /tmp/jong-manual-smoke-20261030.sh`, GTK source syntax,
+  isolated helper `--check`, and `bash /tmp/jong-manual-smoke-20261030.sh <<< exit`
+  passed. Socket creation required sandbox escalation; final isolated startup and
+  shell exit succeeded without opening GUI apps. Early helper metadata/check
+  issues were corrected before handoff. The helper is temporary, not installed.
+- **Environment:** package inventory plus system Python GTK runtime recorded in
+  the spec. Offscreen KWrite `--help` stalled and was interrupted; no app runtime
+  evidence resulted. Active GUI processes could not be inspected from the sandbox.
+- **Documentation checks:** `python3 /tmp/jong-check-desktop-handoff.py` — local
+  links/anchors, unchanged contract/deferral/history and helper source checks
+  passed; `git diff --check` passed. Logs: `/tmp/jong-automated-checks-20261030`.
+- **Prior evidence, not rerun:** generated 83,353-input mixed-context audit,
+  1,350 vowel-pair and 302 standalone audits. Prior user smoke/Escape observations
+  are retained, not newly reproduced. KWrite/Kate investigation stays deferred.
+- **Next action:** user runs the remaining desktop checklist and reports runtime
+  fields and exact failures. Do not repeat confirmed Escape or deferred word edits.
 
 ## Next small implementation step
 
-1. Record actual application/toolkit/Fcitx integration versions and observed
-   Wayland versus XWayland paths for the private-session smoke tests.
-2. Complete the remaining bounded checklist for focus/reset/switching, modifier/
-   repeat behavior, AltGr/compose and mouse relocation. Reuse existing positive
-   observations; explicitly mark unavailable or untested routes.
-3. Address new reproducible adapter issues within that scope and document remaining
-   limitations. Keep KWrite/Kate word editing deferred for v1. Keep packaging/
-   global installation and performance work as separate increments.
+1. Run the prepared private-session helper and test GTK3 first, then Firefox and
+   KWrite using disposable text. Record runtime versions and observed backends;
+   distinguish those observations from the installed inventory and forced flags.
+2. Complete the [remaining checklist](v1.md#remaining-desktop-smoke-checklist):
+   focus/return, switching, modifiers/repeats, boundaries/shortcuts, pointer
+   relocation, restricted fields and already configured AltGr/Compose routes.
+   Mark unavailable routes explicitly; keep existing positive evidence.
+3. Review the user's observations, reproduce/fix new scoped adapter failures and
+   update evidence. Keep KWrite/Kate word editing deferred; packaging/global
+   installation and performance remain separate increments.
 
-**Done when:** remaining frontend observations and limitations are recorded
-reproducibly. The updated Escape interaction has user-confirmed manual evidence;
-the accepted KWrite/Kate word-editing limitation does not block the first release.
+**Done when:** per-app desktop observations and limitations are reproducible.
+Automated readiness is complete; manual frontend acceptance remains pending.
 
 ## Completed steps
 
