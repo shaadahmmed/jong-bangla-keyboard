@@ -15,18 +15,16 @@ Dates use the project's Asia/Dhaka timezone.
 - **Automated baseline (prior evidence, 2026-10-30):** Rust format/Clippy/workspace
   tests, release build, C++ format, normal/sanitized dispatcher harnesses and all
   522,933 pinned fixtures passed in `5ed5bdc`. Not rerun for this docs-only update.
-- **Latest manual evidence:** the user reports Firefox and KWrite passed without
-  issues, then confirmed GTK works after its helper fix. All three private-session
-  test apps have an overall user-reported pass. Per-case results and requested
-  runtime/protocol fields were not supplied; optional-route coverage is unrecorded.
-- **GTK helper fixed and retest confirmed:** `654d6d7` records the reproduced Gtk 3 /
-  Gdk 4 conflict and explicit Gdk 3.0 selection in the temporary active helper and
-  launcher template. Prior import checks passed without warnings; the user's
-  successful GTK report closes the failed-startup retest. No further rerun needed
-  solely for this import fix.
-- **Earlier manual evidence retained:** basic typing/field isolation in GTK3,
-  Firefox, KWrite and Kate; pending Ctrl+Backspace in KWrite; confirmed Escape
-  commit without a space/newline. No detailed Escape edge-case coverage inferred.
+- **Bounded desktop smoke evidence recorded:** user reports GTK3, Firefox and
+  KWrite work. Supplied console/about:support captures establish GTK 3.24.52 with
+  GdkWaylandDisplay and Firefox 159.0 (build 20261027211755) with protocol wayland.
+  KWrite ran with forced Wayland/Fcitx module flags; runtime versions/backend were
+  not independently printed. Package inventory is separate from runtime evidence.
+- **GTK helper retest closed:** `654d6d7` records the Gtk/Gdk version conflict fix;
+  `2db601b` records the user's successful GTK retest. No routine app reruns needed.
+- **Earlier evidence retained:** basic typing/field isolation in GTK3, Firefox,
+  KWrite and Kate; pending Ctrl+Backspace in KWrite; Escape commit without an added
+  space/newline. Detailed per-case or optional-route coverage is not inferred.
 - **Adapter contract:** Ctrl+Backspace clears active raw input and otherwise
   forwards. Space/Enter/navigation/application shortcuts commit before the action.
   Fcitx/frontend own focus-out delivery; focused switching commits once,
@@ -34,54 +32,63 @@ Dates use the project's Asia/Dhaka timezone.
 - **Deferred for v1:** KWrite/Kate Bangla word navigation and committed-word
   deletion, at the user's request. Cause remains unproven; overall Qt success does
   not reverse the deferral. No application-specific workaround/investigation.
-- **Limits:** private helpers request native Wayland with explicit Fcitx GTK/Qt
-  modules over private D-Bus; KWin text-input protocols and XWayland are unverified.
-  Installed inventory is recorded, actual runtime fields remain unrecorded. No
-  installation/global settings changes. See the
-  [checklist](v1.md#remaining-desktop-smoke-checklist) and
-  [evidence](v1.md#fcitx5-local-feasibility-result).
+- **Desktop limits:** private D-Bus/Fcitx IM-module route only. Exact Qt runtime,
+  per-case checklist, AltGr/dead/Compose, Electron, XWayland, KWin text-input
+  protocols and frontend commit ownership are untested or unrecorded. Console
+  service/accessibility/font/selection warnings are documented, not diagnosed or
+  fixed; no Jong crash appears in the supplied capture. No general support claim.
+- **Other limits:** Unicode case policy and performance remain open/unmeasured;
+  no installation/global settings changes. See the
+  [runtime evidence](v1.md#fcitx5-local-feasibility-result) and
+  [uncovered desktop cases](v1.md#remaining-desktop-smoke-checklist).
 
 ## Latest completed step
 
-- **2026-10-30 — Record successful GTK manual retest.** The user confirmed GTK
-  works after the import correction, joining the earlier browser/Qt passes. Updated
-  spec/handoff to close GTK's pending startup/retest without inferring detailed
-  per-case or optional-route observations. Runtime/backend fields remain missing.
-- **Scope:** documentation only. No source, fixtures, temporary helpers, running
-  sessions, dependencies or system input-method settings changed in this step.
-  Keep Escape confirmed and KWrite/Kate word editing deferred.
-- **Checks this step:** `python3 /tmp/jong-check-gtk-confirmation-docs.py` — local
-  links/anchors, confirmed GTK evidence, removal of stale rerun requirements,
-  unchanged adapter contract, v1 deferral and history, 50–100-line handoff and
-  documentation-only scope passed. `git diff --check` passed. No Cargo, CMake,
-  sanitizer, reference or helper runtime checks rerun for this evidence-only update.
-- **Prior evidence, not rerun:** `654d6d7` reproduced the old helper import failure
-  and checked corrected active/template imports: Gtk/Gdk 3.0, GTK runtime 3.24.52,
-  no warnings; shell/Python syntax passed. This was agent-side import evidence;
-  the new desktop confirmation is the user's observation.
-- **Prior automated baseline, not rerun:** `5ed5bdc` records 20 composition,
+- **2026-10-30 — Record supplied frontend runtime evidence and console limits.**
+  Parsed the user's Firefox JSON and GTK/Qt/browser log, retaining the three app
+  passes. Recorded observed GTK/Firefox Wayland paths, missing Qt runtime fields
+  and warning categories. The bounded smoke evidence handoff is complete with
+  explicit limits; full frontend acceptance remains unclaimed.
+- **Observed:** Firefox 159.0, build 20261027211755, distribution archlinux,
+  `graphics.windowProtocol=wayland`; GTK prints runtime 3.24.52 and
+  `GdkWaylandDisplay`. Console shows KWrite opening the disposable test file.
+  Installed `kate` 26.08.2-1.1 / `qt6-base` 6.12.0-3.1 remain package evidence only.
+- **Warnings retained:** private-bus systemd service activation, AT-SPI/atk-bridge,
+  portals/RealtimeKit/app-ID, KWallet socket, candidate-font OpenType support,
+  notification teardown and Firefox selection broken pipe. These identify their
+  emitting subsystems, not established root causes or an observed Jong failure.
+- **Checks:** `python3 /tmp/jong-check-runtime-evidence-docs.py` — attachment JSON/
+  console field extraction, local links/anchors, unchanged adapter contract/v1
+  deferral/history, 50–100-line handoff and documentation-only scope passed.
+  `git diff --check` passed. No Cargo/CMake/reference/sanitizer or GUI reruns for
+  this documentation-only step; no full diagnostic dump added to the repository.
+- **Prior evidence, not rerun:** `654d6d7` reproduced the GTK import error and
+  validated Gtk/Gdk 3.0 selection without warnings. `5ed5bdc` records 20 composition,
   352 conversion, three FFI tests, two doctests, 522,933 reference rows,
-  format/Clippy/release, and ten normal/C++ ASan/UBSan dispatcher suites.
-  Leak detection was disabled; Rust/system libraries were not instrumented.
-  Generated 83,353-input mixed-context, 1,350 vowel-pair and 302 standalone audits
-  remain prior evidence. Three known Unicode case differences are unchanged.
-- **Next action:** collect missing runtime/backend fields and mark optional routes
-  tested/unavailable/untested, retaining the three app passes without routine reruns.
+  format/Clippy/release and ten normal/C++ ASan/UBSan dispatcher suites. Leak
+  detection was disabled; Rust/system libraries were not instrumented. Generated
+  83,353-input mixed-context, 1,350 vowel-pair and 302 standalone audits remain
+  prior evidence. Three known Unicode case differences are unchanged.
+- **Scope:** evidence/handoff docs only. No source, fixtures, helpers, running test
+  sessions, dependencies or system input-method settings changed. Preserve Escape
+  confirmation and the KWrite/Kate word-editing deferral.
+- **Next action:** move to a separate bounded performance measurement increment;
+  retain untested frontend routes rather than infer or repeatedly retest them.
 
 ## Next small implementation step
 
-1. Record the GTK runtime/backend line, Firefox version/Window Protocol and KWrite
-   application/Qt versions from the test session when available. Distinguish actual
-   runtime observations from package inventory or forced launch flags.
-2. Clarify optional AltGr/Compose coverage and any checklist cases not exercised;
-   mark unavailable or untested routes explicitly. Do not infer full acceptance
-   from the overall passes or reopen the corrected GTK startup issue.
-3. Finish the frontend evidence handoff, retaining documented limitations. Keep
-   KWrite/Kate word editing deferred; packaging/global installation, Unicode case
-   policy and performance remain separate increments.
+1. **Proposed next increment:** prepare reproducible release-mode latency
+   measurements for conversion and composition using realistic word lengths and
+   long input buffers, following the [evidence requirements](v1.md#compatibility-and-performance-evidence).
+2. Record hardware, build mode, workloads and measurement method. Keep adapter
+   overhead and added memory separate from Fcitx's baseline; state any unmeasured
+   parts explicitly. Set release budgets only after evidence exists.
+3. Keep packaging/global installation and Unicode case policy separate. Revisit
+   a desktop route only for a named uncovered case or reproducible new failure;
+   retain current smoke passes and the accepted KWrite/Kate limitation.
 
-**Done when:** runtime details and remaining coverage limits are recorded.
-GTK, Firefox and KWrite are user-reported passes; no new adapter failure is reported.
+**Done when:** the selected performance increment has reproducible measurements
+and explicit limits. No performance claim or new release budget exists yet.
 
 ## Completed steps
 
