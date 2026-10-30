@@ -11,6 +11,7 @@
 #include <fcitx-config/rawconfig.h>
 #include <fcitx-utils/capabilityflags.h>
 #include <fcitx-utils/key.h>
+#include <fcitx-utils/standardpaths.h>
 #include <fcitx/addonfactory.h>
 #include <fcitx/addonmanager.h>
 #include <fcitx/event.h>
@@ -39,7 +40,9 @@ void require(bool condition, const std::string &message) {
 // frontend, bus, display, daemon or real input-method configuration is loaded.
 class Sandbox {
 public:
-  Sandbox() {
+  Sandbox(int argc, char **argv) {
+    require(argc == 1 || (argc == 4 && std::string(argv[1]) == "--installed"),
+            "usage: jong-fcitx5-harness [--installed PKG_DATA_DIR ADDON_DIR]");
     char pattern[] = "/tmp/jong-fcitx5-harness-XXXXXX";
     const auto path = mkdtemp(pattern);
     require(path != nullptr, "create harness sandbox");
@@ -53,10 +56,37 @@ public:
     env("XDG_CACHE_HOME", (root_ / "cache").string());
     env("XDG_RUNTIME_DIR", (root_ / "runtime").string());
     env("XDG_DATA_HOME", JONG_HARNESS_DATA);
+    env("FCITX_CONFIG_HOME", (root_ / "config" / "fcitx5").string());
+    env("FCITX_CONFIG_DIRS", (root_ / "empty").string());
+    env("FCITX_DATA_HOME",
+        (std::filesystem::path(JONG_HARNESS_DATA) / "fcitx5").string());
     env("SKIP_FCITX_PATH", "1");
     env("SKIP_FCITX_SYSTEM_PATH", "1");
     env("SKIP_FCITX_USER_PATH", "0");
     env("FCITX_NO_PREEDIT_APPS", "");
+    if (argc == 4) {
+      // Supply only the two test registrations locally; Jong's metadata and
+      // binary must both be discovered in the staged installation.
+      const auto data = root_ / "data" / "fcitx5";
+      std::filesystem::create_directories(data / "addon");
+      std::filesystem::create_directories(data / "inputmethod");
+      std::filesystem::copy_file(std::filesystem::path(JONG_HARNESS_DATA) /
+                                     "fcitx5/addon/jong-harness-null.conf",
+                                 data / "addon/jong-harness-null.conf");
+      std::filesystem::copy_file(std::filesystem::path(JONG_HARNESS_DATA) /
+                                     "fcitx5/inputmethod/keyboard-us.conf",
+                                 data / "inputmethod/keyboard-us.conf");
+      env("XDG_DATA_HOME", (root_ / "data").string());
+      env("FCITX_DATA_HOME", data.string());
+      env("XDG_DATA_DIRS", (root_ / "empty").string());
+      env("FCITX_DATA_DIRS", argv[2]);
+      env("FCITX_ADDON_DIRS", argv[3]);
+      env("SKIP_FCITX_SYSTEM_PATH", "0");
+      const auto dirs =
+          StandardPaths::global().directories(StandardPathsType::Addon);
+      require(dirs.size() == 1 && dirs.front() == argv[3],
+              "search only the staged addon directory");
+    }
   }
 
   ~Sandbox() {
@@ -594,9 +624,9 @@ void test_preedit_click(Instance &instance) {
 
 } // namespace
 
-int main() {
+int main(int argc, char **argv) {
   try {
-    Sandbox sandbox;
+    Sandbox sandbox(argc, argv);
     char program[] = "jong-fcitx5-harness";
     char disable[] = "--disable=all";
     char enable[] = "--enable=jong-bangla,jong-harness-null";
@@ -611,6 +641,8 @@ int main() {
     disableHotkeys(instance);
     require(instance.inputMethodManager().entry("jong-bangla") != nullptr,
             "discover local metadata");
+    require(instance.addonManager().addon("jong-bangla", true) != nullptr,
+            "load Jong addon from configured library path");
     InputMethodGroup group("Jong synthetic");
     group.setDefaultLayout("us");
     group.inputMethodList().emplace_back("keyboard-us");

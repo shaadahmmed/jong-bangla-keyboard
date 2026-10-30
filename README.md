@@ -727,10 +727,11 @@ The build produces `target/fcitx5/libjong-bangla.so` and
 `target/fcitx5/jong-fcitx5-harness`. The harness loads that actual shared addon,
 allows only it and a test passthrough engine, and uses temporary XDG configuration,
 cache and runtime directories. Build-local metadata contains the absolute library
-path and is unsuitable for installation. There is deliberately no install target.
-The [local installation plan](docs/v1.md#experimental-local-installation-plan) records
-the proposed file layout and removal contract. Only synthetic strings are recorded
-by the harness; the addon has no input logger.
+path and is unsuitable for installation. Separate install rules generate metadata
+without a build path; see [experimental installation](#install-the-experimental-addon)
+for the explicit install/removal procedure and
+[layout decisions](docs/v1.md#experimental-local-installation-plan).
+Only synthetic strings are recorded by the harness; the addon has no input logger.
 
 Ten suites check editing, boundaries/shortcuts, releases/modifiers/repeats, resolved
 text, invisible buffers, switching/focus/reset, context isolation, fallback preedit
@@ -799,6 +800,79 @@ Rust heap allocations are observed through the system allocator, as verified by
 the deliberate leak; this does not instrument Rust memory accesses. These
 synthetic tests do not exercise every failure path or a live desktop daemon.
 See the [results and panic-path limit](docs/v1.md#local-resource-measurement-and-leak-check).
+
+## Install the experimental addon
+
+This procedure targets the recorded CachyOS x86_64 environment with Fcitx5 under
+`/usr`. The name is provisional; this is a local source installation, with the
+[existing desktop limitations](docs/v1.md#remaining-desktop-smoke-checklist).
+Keep your already configured Fcitx5/frontend setup. Installation adds the addon
+files; activation remains a separate manual desktop action.
+
+From the repository root, prepare and check a Release build:
+
+```sh
+cmake -S adapters/fcitx5 -B target/fcitx5-install -G Ninja \
+  -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
+  -DFCITX_INSTALL_USE_FCITX_SYS_PATHS=ON
+cmake --build target/fcitx5-install
+ctest --test-dir target/fcitx5-install --output-on-failure
+python3 tools/check-install.py target/fcitx5-install
+```
+
+The Python check requires Python 3. It stages installation in a fresh temporary
+directory, checks the exact three-file layout, runs all ten dispatcher suites
+against the staged copy, checks that a missing staged library fails, and removes
+only Jong's files while retaining an unrelated sentinel. It does not contact a
+desktop frontend or change your input-method settings.
+
+The real installation writes exactly these files:
+
+```text
+/usr/lib/fcitx5/libjong-bangla.so
+/usr/share/fcitx5/addon/jong-bangla.conf
+/usr/share/fcitx5/inputmethod/jong-bangla.conf
+```
+
+Before installing, check for existing files at those paths, including symlinks.
+If present, inspect ownership with `pacman -Qo /absolute/path`; use the owning
+package's update/removal procedure or retain a backup of an earlier manual
+installation. Do not overwrite an unrelated or package-managed file.
+
+**Run this yourself when ready to install:**
+
+```sh
+sudo cmake --install target/fcitx5-install
+```
+
+Use the prefix configured above: the Fcitx5 destination variables are absolute,
+so `cmake --install --prefix` does not relocate them. To change the layout,
+reconfigure in another build directory and repeat the staging check. A staged
+custom-prefix pass does not establish discovery by your normal desktop daemon.
+Only the shared addon and its two registrations are installed; Rust/Cargo,
+private headers and test executables are not runtime installation artifacts.
+
+After installing, restart Fcitx5 through your existing desktop/session setup;
+logging out and back in is an alternative. An already running daemon keeps the
+old addon until restarted. Open Fcitx5's configuration tool, add **Jong Bangla**
+(disable the current-language filter if needed), and select it. In a disposable
+text field, type `ki` then Space: expect `কি `. Keep the current desktop route;
+this installation does not establish support for additional Wayland routes.
+
+For a later source update, rebuild, rerun CTest and the staging check, then repeat
+the installation and restart. CMake does not supply a general uninstall target.
+For removal of this manual `/usr` installation, first switch away from Jong
+Bangla and remove its entry in Fcitx5's configuration tool. Then run:
+
+```sh
+sudo rm -- /usr/lib/fcitx5/libjong-bangla.so \
+  /usr/share/fcitx5/addon/jong-bangla.conf \
+  /usr/share/fcitx5/inputmethod/jong-bangla.conf
+```
+
+Restart Fcitx5 through your existing session setup afterward. Restore any prior
+manual-install backups as appropriate. Keep shared directories, other engines,
+toolkit integrations and the rest of your Fcitx5 configuration.
 
 ## Measure core latency
 

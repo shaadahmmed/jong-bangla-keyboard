@@ -11,25 +11,27 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Implemented:** platform-independent Rust transliteration/composition, a separate
   C ABI and an experimental C++ Fcitx5 addon with an isolated dispatcher harness.
-- **Installation plan (2026-10-30):** reviewed the three-file `/usr` layout,
-  separate installed/build-local metadata, build/runtime dependencies, temporary
-  staging, removal and public-packaging choices. See the
-  [local installation plan](v1.md#experimental-local-installation-plan).
-- **User boundary:** prepare and test source/install support; the user alone will
-  perform actual installation and desktop configuration. No install rules yet.
-- **Current checks:** local Markdown links/anchors and diff whitespace passed.
-  This step changed documentation only; no Rust/C++/desktop/resource checks rerun.
-- **Prior Unicode policy (`d8b701f`, not rerun):** preserve exact unsupported
-  Unicode scalars without lowercasing/normalization; explicit v1 exception.
-  60 authored rows have separate engine/reference expectations: 51 deliberate
-  differences, nine agreements; separate from 522,933 pinned parity rows.
-  Rust checks and pinned parity/policy comparison passed in that step; the audit
-  is bounded, not a full Unicode census. See the
-  [policy evidence](v1.md#unicode-case-preservation-policy).
-- **Prior panic policy (`f914d45`, not rerun):** one guarded caught-payload cleanup
-  attempt; retain a destructor-panic replacement and clear state before status 2.
-  Five isolated child scenarios check recovery/expected aborts. Arbitrary
-  destructors may retain memory, block or terminate; no blanket leak-freedom claim.
+- **Installation support (2026-10-30):** separate installed/build-local metadata
+  and three-file install rules. `/usr` Release staging and a separate `/opt`
+  prefix passed actual loading, missing-library rejection and clean removal.
+  See [instructions](../README.md#install-the-experimental-addon) and
+  [layout/evidence](v1.md#experimental-local-installation-plan).
+- **User boundary:** actual installation, activation and desktop configuration
+  belong to the user. The real `/usr` targets remain absent; no daemon or
+  input-method settings changed.
+- **Current checks:** Release CTest (two tests/ten dispatcher suites), staged checks
+  for both prefixes, C++ format, Rust format/Clippy/workspace tests/release build/
+  API docs, local Markdown links and diff whitespace passed. No production key
+  handling or transliteration changed; no new dependencies or upstream code.
+- **Unicode policy (`d8b701f`):** preserve exact unsupported Unicode scalars without
+  lowercasing/normalization; explicit v1 exception. All 60 engine policy cases
+  rerun in workspace tests. Separate pinned parity/reference-policy comparison
+  was not rerun: prior evidence is 522,933 parity rows plus 60 policy rows
+  (51 deliberate differences, nine agreements), a bounded Unicode audit.
+- **Panic policy (`f914d45`):** one guarded caught-payload cleanup attempt;
+  retain a destructor-panic replacement and clear state before status 2. Isolated
+  child recovery/expected-abort scenarios rerun in workspace tests. Arbitrary
+  destructors may retain memory, block or terminate; no leak-freedom guarantee.
 - **Prior resources (`00570df`, not rerun):** short-typing/Space medians
   1.651–2.255 µs/action; added median time 0.834–1.474 µs/action; added idle RSS
   276–364 KiB. Heap/RSS stable from 1,000 to 2,000 sessions in both modes;
@@ -48,40 +50,55 @@ Dates use the project's Asia/Dhaka timezone.
 - **Adapter contract:** active Ctrl+Backspace clears, otherwise forwards;
   boundaries/navigation/shortcuts commit first. Focus-out belongs to
   Fcitx/frontend; switching commits once, restrictions/reset discard, contexts
-  never copy raw state. Installation planning changes none of these behaviors.
+  never copy raw state. Existing behavior is unchanged.
 
 ## Latest completed step
 
-- **2026-10-30 — Review experimental local installation requirements.** Documented
-  `/usr/lib/fcitx5/libjong-bangla.so` and the two `jong-bangla.conf` registrations
-  under `/usr/share/fcitx5/{addon,inputmethod}` using installed Fcitx5 CMake paths.
-- **Result:** installed metadata must use `Library=libjong-bangla`; ordinary
-  harness metadata retains its absolute build path. Defined exact artifact,
-  staged-loading, negative-control and clean-removal acceptance criteria.
-- **Evidence inspected:** current CMake/metadata, installed Fcitx5 5.1.23 CMake
-  configuration, tagged upstream loader/path sources and official addon tutorial;
-  `readelf -d target/fcitx5/libjong-bangla.so` identified runtime dependencies.
-  No upstream code/fixtures imported and no dependencies installed.
-- **Checks passed:** `python3 /tmp/jong-check-markdown-links.py` for local links
-  and anchors; `git diff --check`. Documentation-only change; no Cargo, C++,
-  desktop, reference, leak or resource checks rerun. Older results above are
-  prior evidence only.
-- **Limits:** plan only, no install target or staged-install result yet. Names
-  remain provisional; public package format, licensing manifest and support
-  scope remain open. No system/user files, daemon or input-method settings changed.
-- **Next:** implement the documented install rules and stage-check them before
-  handing the real installation instructions to the user.
+- **2026-10-30 — Prepare experimental local installation for the user.** Followed
+  the layout review in `e71fd18` with install rules, separate relocatable metadata,
+  a staged dispatcher mode and `tools/check-install.py`. README includes explicit
+  build, staging, user-run install, activation, update and three-file removal.
+- **Release checks passed:** `cmake -S adapters/fcitx5 -B target/fcitx5-install
+  -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+  -DFCITX_INSTALL_USE_FCITX_SYS_PATHS=ON`; `cmake --build target/fcitx5-install`;
+  `ctest --test-dir target/fcitx5-install --output-on-failure` (both tests);
+  `python3 tools/check-install.py target/fcitx5-install` (four check groups).
+- **Custom-prefix check passed:** same configure/build with build directory
+  `target/fcitx5-prefix-check`, prefix `/opt/jong-prefix-check` and system-path
+  option `OFF`; `python3 tools/check-install.py target/fcitx5-prefix-check`.
+  Explicit isolated search paths prove staged loading, not normal `/opt` discovery.
+- **Rust checks passed:** `cargo fmt --all -- --check`;
+  `cargo clippy --offline --workspace --all-targets -- -D warnings`;
+  `cargo test --offline --workspace` (20 composition, 351 conversion, two Unicode,
+  four FFI tests plus parent-invoked ignored helper, two doctests);
+  `cargo build --offline --workspace --release`;
+  `cargo doc --offline --workspace --no-deps`.
+- **Other checks passed:** `clang-format --dry-run --Werror
+  adapters/fcitx5/addon.cpp adapters/fcitx5/jong.h adapters/fcitx5/tests/harness.cpp`;
+  Python AST parse of `tools/check-install.py`;
+  `python3 /tmp/jong-check-markdown-links.py`; `git diff --check`.
+  `readelf -d target/fcitx5-install/libjong-bangla.so` confirmed runtime libraries
+  and no RPATH/RUNPATH. The checker stages only three files and retains an unrelated
+  sentinel on removal. A first negative-control assertion expected suppressed
+  logging; explicit harness load validation fixed it and final checks passed.
+- **Limits:** no actual installation/desktop test, reference comparison,
+  sanitizers, leak/resource measurement or broader context audit rerun. Public
+  display name, package format, licensing manifest and support scope remain open.
+- **Next:** user installs the checked build, activates it through their existing
+  desktop setup and reports the disposable `ki` then Space smoke result.
 
 ## Next small implementation step
 
-1. Add install rules and separate installed metadata, preserving build-local tests.
-2. Build/check Release; stage under a temporary root and verify exact artifacts,
-   actual dispatcher loading, missing-library rejection and clean removal.
-3. Document tested installation/activation/removal commands; leave their real
-   execution and all desktop configuration to the user.
+1. **User action:** follow README's experimental installation instructions;
+   restart Fcitx5 through the existing session setup and select Jong Bangla.
+2. Record actual installed-route behavior and any reproducible failure before
+   changing the adapter. Retain existing desktop evidence and deferred limitations.
+3. Before public packaging, confirm display name and package format, review the
+   distribution/license manifest and derive support scope from recorded tests.
 
-**Done when:** temporary staging passes and the user has concrete instructions
-for the experimental `/usr` source install, without public packaging/support claims.
+**Done when:** the user confirms installed-addon typing on their actual route,
+with environment/limitations recorded. Source preparation is complete; actual
+installation remains intentionally unperformed.
 
 ## Completed steps
 

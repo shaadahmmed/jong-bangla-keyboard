@@ -32,8 +32,9 @@ target_link_options(jong-bangla PRIVATE -Wl,--no-undefined -Wl,--exclude-libs,AL
 set_target_properties(jong-bangla PROPERTIES CXX_VISIBILITY_PRESET hidden
     VISIBILITY_INLINES_HIDDEN YES)
 
-# Build-local metadata only. No install target or desktop configuration changes.
+# Keep build-local metadata separate from the relocatable installed registration.
 set(HARNESS_DATA "${CMAKE_CURRENT_BINARY_DIR}/harness-data")
+set(JONG_ADDON_LIBRARY "${CMAKE_CURRENT_BINARY_DIR}/libjong-bangla")
 configure_file(jong-bangla.conf.in "${HARNESS_DATA}/fcitx5/addon/jong-bangla.conf" @ONLY)
 configure_file(jong-bangla-inputmethod.conf
     "${HARNESS_DATA}/fcitx5/inputmethod/jong-bangla.conf" COPYONLY)
@@ -41,6 +42,18 @@ configure_file(tests/null-addon.conf
     "${HARNESS_DATA}/fcitx5/addon/jong-harness-null.conf" COPYONLY)
 configure_file(tests/null-inputmethod.conf
     "${HARNESS_DATA}/fcitx5/inputmethod/keyboard-us.conf" COPYONLY)
+
+# Installing files is an explicit user action; no daemon or profile is modified.
+set(JONG_ADDON_LIBRARY "libjong-bangla")
+configure_file(jong-bangla.conf.in "${CMAKE_CURRENT_BINARY_DIR}/install-data/jong-bangla.conf" @ONLY)
+install(TARGETS jong-bangla LIBRARY DESTINATION "${FCITX_INSTALL_ADDONDIR}")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/install-data/jong-bangla.conf"
+    DESTINATION "${FCITX_INSTALL_PKGDATADIR}/addon")
+install(FILES jong-bangla-inputmethod.conf
+    DESTINATION "${FCITX_INSTALL_PKGDATADIR}/inputmethod" RENAME jong-bangla.conf)
+# The stage checker reads resolved paths rather than assuming a distro layout.
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/install-layout.txt"
+    "${FCITX_INSTALL_ADDONDIR}\n${FCITX_INSTALL_PKGDATADIR}\n")
 
 enable_testing()
 add_executable(jong-fcitx5-harness tests/harness.cpp)
