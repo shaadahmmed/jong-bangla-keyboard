@@ -728,7 +728,9 @@ The build produces `target/fcitx5/libjong-bangla.so` and
 allows only it and a test passthrough engine, and uses temporary XDG configuration,
 cache and runtime directories. Build-local metadata contains the absolute library
 path and is unsuitable for installation. There is deliberately no install target.
-Only synthetic strings are recorded by the harness; the addon has no input logger.
+The [local installation plan](docs/v1.md#experimental-local-installation-plan) records
+the proposed file layout and removal contract. Only synthetic strings are recorded
+by the harness; the addon has no input logger.
 
 Ten suites check editing, boundaries/shortcuts, releases/modifiers/repeats, resolved
 text, invisible buffers, switching/focus/reset, context isolation, fallback preedit

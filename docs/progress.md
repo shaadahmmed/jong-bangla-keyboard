@@ -9,95 +9,79 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Current position
 
-- **Implemented:** Rust transliteration/composition, a separate C ABI and an
-  experimental C++ Fcitx5 addon with a real-dispatcher harness. Core rules and
-  composition remain independent of platform APIs.
-- **Unicode decision (2026-10-30):** retain exact case/code points for unsupported
-  Unicode, without lowercasing or normalization. Supported ASCII aliases and
-  phonetic behavior are unchanged. This is an explicit v1 compatibility exception;
-  see the [policy and evidence](v1.md#unicode-case-preservation-policy).
-- **Unicode evidence:** 60 authored policy rows independently specify engine and
-  pinned-reference outputs/code points: 51 deliberate differences, nine agreements.
-  Expansion, vowel/reph context, Greek sigma, Kelvin/fullwidth letters, combining
-  marks and supplementary Deseret are covered. These rows remain separate from
-  the 522,933 parity fixtures. The audit is bounded, not a full Unicode census.
-- **Current checks:** Rust formatting/Clippy/workspace tests/release build/API
-  documentation, pinned parity/policy comparison, local Markdown links and diff
-  whitespace passed. No production behavior changed; C++/desktop/resource checks
-  and the broader generated context audit were not rerun.
-- **Prior panic policy (`f914d45`, not revalidated beyond workspace tests):** caught
-  C-ABI payloads get one guarded cleanup attempt. A destructor-panic replacement
-  is deliberately retained; state is cleared before status 2. Five isolated child
-  scenarios cover cleanup/recovery and expected aborts. Arbitrary destructors can
-  retain memory, block or terminate; there is no blanket leak-freedom claim.
+- **Implemented:** platform-independent Rust transliteration/composition, a separate
+  C ABI and an experimental C++ Fcitx5 addon with an isolated dispatcher harness.
+- **Installation plan (2026-10-30):** reviewed the three-file `/usr` layout,
+  separate installed/build-local metadata, build/runtime dependencies, temporary
+  staging, removal and public-packaging choices. See the
+  [local installation plan](v1.md#experimental-local-installation-plan).
+- **User boundary:** prepare and test source/install support; the user alone will
+  perform actual installation and desktop configuration. No install rules yet.
+- **Current checks:** local Markdown links/anchors and diff whitespace passed.
+  This step changed documentation only; no Rust/C++/desktop/resource checks rerun.
+- **Prior Unicode policy (`d8b701f`, not rerun):** preserve exact unsupported
+  Unicode scalars without lowercasing/normalization; explicit v1 exception.
+  60 authored rows have separate engine/reference expectations: 51 deliberate
+  differences, nine agreements; separate from 522,933 pinned parity rows.
+  Rust checks and pinned parity/policy comparison passed in that step; the audit
+  is bounded, not a full Unicode census. See the
+  [policy evidence](v1.md#unicode-case-preservation-policy).
+- **Prior panic policy (`f914d45`, not rerun):** one guarded caught-payload cleanup
+  attempt; retain a destructor-panic replacement and clear state before status 2.
+  Five isolated child scenarios check recovery/expected aborts. Arbitrary
+  destructors may retain memory, block or terminate; no blanket leak-freedom claim.
 - **Prior resources (`00570df`, not rerun):** short-typing/Space medians
-  1.651–2.255 µs/action; added median time 0.834–1.474 µs/action. Added idle RSS
+  1.651–2.255 µs/action; added median time 0.834–1.474 µs/action; added idle RSS
   276–364 KiB. Heap/RSS stable from 1,000 to 2,000 sessions in both modes;
-  [methods, longer workloads and CSV](v1.md#synthetic-adapter-resource-measurements).
-- **Prior leak evidence (`8970a9c`, not rerun):** detector caught a deliberate
-  Rust leak, then found no reports in 20,000 C-ABI cycles / 10,001 freed sessions
-  and ten dispatcher suites. Rust/system accesses were not sanitizer-instrumented;
+  [methods and CSV](v1.md#synthetic-adapter-resource-measurements).
+- **Prior leak evidence (`8970a9c`, not rerun):** detector caught deliberate Rust
+  leakage; no reports in 20,000 C-ABI cycles / 10,001 freed sessions and ten
+  dispatcher suites. Rust/system accesses were not sanitizer-instrumented;
   source predates the revised panic policy.
-- **Desktop evidence retained:** user reports GTK3, Firefox and KWrite passes;
+- **Desktop evidence retained:** user-reported GTK3/Firefox/KWrite passes;
   captures establish GTK 3.24.52/GdkWaylandDisplay and Firefox 159.0/Wayland.
-  Earlier Kate typing/field isolation and Escape/pending Ctrl+Backspace evidence
-  remain. No installation or input-method settings changed.
+  Earlier Kate typing/field isolation and Escape/pending Ctrl+Backspace remain.
 - **Desktop limits:** private D-Bus/Fcitx IM-module route only; exact Qt runtime,
-  detailed case matrix, AltGr/dead/Compose, Electron/XWayland and KWin routes remain
-  untested/unrecorded. KWrite/Kate word navigation and committed-word deletion
-  remain deferred for v1 at the user's request. No general support claim.
-- **Adapter contract unchanged:** Ctrl+Backspace clears active raw input and
-  otherwise forwards; boundaries/navigation/shortcuts commit before the action.
-  Focus-out delivery belongs to Fcitx/frontend; switching commits once,
-  restrictions/reset discard, and contexts do not copy raw state.
+  detailed case matrix, AltGr/dead/Compose, Electron/XWayland and KWin routes
+  remain untested/unrecorded. KWrite/Kate word navigation and committed-word
+  deletion remain deferred for v1 at the user's request. No general support claim.
+- **Adapter contract:** active Ctrl+Backspace clears, otherwise forwards;
+  boundaries/navigation/shortcuts commit first. Focus-out belongs to
+  Fcitx/frontend; switching commits once, restrictions/reset discard, contexts
+  never copy raw state. Installation planning changes none of these behaviors.
 
 ## Latest completed step
 
-- **2026-10-30 — Settle the Unicode case-preservation policy.** Retained the
-  documented preservation contract and made its reference incompatibility explicit.
-  Added 60 MIT-authored policy rows with separate expected engine/reference text
-  and exact code points; no upstream source, tables or fixtures imported.
-- **Result:** the reference's UTF-16-unit lowercasing can expand İ into a phonetic
-  vowel, complete rri, or convert Kelvin sign into a joining k. Generic Unicode
-  lowercasing also differs from the reference for final sigma and supplementary
-  Deseret. Preserving copied characters avoids these transformations in v1.
-- **Regression coverage:** two focused tests check all 60 engine outputs/code
-  points and incremental preedit, scalar Backspace and commit. They replace the
-  earlier three-input assertion. The reference checker now asserts all 60 policy
-  expectations, labels differences as deliberate and keeps parity totals separate.
-- **Checks passed:** `cargo test --offline --test unicode_case` (two tests);
-  `cargo fmt --all -- --check`;
-  `cargo clippy --offline --workspace --all-targets -- -D warnings`;
-  `cargo test --offline --workspace` (20 composition, 351 conversion, two Unicode
-  policy, four FFI tests plus one parent-invoked ignored helper, two doctests);
-  `cargo build --offline --workspace --release`;
-  `cargo doc --offline --workspace --no-deps`.
-- **Reference check passed:** `node tools/check-reference.mjs
-  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` (522,933 parity rows plus 60 separate
-  policy rows: 51 deliberate differences, nine agreements). SHA-256 pinned;
-  Node v24.21.0, Unicode 17.0, ICU 78.3. `node --check tools/check-reference.mjs`,
-  inline Python validation of 964 local Markdown links/anchors, and
-  `git diff --check` passed.
-- **Limits:** no exhaustive Unicode parity claim; JavaScript casing tables depend
-  on runtime. No production algorithm changes, C++/desktop tests, leak detection,
-  resource collection or broader generated audit rerun. Older evidence above
-  remains identified by its original commit.
-- **Next:** review experimental local installation requirements as a separate
-  increment; public display name, package format and support scope remain open.
+- **2026-10-30 — Review experimental local installation requirements.** Documented
+  `/usr/lib/fcitx5/libjong-bangla.so` and the two `jong-bangla.conf` registrations
+  under `/usr/share/fcitx5/{addon,inputmethod}` using installed Fcitx5 CMake paths.
+- **Result:** installed metadata must use `Library=libjong-bangla`; ordinary
+  harness metadata retains its absolute build path. Defined exact artifact,
+  staged-loading, negative-control and clean-removal acceptance criteria.
+- **Evidence inspected:** current CMake/metadata, installed Fcitx5 5.1.23 CMake
+  configuration, tagged upstream loader/path sources and official addon tutorial;
+  `readelf -d target/fcitx5/libjong-bangla.so` identified runtime dependencies.
+  No upstream code/fixtures imported and no dependencies installed.
+- **Checks passed:** `python3 /tmp/jong-check-markdown-links.py` for local links
+  and anchors; `git diff --check`. Documentation-only change; no Cargo, C++,
+  desktop, reference, leak or resource checks rerun. Older results above are
+  prior evidence only.
+- **Limits:** plan only, no install target or staged-install result yet. Names
+  remain provisional; public package format, licensing manifest and support
+  scope remain open. No system/user files, daemon or input-method settings changed.
+- **Next:** implement the documented install rules and stage-check them before
+  handing the real installation instructions to the user.
 
 ## Next small implementation step
 
-1. **Proposed next increment:** review local installation requirements for the
-   experimental Fcitx5 addon: metadata names, loader paths, dependencies and clean
-   removal. Document a concrete plan and remaining choices before adding install
-   targets. Keep source edits separate from actual installation/system settings.
-2. Confirm display name and choose a package format before public packaging;
-   derive support scope from recorded validation, retaining known limitations.
-3. Revisit desktop routes only for a named uncovered case or reproducible failure;
-   retain existing smoke passes and the accepted KWrite/Kate limitation.
+1. Add install rules and separate installed metadata, preserving build-local tests.
+2. Build/check Release; stage under a temporary root and verify exact artifacts,
+   actual dispatcher loading, missing-library rejection and clean removal.
+3. Document tested installation/activation/removal commands; leave their real
+   execution and all desktop configuration to the user.
 
-**Done when:** the local installation plan is reviewable, with exact file/layout
-requirements, removal steps and unresolved public-packaging decisions identified.
+**Done when:** temporary staging passes and the user has concrete instructions
+for the experimental `/usr` source install, without public packaging/support claims.
 
 ## Completed steps
 
