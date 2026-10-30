@@ -11,86 +11,93 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Implemented:** Rust transliteration/composition, a separate C ABI and an
   experimental C++ Fcitx5 addon with a real-dispatcher harness. Core rules and
-  composition remain independent of platform APIs.
-- **Current automated evidence (2026-10-30):** Rust format/Clippy/workspace tests,
-  release builds, C++ format, both normal CTest cases, 522,933 pinned fixtures,
-  and leak-enabled ASan/UBSan lifecycle/dispatcher checks passed in this step.
-- **New resource evidence:** two sequential release core timing runs are recorded
-  in [v1.md](v1.md#local-resource-measurement-and-leak-check) and a 44-row CSV.
-  Short conversion medians: 0.594–2.032 µs; editing at an 8,192-scalar buffer's end:
-  about 1.19 ms/action. These are batch means on one CPU, not desktop guarantees.
-- **Leak result:** detector caught a deliberate Rust session leak, then reported
-  no leaks in 20,000 normal C-ABI cycles / 10,001 freed sessions and ten synthetic
-  dispatcher suites. Ran outside ptrace with leak detection enabled, without
-  suppressions. Rust/system memory accesses are not sanitizer-instrumented.
-- **Known memory limits:** caught panic payloads are deliberately forgotten at
-  the C boundary and can leak heap-owned payloads; this path was not induced.
-  Retained buffer capacity, RSS, peak memory and incremental Fcitx memory remain
-  unmeasured. No blanket leak-free claim or release resource budget.
+  composition remain independent of platform APIs; production behavior unchanged.
+- **New resource evidence (2026-10-30):** three matched Release dispatcher rounds
+  compare a static passthrough baseline with Jong, without a desktop frontend.
+  Short typing/Space medians: 1.651–2.255 µs/action with Jong; added median time
+  0.834–1.474 µs/action. Editing at 8,192 scalars: about 1.46 ms/action.
+- **Memory:** added RSS 276–364 KiB at idle; paired maximum snapshot additions
+  608–764 KiB. Used/reserved heap and RSS were stable from 1,000 to 2,000 sessions
+  in both modes in all runs. After context destruction, allocator-used bytes were
+  2,272 above baseline; remaining mapped/reserved pages are not proof of a leak.
+- **Evidence:** methods, eight-checkpoint interpretation and limits are in
+  [v1.md](v1.md#synthetic-adapter-resource-measurements); 48 memory rows, 48 timing
+  rows and build/source metadata are in `docs/measurements/2026-10-30-adapter-*`.
+  Peak snapshots are lower bounds; raw kernel HWM is approximate. No exact
+  transient heap peak, desktop-daemon memory or individual-event tail latency.
+- **Current checks:** Rust format/Clippy/workspace tests/release builds, 522,933
+  pinned fixtures, C++ formatting and normal/Release CTest passed in this step.
+- **Prior evidence (`8970a9c`, not rerun):** core conversion medians 0.594–2.032 µs;
+  editing at an 8,192-scalar buffer end about 1.19 ms/action, with a different
+  workload. Leak detector caught a deliberate Rust leak, then found no reports
+  in 20,000 C-ABI cycles / 10,001 freed sessions and ten dispatcher suites.
+  Rust/system memory accesses were not sanitizer-instrumented.
+- **Known failure-path limit:** caught panic payloads are deliberately forgotten
+  at the C boundary and can leak heap-owned payloads. This increment does not
+  induce/change that path or establish blanket leak freedom. Release budgets,
+  Unicode case policy and broader support remain open.
 - **Desktop evidence retained:** user reports GTK3, Firefox and KWrite passes;
   captures establish GTK 3.24.52/GdkWaylandDisplay and Firefox 159.0/Wayland.
-  Basic typing/field isolation also has earlier Kate evidence. Escape commits
-  without an added space/newline; pending Ctrl+Backspace works in KWrite.
+  Basic typing/field isolation has earlier Kate evidence. Escape and pending
+  Ctrl+Backspace work as recorded. No desktop tests rerun or installation changes.
 - **Desktop limits:** private D-Bus/Fcitx IM-module route only; exact Qt runtime,
-  detailed per-case matrix, AltGr/dead/Compose, Electron/XWayland and KWin routes
-  remain untested/unrecorded. No general desktop support claim. No routine reruns.
+  detailed case matrix, AltGr/dead/Compose, Electron/XWayland and KWin routes remain
+  untested/unrecorded. No general desktop support claim or routine reruns.
 - **Deferred for v1:** KWrite/Kate Bangla word navigation and committed-word
   deletion, at the user's request. No app-specific workaround/investigation.
 - **Adapter contract unchanged:** Ctrl+Backspace clears active raw input and
   otherwise forwards; boundaries/navigation/shortcuts commit before the action.
   Focus-out delivery belongs to Fcitx/frontend; switching commits once,
   restrictions/reset discard, and contexts do not copy raw state.
-- **Other limits:** Unicode case policy, adapter overhead and release budgets
-  remain open. No installation/global settings changes. GTK helper retest is
-  closed in `654d6d7` / `2db601b`; runtime evidence is in `57a101e`.
 
 ## Latest completed step
 
-- **2026-10-30 — Measure core latency and check synthetic heap ownership.**
-  Added `examples/measure.rs`, `adapters/fcitx5/tests/memory.cpp`, CTest wiring and
-  `tools/check-memory.py`; recorded methods, results and limits in README/v1.
-  No production engine/adapter behavior or dependencies changed.
-- **Latency:** `cargo build --offline --release --example measure`, then
-  `target/release/examples/measure` twice sequentially. Ryzen 5 5500U, Rust 1.99.1,
-  default release profile, 31 calibrated batches/workload, seven short inputs and
-  mixed buffers of 32/128/1,024/8,192 scalars. CSV preserves all 44 rows. Background
-  desktop load/frequency were uncontrolled; event-tail latency is not measured.
-- **Leak check:** `python3 tools/check-memory.py target/fcitx5-sanitized` passed
-  outside ptrace: deliberate Rust leak detected, then both normal workloads clean
-  with ASan/UBSan/LSan enabled. The sandbox run failed with LSan's ptrace error
-  and was correctly rejected. The run outside tracing passed.
+- **2026-10-30 — Measure synthetic adapter resources against a Fcitx baseline.**
+  Added optional Linux/glibc `tests/resources.cpp` and `tools/measure-adapter.py`,
+  README commands and recorded CSV/metadata. Default builds keep the probe off.
+  No engine/adapter policy change or new dependency; the probe uses system glibc.
+- **Collection passed:** `cmake -S adapters/fcitx5 -B target/fcitx5-release -G Ninja
+  -DCMAKE_BUILD_TYPE=Release -DJONG_BUILD_RESOURCE_PROBE=ON`,
+  `cmake --build target/fcitx5-release`, then
+  `python3 tools/measure-adapter.py target/fcitx5-release --output
+  target/adapter-resources-recorded --runs 3`. No concurrent builds/checks.
+  A one-round trial is excluded; CSV exports normalize line endings to LF.
 - **Checks passed:** `cargo fmt --all -- --check`;
   `cargo clippy --offline --workspace --all-targets -- -D warnings`;
   `cargo test --offline --workspace` (20 composition, 352 conversion, three FFI
   tests, two doctests); `cargo build --offline --workspace --release --examples`;
   `cargo build --offline --workspace --release`.
-- **Checks passed:** `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
-  (522,933 rows; existing three Unicode case gaps unchanged); normal/sanitized
-  CMake configure/build as documented; `ctest --test-dir target/fcitx5 --output-on-failure`
-  (both tests, ten dispatcher suites); `clang-format --dry-run --Werror` on
-  addon/header/harness/new memory source. Docs/data checks, unsanitized-detector
-  rejection, debug-measurement rejection and `git diff --check` passed.
-  Clippy initially rejected a constant assertion in the new example;
-  changing the debug-build rejection to an explicit exit resolved it.
-- **Limits/next:** no panic-path leak-freedom, RSS/retention measurement or adapter
-  timing result. No generated context audits or desktop tests rerun. Next measure
-  adapter overhead and added memory against a defined Fcitx baseline.
+- **Checks passed:** `node tools/check-reference.mjs
+  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` (522,933 rows; existing three Unicode
+  case differences unchanged); normal Debug CMake configure/build and
+  `ctest --test-dir target/fcitx5 --output-on-failure`; Release CTest with the
+  same flags under `target/fcitx5-release` (both tests / ten dispatcher suites).
+  `clang-format --dry-run --Werror` on addon/header/harness/memory/resources.
+- **Tool/data validation:** Debug builds and sanitizer instrumentation rejected;
+  failed/malformed checkpoint children, incomplete timing output and nonfinite
+  timing samples rejected. CSV shape/pairs, source/build hashes, doc links and
+  `git diff --check` passed. No sanitizer/leak or generated context audits rerun.
+- **Limits/next:** isolated synchronous dispatch, one CPU, uncontrolled background
+  load and batch means only. Retention readings are allocator/process totals,
+  not object-level reachability. Next proposed increment is the caught-panic
+  failure-policy review, kept separate from resource measurement.
 
 ## Next small implementation step
 
-1. **Proposed next increment:** measure synthetic adapter overhead and incremental
-   live/peak memory against an explicit Fcitx-only baseline, with matched build
-   modes/workloads. Keep frontend/desktop conclusions bounded to actual evidence.
-2. Distinguish reusable buffer capacity from unreachable leaks. The existing
-   panic-payload retention policy needs a separate focused failure-path review
-   before any claim covering caught panics; do not fold that behavior change into
-   measurement tooling. Set release budgets only after enough evidence exists.
-3. Keep packaging/global installation and Unicode case policy separate. Revisit
-   a desktop route only for a named uncovered case or reproducible new failure;
-   retain current smoke passes and the accepted KWrite/Kate limitation.
+1. **Proposed next increment:** review the C-ABI caught-panic payload policy.
+   Independently exercise ordinary heap-owning and destructor-panicking payloads;
+   preserve the rule that no unwind crosses C. Decide whether to keep the
+   documented exception or change containment, with focused failure-path tests.
+2. Keep Unicode lowercasing a separate behavior decision: three known reference
+   differences remain. No new compatibility gaps were found in current fixtures.
+3. Keep packaging/global installation separate; choose display name/package
+   format and validated support scope before public packaging. Revisit a desktop
+   route only for a named uncovered case or reproducible new failure; retain the
+   current smoke passes and accepted KWrite/Kate limitation.
 
-**Done when:** adapter time/memory measurements have a reproducible baseline and
-explicit limits. Core timings and normal-path synthetic leak checks are complete.
+**Done when:** the panic containment policy and its memory/termination limits have
+explicit failure-path evidence. Do not promise blanket leak freedom or desktop
+performance from the completed normal-path synthetic measurements.
 
 ## Completed steps
 

@@ -1,0 +1,49 @@
+{
+  "started_utc": "2026-10-30T05:08:01.425027+00:00",
+  "runs": 3,
+  "build": "/mnt/Academic/Projects/jong-board/target/fcitx5-release",
+  "platform": "Linux-7.3.0-4-cachyos-x86_64-with-glibc2.44",
+  "cpuinfo": "processor\t: 0\nvendor_id\t: AuthenticAMD\ncpu family\t: 23\nmodel\t\t: 104\nmodel name\t: AMD Ryzen 5 5500U with Radeon Graphics\nstepping\t: 1\nmicrocode\t: 0x8608108\ncpu MHz\t\t: 2020.839\ncache size\t: 512 KB\nphysical id\t: 0\nsiblings\t: 12\ncore id\t\t: 0\ncpu cores\t: 6\napicid\t\t: 0\ninitial apicid\t: 0\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 16\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip rdpid overflow_recov succor smca\nbugs\t\t: sysret_ss_attrs spectre_v1 spectre_v2 spec_store_bypass retbleed smt_rsb srso ibpb_no_ret spectre_v2_user vmscape\nbogomips\t: 4191.95\nTLB size\t: 3072 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 48 bits physical, 48 bits virtual\npower management: ts ttp tm hwpstate cpb eff_freq_ro [13] [14]",
+  "libc": [
+    "glibc",
+    "2.44"
+  ],
+  "python": "3.14.8 (main, Oct 13 2026, 10:33:10) [GCC 16.2.1 20260810]",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Arch Linux rust 1:1.99.1-1)",
+  "cxx": "c++ (GCC) 16.2.1 20260810",
+  "fcitx5": "5.1.23",
+  "cmake": "cmake version 4.4.5",
+  "git_head": "8970a9c3bda2c60f78fdc3f5b81cc90ba07e7475",
+  "git_status": "M adapters/fcitx5/CMakeLists.txt\n?? adapters/fcitx5/tests/resources.cpp\n?? tools/__pycache__/\n?? tools/measure-adapter.py",
+  "sha256": {
+    "adapters/fcitx5/tests/resources.cpp": "dd7d5f529b068be2b4ada096a6b52ff161732e07970c2b55a1543ada3255cf8a",
+    "adapters/fcitx5/CMakeLists.txt": "16dd5570151cadfc01ac88f36ef7853eee13282b3464998fbbf8325cfe60a4fc",
+    "tools/measure-adapter.py": "4a2af26bfcaf250168429e1f52557f535fddb26ef3febe76483a490149ab37a4",
+    "adapters/fcitx5/addon.cpp": "650ed83ab94011efb36441371c630ec7a76c320339d3a98bc0869f641c2f144d",
+    "adapters/fcitx5/ffi/src/lib.rs": "ddfe8c2b487cef69d772ae44946690d53a2b76ff0cab548572175b9130bb5c96",
+    "src/composition.rs": "0de7f50cfbaee23b3296b06568513bb0037c9c6d8f9974b20e956a6be3dfe151"
+  },
+  "binary_sha256": "3dbff88e55ec009b3c62ea672c12984214500081112eda5722346013ef45dcf1",
+  "addon_sha256": "d7e438fcbb2731e7f02a186f95ff69e2842e3722960e66170ce8e1b9fd75e31b",
+  "cmake_cache_sha256": "6b9f88970730c1b6d8bea74c0a7e194f28f075dc12da96b435e402436a34f257",
+  "cmake_flags": [
+    "CMAKE_BUILD_TYPE:STRING=Release",
+    "CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++",
+    "CMAKE_CXX_FLAGS:STRING=",
+    "CMAKE_CXX_FLAGS_DEBUG:STRING=-g",
+    "CMAKE_CXX_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG",
+    "CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG",
+    "CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG",
+    "CMAKE_EXE_LINKER_FLAGS:STRING=",
+    "CMAKE_SHARED_LINKER_FLAGS:STRING=",
+    "CMAKE_CXX_FLAGS-ADVANCED:INTERNAL=1",
+    "CMAKE_CXX_FLAGS_DEBUG-ADVANCED:INTERNAL=1",
+    "CMAKE_CXX_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1",
+    "CMAKE_CXX_FLAGS_RELEASE-ADVANCED:INTERNAL=1",
+    "CMAKE_CXX_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1"
+  ],
+  "allocator_environment": {},
+  "rust_environment": {},
+  "method": "fresh processes; alternating baseline/Jong order; memory before timing; 31 batch means/workload; >=5ms adaptive calibration; key presses only; no frontend, event loop, CPU pinning, malloc_trim or document retention",
+  "finished_utc": "2026-10-30T05:08:48.941722+00:00"
+}

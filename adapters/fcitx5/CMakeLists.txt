@@ -57,3 +57,19 @@ target_compile_options(jong-ffi-memory PRIVATE -Wall -Wextra -Wpedantic -Werror)
 target_link_libraries(jong-ffi-memory PRIVATE jong_ffi Threads::Threads ${CMAKE_DL_LIBS} m)
 add_test(NAME ffi-memory-lifecycle COMMAND jong-ffi-memory)
 set_tests_properties(ffi-memory-lifecycle PROPERTIES TIMEOUT 120)
+
+# Optional Linux/glibc resource probe. Run manually in Release, without sanitizers;
+# timing/memory observations are not correctness tests or release thresholds.
+option(JONG_BUILD_RESOURCE_PROBE "Build the optional Linux/glibc resource probe" OFF)
+if(JONG_BUILD_RESOURCE_PROBE)
+    if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        message(FATAL_ERROR "The resource probe requires Linux/glibc")
+    endif()
+    add_executable(jong-fcitx5-resources tests/resources.cpp)
+    target_compile_definitions(jong-fcitx5-resources PRIVATE
+        JONG_HARNESS_DATA="${HARNESS_DATA}"
+        JONG_RESOURCE_RELEASE=$<STREQUAL:$<CONFIG>,Release>)
+    target_compile_options(jong-fcitx5-resources PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    target_link_libraries(jong-fcitx5-resources PRIVATE Fcitx5::Core)
+    add_dependencies(jong-fcitx5-resources jong-bangla)
+endif()
