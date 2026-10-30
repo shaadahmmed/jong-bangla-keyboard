@@ -12,89 +12,81 @@ Dates use the project's Asia/Dhaka timezone.
 - **Implemented:** Rust transliteration/composition APIs, separate C-ABI wrapper
   and experimental C++ Fcitx5 addon with a real-dispatcher harness. Core rules and
   composition logic remain independent of platform APIs.
-- **Automated baseline refreshed (2026-10-30):** Rust format/Clippy/workspace tests,
-  release build, C++ format, normal/sanitized dispatcher harnesses and all 522,933
-  pinned reference fixtures passed. No engine or adapter source changed.
-- **Manual evidence retained:** basic typing/field isolation in GTK3, Firefox,
-  KWrite and Kate; pending Ctrl+Backspace in KWrite; user-confirmed Escape commit.
-  Escape preserves the pending word without a space/newline and clears raw input.
-  Reset/destruction/cancel still discard; manual Escape edge cases are not inferred.
+- **Automated baseline (prior evidence, 2026-10-30):** Rust format/Clippy/workspace
+  tests, release build, C++ format, normal/sanitized dispatcher harnesses and all
+  522,933 pinned fixtures passed in `5ed5bdc`. Not rerun for this helper-only fix.
+- **Latest manual evidence:** the user reports `browser-test` (Firefox) and
+  `qt-test` (KWrite) passed without issues. Per-case results and requested runtime/
+  protocol details were not supplied; do not infer optional-route coverage.
+- **GTK helper corrected:** the new GTK3 window failed before opening because
+  PyGI selected Gdk 4.0 alongside Gtk 3.0. Reproduced the failure and explicitly
+  pinned Gdk 3.0 in the active helper and future launcher template. Both imports
+  now pass without warnings. GTK desktop behavior still needs the user's rerun.
+- **Earlier manual evidence retained:** basic typing/field isolation in GTK3,
+  Firefox, KWrite and Kate; pending Ctrl+Backspace in KWrite; confirmed Escape
+  commit without a space/newline. No detailed Escape edge-case coverage inferred.
 - **Adapter contract:** Ctrl+Backspace clears active raw input and otherwise
   forwards. Space/Enter/navigation/application shortcuts commit before the action.
-  Fcitx/frontend own focus-out delivery; ordinary focused switching commits once,
-  while restrictions/reset discard. Per-context raw state is not copied.
-- **Deferred for v1 by user:** KWrite/Kate Bangla word navigation and committed-word
-  deletion. Cause remains unproven; no application-specific workaround or new
-  investigation. The accepted limitation does not block the first release.
-- **Desktop readiness:** installed versions refreshed; private D-Bus/Fcitx startup
-  and Jong metadata discovery checked. A temporary helper prepares disposable
-  GTK3/Firefox fields and a KWrite file. No agent-run GUI smoke evidence exists.
-  Requested native Wayland windows use explicit Fcitx IM modules over private
-  D-Bus, not a validated KWin text-input protocol or XWayland route.
-- **Limits:** actual per-app runtime/protocol details, remaining desktop checklist,
-  Unicode case policy and performance remain incomplete. No installation or
-  global settings changes. See the [checklist](v1.md#remaining-desktop-smoke-checklist)
-  and [evidence](v1.md#fcitx5-local-feasibility-result).
+  Fcitx/frontend own focus-out delivery; focused switching commits once,
+  restrictions/reset discard, and per-context raw state is not copied.
+- **Deferred for v1:** KWrite/Kate Bangla word navigation and committed-word
+  deletion, at the user's request. Cause remains unproven; the new overall Qt pass
+  does not reverse this deferral. No application-specific workaround/investigation.
+- **Limits:** temporary helpers request native Wayland with explicit Fcitx GTK/Qt
+  modules over private D-Bus; KWin text-input protocols and XWayland are unverified.
+  Installed inventory is recorded, actual runtime fields remain pending. No engine,
+  adapter, installation or global settings changes. See the
+  [checklist](v1.md#remaining-desktop-smoke-checklist) and
+  [evidence](v1.md#fcitx5-local-feasibility-result).
 
 ## Latest completed step
 
-- **2026-10-30 — Refresh automated baseline and prepare desktop handoff.** All
-  checks below passed; installed environment and remaining manual observations are
-  recorded in README/spec. Source, fixture expectations and adapter policy are
-  unchanged. The user will perform the GUI checks next; they are not complete.
-- **Rust commands:** `cargo fmt --all -- --check`;
-  `cargo clippy --offline --workspace --all-targets -- -D warnings`;
-  `cargo test --offline --workspace` (20 composition, 352 conversion, three FFI
-  tests, two doctests); `cargo build --offline --workspace --release` — all passed.
-- **C++ format:** `clang-format --dry-run --Werror adapters/fcitx5/addon.cpp
-  adapters/fcitx5/jong.h adapters/fcitx5/tests/harness.cpp` — passed.
-- **Normal harness:** `cmake -S adapters/fcitx5 -B target/fcitx5 -G Ninja
-  -DCMAKE_BUILD_TYPE=Debug`; `cmake --build target/fcitx5`;
-  `ctest --test-dir target/fcitx5 --output-on-failure` — passed, ten suites.
-- **Sanitized harness:** `cmake -S adapters/fcitx5 -B target/fcitx5-sanitized
-  -G Ninja -DCMAKE_BUILD_TYPE=Debug
-  -DCMAKE_CXX_FLAGS='-fsanitize=address,undefined -fno-omit-frame-pointer'
-  -DCMAKE_SHARED_LINKER_FLAGS='-fsanitize=address,undefined'
-  -DCMAKE_EXE_LINKER_FLAGS='-fsanitize=address,undefined'`;
-  `cmake --build target/fcitx5-sanitized`;
-  `ASAN_OPTIONS=detect_leaks=0 ctest --test-dir target/fcitx5-sanitized
-  --output-on-failure` — passed, ten suites. C++ ASan/UBSan only; leak detection
-  disabled, Rust/system libraries uninstrumented.
-- **Reference:** `node tools/check-reference.mjs
-  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` — passed all 522,933 authored rows;
-  parser hash verified by checker. Three known Unicode case differences remain.
-- **Setup check:** `bash -n /tmp/jong-manual-smoke-20261030.sh`, GTK source syntax,
-  isolated helper `--check`, and `bash /tmp/jong-manual-smoke-20261030.sh <<< exit`
-  passed. Socket creation required sandbox escalation; final isolated startup and
-  shell exit succeeded without opening GUI apps. Early helper metadata/check
-  issues were corrected before handoff. The helper is temporary, not installed.
-- **Environment:** package inventory plus system Python GTK runtime recorded in
-  the spec. Offscreen KWrite `--help` stalled and was interrupted; no app runtime
-  evidence resulted. Active GUI processes could not be inspected from the sandbox.
-- **Documentation checks:** `python3 /tmp/jong-check-desktop-handoff.py` — local
-  links/anchors, unchanged contract/deferral/history and helper source checks
-  passed; `git diff --check` passed. Logs: `/tmp/jong-automated-checks-20261030`.
-- **Prior evidence, not rerun:** generated 83,353-input mixed-context audit,
-  1,350 vowel-pair and 302 standalone audits. Prior user smoke/Escape observations
-  are retained, not newly reproduced. KWrite/Kate investigation stays deferred.
-- **Next action:** user runs the remaining desktop checklist and reports runtime
-  fields and exact failures. Do not repeat confirmed Escape or deferred word edits.
+- **2026-10-30 — Fix the manual GTK helper's Gdk dependency selection and record
+  browser/Qt results.** The user reports both browser and Qt tests passed, while
+  GTK could not start. This was a helper import error, not an observed engine or
+  adapter failure. GTK manual acceptance remains pending.
+- **Fix:** add `gi.require_version('Gdk', '3.0')` before `from gi.repository import
+  Gdk, Gtk` in `/tmp/jong-manual-smoke-20261030.sh` and the user's active
+  `/tmp/jong-manual-20261030.xL7mN9/gtk-test.py`. Existing `gtk-test` commands read
+  that patched file immediately; no private-daemon restart is needed.
+- **Checks:** `python3 /tmp/jong-check-gtk-helper-fix.py` — reproduced the original
+  import error in a fresh subprocess, then checked both corrected sources:
+  Gtk/Gdk 3.0, GTK runtime 3.24.52, no stderr/warnings; matching active/template
+  sources, Python syntax and `bash -n /tmp/jong-manual-smoke-20261030.sh` passed.
+  These checks do not open a window or establish desktop input behavior.
+- **Docs checks:** the same script checks local links/anchors, unchanged adapter
+  contract, v1 deferral and historical entries, 50–100-line handoff and
+  documentation-only repository changes; `git diff --check` passed.
+- **Validation correction:** the previous helper's syntax-only check missed the
+  runtime dependency conflict. Both Gtk and Gdk must be selected before importing
+  namespaces; explicitly selecting Gdk 4.0 would keep the Gtk 3.0 conflict.
+- **Prior evidence, not rerun:** `5ed5bdc` records 20 composition, 352 conversion,
+  three FFI tests and two doctests, 522,933 reference rows, format/Clippy/release,
+  and ten dispatcher suites in normal/C++ ASan/UBSan builds. Leak detection was
+  disabled and Rust/system libraries were not instrumented. Generated 83,353-input
+  mixed-context, 1,350 vowel-pair and 302 standalone audits also remain prior
+  evidence. Three known Unicode case differences remain unchanged.
+- **Scope:** repository changes are evidence/handoff docs; temporary helper files
+  are outside Git. No dependencies, transliteration rules, adapter behavior or
+  system input-method settings changed. KWrite/Kate word editing stays deferred.
+- **Next action:** rerun GTK in the existing private shell and report results and
+  the printed runtime/backend line; retain the browser/Qt passes.
 
 ## Next small implementation step
 
-1. Run the prepared private-session helper and test GTK3 first, then Firefox and
-   KWrite using disposable text. Record runtime versions and observed backends;
-   distinguish those observations from the installed inventory and forced flags.
-2. Complete the [remaining checklist](v1.md#remaining-desktop-smoke-checklist):
-   focus/return, switching, modifiers/repeats, boundaries/shortcuts, pointer
-   relocation, restricted fields and already configured AltGr/Compose routes.
-   Mark unavailable routes explicitly; keep existing positive evidence.
-3. Review the user's observations, reproduce/fix new scoped adapter failures and
-   update evidence. Keep KWrite/Kate word editing deferred; packaging/global
-   installation and performance remain separate increments.
+1. In the existing private test shell run `gtk-test` again and complete the
+   [desktop checklist](v1.md#remaining-desktop-smoke-checklist) with disposable
+   text. If the shell was closed, rerun `/tmp/jong-manual-smoke-20261030.sh` first.
+2. Record the GTK runtime/backend line, Firefox version/Window Protocol and KWrite
+   application/Qt versions. Mark optional AltGr/Compose routes unavailable when
+   not configured; do not rerun the passed browser/Qt tests just for this fix.
+3. Review GTK observations and any reproducible new adapter issue. Keep Escape
+   confirmed and KWrite/Kate word editing deferred; packaging/global installation,
+   Unicode case policy and performance remain separate work.
 
-**Done when:** per-app desktop observations and limitations are reproducible.
-Automated readiness is complete; manual frontend acceptance remains pending.
+**Done when:** the corrected GTK helper runs, desktop observations and remaining
+runtime/protocol limitations are recorded. Browser/Qt are user-reported passes;
+GTK and missing metadata remain pending.
 
 ## Completed steps
 
