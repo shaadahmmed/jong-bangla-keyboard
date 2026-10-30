@@ -12,31 +12,32 @@ Dates use the project's Asia/Dhaka timezone.
 - **Implemented:** Rust transliteration/composition, a separate C ABI and an
   experimental C++ Fcitx5 addon with a real-dispatcher harness. Core rules and
   composition remain independent of platform APIs.
-- **New failure policy (2026-10-30):** caught C-ABI panic payloads get one guarded
-  cleanup attempt. Ordinary payloads are released; a destructor-panic replacement
-  is deliberately retained. Partial operation state is cleared before status 2.
-- **Failure evidence:** five isolated Linux child scenarios verify heap ownership,
-  empty/error output and fresh input after recovery, replacement retention, and
-  SIGABRT on operation/cleanup double panics and a panicking runtime hook. See
-  [policy and tradeoff](v1.md#c-abi-caught-panic-policy-review). No unwind into C.
-- **Limits:** arbitrary destructors can retain memory, block or terminate. The
-  cleanup attempt introduces an additional double-panic termination exposure.
-  OOM/abort, invalid pointers and abort-profile builds remain unrecoverable; no
-  blanket leak-freedom claim. No production injection API or global hook change.
-- **Current checks:** Rust formatting/Clippy/workspace tests/release builds,
-  Release FFI tests, 522,933 pinned fixtures, C++ formatting and Debug/Release
-  CTest passed. No leak detector, timing collection or desktop test rerun.
-- **Prior resource evidence (`00570df`, not rerun):** three matched Release
-  dispatcher rounds: short-typing/Space medians 1.651–2.255 µs/action; added
-  median time 0.834–1.474 µs/action. Editing at 8,192 scalars about 1.46 ms/action.
-  Added idle RSS 276–364 KiB; paired maximum snapshot additions 608–764 KiB.
-  Stable used/reserved heap and RSS from 1,000 to 2,000 sessions in both modes.
-  Methods, CSV and build hashes remain in
-  [resource evidence](v1.md#synthetic-adapter-resource-measurements).
+- **Unicode decision (2026-10-30):** retain exact case/code points for unsupported
+  Unicode, without lowercasing or normalization. Supported ASCII aliases and
+  phonetic behavior are unchanged. This is an explicit v1 compatibility exception;
+  see the [policy and evidence](v1.md#unicode-case-preservation-policy).
+- **Unicode evidence:** 60 authored policy rows independently specify engine and
+  pinned-reference outputs/code points: 51 deliberate differences, nine agreements.
+  Expansion, vowel/reph context, Greek sigma, Kelvin/fullwidth letters, combining
+  marks and supplementary Deseret are covered. These rows remain separate from
+  the 522,933 parity fixtures. The audit is bounded, not a full Unicode census.
+- **Current checks:** Rust formatting/Clippy/workspace tests/release build/API
+  documentation, pinned parity/policy comparison, local Markdown links and diff
+  whitespace passed. No production behavior changed; C++/desktop/resource checks
+  and the broader generated context audit were not rerun.
+- **Prior panic policy (`f914d45`, not revalidated beyond workspace tests):** caught
+  C-ABI payloads get one guarded cleanup attempt. A destructor-panic replacement
+  is deliberately retained; state is cleared before status 2. Five isolated child
+  scenarios cover cleanup/recovery and expected aborts. Arbitrary destructors can
+  retain memory, block or terminate; there is no blanket leak-freedom claim.
+- **Prior resources (`00570df`, not rerun):** short-typing/Space medians
+  1.651–2.255 µs/action; added median time 0.834–1.474 µs/action. Added idle RSS
+  276–364 KiB. Heap/RSS stable from 1,000 to 2,000 sessions in both modes;
+  [methods, longer workloads and CSV](v1.md#synthetic-adapter-resource-measurements).
 - **Prior leak evidence (`8970a9c`, not rerun):** detector caught a deliberate
   Rust leak, then found no reports in 20,000 C-ABI cycles / 10,001 freed sessions
-  and ten dispatcher suites. Rust/system
-  accesses were not sanitizer-instrumented. Source predates the new panic policy.
+  and ten dispatcher suites. Rust/system accesses were not sanitizer-instrumented;
+  source predates the revised panic policy.
 - **Desktop evidence retained:** user reports GTK3, Firefox and KWrite passes;
   captures establish GTK 3.24.52/GdkWaylandDisplay and Firefox 159.0/Wayland.
   Earlier Kate typing/field isolation and Escape/pending Ctrl+Backspace evidence
@@ -52,51 +53,51 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Latest completed step
 
-- **2026-10-30 — Review and narrow the caught-panic payload exception.** Replaced
-  unconditional forgetting with one guarded cleanup attempt; documented the
-  deliberate replacement leak and additional destructor termination exposure.
-  Added test-only subprocess probes; engine and normal adapter behavior unchanged.
-- **Regression evidence:** ordinary heap-payload test failed against the old
-  policy, then all five scenarios passed after the change. Weak references and
-  destructor counters check ownership; expected SIGABRT plus runtime diagnostics
-  check unrecoverable cases behind a test-only C ABI. Core dumps disabled in
-  children only. The ignored helper is explicitly invoked by its parent test.
-- **Checks passed:** `cargo fmt --all -- --check`;
+- **2026-10-30 — Settle the Unicode case-preservation policy.** Retained the
+  documented preservation contract and made its reference incompatibility explicit.
+  Added 60 MIT-authored policy rows with separate expected engine/reference text
+  and exact code points; no upstream source, tables or fixtures imported.
+- **Result:** the reference's UTF-16-unit lowercasing can expand İ into a phonetic
+  vowel, complete rri, or convert Kelvin sign into a joining k. Generic Unicode
+  lowercasing also differs from the reference for final sigma and supplementary
+  Deseret. Preserving copied characters avoids these transformations in v1.
+- **Regression coverage:** two focused tests check all 60 engine outputs/code
+  points and incremental preedit, scalar Backspace and commit. They replace the
+  earlier three-input assertion. The reference checker now asserts all 60 policy
+  expectations, labels differences as deliberate and keeps parity totals separate.
+- **Checks passed:** `cargo test --offline --test unicode_case` (two tests);
+  `cargo fmt --all -- --check`;
   `cargo clippy --offline --workspace --all-targets -- -D warnings`;
-  `cargo test --offline --workspace` (20 composition, 352 conversion, four FFI
-  tests plus one parent-invoked ignored helper, two doctests);
-  `cargo test --offline --release -p jong-bangla-fcitx5-ffi` (four passed,
-  one parent-invoked ignored helper); `cargo build --offline --workspace --release
-  --examples`; `cargo build --offline --workspace --release`.
-- **Checks passed:** `node tools/check-reference.mjs
-  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` (522,933 rows; existing Unicode policy
-  probes unchanged); `clang-format --dry-run --Werror` on addon/header/harness/
-  memory/resources, after fixing header comment wrapping.
-- **Checks passed:** `cmake -S adapters/fcitx5 -B target/fcitx5 -G Ninja
-  -DCMAKE_BUILD_TYPE=Debug`, `cmake --build target/fcitx5`, and
-  `ctest --test-dir target/fcitx5 --output-on-failure`; same configure/build/CTest
-  under `target/fcitx5-release` with `-DCMAKE_BUILD_TYPE=Release
-  -DJONG_BUILD_RESOURCE_PROBE=ON` (two tests / ten dispatcher suites each).
-- **Documentation:** README/header/specification agree on cleanup, recovery and
-  limits. Local Markdown links and `git diff --check` passed. No LeakSanitizer,
-  resource collection, generated context audits or desktop tests rerun; earlier
-  evidence above is identified by its original commit.
-- **Next:** review the separate Unicode case-preservation decision before changing
-  deterministic transliteration behavior. Public packaging remains separate.
+  `cargo test --offline --workspace` (20 composition, 351 conversion, two Unicode
+  policy, four FFI tests plus one parent-invoked ignored helper, two doctests);
+  `cargo build --offline --workspace --release`;
+  `cargo doc --offline --workspace --no-deps`.
+- **Reference check passed:** `node tools/check-reference.mjs
+  /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js` (522,933 parity rows plus 60 separate
+  policy rows: 51 deliberate differences, nine agreements). SHA-256 pinned;
+  Node v24.21.0, Unicode 17.0, ICU 78.3. `node --check tools/check-reference.mjs`,
+  inline Python validation of 964 local Markdown links/anchors, and
+  `git diff --check` passed.
+- **Limits:** no exhaustive Unicode parity claim; JavaScript casing tables depend
+  on runtime. No production algorithm changes, C++/desktop tests, leak detection,
+  resource collection or broader generated audit rerun. Older evidence above
+  remains identified by its original commit.
+- **Next:** review experimental local installation requirements as a separate
+  increment; public display name, package format and support scope remain open.
 
 ## Next small implementation step
 
-1. **Proposed next increment:** review the three known Unicode case differences
-   (İ, É and Σ). Compare preserving unsupported text with the pinned reference's
-   lowercasing, including Unicode expansion/context interactions. Document the
-   tradeoff and resolve the behavior decision before changing the preservation
-   contract; add focused evidence for whichever policy is chosen.
-2. Keep display name, package format and validated support scope separate.
+1. **Proposed next increment:** review local installation requirements for the
+   experimental Fcitx5 addon: metadata names, loader paths, dependencies and clean
+   removal. Document a concrete plan and remaining choices before adding install
+   targets. Keep source edits separate from actual installation/system settings.
+2. Confirm display name and choose a package format before public packaging;
+   derive support scope from recorded validation, retaining known limitations.
 3. Revisit desktop routes only for a named uncovered case or reproducible failure;
    retain existing smoke passes and the accepted KWrite/Kate limitation.
 
-**Done when:** the Unicode case policy is explicit, with exact output evidence and
-remaining exceptions recorded; preserve the current contract until that decision.
+**Done when:** the local installation plan is reviewable, with exact file/layout
+requirements, removal steps and unresolved public-packaging decisions identified.
 
 ## Completed steps
 

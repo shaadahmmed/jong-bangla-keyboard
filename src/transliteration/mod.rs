@@ -33,8 +33,9 @@ enum Context {
 ///
 /// The ASCII aliases ABCEFHKLMPQVWX match their lowercase forms; other letters
 /// remain case-sensitive. Matching follows verified rule priority. Unmatched
-/// Unicode characters pass through without normalization; supported parts of
-/// an otherwise unsupported sequence may still convert.
+/// Unicode characters retain their exact case and code points without Unicode
+/// lowercasing or normalization. This deliberately differs from the pinned Avro
+/// reference. Supported parts of an otherwise unsupported sequence may still convert.
 ///
 /// Vowel context comes only from raw tokens matched within this call, not from
 /// copied Bangla. The input is never modified or retained, and calls share no

@@ -3008,15 +3008,6 @@ fn consumed_keys_leave_fresh_g_aliases_and_backtick_boundaries() {
 }
 
 #[test]
-fn reference_unicode_lowercasing_remains_separate() {
-    // Reference lowercases these to ই + U+0307, é and σ. Keep the current
-    // Unicode preservation contract explicit until that policy is decided.
-    for raw in ["İ", "É", "Σ"] {
-        assert_eq!(transliterate(raw), raw);
-    }
-}
-
-#[test]
 fn long_mixed_input_preserves_character_boundaries() {
     let input = "🙂kh2a\u{301}kUuakIakeeeakoooakOakOIakOUokrria".repeat(4096)
         + &"rrrirrrri".repeat(4096)

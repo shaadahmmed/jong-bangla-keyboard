@@ -1,0 +1,65 @@
+# Independently authored for Jong Bangla under MIT; not imported fixtures.
+# Policy: preserve unsupported Unicode; these are not all parity expectations.
+# Compare with jsAvroPhonetic v1.1.4 at d3790172ebff92d43f0294bc51fed1fca7c80039.
+# Parser SHA-256: 312ed3438ebf0a69f6de38036572ec39cdbafe3ef53f500caa402aaa704c2b32.
+# Columns: input, engine output, engine code points, reference output, reference code points (tabs).
+İ	İ	U+0130	ই̇	U+0987 U+0307
+É	É	U+00C9	é	U+00E9
+Σ	Σ	U+03A3	σ	U+03C3
+kİ	কİ	U+0995 U+0130	কি̇	U+0995 U+09BF U+0307
+kÉ	কÉ	U+0995 U+00C9	কé	U+0995 U+00E9
+kΣ	কΣ	U+0995 U+03A3	কσ	U+0995 U+03C3
+İa	İআ	U+0130 U+0986	ই̇আ	U+0987 U+0307 U+0986
+Éa	Éআ	U+00C9 U+0986	éআ	U+00E9 U+0986
+Σa	Σআ	U+03A3 U+0986	σআ	U+03C3 U+0986
+İi	İই	U+0130 U+0987	ই̇ই	U+0987 U+0307 U+0987
+Éi	Éই	U+00C9 U+0987	éই	U+00E9 U+0987
+Σi	Σই	U+03A3 U+0987	σই	U+03C3 U+0987
+İy	İইয়	U+0130 U+0987 U+09DF	ই̇ইয়	U+0987 U+0307 U+0987 U+09DF
+Éy	Éইয়	U+00C9 U+0987 U+09DF	éইয়	U+00E9 U+0987 U+09DF
+Σy	Σইয়	U+03A3 U+0987 U+09DF	σইয়	U+03C3 U+0987 U+09DF
+İr	İর	U+0130 U+09B0	ই̇র	U+0987 U+0307 U+09B0
+Ér	Éর	U+00C9 U+09B0	éর	U+00E9 U+09B0
+Σr	Σর	U+03A3 U+09B0	σর	U+03C3 U+09B0
+İx	İএক্স	U+0130 U+098F U+0995 U+09CD U+09B8	ই̇এক্স	U+0987 U+0307 U+098F U+0995 U+09CD U+09B8
+Éx	Éএক্স	U+00C9 U+098F U+0995 U+09CD U+09B8	éএক্স	U+00E9 U+098F U+0995 U+09CD U+09B8
+Σx	Σএক্স	U+03A3 U+098F U+0995 U+09CD U+09B8	σএক্স	U+03C3 U+098F U+0995 U+09CD U+09B8
+İw	İও	U+0130 U+0993	ই̇ও	U+0987 U+0307 U+0993
+Éw	Éও	U+00C9 U+0993	éও	U+00E9 U+0993
+Σw	Σও	U+03A3 U+0993	σও	U+03C3 U+0993
+rrİ	ররİ	U+09B0 U+09B0 U+0130	ঋ̇	U+098B U+0307
+rrÉ	ররÉ	U+09B0 U+09B0 U+00C9	ররé	U+09B0 U+09B0 U+00E9
+rrΣ	ররΣ	U+09B0 U+09B0 U+03A3	ররσ	U+09B0 U+09B0 U+03C3
+İ́	İ́	U+0130 U+0301	ই̇́	U+0987 U+0307 U+0301
+É́	É́	U+00C9 U+0301	é́	U+00E9 U+0301
+Σ́	Σ́	U+03A3 U+0301	σ́	U+03C3 U+0301
+É	এ́	U+098F U+0301	এ́	U+098F U+0301
+İ	ঈ̇	U+0988 U+0307	ঈ̇	U+0988 U+0307
+ΟΣ	ΟΣ	U+039F U+03A3	οσ	U+03BF U+03C3
+ΣΑ	ΣΑ	U+03A3 U+0391	σα	U+03C3 U+03B1
+AΣ	আΣ	U+0986 U+03A3	আσ	U+0986 U+03C3
+K	K	U+212A	ক	U+0995
+Kh	Kহ	U+212A U+09B9	খ	U+0996
+Ka	Kআ	U+212A U+0986	কা	U+0995 U+09BE
+Kr	Kর	U+212A U+09B0	ক্র	U+0995 U+09CD U+09B0
+Kx	Kএক্স	U+212A U+098F U+0995 U+09CD U+09B8	ক্ষ	U+0995 U+09CD U+09B7
+Ａ	Ａ	U+FF21	ａ	U+FF41
+Ａi	Ａই	U+FF21 U+0987	ａই	U+FF41 U+0987
+é	é	U+00E9	é	U+00E9
+σ	σ	U+03C3	σ	U+03C3
+ς	ς	U+03C2	ς	U+03C2
+i̇	ই̇	U+0987 U+0307	ই̇	U+0987 U+0307
+kİa	কİআ	U+0995 U+0130 U+0986	কি̇আ	U+0995 U+09BF U+0307 U+0986
+İ`a	İআ	U+0130 U+0986	ই̇আ	U+0987 U+0307 U+0986
+İ🙂i	İ🙂ই	U+0130 U+1F642 U+0987	ই̇🙂ই	U+0987 U+0307 U+1F642 U+0987
+İ‍i	İ‍ই	U+0130 U+200D U+0987	ই̇‍ই	U+0987 U+0307 U+200D U+0987
+𐐀	𐐀	U+10400	𐐀	U+10400
+𐐨	𐐨	U+10428	𐐨	U+10428
+ẞ	ẞ	U+1E9E	ß	U+00DF
+ß	ß	U+00DF	ß	U+00DF
+İ̇	İ̇	U+0130 U+0307	ই̇̇	U+0987 U+0307 U+0307
+Kİ	কİ	U+0995 U+0130	কি̇	U+0995 U+09BF U+0307
+rrİa	ররİআ	U+09B0 U+09B0 U+0130 U+0986	ঋ̇আ	U+098B U+0307 U+0986
+kÉi	কÉই	U+0995 U+00C9 U+0987	কéই	U+0995 U+00E9 U+0987
+kΣi	কΣই	U+0995 U+03A3 U+0987	কσই	U+0995 U+03C3 U+0987
+কিİ2	কিİ২	U+0995 U+09BF U+0130 U+09E8	কিই̇২	U+0995 U+09BF U+0987 U+0307 U+09E8

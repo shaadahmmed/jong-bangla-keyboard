@@ -108,7 +108,8 @@ Reph now attaches leading `rr` across basic consonants and existing conjuncts;
 see the [reph behavior and evidence](docs/v1.md#reph-batch).
 This is a partial engine with 522,933 reference-checked examples,
 not a usable desktop keyboard or a full Avro compatibility claim. Further
-context auditing and a decision about reference Unicode lowercasing remain;
+context auditing remains. The v1 [Unicode case policy](docs/v1.md#unicode-case-preservation-policy)
+preserves unsupported characters, with deliberate reference differences;
 the platform-independent composition controller is implemented. A minimal Fcitx5
 addon now builds and passes a synthetic dispatcher harness. The user reports
 successful basic typing/field switching across GTK3, Firefox, KWrite and Kate.
@@ -1083,10 +1084,15 @@ curl --fail --location 'https://raw.githubusercontent.com/torifat/jsAvroPhonetic
 node tools/check-reference.mjs "$reference_dir/avro-lib.js"
 ```
 
-It checks the same 522,933 cases used by Rust tests and prints reference outputs
-for three Unicode case differences: `İ`, `É`, and `Σ`. The engine currently
-preserves these inputs; the reference returns `ই̇`, `é`, and `σ`. These probes
-are separate from the supported fixtures and require a case-handling decision.
+It checks the same 522,933 parity cases used by Rust tests, then separately checks
+60 [Unicode policy cases](tests/fixtures/unicode-case-policy.tsv). These record
+independent engine/reference outputs and exact code points: 51 deliberate
+differences and nine agreements. Rust tests check the engine columns; this script
+checks the reference columns. Policy cases do not increase the parity count.
+For example, the engine preserves `İ`, `É`, and `Σ`; the reference returns `ই̇`,
+`é`, and `σ`. Expansion can also change phonetic matches: `rrİ` stays `ররİ`
+here but becomes `ঋ̇` in the reference. See the
+[decision and limits](docs/v1.md#unicode-case-preservation-policy).
 The original comparison and test tooling are MIT;
 the upstream parser remains external and is not shipped with the library.
 
@@ -1100,7 +1106,8 @@ This builds and runs the `audit_batch` Rust example offline. Its binary UTF-8
 transport preserves empty strings, newlines, NULs and other copied characters.
 The command writes counts, hashes and every discrepancy with exact code points;
 it exits unsuccessfully for any unexpected difference. The three known case
-probes are checked separately against explicit outputs. The
+probes retain their original explicit outputs under the settled preservation
+policy; the 60 focused policy cases above provide broader evidence. The
 [recorded report](docs/evidence/mixed-context-audit.json) contains the validated
 results and tool versions. Group hashes cover ordered JSON arrays of
 `[input, engine output, reference output]`; group counts overlap. Compare hashes

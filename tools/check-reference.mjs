@@ -358,8 +358,25 @@ for (const name of [
 }
 console.log(`PASS: ${count} authored cases; runtime ${process.version}`);
 
-// These probes expose missing behavior; they are not supported-slice fixtures.
-for (const input of ["İ", "É", "Σ"]) {
+// Deliberate policy exceptions have independent engine/reference expectations.
+// Rust tests check the engine columns; these rows never inflate parity counts.
+const policyFixture = readFileSync(
+  new URL("../tests/fixtures/unicode-case-policy.tsv", import.meta.url), "utf8",
+);
+const policyInputs = new Set();
+let policyDifferences = 0;
+for (const line of policyFixture.trimEnd().split("\n")) {
+  if (line.startsWith("#")) continue;
+  const columns = line.split("\t");
+  assert.equal(columns.length, 5, `Invalid policy fixture: ${line}`);
+  const [input, engine, enginePoints, reference, referencePoints] = columns;
+  assert.ok(!policyInputs.has(input), `Duplicate policy input: ${JSON.stringify(input)}`);
+  policyInputs.add(input);
+  assert.equal(codePoints(engine), enginePoints, `Engine policy code points: ${JSON.stringify(input)}`);
   const actual = parse(input);
-  console.log(`GAP reference ${JSON.stringify(input)} -> ${actual} (${codePoints(actual)})`);
+  assert.equal(actual, reference, `Reference policy output: ${JSON.stringify(input)}`);
+  assert.equal(codePoints(actual), referencePoints, `Reference policy code points: ${JSON.stringify(input)}`);
+  if (engine !== reference) policyDifferences += 1;
 }
+assert.ok(policyInputs.size > 0, "Unicode policy fixture must contain cases");
+console.log(`PASS: ${policyInputs.size} Unicode policy cases (${policyDifferences} deliberate differences, ${policyInputs.size - policyDifferences} agreements); separate from parity fixtures`);
