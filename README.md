@@ -768,7 +768,17 @@ These sanitizers instrument the C++ addon and harness, not the Rust static libra
 or the system Fcitx5 libraries. The command above disables leak detection because
 LeakSanitizer fails under a ptrace execution sandbox; it is not a leak check.
 Rust boundary tests separately check invalid scalar arguments, UTF-8 spans and
-recovery after a caught panic.
+recovery after a caught panic. On Linux, workspace tests also run five isolated
+failure scenarios: ordinary heap-payload cleanup, a panicking payload destructor,
+double panics during operation/cleanup, and a panicking runtime hook. Expected
+aborts stay in child processes with core dumps disabled. The ignored child helper
+is invoked by the parent test; it needs no separate manual run.
+
+The boundary attempts to release a caught payload once. If its destructor panics,
+the replacement payload is deliberately retained, and the session is cleared.
+Double panics and panicking hooks still abort; this policy is not a guarantee of
+leak freedom or recovery from arbitrary destructor code. See the
+[failure-policy evidence](docs/v1.md#c-abi-caught-panic-policy-review).
 
 For a leak check, use the same sanitized build in an ordinary terminal outside
 ptrace/debugger tracing, with Python 3 available:

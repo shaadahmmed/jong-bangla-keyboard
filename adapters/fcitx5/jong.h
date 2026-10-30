@@ -36,7 +36,9 @@ enum JongAction {
 // or reentrant calls on a handle. Output spans are borrowed, UTF-8,
 // byte-counted, not NUL-terminated; copy before the next action/free. Never
 // dereference an empty span. Only use spans on success. Invalid action/scalar
-// leaves state unchanged; caught panic clears state. OOM/abort/invalid pointers
+// leaves state unchanged; caught panic clears state. Rust attempts payload
+// cleanup once; if cleanup panics, its replacement payload is retained.
+// OOM/abort/invalid pointers, panicking hooks and double panics during cleanup
 // cannot recover.
 JongSession *jong_session_new(void);
 void jong_session_free(JongSession *session);

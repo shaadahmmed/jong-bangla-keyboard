@@ -4,6 +4,9 @@
 use jong_bangla_core::{Composition, CompositionKey, KeyEffect};
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
+#[cfg(all(test, target_os = "linux"))]
+mod panic_tests;
+
 const OK: u32 = 0;
 const INVALID: u32 = 1;
 const PANIC: u32 = 2;
@@ -45,10 +48,13 @@ impl JongResult {
 fn contain_panic<T>(f: impl FnOnce() -> T) -> Option<T> {
     match catch_unwind(AssertUnwindSafe(f)) {
         Ok(value) => Some(value),
-        // A custom panic payload can itself panic in Drop. Do not let that
-        // unwind through the ABI either. This only leaks on a caught panic.
         Err(payload) => {
-            std::mem::forget(payload);
+            // Reclaim ordinary payloads, but contain a panic in their Drop too.
+            // Do not recursively drop replacement payloads: arbitrary Drop code
+            // can panic forever. This exceptional replacement remains leaked.
+            if let Err(replacement) = catch_unwind(AssertUnwindSafe(|| drop(payload))) {
+                std::mem::forget(replacement);
+            }
             None
         }
     }
@@ -143,7 +149,7 @@ mod tests {
     use super::*;
 
     // Copy spans while the result's handle is still uniquely borrowed here.
-    fn strings(result: &JongResult) -> (String, String) {
+    pub(super) fn strings(result: &JongResult) -> (String, String) {
         assert_eq!(result.status, OK);
         let copy = |ptr, len| {
             if len == 0 {
