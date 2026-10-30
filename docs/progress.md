@@ -13,14 +13,14 @@ Dates use the project's Asia/Dhaka timezone.
   C ABI and an experimental C++ Fcitx5 addon with an isolated dispatcher harness.
 - **Active issue:** user reports intermittent loss of the initial আ while typing
   `amar` in Brave/WhatsApp: `a` displays আ, then `m` leaves only ম. About 70% of
-  attempts work; Kate and Brave's address bar did not reproduce it. Similar
-  OpenBangla behavior is a user observation. Application/frontend reset is a
-  hypothesis, not an established cause.
+  attempts work; Kate, Brave's address bar and WhatsApp in Firefox did not
+  reproduce it. Similar OpenBangla behavior is a user observation. Brave/message
+  editor interaction is the remaining investigation scope; an application/frontend
+  reset is a hypothesis, not an established cause.
   See the [desktop evidence](v1.md#fcitx5-local-feasibility-result).
-- **Separate report:** held Backspace is slow in WhatsApp with multiple Bangla
-  keyboards, but normal in Kate and Brave's address bar. Pending versus committed
-  text, other web fields/browser behavior and timings are still unknown.
-  Neither report is fixed or deferred for v1; no speculative workaround was added.
+- **Backspace correction:** user retested and withdrew the slow held-Backspace
+  report; it works normally everywhere they tested. No fix/performance improvement
+  was made. Brave's first-character loss remains unresolved, without a v1 deferral.
 - **Runtime limit:** installed Brave is 1:1.98.62-1; no Brave main process is visible
   here. Its actual version, input method/build, launch flags and Wayland/XWayland
   route need confirmation. No system settings, daemon or application data changed.
@@ -54,15 +54,14 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Latest completed step
 
-- **2026-10-30 — Narrow both reported symptoms to WhatsApp's message box.**
-  Recorded the user's `a` → আ, then `m` → ম failure, approximate success rate,
-  Kate comparison, separate held-Backspace report and unconfirmed runtime details.
-  The user subsequently confirmed both first-character loss and slow held
-  Backspace are absent in Brave's address bar; Backspace is also normal in Kate.
-  No other ordinary web field or WhatsApp/Firefox result has been supplied.
-  Source inspection identifies reset as a possible buffer-clearing path, without
-  evidence that the browser actually sends it. Related upstream reports are linked
-  as investigative context, not a diagnosis or fix.
+- **2026-10-30 — Record successful WhatsApp/Firefox comparison and correction.**
+  User reports no `amar` loss in WhatsApp Web in Firefox and retracts the slow
+  held-Backspace report after retesting everywhere. The remaining observed failure
+  is intermittent first-character loss in Brave/WhatsApp; Kate and Brave's address
+  bar also pass. No other ordinary web field in Brave has been reported.
+  Updated the specification/handoff without changing code or settings. The actual
+  browser input route and any reset event remain unconfirmed; upstream reports
+  are investigative context, not a diagnosis or fix.
 - **Prior triage checks (`8aae525`, not rerun for this follow-up):**
   `cargo run --offline --quiet --example convert -- 'a am ama amar mar amar amar amar'`
   produced `আ আম আমা আমার মার আমার আমার আমার`;
@@ -78,19 +77,20 @@ Dates use the project's Asia/Dhaka timezone.
 - **Limits:** no desktop reproduction, browser event trace, timing measurement,
   full Rust workspace checks, reference comparison, sanitizer or install check.
   Earlier complete engineering checks are prior evidence. No behavior fix claimed.
-- **Next:** compare WhatsApp in Firefox if already available and an ordinary web
-  field in Brave; establish empty-message and pending/committed-text behavior.
+- **Next:** establish Brave's runtime/input route, then compare an ordinary web
+  field and empty-message versus subsequent-word behavior if investigation proceeds.
 
 ## Next small implementation step
 
-1. Compare WhatsApp Web in Firefox if already available, and another ordinary web
-   field in Brave. Reuse the successful Kate/address-bar comparisons.
-2. Confirm actual Brave version/input route and Jong activation/build. Compare
+1. Confirm actual Brave version/input route and Jong activation/build. Reuse the
+   successful Kate/address-bar and WhatsApp/Firefox comparisons; the Backspace
+   slowdown report is withdrawn. Firefox is a verified alternative for this case.
+2. Compare another ordinary web field in Brave and
    empty-message versus subsequent-word behavior using disposable input. If needed,
    arrange an isolated frontend comparison without changing persistent settings.
 3. Change the adapter only after a reproducible event sequence identifies a defect;
-   preserve reset/focus isolation and editable preedit. Keep browser key loss,
-   repeat latency and the accepted Kate word-editing deferral distinct.
+   preserve reset/focus isolation and editable preedit. Keep browser key loss and
+   the accepted Kate word-editing deferral distinct.
 
 **Done when:** the failing field/input route and a reproducible sequence are known,
 with observed results recorded. Installed-route smoke confirmation and public
