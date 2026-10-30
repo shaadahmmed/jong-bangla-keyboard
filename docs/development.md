@@ -1,0 +1,160 @@
+# Development guide
+
+Run all commands from the repository root. For contribution scope and review
+expectations, read [CONTRIBUTING.md](../CONTRIBUTING.md). For installation, use
+the separate [installation guide](installation.md).
+
+## Build and check the Rust workspace
+
+Use Rust/Cargo **1.99.1 or newer**, with rustfmt and Clippy. This initial baseline
+is the toolchain actually validated, not evidence that older Rust cannot work.
+The library uses the Rust 2024 edition and has no external dependencies.
+
+From the repository root:
+
+```sh
+cargo fmt --all -- --check
+cargo clippy --offline --workspace --all-targets -- -D warnings
+cargo test --offline --workspace
+cargo build --offline --workspace --release
+cargo doc --offline --workspace --no-deps
+cargo run --offline --example convert -- 'kh12T'
+```
+
+The conversion example prints `খ১২ট`. See the [typing guide](typing.md) for
+more examples and composition controls. API docs are generated in `target/doc/`.
+
+## Build and check the Fcitx5 experiment
+
+This builds an experimental addon and runs synthetic input through the installed
+Fcitx5 dispatcher. It does not install the addon, connect a desktop frontend, or
+change input-method settings. Limited user-reported desktop smoke observations
+are recorded in the [specification](v1.md#fcitx5-local-feasibility-result);
+the full frontend matrix is still unverified.
+
+In addition to Rust, use Fcitx5 Core/Utils development headers **5.1.23 or newer**,
+a C++20 compiler, CMake **3.25 or newer**, and Ninja. These are build requirements;
+only the versions in the [environment record](v1.md#fcitx5-local-feasibility-result)
+have been validated. Cargo remains offline and adds no registry dependencies.
+
+```sh
+cmake -S adapters/fcitx5 -B target/fcitx5 -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake --build target/fcitx5
+ctest --test-dir target/fcitx5 --output-on-failure
+```
+
+The build produces `target/fcitx5/libjong-bangla.so` and
+`target/fcitx5/jong-fcitx5-harness`. The harness loads that actual shared addon,
+allows only it and a test passthrough engine, and uses temporary XDG configuration,
+cache and runtime directories. Build-local metadata contains the absolute library
+path and is unsuitable for installation. Separate install rules generate metadata
+without a build path; see [experimental installation](installation.md#install-the-experimental-addon)
+for the explicit install/removal procedure and
+[layout decisions](v1.md#experimental-local-installation-plan).
+Only synthetic strings are recorded by the harness; the addon has no input logger.
+
+Ten suites check editing, boundaries/shortcuts, releases/modifiers/repeats, resolved
+text, invisible buffers, switching/focus/reset, context isolation, fallback preedit
+and explicit preedit clicks. They verify UTF-8 cursor offsets and ordered
+preedit/commit/application-key effects, including framework-owned shortcuts and
+both focus-out commit owners. A simulated frontend commit is not evidence that a
+real toolkit honors that path. Actual AltGr/compose completion, document relocation,
+Wayland/XWayland delivery and desktop UI still need systematic smoke tests.
+Use the [remaining desktop checklist](v1.md#remaining-desktop-smoke-checklist)
+to report those observations and application runtime details.
+The user has manually confirmed that the updated Escape behavior works. For
+repeat tests, `ki` then Escape should keep কি, and the next `i` should start a
+fresh ই. Restart the private test daemon
+with the rebuilt addon; an already loaded process keeps its old implementation.
+The precise
+[boundary contract and limits](v1.md#fcitx5-local-feasibility-result) are recorded
+alongside the product specification.
+
+For C++ formatting (validated with clang-format 23.1.4):
+
+```sh
+clang-format --dry-run --Werror adapters/fcitx5/addon.cpp adapters/fcitx5/jong.h adapters/fcitx5/tests/harness.cpp
+```
+
+The Rust workspace checks above include the C-ABI crate through `--workspace`. To repeat
+the C++ AddressSanitizer/UndefinedBehaviorSanitizer check as well:
+
+```sh
+cmake -S adapters/fcitx5 -B target/fcitx5-sanitized -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_CXX_FLAGS='-fsanitize=address,undefined -fno-omit-frame-pointer' \
+  -DCMAKE_SHARED_LINKER_FLAGS='-fsanitize=address,undefined' \
+  -DCMAKE_EXE_LINKER_FLAGS='-fsanitize=address,undefined'
+cmake --build target/fcitx5-sanitized
+ASAN_OPTIONS=detect_leaks=0 ctest --test-dir target/fcitx5-sanitized --output-on-failure
+```
+
+These sanitizers instrument the C++ addon and harness, not the Rust static library
+or the system Fcitx5 libraries. The command above disables leak detection because
+LeakSanitizer fails under a ptrace execution sandbox; it is not a leak check.
+Rust boundary tests separately check invalid scalar arguments, UTF-8 spans and
+recovery after a caught panic. On Linux, workspace tests also run five isolated
+failure scenarios: ordinary heap-payload cleanup, a panicking payload destructor,
+double panics during operation/cleanup, and a panicking runtime hook. Expected
+aborts stay in child processes with core dumps disabled. The ignored child helper
+is invoked by the parent test; it needs no separate manual run.
+
+The boundary attempts to release a caught payload once. If its destructor panics,
+the replacement payload is deliberately retained, and the session is cleared.
+Double panics and panicking hooks still abort; this policy is not a guarantee of
+leak freedom or recovery from arbitrary destructor code. See the
+[failure-policy evidence](v1.md#c-abi-caught-panic-policy-review).
+
+For a leak check, use the same sanitized build in an ordinary terminal outside
+ptrace/debugger tracing, with Python 3 available:
+
+```sh
+python3 tools/check-memory.py target/fcitx5-sanitized
+```
+
+This first requires LeakSanitizer to detect an intentionally lost Rust session,
+then runs 20,000 C-ABI lifecycle cycles and the ten dispatcher suites with
+ASan/UBSan/leak detection enabled. It fails if the detector is unavailable, if
+the build lacks leak detection, or if a normal workload reports an error. The
+normal lifecycle test is also included in CTest. No suppression file is used.
+Rust heap allocations are observed through the system allocator, as verified by
+the deliberate leak; this does not instrument Rust memory accesses. These
+synthetic tests do not exercise every failure path or a live desktop daemon.
+See the [results and panic-path limit](v1.md#local-resource-measurement-and-leak-check).
+
+## Library structure
+
+[`src/lib.rs`](../src/lib.rs) exposes `jong_bangla_core::transliterate` and the
+`Composition`, `CompositionKey`, and `KeyEffect` types.
+[`src/composition.rs`](../src/composition.rs) owns the editable raw buffer and
+converted preedit, plus platform-independent editing actions. It reuses the
+transliterator without retaining committed text. Regression sequences are in
+[`tests/composition.rs`](../tests/composition.rs).
+
+The transliterator lives in private modules under `src/transliteration/`:
+
+- [`mod.rs`](../src/transliteration/mod.rs): the scanner, per-call context, and
+  explicit matching priority across rule families.
+- [`case.rs`](../src/transliteration/case.rs): selective ASCII aliases before rule matching;
+  Unicode and the remaining case distinctions are preserved.
+- [`rules.rs`](../src/transliteration/rules.rs): independently authored mapping
+  tables, retaining their verified order and provenance comments.
+- [`vowels.rs`](../src/transliteration/vowels.rs): fixed vowel-sign escapes and
+  ordinary contextual vowels; the scanner preserves ng/nasal-r priority and
+  handles ordinary `rri` plus `aZ`/`oZ`.
+- [`symbols.rs`](../src/transliteration/symbols.rs): ordered punctuation, symbol escapes,
+  and empty-output backticks; all reset raw phonetic context.
+- [`reph.rs`](../src/transliteration/reph.rs): leading-`rr` attachment, raw preceding-r
+  guard, and terminal `rrr` exception.
+- [`following_r.rs`](../src/transliteration/following_r.rs): shared following-`r`
+  attachment and exceptions based on raw keys.
+
+The experimental Fcitx5 addon is under
+[`adapters/fcitx5`](../adapters/fcitx5/CMakeLists.txt), with a separate Rust C-ABI
+crate and C++ framework code. The core still forbids unsafe code and has no
+platform dependencies. See [the architecture plan](v1.md#proposed-architecture).
+
+Source comments keep the API contract and reasons for non-obvious matching
+choices close to the code. Detailed rule behavior belongs in
+[the behavior notes](v1.md#transliteration-api); exhaustive examples live
+in tests and fixtures. Crate documentation keeps three transliteration examples;
+the `Composition` type includes an executable word-deletion example.

@@ -20,9 +20,11 @@ User instructions take precedence over this guide; update the docs when they cha
   [Latest completed step](docs/progress.md#latest-completed-step), and
   [Next small implementation step](docs/progress.md#next-small-implementation-step)
   sections of the progress log for the current handoff.
-- Read relevant sections of [README.md](README.md) for orientation, usage, and
-  check commands, and [docs/v1.md](docs/v1.md) for requirements and decisions
-  needed by the task. Do not read either document in full by default.
+- Use [README.md](README.md) for orientation and links to the focused guides.
+  Read relevant sections of [docs/development.md](docs/development.md) for check
+  commands, [CONTRIBUTING.md](CONTRIBUTING.md) for contribution expectations, and
+  [docs/v1.md](docs/v1.md) for requirements and decisions needed by the task.
+  Do not read these documents in full by default.
 - Read historical progress entries only when investigating an earlier decision
   or regression, or when the current handoff lacks necessary context.
 - Read affected code, related tests/fixtures, and check tooling as needed. Use
@@ -139,6 +141,9 @@ User instructions take precedence over this guide; update the docs when they cha
   typing must not depend on network access or a separate service.
 - Write original project code under MIT. Check provenance and license obligations
   before introducing third-party source, rule tables, fixtures, or assets.
+- Keep the README focused on the project introduction, status, quick start and
+  links. Put detailed commands in the focused `docs/` guides; record notable
+  user-facing changes under `Unreleased` in `CHANGELOG.md`.
 - Record behavioral decisions in `docs/v1.md`; update usage/build instructions
   alongside code. Explain tradeoffs without creating unnecessary documents.
 - Never overwrite unrelated work or change system input-method settings as a
