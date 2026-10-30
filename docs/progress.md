@@ -14,14 +14,16 @@ Dates use the project's Asia/Dhaka timezone.
   composition logic remain independent of platform APIs.
 - **Automated baseline (prior evidence, 2026-10-30):** Rust format/Clippy/workspace
   tests, release build, C++ format, normal/sanitized dispatcher harnesses and all
-  522,933 pinned fixtures passed in `5ed5bdc`. Not rerun for this helper-only fix.
-- **Latest manual evidence:** the user reports `browser-test` (Firefox) and
-  `qt-test` (KWrite) passed without issues. Per-case results and requested runtime/
-  protocol details were not supplied; do not infer optional-route coverage.
-- **GTK helper corrected:** the new GTK3 window failed before opening because
-  PyGI selected Gdk 4.0 alongside Gtk 3.0. Reproduced the failure and explicitly
-  pinned Gdk 3.0 in the active helper and future launcher template. Both imports
-  now pass without warnings. GTK desktop behavior still needs the user's rerun.
+  522,933 pinned fixtures passed in `5ed5bdc`. Not rerun for this docs-only update.
+- **Latest manual evidence:** the user reports Firefox and KWrite passed without
+  issues, then confirmed GTK works after its helper fix. All three private-session
+  test apps have an overall user-reported pass. Per-case results and requested
+  runtime/protocol fields were not supplied; optional-route coverage is unrecorded.
+- **GTK helper fixed and retest confirmed:** `654d6d7` records the reproduced Gtk 3 /
+  Gdk 4 conflict and explicit Gdk 3.0 selection in the temporary active helper and
+  launcher template. Prior import checks passed without warnings; the user's
+  successful GTK report closes the failed-startup retest. No further rerun needed
+  solely for this import fix.
 - **Earlier manual evidence retained:** basic typing/field isolation in GTK3,
   Firefox, KWrite and Kate; pending Ctrl+Backspace in KWrite; confirmed Escape
   commit without a space/newline. No detailed Escape edge-case coverage inferred.
@@ -30,63 +32,56 @@ Dates use the project's Asia/Dhaka timezone.
   Fcitx/frontend own focus-out delivery; focused switching commits once,
   restrictions/reset discard, and per-context raw state is not copied.
 - **Deferred for v1:** KWrite/Kate Bangla word navigation and committed-word
-  deletion, at the user's request. Cause remains unproven; the new overall Qt pass
-  does not reverse this deferral. No application-specific workaround/investigation.
-- **Limits:** temporary helpers request native Wayland with explicit Fcitx GTK/Qt
+  deletion, at the user's request. Cause remains unproven; overall Qt success does
+  not reverse the deferral. No application-specific workaround/investigation.
+- **Limits:** private helpers request native Wayland with explicit Fcitx GTK/Qt
   modules over private D-Bus; KWin text-input protocols and XWayland are unverified.
-  Installed inventory is recorded, actual runtime fields remain pending. No engine,
-  adapter, installation or global settings changes. See the
+  Installed inventory is recorded, actual runtime fields remain unrecorded. No
+  installation/global settings changes. See the
   [checklist](v1.md#remaining-desktop-smoke-checklist) and
   [evidence](v1.md#fcitx5-local-feasibility-result).
 
 ## Latest completed step
 
-- **2026-10-30 — Fix the manual GTK helper's Gdk dependency selection and record
-  browser/Qt results.** The user reports both browser and Qt tests passed, while
-  GTK could not start. This was a helper import error, not an observed engine or
-  adapter failure. GTK manual acceptance remains pending.
-- **Fix:** add `gi.require_version('Gdk', '3.0')` before `from gi.repository import
-  Gdk, Gtk` in `/tmp/jong-manual-smoke-20261030.sh` and the user's active
-  `/tmp/jong-manual-20261030.xL7mN9/gtk-test.py`. Existing `gtk-test` commands read
-  that patched file immediately; no private-daemon restart is needed.
-- **Checks:** `python3 /tmp/jong-check-gtk-helper-fix.py` — reproduced the original
-  import error in a fresh subprocess, then checked both corrected sources:
-  Gtk/Gdk 3.0, GTK runtime 3.24.52, no stderr/warnings; matching active/template
-  sources, Python syntax and `bash -n /tmp/jong-manual-smoke-20261030.sh` passed.
-  These checks do not open a window or establish desktop input behavior.
-- **Docs checks:** the same script checks local links/anchors, unchanged adapter
-  contract, v1 deferral and historical entries, 50–100-line handoff and
-  documentation-only repository changes; `git diff --check` passed.
-- **Validation correction:** the previous helper's syntax-only check missed the
-  runtime dependency conflict. Both Gtk and Gdk must be selected before importing
-  namespaces; explicitly selecting Gdk 4.0 would keep the Gtk 3.0 conflict.
-- **Prior evidence, not rerun:** `5ed5bdc` records 20 composition, 352 conversion,
-  three FFI tests and two doctests, 522,933 reference rows, format/Clippy/release,
-  and ten dispatcher suites in normal/C++ ASan/UBSan builds. Leak detection was
-  disabled and Rust/system libraries were not instrumented. Generated 83,353-input
-  mixed-context, 1,350 vowel-pair and 302 standalone audits also remain prior
-  evidence. Three known Unicode case differences remain unchanged.
-- **Scope:** repository changes are evidence/handoff docs; temporary helper files
-  are outside Git. No dependencies, transliteration rules, adapter behavior or
-  system input-method settings changed. KWrite/Kate word editing stays deferred.
-- **Next action:** rerun GTK in the existing private shell and report results and
-  the printed runtime/backend line; retain the browser/Qt passes.
+- **2026-10-30 — Record successful GTK manual retest.** The user confirmed GTK
+  works after the import correction, joining the earlier browser/Qt passes. Updated
+  spec/handoff to close GTK's pending startup/retest without inferring detailed
+  per-case or optional-route observations. Runtime/backend fields remain missing.
+- **Scope:** documentation only. No source, fixtures, temporary helpers, running
+  sessions, dependencies or system input-method settings changed in this step.
+  Keep Escape confirmed and KWrite/Kate word editing deferred.
+- **Checks this step:** `python3 /tmp/jong-check-gtk-confirmation-docs.py` — local
+  links/anchors, confirmed GTK evidence, removal of stale rerun requirements,
+  unchanged adapter contract, v1 deferral and history, 50–100-line handoff and
+  documentation-only scope passed. `git diff --check` passed. No Cargo, CMake,
+  sanitizer, reference or helper runtime checks rerun for this evidence-only update.
+- **Prior evidence, not rerun:** `654d6d7` reproduced the old helper import failure
+  and checked corrected active/template imports: Gtk/Gdk 3.0, GTK runtime 3.24.52,
+  no warnings; shell/Python syntax passed. This was agent-side import evidence;
+  the new desktop confirmation is the user's observation.
+- **Prior automated baseline, not rerun:** `5ed5bdc` records 20 composition,
+  352 conversion, three FFI tests, two doctests, 522,933 reference rows,
+  format/Clippy/release, and ten normal/C++ ASan/UBSan dispatcher suites.
+  Leak detection was disabled; Rust/system libraries were not instrumented.
+  Generated 83,353-input mixed-context, 1,350 vowel-pair and 302 standalone audits
+  remain prior evidence. Three known Unicode case differences are unchanged.
+- **Next action:** collect missing runtime/backend fields and mark optional routes
+  tested/unavailable/untested, retaining the three app passes without routine reruns.
 
 ## Next small implementation step
 
-1. In the existing private test shell run `gtk-test` again and complete the
-   [desktop checklist](v1.md#remaining-desktop-smoke-checklist) with disposable
-   text. If the shell was closed, rerun `/tmp/jong-manual-smoke-20261030.sh` first.
-2. Record the GTK runtime/backend line, Firefox version/Window Protocol and KWrite
-   application/Qt versions. Mark optional AltGr/Compose routes unavailable when
-   not configured; do not rerun the passed browser/Qt tests just for this fix.
-3. Review GTK observations and any reproducible new adapter issue. Keep Escape
-   confirmed and KWrite/Kate word editing deferred; packaging/global installation,
-   Unicode case policy and performance remain separate work.
+1. Record the GTK runtime/backend line, Firefox version/Window Protocol and KWrite
+   application/Qt versions from the test session when available. Distinguish actual
+   runtime observations from package inventory or forced launch flags.
+2. Clarify optional AltGr/Compose coverage and any checklist cases not exercised;
+   mark unavailable or untested routes explicitly. Do not infer full acceptance
+   from the overall passes or reopen the corrected GTK startup issue.
+3. Finish the frontend evidence handoff, retaining documented limitations. Keep
+   KWrite/Kate word editing deferred; packaging/global installation, Unicode case
+   policy and performance remain separate increments.
 
-**Done when:** the corrected GTK helper runs, desktop observations and remaining
-runtime/protocol limitations are recorded. Browser/Qt are user-reported passes;
-GTK and missing metadata remain pending.
+**Done when:** runtime details and remaining coverage limits are recorded.
+GTK, Firefox and KWrite are user-reported passes; no new adapter failure is reported.
 
 ## Completed steps
 
