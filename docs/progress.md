@@ -13,19 +13,21 @@ Dates use the project's Asia/Dhaka timezone.
   C ABI and an experimental C++ Fcitx5 addon with an isolated dispatcher harness.
 - **Active issue:** user reports intermittent loss of the initial আ while typing
   `amar` in Brave/WhatsApp: `a` displays আ, then `m` leaves only ম. About 70% of
-  attempts work; Kate did not reproduce it. Similar OpenBangla behavior is a user
-  observation. Application/frontend reset is a hypothesis, not an established cause.
+  attempts work; Kate and Brave's address bar did not reproduce it. Similar
+  OpenBangla behavior is a user observation. Application/frontend reset is a
+  hypothesis, not an established cause.
   See the [desktop evidence](v1.md#fcitx5-local-feasibility-result).
-- **Separate report:** held Backspace is slow with multiple Bangla keyboards.
-  Application scope, pending versus committed text and timings are still unknown.
+- **Separate report:** held Backspace is slow in WhatsApp with multiple Bangla
+  keyboards, but normal in Kate and Brave's address bar. Pending versus committed
+  text, other web fields/browser behavior and timings are still unknown.
   Neither report is fixed or deferred for v1; no speculative workaround was added.
 - **Runtime limit:** installed Brave is 1:1.98.62-1; no Brave main process is visible
   here. Its actual version, input method/build, launch flags and Wayland/XWayland
   route need confirmation. No system settings, daemon or application data changed.
-- **Current checks:** core conversion gives আমার for `amar` and মার for `mar`;
-  20 composition tests and both existing CTest tests passed. CTest used the existing
-  build without rebuilding. Documentation checks and diff whitespace passed.
-  These checks do not reproduce or resolve the Brave failure.
+- **Current checks:** documentation checks and diff whitespace passed. Prior triage
+  (`8aae525`) converted `amar` to আমার and `mar` to মার; 20 composition tests and
+  both existing CTest tests passed (existing build without rebuilding). These
+  code checks were not rerun and do not reproduce or resolve the Brave failure.
 - **Installation support (`056792c`, prior evidence):** installed/build-local metadata
   and three-file install rules passed staged `/usr` and `/opt` loading/removal.
   Actual installed-route activation remains unconfirmed; see
@@ -52,33 +54,37 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Latest completed step
 
-- **2026-10-30 — Triage intermittent first-character loss in Brave/WhatsApp.**
+- **2026-10-30 — Narrow both reported symptoms to WhatsApp's message box.**
   Recorded the user's `a` → আ, then `m` → ম failure, approximate success rate,
   Kate comparison, separate held-Backspace report and unconfirmed runtime details.
+  The user subsequently confirmed both first-character loss and slow held
+  Backspace are absent in Brave's address bar; Backspace is also normal in Kate.
+  No other ordinary web field or WhatsApp/Firefox result has been supplied.
   Source inspection identifies reset as a possible buffer-clearing path, without
   evidence that the browser actually sends it. Related upstream reports are linked
   as investigative context, not a diagnosis or fix.
-- **Checks run during this investigation:**
+- **Prior triage checks (`8aae525`, not rerun for this follow-up):**
   `cargo run --offline --quiet --example convert -- 'a am ama amar mar amar amar amar'`
   produced `আ আম আমা আমার মার আমার আমার আমার`;
   `cargo test --offline --test composition --quiet` passed all 20 tests;
   `ctest --test-dir target/fcitx5 --output-on-failure` passed 2/2 existing tests
   (synthetic dispatcher and FFI lifecycle, existing build without a rebuild).
-- `pacman -Q` recorded installed Brave/Fcitx/KWin packages; a filtered `/proc`
-  inspection found no visible Brave main process, so it supplied no runtime route.
+- Prior triage `pacman -Q` recorded installed Brave/Fcitx/KWin packages; a filtered
+  `/proc` inspection found no visible Brave main process, so it supplied no runtime
+  route. Neither inventory nor process inspection was repeated this follow-up.
 - **Documentation checks:** `python3 /tmp/jong-check-docs.py` passed local links/
   anchors and fences, preserved command blocks, shell syntax and template metadata;
   `git diff --check` passed. Only specification/handoff documentation changed.
 - **Limits:** no desktop reproduction, browser event trace, timing measurement,
   full Rust workspace checks, reference comparison, sanitizer or install check.
   Earlier complete engineering checks are prior evidence. No behavior fix claimed.
-- **Next:** obtain same-session WhatsApp/address-bar/ordinary-field comparison and
-  held-Backspace scope, then choose a targeted frontend investigation.
+- **Next:** compare WhatsApp in Firefox if already available and an ordinary web
+  field in Brave; establish empty-message and pending/committed-text behavior.
 
 ## Next small implementation step
 
-1. Ask whether `amar` loses its first character outside WhatsApp in the same Brave
-   session, and whether held Backspace is slow in Kate as well as Brave.
+1. Compare WhatsApp Web in Firefox if already available, and another ordinary web
+   field in Brave. Reuse the successful Kate/address-bar comparisons.
 2. Confirm actual Brave version/input route and Jong activation/build. Compare
    empty-message versus subsequent-word behavior using disposable input. If needed,
    arrange an isolated frontend comparison without changing persistent settings.
