@@ -9,86 +9,88 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Current position
 
-- **Implemented:** Rust transliteration/composition APIs, separate C-ABI wrapper
-  and experimental C++ Fcitx5 addon with a real-dispatcher harness. Core rules and
-  composition logic remain independent of platform APIs.
-- **Automated baseline (prior evidence, 2026-10-30):** Rust format/Clippy/workspace
-  tests, release build, C++ format, normal/sanitized dispatcher harnesses and all
-  522,933 pinned fixtures passed in `5ed5bdc`. Not rerun for this docs-only update.
-- **Bounded desktop smoke evidence recorded:** user reports GTK3, Firefox and
-  KWrite work. Supplied console/about:support captures establish GTK 3.24.52 with
-  GdkWaylandDisplay and Firefox 159.0 (build 20261027211755) with protocol wayland.
-  KWrite ran with forced Wayland/Fcitx module flags; runtime versions/backend were
-  not independently printed. Package inventory is separate from runtime evidence.
-- **GTK helper retest closed:** `654d6d7` records the Gtk/Gdk version conflict fix;
-  `2db601b` records the user's successful GTK retest. No routine app reruns needed.
-- **Earlier evidence retained:** basic typing/field isolation in GTK3, Firefox,
-  KWrite and Kate; pending Ctrl+Backspace in KWrite; Escape commit without an added
-  space/newline. Detailed per-case or optional-route coverage is not inferred.
-- **Adapter contract:** Ctrl+Backspace clears active raw input and otherwise
-  forwards. Space/Enter/navigation/application shortcuts commit before the action.
-  Fcitx/frontend own focus-out delivery; focused switching commits once,
-  restrictions/reset discard, and per-context raw state is not copied.
+- **Implemented:** Rust transliteration/composition, a separate C ABI and an
+  experimental C++ Fcitx5 addon with a real-dispatcher harness. Core rules and
+  composition remain independent of platform APIs.
+- **Current automated evidence (2026-10-30):** Rust format/Clippy/workspace tests,
+  release builds, C++ format, both normal CTest cases, 522,933 pinned fixtures,
+  and leak-enabled ASan/UBSan lifecycle/dispatcher checks passed in this step.
+- **New resource evidence:** two sequential release core timing runs are recorded
+  in [v1.md](v1.md#local-resource-measurement-and-leak-check) and a 44-row CSV.
+  Short conversion medians: 0.594–2.032 µs; editing at an 8,192-scalar buffer's end:
+  about 1.19 ms/action. These are batch means on one CPU, not desktop guarantees.
+- **Leak result:** detector caught a deliberate Rust session leak, then reported
+  no leaks in 20,000 normal C-ABI cycles / 10,001 freed sessions and ten synthetic
+  dispatcher suites. Ran outside ptrace with leak detection enabled, without
+  suppressions. Rust/system memory accesses are not sanitizer-instrumented.
+- **Known memory limits:** caught panic payloads are deliberately forgotten at
+  the C boundary and can leak heap-owned payloads; this path was not induced.
+  Retained buffer capacity, RSS, peak memory and incremental Fcitx memory remain
+  unmeasured. No blanket leak-free claim or release resource budget.
+- **Desktop evidence retained:** user reports GTK3, Firefox and KWrite passes;
+  captures establish GTK 3.24.52/GdkWaylandDisplay and Firefox 159.0/Wayland.
+  Basic typing/field isolation also has earlier Kate evidence. Escape commits
+  without an added space/newline; pending Ctrl+Backspace works in KWrite.
+- **Desktop limits:** private D-Bus/Fcitx IM-module route only; exact Qt runtime,
+  detailed per-case matrix, AltGr/dead/Compose, Electron/XWayland and KWin routes
+  remain untested/unrecorded. No general desktop support claim. No routine reruns.
 - **Deferred for v1:** KWrite/Kate Bangla word navigation and committed-word
-  deletion, at the user's request. Cause remains unproven; overall Qt success does
-  not reverse the deferral. No application-specific workaround/investigation.
-- **Desktop limits:** private D-Bus/Fcitx IM-module route only. Exact Qt runtime,
-  per-case checklist, AltGr/dead/Compose, Electron, XWayland, KWin text-input
-  protocols and frontend commit ownership are untested or unrecorded. Console
-  service/accessibility/font/selection warnings are documented, not diagnosed or
-  fixed; no Jong crash appears in the supplied capture. No general support claim.
-- **Other limits:** Unicode case policy and performance remain open/unmeasured;
-  no installation/global settings changes. See the
-  [runtime evidence](v1.md#fcitx5-local-feasibility-result) and
-  [uncovered desktop cases](v1.md#remaining-desktop-smoke-checklist).
+  deletion, at the user's request. No app-specific workaround/investigation.
+- **Adapter contract unchanged:** Ctrl+Backspace clears active raw input and
+  otherwise forwards; boundaries/navigation/shortcuts commit before the action.
+  Focus-out delivery belongs to Fcitx/frontend; switching commits once,
+  restrictions/reset discard, and contexts do not copy raw state.
+- **Other limits:** Unicode case policy, adapter overhead and release budgets
+  remain open. No installation/global settings changes. GTK helper retest is
+  closed in `654d6d7` / `2db601b`; runtime evidence is in `57a101e`.
 
 ## Latest completed step
 
-- **2026-10-30 — Record supplied frontend runtime evidence and console limits.**
-  Parsed the user's Firefox JSON and GTK/Qt/browser log, retaining the three app
-  passes. Recorded observed GTK/Firefox Wayland paths, missing Qt runtime fields
-  and warning categories. The bounded smoke evidence handoff is complete with
-  explicit limits; full frontend acceptance remains unclaimed.
-- **Observed:** Firefox 159.0, build 20261027211755, distribution archlinux,
-  `graphics.windowProtocol=wayland`; GTK prints runtime 3.24.52 and
-  `GdkWaylandDisplay`. Console shows KWrite opening the disposable test file.
-  Installed `kate` 26.08.2-1.1 / `qt6-base` 6.12.0-3.1 remain package evidence only.
-- **Warnings retained:** private-bus systemd service activation, AT-SPI/atk-bridge,
-  portals/RealtimeKit/app-ID, KWallet socket, candidate-font OpenType support,
-  notification teardown and Firefox selection broken pipe. These identify their
-  emitting subsystems, not established root causes or an observed Jong failure.
-- **Checks:** `python3 /tmp/jong-check-runtime-evidence-docs.py` — attachment JSON/
-  console field extraction, local links/anchors, unchanged adapter contract/v1
-  deferral/history, 50–100-line handoff and documentation-only scope passed.
-  `git diff --check` passed. No Cargo/CMake/reference/sanitizer or GUI reruns for
-  this documentation-only step; no full diagnostic dump added to the repository.
-- **Prior evidence, not rerun:** `654d6d7` reproduced the GTK import error and
-  validated Gtk/Gdk 3.0 selection without warnings. `5ed5bdc` records 20 composition,
-  352 conversion, three FFI tests, two doctests, 522,933 reference rows,
-  format/Clippy/release and ten normal/C++ ASan/UBSan dispatcher suites. Leak
-  detection was disabled; Rust/system libraries were not instrumented. Generated
-  83,353-input mixed-context, 1,350 vowel-pair and 302 standalone audits remain
-  prior evidence. Three known Unicode case differences are unchanged.
-- **Scope:** evidence/handoff docs only. No source, fixtures, helpers, running test
-  sessions, dependencies or system input-method settings changed. Preserve Escape
-  confirmation and the KWrite/Kate word-editing deferral.
-- **Next action:** move to a separate bounded performance measurement increment;
-  retain untested frontend routes rather than infer or repeatedly retest them.
+- **2026-10-30 — Measure core latency and check synthetic heap ownership.**
+  Added `examples/measure.rs`, `adapters/fcitx5/tests/memory.cpp`, CTest wiring and
+  `tools/check-memory.py`; recorded methods, results and limits in README/v1.
+  No production engine/adapter behavior or dependencies changed.
+- **Latency:** `cargo build --offline --release --example measure`, then
+  `target/release/examples/measure` twice sequentially. Ryzen 5 5500U, Rust 1.99.1,
+  default release profile, 31 calibrated batches/workload, seven short inputs and
+  mixed buffers of 32/128/1,024/8,192 scalars. CSV preserves all 44 rows. Background
+  desktop load/frequency were uncontrolled; event-tail latency is not measured.
+- **Leak check:** `python3 tools/check-memory.py target/fcitx5-sanitized` passed
+  outside ptrace: deliberate Rust leak detected, then both normal workloads clean
+  with ASan/UBSan/LSan enabled. The sandbox run failed with LSan's ptrace error
+  and was correctly rejected. The run outside tracing passed.
+- **Checks passed:** `cargo fmt --all -- --check`;
+  `cargo clippy --offline --workspace --all-targets -- -D warnings`;
+  `cargo test --offline --workspace` (20 composition, 352 conversion, three FFI
+  tests, two doctests); `cargo build --offline --workspace --release --examples`;
+  `cargo build --offline --workspace --release`.
+- **Checks passed:** `node tools/check-reference.mjs /tmp/jong-avro-v1.1.4-rsz8kb89/avro-lib.js`
+  (522,933 rows; existing three Unicode case gaps unchanged); normal/sanitized
+  CMake configure/build as documented; `ctest --test-dir target/fcitx5 --output-on-failure`
+  (both tests, ten dispatcher suites); `clang-format --dry-run --Werror` on
+  addon/header/harness/new memory source. Docs/data checks, unsanitized-detector
+  rejection, debug-measurement rejection and `git diff --check` passed.
+  Clippy initially rejected a constant assertion in the new example;
+  changing the debug-build rejection to an explicit exit resolved it.
+- **Limits/next:** no panic-path leak-freedom, RSS/retention measurement or adapter
+  timing result. No generated context audits or desktop tests rerun. Next measure
+  adapter overhead and added memory against a defined Fcitx baseline.
 
 ## Next small implementation step
 
-1. **Proposed next increment:** prepare reproducible release-mode latency
-   measurements for conversion and composition using realistic word lengths and
-   long input buffers, following the [evidence requirements](v1.md#compatibility-and-performance-evidence).
-2. Record hardware, build mode, workloads and measurement method. Keep adapter
-   overhead and added memory separate from Fcitx's baseline; state any unmeasured
-   parts explicitly. Set release budgets only after evidence exists.
+1. **Proposed next increment:** measure synthetic adapter overhead and incremental
+   live/peak memory against an explicit Fcitx-only baseline, with matched build
+   modes/workloads. Keep frontend/desktop conclusions bounded to actual evidence.
+2. Distinguish reusable buffer capacity from unreachable leaks. The existing
+   panic-payload retention policy needs a separate focused failure-path review
+   before any claim covering caught panics; do not fold that behavior change into
+   measurement tooling. Set release budgets only after enough evidence exists.
 3. Keep packaging/global installation and Unicode case policy separate. Revisit
    a desktop route only for a named uncovered case or reproducible new failure;
    retain current smoke passes and the accepted KWrite/Kate limitation.
 
-**Done when:** the selected performance increment has reproducible measurements
-and explicit limits. No performance claim or new release budget exists yet.
+**Done when:** adapter time/memory measurements have a reproducible baseline and
+explicit limits. Core timings and normal-path synthetic leak checks are complete.
 
 ## Completed steps
 

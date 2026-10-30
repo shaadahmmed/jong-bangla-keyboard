@@ -765,10 +765,45 @@ ASAN_OPTIONS=detect_leaks=0 ctest --test-dir target/fcitx5-sanitized --output-on
 ```
 
 These sanitizers instrument the C++ addon and harness, not the Rust static library
-or the system Fcitx5 libraries. LeakSanitizer fails under this execution sandbox's
-ptrace environment, so this command disables leak detection; it is not a leak
-check. Rust boundary tests separately check invalid scalar arguments, UTF-8 spans
-and recovery after a caught panic.
+or the system Fcitx5 libraries. The command above disables leak detection because
+LeakSanitizer fails under a ptrace execution sandbox; it is not a leak check.
+Rust boundary tests separately check invalid scalar arguments, UTF-8 spans and
+recovery after a caught panic.
+
+For a leak check, use the same sanitized build in an ordinary terminal outside
+ptrace/debugger tracing, with Python 3 available:
+
+```sh
+python3 tools/check-memory.py target/fcitx5-sanitized
+```
+
+This first requires LeakSanitizer to detect an intentionally lost Rust session,
+then runs 20,000 C-ABI lifecycle cycles and the ten dispatcher suites with
+ASan/UBSan/leak detection enabled. It fails if the detector is unavailable, if
+the build lacks leak detection, or if a normal workload reports an error. The
+normal lifecycle test is also included in CTest. No suppression file is used.
+Rust heap allocations are observed through the system allocator, as verified by
+the deliberate leak; this does not instrument Rust memory accesses. These
+synthetic tests do not exercise every failure path or a live desktop daemon.
+See the [results and panic-path limit](docs/v1.md#local-resource-measurement-and-leak-check).
+
+## Measure core latency
+
+```sh
+cargo run --offline --release --example measure > target/core-latency.csv
+```
+
+The dependency-free runner measures seven short inputs and mixed buffers of
+32, 128, 1,024 and 8,192 Unicode scalars. It includes one-shot conversion,
+short-word typing/commit and insert/Backspace pairs at long buffers' ends.
+It prints nanoseconds per action: minimum, median and 95th percentile of 31
+batch means after adaptive calibration. Those percentiles describe batches,
+not individual keystroke tail latency. Allocations/output destruction are timed;
+long-buffer setup is excluded. The runner rejects debug builds. Run it without
+concurrent builds/tests and record hardware, toolchain and load conditions.
+The [local measurements](docs/v1.md#local-resource-measurement-and-leak-check)
+record two release runs and the parts still unmeasured, including adapter
+overhead and memory relative to Fcitx's baseline.
 
 ## Repeat the reference comparison
 

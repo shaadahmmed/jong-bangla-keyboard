@@ -50,3 +50,10 @@ target_link_libraries(jong-fcitx5-harness PRIVATE Fcitx5::Core)
 add_dependencies(jong-fcitx5-harness jong-bangla)
 add_test(NAME fcitx5-synthetic COMMAND jong-fcitx5-harness)
 set_tests_properties(fcitx5-synthetic PROPERTIES TIMEOUT 30)
+
+# Links the same release Rust archive without Fcitx, isolating C-ABI ownership.
+add_executable(jong-ffi-memory tests/memory.cpp)
+target_compile_options(jong-ffi-memory PRIVATE -Wall -Wextra -Wpedantic -Werror)
+target_link_libraries(jong-ffi-memory PRIVATE jong_ffi Threads::Threads ${CMAKE_DL_LIBS} m)
+add_test(NAME ffi-memory-lifecycle COMMAND jong-ffi-memory)
+set_tests_properties(ffi-memory-lifecycle PROPERTIES TIMEOUT 120)
