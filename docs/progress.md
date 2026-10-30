@@ -11,83 +11,84 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Implemented:** platform-independent Rust transliteration/composition, a separate
   C ABI and an experimental C++ Fcitx5 addon with an isolated dispatcher harness.
-- **Documentation:** README is a short project entry point. Focused guides cover
-  [typing](typing.md), [installation](installation.md), [development](development.md),
-  [reference checks](reference-checks.md) and [performance](performance.md).
-  [Contributing](../CONTRIBUTING.md), [changelog](../CHANGELOG.md), and GitHub
-  issue/PR templates now describe reporting, review and notable unreleased changes.
-- **Installation support (`056792c`, prior evidence):** separate installed/build-local
-  metadata and three-file install rules. `/usr` Release staging and a separate
-  `/opt` prefix passed actual loading, missing-library rejection and clean removal.
-  See [instructions](installation.md#install-the-experimental-addon) and
-  [layout/evidence](v1.md#experimental-local-installation-plan).
-- **User boundary:** actual installation, activation and desktop configuration
-  belong to the user. No installation or input-method settings changed this step.
-- **Current checks:** documentation links/anchors, preserved command blocks,
-  shell-example syntax, template metadata and diff whitespace. No code changes.
-  Rust, C++/CTest, staged installation and API-doc checks passed in `056792c`;
-  those are prior evidence and were not rerun for this documentation-only step.
-- **Unicode policy (`d8b701f`, prior evidence):** preserve exact unsupported Unicode
-  without lowercasing/normalization. Recorded reference evidence is 522,933 parity
-  rows plus 60 policy rows (51 deliberate differences, nine agreements).
-  This is bounded coverage; see [policy](v1.md#unicode-case-preservation-policy).
-- **Panic policy (`f914d45`, prior evidence):** one guarded caught-payload cleanup;
-  retain a destructor-panic replacement and clear state before status 2. Arbitrary
-  destructors may retain memory, block or terminate; no leak-freedom guarantee.
-  See [failure policy](v1.md#c-abi-caught-panic-policy-review).
-- **Prior resources/leaks (`00570df`, `8970a9c`, not rerun):** isolated dispatcher
-  measurements and bounded lifecycle/leak checks remain in the
-  [resource record](v1.md#synthetic-adapter-resource-measurements) and
-  [leak evidence](v1.md#local-resource-measurement-and-leak-check).
-  Rust/system accesses were not sanitizer-instrumented; leak evidence predates
-  the revised panic policy.
-- **Desktop evidence retained:** user-reported GTK3/Firefox/KWrite passes;
-  captures establish GTK 3.24.52/GdkWaylandDisplay and Firefox 159.0/Wayland.
-  Earlier Kate typing/field isolation and Escape/pending Ctrl+Backspace remain.
-- **Desktop limits:** private D-Bus/Fcitx IM-module route only; exact Qt runtime,
-  detailed case matrix, AltGr/dead/Compose, Electron/XWayland and KWin routes
-  remain untested/unrecorded. KWrite/Kate word navigation and committed-word
-  deletion remain deferred for v1 at the user's request. No general support claim.
-- **Adapter contract:** active Ctrl+Backspace clears, otherwise forwards;
-  boundaries/navigation/shortcuts commit first. Focus-out belongs to
-  Fcitx/frontend; switching commits once, restrictions/reset discard, contexts
-  never copy raw state. Existing behavior is unchanged.
+- **Active issue:** user reports intermittent loss of the initial আ while typing
+  `amar` in Brave/WhatsApp: `a` displays আ, then `m` leaves only ম. About 70% of
+  attempts work; Kate did not reproduce it. Similar OpenBangla behavior is a user
+  observation. Application/frontend reset is a hypothesis, not an established cause.
+  See the [desktop evidence](v1.md#fcitx5-local-feasibility-result).
+- **Separate report:** held Backspace is slow with multiple Bangla keyboards.
+  Application scope, pending versus committed text and timings are still unknown.
+  Neither report is fixed or deferred for v1; no speculative workaround was added.
+- **Runtime limit:** installed Brave is 1:1.98.62-1; no Brave main process is visible
+  here. Its actual version, input method/build, launch flags and Wayland/XWayland
+  route need confirmation. No system settings, daemon or application data changed.
+- **Current checks:** core conversion gives আমার for `amar` and মার for `mar`;
+  20 composition tests and both existing CTest tests passed. CTest used the existing
+  build without rebuilding. Documentation checks and diff whitespace passed.
+  These checks do not reproduce or resolve the Brave failure.
+- **Installation support (`056792c`, prior evidence):** installed/build-local metadata
+  and three-file install rules passed staged `/usr` and `/opt` loading/removal.
+  Actual installed-route activation remains unconfirmed; see
+  [installation](installation.md#install-the-experimental-addon).
+- **Documentation:** README and [focused guides](../README.md#documentation),
+  [contribution guidance](../CONTRIBUTING.md), changelog and GitHub templates exist.
+  Their full validation was prior evidence, not an implementation change this step.
+- **Compatibility (`d8b701f`, prior evidence):** 522,933 parity rows plus 60 Unicode
+  policy rows (51 deliberate differences, nine agreements), with exact unsupported
+  Unicode preserved. This remains bounded coverage; see
+  [policy](v1.md#unicode-case-preservation-policy).
+- **Panic/resources (prior evidence):** `f914d45` records caught-payload cleanup
+  limits; `00570df`/`8970a9c` record bounded resource/leak checks, which predate the
+  revised panic policy. Rust/system accesses were not sanitizer-instrumented.
+- **Desktop evidence retained:** user-reported GTK3/Firefox/KWrite passes on the
+  private D-Bus/IM-module route, GTK 3.24.52/GdkWaylandDisplay and Firefox 159.0/
+  Wayland captures, plus earlier Kate field isolation and confirmed Escape behavior.
+- **Desktop limits:** exact Qt runtime, detailed case matrix, AltGr/dead/Compose,
+  Electron/XWayland and KWin routes remain untested/unrecorded. KWrite/Kate word
+  navigation and committed-word deletion stay deferred at the user's request.
+- **Adapter contract unchanged:** active Ctrl+Backspace clears, otherwise forwards;
+  boundaries/navigation/shortcuts commit first. Focus-out belongs to Fcitx/frontend;
+  switching commits once, restrictions/reset discard, contexts never copy raw state.
 
 ## Latest completed step
 
-- **2026-10-30 — Organize project documentation and contribution entry points.**
-  Replaced the 1,194-line README with a 79-line introduction, experimental status,
-  quick start and documentation index. Moved build/install/reference/measurement
-  commands into focused guides; replaced duplicated rule inventories with links
-  to the existing specification and fixtures. Added selected typing examples.
-- Added `CONTRIBUTING.md`, an `Unreleased` changelog baseline, bug/feature issue
-  templates and a PR template. No published release or broader support is implied.
-  Updated specification links and AGENTS reading guidance for the new locations.
-- **Checks passed:** `python3 /tmp/jong-check-docs.py` checks all repository Markdown
-  local links/anchors (736 across 14 files) and balanced fences, preserves all 12
-  original README shell command blocks, runs `bash -n` on 14 shell examples, and
-  checks issue template metadata. `git diff --check` passed. Commands were syntax-checked and
-  compared with prior instructions, not executed as installation or benchmark work.
-- **Limits:** documentation-only; no Rust/C++ tests, reference comparison,
-  sanitizers, staged/actual installation or performance measurements rerun.
-  Older engineering results above remain explicitly prior evidence.
-- **Next:** user installs the previously checked build, activates it through their
-  existing desktop setup and reports the disposable `ki` then Space smoke result.
+- **2026-10-30 — Triage intermittent first-character loss in Brave/WhatsApp.**
+  Recorded the user's `a` → আ, then `m` → ম failure, approximate success rate,
+  Kate comparison, separate held-Backspace report and unconfirmed runtime details.
+  Source inspection identifies reset as a possible buffer-clearing path, without
+  evidence that the browser actually sends it. Related upstream reports are linked
+  as investigative context, not a diagnosis or fix.
+- **Checks run during this investigation:**
+  `cargo run --offline --quiet --example convert -- 'a am ama amar mar amar amar amar'`
+  produced `আ আম আমা আমার মার আমার আমার আমার`;
+  `cargo test --offline --test composition --quiet` passed all 20 tests;
+  `ctest --test-dir target/fcitx5 --output-on-failure` passed 2/2 existing tests
+  (synthetic dispatcher and FFI lifecycle, existing build without a rebuild).
+- `pacman -Q` recorded installed Brave/Fcitx/KWin packages; a filtered `/proc`
+  inspection found no visible Brave main process, so it supplied no runtime route.
+- **Documentation checks:** `python3 /tmp/jong-check-docs.py` passed local links/
+  anchors and fences, preserved command blocks, shell syntax and template metadata;
+  `git diff --check` passed. Only specification/handoff documentation changed.
+- **Limits:** no desktop reproduction, browser event trace, timing measurement,
+  full Rust workspace checks, reference comparison, sanitizer or install check.
+  Earlier complete engineering checks are prior evidence. No behavior fix claimed.
+- **Next:** obtain same-session WhatsApp/address-bar/ordinary-field comparison and
+  held-Backspace scope, then choose a targeted frontend investigation.
 
 ## Next small implementation step
 
-1. **User action:** follow the [experimental installation guide](installation.md);
-   restart Fcitx5 through the existing session setup and select Jong Bangla.
-2. Record actual installed-route behavior and any reproducible failure before
-   changing the adapter. Retain existing desktop evidence and deferred limitations.
-3. Before public packaging, confirm display name and package format, review the
-   distribution/license manifest and derive support scope from recorded tests.
-   When a release is actually published, move its notable changes from `Unreleased`
-   to a versioned, dated changelog section.
+1. Ask whether `amar` loses its first character outside WhatsApp in the same Brave
+   session, and whether held Backspace is slow in Kate as well as Brave.
+2. Confirm actual Brave version/input route and Jong activation/build. Compare
+   empty-message versus subsequent-word behavior using disposable input. If needed,
+   arrange an isolated frontend comparison without changing persistent settings.
+3. Change the adapter only after a reproducible event sequence identifies a defect;
+   preserve reset/focus isolation and editable preedit. Keep browser key loss,
+   repeat latency and the accepted Kate word-editing deferral distinct.
 
-**Done when:** the user confirms installed-addon typing on their actual route,
-with environment/limitations recorded. Source preparation is complete; actual
-installation remains intentionally unperformed.
+**Done when:** the failing field/input route and a reproducible sequence are known,
+with observed results recorded. Installed-route smoke confirmation and public
+packaging decisions remain outstanding; current checks do not close those tasks.
 
 ## Completed steps
 
