@@ -11,88 +11,85 @@ Dates use the project's Asia/Dhaka timezone.
 
 - **Implemented:** independent Rust transliteration/composition, C ABI and an
   experimental C++ Fcitx5 addon with an isolated dispatcher harness.
-- **Release setup prepared locally:** PR/main CI, reusable tagged-release checks,
-  source archive/checksums and draft creation, release-note template/categories,
-  weekly Actions update PR configuration, and [release guidance](releases.md).
-  Hosted execution, repository rules and immutable releases are not yet verified
-  or enabled by this work. No version bump, tag or release was created.
-- **User workflow decision (2026-10-31):** features and fixes go through branches
-  and PRs. Finish checks/docs, give a detailed summary, then wait for explicit
-  confirmation before committing. Manual release versions; no automatic publish.
-  The instructions are recorded in AGENTS.md, CONTRIBUTING.md and the specification.
-- **Review state:** the user approved committing the reviewed setup on
-  `ci/release-workflows` on 2026-10-31 and chose one combined PR including the
-  three earlier local documentation commits (`8aae525`, `8c8306a`, `0eaccc5`),
-  which remain intact. Nothing was pushed.
-- **Current validation:** local Rust workspace and fresh Release adapter/staged
-  install checks pass; the same native build checks also pass in a disposable
-  official Arch container. Workflow lint, documentation checks and nine release
-  tooling tests pass. GitHub checkout/release API execution remains untested.
+- **Combined PR open:** [PR #1](https://github.com/shaadahmmed/jong-bangla-keyboard/pull/1)
+  targets `main` from `ci/release-workflows`, includes the approved setup commit
+  `af8c54e` and the three earlier documentation commits, and has no merge conflicts.
+  The initial four commits were pushed; the user also approved this handoff-only
+  follow-up commit and push. The PR remains open and unmerged.
+- **Hosted CI verified:** both `Documentation and release tooling` and
+  `Rust and Fcitx5` passed in [run 41174114119](https://github.com/shaadahmmed/jong-bangla-keyboard/actions/runs/41174114119)
+  for `af8c54e`. Checkout, workflow lint, docs/tooling tests, Rust checks, native
+  adapter tests and staged installation now have actual GitHub Actions evidence.
+- **Release limits:** the tag-triggered draft/release API path is still untested;
+  no version bump, tag or release was created. Repository branch/tag protections
+  and immutable releases have not been configured or verified by this step.
+  See [the release guide](releases.md) for their setup and the source-only policy.
+- **User workflow:** features/fixes use branches and PRs; release versions are
+  manually selected. Agents finish checks/docs, provide a detailed summary and
+  wait for explicit confirmation before each commit. The user approved the
+  handoff-only commit and push on 2026-10-31; current CI is tracked in PR checks.
 - **Active product issue:** intermittent initial আ loss while typing `amar` in
   Brave/WhatsApp remains unresolved, without a v1 deferral. Kate, Brave's address
   bar and WhatsApp in Firefox passed user comparisons. The held-Backspace slowdown
   report was withdrawn. Browser runtime/input route and reset hypothesis remain
   unconfirmed; see [desktop evidence](v1.md#fcitx5-local-feasibility-result).
-- **Other limits:** installed-route desktop activation and the broader toolkit/
-  Wayland/XWayland matrix remain unconfirmed. KWrite/Kate word-navigation and
-  committed-word deletion stay deferred. Public binary packaging remains open.
+- **Other limits:** installed-route desktop activation and broader toolkit/
+  Wayland/XWayland coverage remain unconfirmed. KWrite/Kate word-navigation and
+  committed-word deletion stay deferred; public binary packaging remains open.
 - **Compatibility prior evidence:** 522,933 parity rows plus 60 Unicode policy
-  rows; the pinned comparison was not rerun in this workflow step. See
-  [Unicode policy](v1.md#unicode-case-preservation-policy) and
-  [performance evidence](performance.md) for bounded claims and earlier limits.
+  rows. The external pinned comparison was not rerun in this step; hosted Rust
+  tests exercise stored fixtures. See [Unicode policy](v1.md#unicode-case-preservation-policy)
+  and [performance evidence](performance.md) for bounded claims and earlier limits.
 
 ## Latest completed step
 
-- **2026-10-31 — Prepare PR-based CI and manual-version release drafts.** Added
-  two workflows, release template/categories, Dependabot config, release validator
-  and documentation checker. Updated contribution/agent/PR instructions, README,
-  changelog, development guide and behavioral decision record. No engine, adapter
-  behavior, system input settings, package versions or public support claims changed.
-- **Rust checks passed:** `cargo fmt --all -- --check`;
-  `cargo clippy --offline --locked --workspace --all-targets -- -D warnings`;
-  `cargo test --offline --locked --workspace` (377 tests and two doctests pass;
-  one child helper is ignored in ordinary discovery and exercised by its parent);
-  `cargo build --offline --locked --workspace --release`;
-  `cargo doc --offline --locked --workspace --no-deps`;
-  `cargo run --offline --locked --quiet --example convert -- 'kh12T'` = `খ১২ট`.
-- **Adapter checks passed:** `cmake -S adapters/fcitx5 -B target/ci-fcitx5 -G Ninja
-  -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
-  -DFCITX_INSTALL_USE_FCITX_SYS_PATHS=ON`, `cmake --build target/ci-fcitx5`,
-  `ctest --test-dir target/ci-fcitx5 --output-on-failure` (2/2), and
-  `python3 tools/check-install.py target/ci-fcitx5` (three-file staging, ten
-  synthetic suites, missing-library rejection and selective removal).
-- **Container evidence:** native CI commands, workflow lint and initial tooling
-  tests also passed in disposable `archlinux:base-devel`, image digest
-  `sha256:624bdc7fc6615155d67bc34cf7146c0c9fd0e3c92943977da63a630e4ca49c30`.
-  Actual packages: Rust 1:1.99.1-1, Fcitx5 5.1.23-1, GCC 16.2.1,
+- **2026-10-31 — Open the combined PR and verify hosted CI.** Verified authenticated
+  CLI access, fetched the remote, checked that no existing PR used the branch,
+  pushed `ci/release-workflows` and opened PR #1 with the combined scope selected
+  by the user. Confirmed all four commits and a mergeable, open PR; no merge,
+  release or repository-setting change was made. The user subsequently approved
+  the documentation-only follow-up recording the PR and hosted validation.
+- **Actual remote commands:** `gh auth status`, `git fetch origin`,
+  `git -c credential.helper= -c 'credential.helper=!gh auth git-credential'
+  push --set-upstream origin ci/release-workflows`, and
+  `gh pr create --repo shaadahmmed/jong-bangla-keyboard --base main
+  --head ci/release-workflows --title "Add PR-based CI and release drafts; update desktop test evidence"
+  --body-file /tmp/jong-release-pr.md` succeeded. No credentials were copied into
+  project files or the PR description.
+- **Hosted evidence:** `gh run watch 41174114119 --interval 15 --exit-status`,
+  `gh run view 41174114119 --json status,conclusion,headSha,url,jobs`, log inspection
+  and `gh pr checks 1` (all using the explicit repository) confirmed success.
+  Documentation/tooling passed in 5s; Rust/Fcitx5 passed in 52s.
+- **Hosted checks:** Markdown links/anchors/fences and shell syntax, nine tooling
+  tests, whitespace checks and actionlint/ShellCheck passed. Rust formatting,
+  Clippy, locked/offline workspace tests (377 tests and two doctests), release
+  build, API docs and conversion smoke passed. The child helper is ignored in
+  ordinary discovery and exercised by its parent. Fresh Release adapter CTest
+  passed 2/2; staged loading passed ten suites, missing-library rejection and
+  selective removal.
+- **Hosted versions:** Rust 1:1.99.1-1, Fcitx5 5.1.23-1, GCC 16.2.1,
   CMake 4.4.5, Ninja 1.13.2, Python 3.14.8, actionlint 1.7.12, ShellCheck 0.11.0.
-  The rolling image/packages do not establish reproducible builds or GUI support.
-- **Tooling/docs passed:** `python3 -m unittest discover -s tools/tests -v` (nine
-  tests on final local tooling), `python3 tools/check-docs.py`,
-  `/tmp/jong-release-tools/actionlint -shellcheck=/tmp/jong-release-tools/shellcheck`,
-  YAML parsing/configuration inspection, and `git diff --check`.
-  `python3 tools/check-release.py v0.1.0` intentionally rejects the undated baseline:
-  `expected one changelog heading: ## 0.1.0 - YYYY-MM-DD`.
-- **Limits:** no hosted Actions/API/PR run, desktop smoke, pinned reference rerun,
-  sanitizer/leak run or performance measurement. The user approved the commit;
-  automatic commit-after-step instructions have been superseded.
+  These validate CI builds, not desktop application support or reproducible builds.
+- **Handoff validation:** `python3 tools/check-docs.py` and `git diff --check`
+  pass for this documentation-only follow-up; historical progress entries remain
+  unchanged. Local Rust/container checks from `af8c54e` remain prior evidence.
+- **Limits:** no release workflow/API execution, desktop smoke, pinned reference
+  rerun, sanitizer/leak check or performance measurement. Repository protections
+  remain separate administrative work. The handoff commit and push were approved.
 
 ## Next small implementation step
 
-1. Prepare the combined PR the user selected from `ci/release-workflows`, retaining
-   the three earlier documentation commits alongside the approved setup commit.
-   Keep future feature/fix work on separate branches and await explicit approval
-   before each agent-authored commit.
-2. Verify hosted CI, configure the documented branch/tag rules and immutable
-   releases with repository administration access, then use release PRs to select
-   future versions. This setup does not authorize cutting a release now.
-3. Resume Brave runtime/input-route investigation separately when requested;
-   preserve the successful comparisons and distinguish it from the deferred
-   KWrite/Kate word-editing limitations.
+1. Complete PR review, merge when authorized, and configure/verify the documented
+   branch/tag rules and immutable releases using the now-available check names.
+   Keep stable/prerelease publication a deliberate maintainer action; do not cut
+   a release as a side effect of CI setup.
+2. Resume Brave runtime/input-route investigation separately when requested;
+   preserve successful comparisons and the distinct KWrite/Kate deferral.
 
-**Done when:** the reviewed setup is approved, committed and merged through its
-PR, hosted checks pass, and repository protections are verified. Local files and
-checks are complete and commit approval is recorded; PR/hosted setup remain pending.
+**Done when:** PR #1 is reviewed/merged and repository protections are verified.
+The combined PR and initial hosted CI are complete; merge and hosted settings
+remain pending. Tag-triggered draft creation will need release-specific
+validation when a version is prepared.
 
 ## Completed steps
 
