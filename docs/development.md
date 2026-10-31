@@ -21,6 +21,11 @@ The unit tests exercise the release metadata and note-validation gates.
 Run `actionlint` when changing `.github/workflows/`; installing ShellCheck also
 enables its shell diagnostics. CI installs both tools in its build container.
 
+The local `git diff --check` command checks uncommitted edits. CI fetches history
+and checks committed changes: PRs against their base commit, pushes to `main`
+across the full pushed range, and release tags against the tagged commit's first
+parent (or an empty tree for a root commit).
+
 ## Build and check the Rust workspace
 
 Use Rust/Cargo **1.99.1 or newer**, with rustfmt and Clippy. This initial baseline

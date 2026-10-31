@@ -12,84 +12,79 @@ Dates use the project's Asia/Dhaka timezone.
 - **Implemented:** independent Rust transliteration/composition, C ABI and an
   experimental C++ Fcitx5 addon with an isolated dispatcher harness.
 - **Combined PR open:** [PR #1](https://github.com/shaadahmmed/jong-bangla-keyboard/pull/1)
-  targets `main` from `ci/release-workflows`, includes the approved setup commit
-  `af8c54e` and the three earlier documentation commits, and has no merge conflicts.
-  The initial four commits were pushed; the user also approved this handoff-only
-  follow-up commit and push. The PR remains open and unmerged.
-- **Hosted CI verified:** both `Documentation and release tooling` and
-  `Rust and Fcitx5` passed in [run 41174114119](https://github.com/shaadahmmed/jong-bangla-keyboard/actions/runs/41174114119)
-  for `af8c54e`. Checkout, workflow lint, docs/tooling tests, Rust checks, native
-  adapter tests and staged installation now have actual GitHub Actions evidence.
-- **Release limits:** the tag-triggered draft/release API path is still untested;
-  no version bump, tag or release was created. Repository branch/tag protections
-  and immutable releases have not been configured or verified by this step.
-  See [the release guide](releases.md) for their setup and the source-only policy.
-- **User workflow:** features/fixes use branches and PRs; release versions are
-  manually selected. Agents finish checks/docs, provide a detailed summary and
-  wait for explicit confirmation before each commit. The user approved the
-  handoff-only commit and push on 2026-10-31; current CI is tracked in PR checks.
-- **Active product issue:** intermittent initial আ loss while typing `amar` in
-  Brave/WhatsApp remains unresolved, without a v1 deferral. Kate, Brave's address
-  bar and WhatsApp in Firefox passed user comparisons. The held-Backspace slowdown
-  report was withdrawn. Browser runtime/input route and reset hypothesis remain
-  unconfirmed; see [desktop evidence](v1.md#fcitx5-local-feasibility-result).
-- **Other limits:** installed-route desktop activation and broader toolkit/
-  Wayland/XWayland coverage remain unconfirmed. KWrite/Kate word-navigation and
-  committed-word deletion stay deferred; public binary packaging remains open.
+  targets `main` from `ci/release-workflows`. Its current remote head is `e083093`.
+  Review found one ineffective CI whitespace check; the fix is locally validated
+  and awaits explicit commit approval. No merge, push or commit occurred this step.
+- **CI correction:** documentation-job checkout fetches history; whitespace checks
+  compare PRs to their base, main pushes across the full pushed range, and release
+  tags to the tagged commit's first parent. Root commits use an empty tree.
+  See [development checks](development.md#documentation-and-release-tooling).
+- **Hosted CI prior evidence:** both jobs passed for `e083093` in
+  [run 41174787623](https://github.com/shaadahmmed/jong-bangla-keyboard/actions/runs/41174787623).
+  This predates the local fix; its updated hosted run is still pending.
+- **Merge restriction verified:** the active `Protection` ruleset restricts updates
+  to `main` and allows an administrator bypass. PR #1 is mergeable but reports
+  `BLOCKED`; the ruleset requires PRs with zero approving reviewers and currently
+  has no required status-check rule. No bypass or settings change was performed.
+- **Release limits:** tag-triggered draft/API execution remains untested; no version,
+  tag or release was created. Tag protections and immutable-release settings were
+  not inspected this step. See [the release guide](releases.md).
+- **User workflow:** branches and PRs, manual release versions, explicit approval
+  before agent commits. The user requested merging once the PR has no issues;
+  the new fix still needs commit approval, updated hosted CI and resolution of
+  the normal-merge restriction before that authorized merge can proceed.
+- **Active product issue:** intermittent initial আ loss for `amar` in Brave/
+  WhatsApp remains unresolved without a v1 deferral. Kate, Brave's address bar
+  and WhatsApp/Firefox passed user comparisons. The held-Backspace slowdown was
+  withdrawn; runtime/input route and reset hypothesis remain unconfirmed.
+- **Other limits:** installed-route typing and broader desktop routes remain
+  unconfirmed. Kate/KWrite word-editing issues stay deferred; binary packaging
+  remains open. See [desktop evidence](v1.md#fcitx5-local-feasibility-result).
 - **Compatibility prior evidence:** 522,933 parity rows plus 60 Unicode policy
-  rows. The external pinned comparison was not rerun in this step; hosted Rust
-  tests exercise stored fixtures. See [Unicode policy](v1.md#unicode-case-preservation-policy)
-  and [performance evidence](performance.md) for bounded claims and earlier limits.
+  rows; no pinned comparison or performance measurement was rerun this step.
 
 ## Latest completed step
 
-- **2026-10-31 — Open the combined PR and verify hosted CI.** Verified authenticated
-  CLI access, fetched the remote, checked that no existing PR used the branch,
-  pushed `ci/release-workflows` and opened PR #1 with the combined scope selected
-  by the user. Confirmed all four commits and a mergeable, open PR; no merge,
-  release or repository-setting change was made. The user subsequently approved
-  the documentation-only follow-up recording the PR and hosted validation.
-- **Actual remote commands:** `gh auth status`, `git fetch origin`,
-  `git -c credential.helper= -c 'credential.helper=!gh auth git-credential'
-  push --set-upstream origin ci/release-workflows`, and
-  `gh pr create --repo shaadahmmed/jong-bangla-keyboard --base main
-  --head ci/release-workflows --title "Add PR-based CI and release drafts; update desktop test evidence"
-  --body-file /tmp/jong-release-pr.md` succeeded. No credentials were copied into
-  project files or the PR description.
-- **Hosted evidence:** `gh run watch 41174114119 --interval 15 --exit-status`,
-  `gh run view 41174114119 --json status,conclusion,headSha,url,jobs`, log inspection
-  and `gh pr checks 1` (all using the explicit repository) confirmed success.
-  Documentation/tooling passed in 5s; Rust/Fcitx5 passed in 52s.
-- **Hosted checks:** Markdown links/anchors/fences and shell syntax, nine tooling
-  tests, whitespace checks and actionlint/ShellCheck passed. Rust formatting,
-  Clippy, locked/offline workspace tests (377 tests and two doctests), release
-  build, API docs and conversion smoke passed. The child helper is ignored in
-  ordinary discovery and exercised by its parent. Fresh Release adapter CTest
-  passed 2/2; staged loading passed ten suites, missing-library rejection and
-  selective removal.
-- **Hosted versions:** Rust 1:1.99.1-1, Fcitx5 5.1.23-1, GCC 16.2.1,
-  CMake 4.4.5, Ninja 1.13.2, Python 3.14.8, actionlint 1.7.12, ShellCheck 0.11.0.
-  These validate CI builds, not desktop application support or reproducible builds.
-- **Handoff validation:** `python3 tools/check-docs.py` and `git diff --check`
-  pass for this documentation-only follow-up; historical progress entries remain
-  unchanged. Local Rust/container checks from `af8c54e` remain prior evidence.
-- **Limits:** no release workflow/API execution, desktop smoke, pinned reference
-  rerun, sanitizer/leak check or performance measurement. Repository protections
-  remain separate administrative work. The handoff commit and push were approved.
+- **2026-10-31 — Review PR #1 and prepare the CI whitespace fix.** Reviewed the
+  full PR against its base `0c04654` and confirmed remote head `e083093`. Reproduced
+  committed whitespace passing the original `git diff --check`: a clean checkout
+  has no uncommitted diff. The workflow now checks explicit committed ranges.
+  Updated development instructions; no engine/adapter behavior changed.
+- **Actual local checks:** `python3 /tmp/jong-pr-ci-whitespace-check.py` passed ten
+  disposable-Git-repository scenarios executing the workflow's actual shell block:
+  clean/dirty PRs, multi-commit main pushes, tagged changes, corrected content and
+  clean/dirty root commits. Earlier whitespace in a multi-commit range is caught;
+  tag checks inspect only the tagged delta. The temporary harness is not shipped.
+- **Other actual commands:** `python3 tools/check-docs.py`,
+  `python3 -m unittest discover -s tools/tests -v`,
+  `/tmp/jong-release-tools/actionlint`, `git diff --check`, and
+  `git diff --check origin/main...HEAD` passed. Nine release-tooling tests passed.
+  Documentation checks were repeated after the handoff edit.
+- **Remote read-only commands:** `gh pr view 1`, `gh pr checks 1`,
+  `gh run view 41174787623` and the GitHub API rules/ruleset reads (all using
+  `shaadahmmed/jong-bangla-keyboard`) confirmed hosted success for the prior head
+  and identified the update restriction. Classic branch protection returned 404;
+  the active protection is a repository ruleset, ID `26262102`.
+- **Prior evidence only:** hosted Rust formatting, Clippy, 377 tests/two doctests,
+  release build, API docs, conversion smoke, native CTest and staged installation
+  passed for `e083093`. These were not rerun locally for this workflow-only fix.
+- **Limits:** updated hosted CI awaits an approved commit/push. No release API,
+  desktop, pinned reference, sanitizer/leak or performance checks were performed.
+  The fix remains uncommitted; the repository's settings remain unchanged.
 
 ## Next small implementation step
 
-1. Complete PR review, merge when authorized, and configure/verify the documented
-   branch/tag rules and immutable releases using the now-available check names.
-   Keep stable/prerelease publication a deliberate maintainer action; do not cut
-   a release as a side effect of CI setup.
-2. Resume Brave runtime/input-route investigation separately when requested;
-   preserve successful comparisons and the distinct KWrite/Kate deferral.
+1. Obtain approval for `ci: check committed whitespace across workflow events`,
+   commit/push this reviewed fix, then inspect the updated hosted CI results.
+2. Resolve the `main` update restriction through the maintainer's chosen settings
+   or explicitly authorized administrator bypass, then merge the PR after checks
+   pass. Configure required CI checks according to the release guide; do not create
+   a release as part of this work.
+3. Resume Brave runtime/input-route investigation separately when requested.
 
-**Done when:** PR #1 is reviewed/merged and repository protections are verified.
-The combined PR and initial hosted CI are complete; merge and hosted settings
-remain pending. Tag-triggered draft creation will need release-specific
-validation when a version is prepared.
+**Done when:** the fix is committed, updated hosted CI passes, and PR #1 is merged
+through an authorized route. Repository protection setup and release-specific
+API validation remain distinct follow-up work.
 
 ## Completed steps
 

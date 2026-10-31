@@ -21,10 +21,26 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
           persist-credentials: false
       - run: python3 tools/check-docs.py
       - run: python3 -m unittest discover -s tools/tests -v
-      - run: git diff --check
+      - name: Check committed whitespace
+        shell: bash
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == pull_request ]]; then
+            base="$PR_BASE_SHA"
+          elif [[ "$GITHUB_REF" == refs/heads/* && -n "$PUSH_BEFORE_SHA" && "$PUSH_BEFORE_SHA" != 0000000000000000000000000000000000000000 ]]; then
+            base="$PUSH_BEFORE_SHA"
+          else
+            # Tag-triggered release checks compare the tagged commit to its parent.
+            # A root commit has no parent, so compare it to an empty tree.
+            base="$(git rev-parse --verify HEAD^ 2>/dev/null || git hash-object -t tree /dev/null)"
+          fi
+          git diff --check "$base" HEAD
 
   build:
     name: Rust and Fcitx5
