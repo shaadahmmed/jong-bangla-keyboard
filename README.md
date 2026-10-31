@@ -59,6 +59,7 @@ library layout, use the [development guide](docs/development.md).
 | [Typing guide](docs/typing.md) | Common spellings and editing controls |
 | [Installation](docs/installation.md) | Build, stage, install, activate, update and remove the addon |
 | [Development](docs/development.md) | Toolchain, workspace checks, Fcitx5 harness and code layout |
+| [Releases](docs/releases.md) | Pull requests, manual versions, release template and draft publication |
 | [Reference checks](docs/reference-checks.md) | Reproduce pinned compatibility comparisons and context audits |
 | [Performance](docs/performance.md) | Reproduce core latency and adapter resource measurements |
 | [Requirements and behavior](docs/v1.md) | Confirmed decisions, exact Unicode rules and compatibility evidence |

@@ -1,0 +1,105 @@
+"""Regression checks for release publication gates; no GitHub access required."""
+
+import importlib.util
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+import unittest
+
+
+spec = importlib.util.spec_from_file_location("check_release", Path(__file__).parents[1] / "check-release.py")
+release = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(release)
+
+
+class ReleaseValidation(unittest.TestCase):
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory()
+        self.addCleanup(self.directory.cleanup)
+        self.root = Path(self.directory.name)
+        self.version = "0.1.0-alpha.1"
+        for name in ("Cargo.toml", "adapters/fcitx5/ffi/Cargo.toml"):
+            self.write(name, f'[package]\nversion = "{self.version}"\n')
+        self.write("Cargo.lock", "\n".join(
+            f'[[package]]\nname = "{name}"\nversion = "{self.version}"\n'
+            for name in ("jong-bangla-core", "jong-bangla-fcitx5-ffi")
+        ))
+        self.write("adapters/fcitx5/jong-bangla.conf.in", f"[Addon]\nVersion={self.version}\n")
+        self.notes = "\n\n".join(f"### {section}\n\nRecorded result." for section in release.REQUIRED_SECTIONS)
+        self.changelog = f"# Changelog\n\n## Unreleased\n\nFuture work.\n\n## {self.version} - 2026-10-31\n\n{self.notes}\n\n## 0.0.1 - 2026-10-01\n\nOlder notes.\n"
+        self.write("CHANGELOG.md", self.changelog)
+
+    def write(self, name, content):
+        path = self.root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
+
+    def test_extracts_only_selected_release(self):
+        notes = release.release_notes(self.root, "v" + self.version)
+        self.assertIn("# Jong Bangla v0.1.0-alpha.1", notes)
+        self.assertIn("### Known issues", notes)
+        self.assertNotIn("Future work", notes)
+        self.assertNotIn("Older notes", notes)
+
+    def test_accepts_stable_release(self):
+        for version in ("0.1.0", "0.1.0-beta.2", "0.1.0-rc.1"):
+            for path in self.root.rglob("*"):
+                if path.is_file():
+                    path.write_text(path.read_text().replace(self.version, version))
+            self.version = version
+            with self.subTest(version=version):
+                self.assertIn("v" + version, release.release_notes(self.root, "v" + version))
+
+    def test_cli_writes_reviewed_notes(self):
+        destination = self.root / "notes.md"
+        result = subprocess.run(
+            [sys.executable, str(Path(release.__file__).resolve()), "v" + self.version,
+             "--notes-file", str(destination)],
+            cwd=self.root, text=True, capture_output=True, check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(destination.read_text(), release.release_notes(self.root, "v" + self.version))
+
+    def test_rejects_malformed_tags(self):
+        for tag in ("0.1.0", "v01.1.0", "v0.1.0-alpha.0", "v0.1.0-alpha.01", "v0.1.0-nightly", "v0.1.0;echo bad"):
+            with self.subTest(tag=tag), self.assertRaisesRegex(ValueError, "tag must"):
+                release.release_notes(self.root, tag)
+
+    def test_rejects_each_version_mismatch(self):
+        for name in ("Cargo.toml", "adapters/fcitx5/ffi/Cargo.toml", "Cargo.lock", "adapters/fcitx5/jong-bangla.conf.in"):
+            original = (self.root / name).read_text()
+            self.write(name, original.replace(self.version, "0.1.0"))
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                release.release_notes(self.root, "v" + self.version)
+            self.write(name, original)
+
+    def test_rejects_missing_or_duplicate_release(self):
+        for content in (self.changelog.replace(self.version, "0.2.0"), self.changelog + self.changelog):
+            self.write("CHANGELOG.md", content)
+            with self.assertRaisesRegex(ValueError, "expected one changelog"):
+                release.release_notes(self.root, "v" + self.version)
+
+    def test_requires_unreleased_and_valid_date(self):
+        for content in (self.changelog.replace("## Unreleased", "## Pending"), self.changelog.replace("2026-10-31", "2026-02-30")):
+            self.write("CHANGELOG.md", content)
+            with self.assertRaises(ValueError):
+                release.release_notes(self.root, "v" + self.version)
+
+    def test_rejects_missing_section_or_placeholder(self):
+        for content in (self.changelog.replace("### Known issues", "### Other"), self.changelog.replace("Recorded result.", "{{Complete this.}}")):
+            self.write("CHANGELOG.md", content)
+            with self.assertRaises(ValueError):
+                release.release_notes(self.root, "v" + self.version)
+
+    def test_rejects_empty_required_section(self):
+        for section in release.REQUIRED_SECTIONS:
+            self.write("CHANGELOG.md", self.changelog.replace(
+                f"### {section}\n\nRecorded result.", f"### {section}\n\n",
+            ))
+            with self.subTest(section=section), self.assertRaisesRegex(ValueError, "nonempty"):
+                release.release_notes(self.root, "v" + self.version)
+
+
+if __name__ == "__main__":
+    unittest.main()

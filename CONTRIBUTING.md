@@ -26,6 +26,9 @@ desired typing behavior and whether they change a confirmed v1 decision.
 Keep each change focused and independently reviewable. Follow the
 [development guide](docs/development.md) for prerequisites and commands; run them
 from the repository root. No network service is needed for ordinary Rust checks.
+Create a branch for every new feature or fix and submit a pull request to `main`;
+do not push these changes directly to `main`. Documentation and maintenance work
+should use the same branch and pull request process.
 
 - Keep transliteration and composition independent of Fcitx5 and desktop APIs.
 - Add meaningful regression cases for behavior changes. For phonetic rules,
@@ -52,7 +55,17 @@ Update usage instructions with code changes, behavioral decisions in
 `Unreleased` in [CHANGELOG.md](CHANGELOG.md); routine internal steps belong in Git
 and the handoff. Keep the changelog distinct from detailed validation records.
 
-Commit each completed step after its checks and documentation updates. Pull
-requests should explain the problem, resulting behavior, validation and material
-limitations. Project code is [MIT licensed](LICENSE); retain applicable notices
-and document any third-party obligations.
+When an agent assists with a change, it must finish the checks and documentation,
+present a detailed summary of changes, validation and limitations, and wait for
+the user's explicit confirmation before committing. Task completion alone does
+not authorize a commit. Use a descriptive message and include only the reviewed
+work. Pull requests should explain the problem, resulting behavior, validation
+and material limitations. CI checks documentation/release tooling and the Rust/
+Fcitx5 build; hosted status checks do not replace desktop smoke observations.
+
+Apply relevant PR labels: `enhancement`, `bug`, `breaking-change`, `documentation`
+or `dependencies`. Use `skip-release-notes` only for changes with no release-note
+value. Labels categorize generated notes; they do not select the release version.
+Follow the [release guide](docs/releases.md) for manual versioning, release PRs,
+draft review and publication. Project code is [MIT licensed](LICENSE); retain
+applicable notices and document any third-party obligations.

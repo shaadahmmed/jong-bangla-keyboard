@@ -4,6 +4,28 @@ Run all commands from the repository root. For contribution scope and review
 expectations, read [CONTRIBUTING.md](../CONTRIBUTING.md). For installation, use
 the separate [installation guide](installation.md).
 
+## Documentation and release tooling
+
+For documentation and release-tooling changes, use Python **3.11 or newer** and
+run:
+
+```sh
+python3 tools/check-docs.py
+python3 -m unittest discover -s tools/tests -v
+git diff --check
+```
+
+The documentation checker validates repository Markdown links/anchors, fences
+and shell example syntax. It does not fetch external links or execute examples.
+The unit tests exercise the release metadata and note-validation gates.
+Run `actionlint` when changing `.github/workflows/`; installing ShellCheck also
+enables its shell diagnostics. CI installs both tools in its build container.
+
+The local `git diff --check` command checks uncommitted edits. CI fetches history
+and checks committed changes: PRs against their base commit, pushes to `main`
+across the full pushed range, and release tags against the tagged commit's first
+parent (or an empty tree for a root commit).
+
 ## Build and check the Rust workspace
 
 Use Rust/Cargo **1.99.1 or newer**, with rustfmt and Clippy. This initial baseline

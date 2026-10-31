@@ -9,85 +9,82 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Current position
 
-- **Implemented:** platform-independent Rust transliteration/composition, a separate
-  C ABI and an experimental C++ Fcitx5 addon with an isolated dispatcher harness.
-- **Documentation:** README is a short project entry point. Focused guides cover
-  [typing](typing.md), [installation](installation.md), [development](development.md),
-  [reference checks](reference-checks.md) and [performance](performance.md).
-  [Contributing](../CONTRIBUTING.md), [changelog](../CHANGELOG.md), and GitHub
-  issue/PR templates now describe reporting, review and notable unreleased changes.
-- **Installation support (`056792c`, prior evidence):** separate installed/build-local
-  metadata and three-file install rules. `/usr` Release staging and a separate
-  `/opt` prefix passed actual loading, missing-library rejection and clean removal.
-  See [instructions](installation.md#install-the-experimental-addon) and
-  [layout/evidence](v1.md#experimental-local-installation-plan).
-- **User boundary:** actual installation, activation and desktop configuration
-  belong to the user. No installation or input-method settings changed this step.
-- **Current checks:** documentation links/anchors, preserved command blocks,
-  shell-example syntax, template metadata and diff whitespace. No code changes.
-  Rust, C++/CTest, staged installation and API-doc checks passed in `056792c`;
-  those are prior evidence and were not rerun for this documentation-only step.
-- **Unicode policy (`d8b701f`, prior evidence):** preserve exact unsupported Unicode
-  without lowercasing/normalization. Recorded reference evidence is 522,933 parity
-  rows plus 60 policy rows (51 deliberate differences, nine agreements).
-  This is bounded coverage; see [policy](v1.md#unicode-case-preservation-policy).
-- **Panic policy (`f914d45`, prior evidence):** one guarded caught-payload cleanup;
-  retain a destructor-panic replacement and clear state before status 2. Arbitrary
-  destructors may retain memory, block or terminate; no leak-freedom guarantee.
-  See [failure policy](v1.md#c-abi-caught-panic-policy-review).
-- **Prior resources/leaks (`00570df`, `8970a9c`, not rerun):** isolated dispatcher
-  measurements and bounded lifecycle/leak checks remain in the
-  [resource record](v1.md#synthetic-adapter-resource-measurements) and
-  [leak evidence](v1.md#local-resource-measurement-and-leak-check).
-  Rust/system accesses were not sanitizer-instrumented; leak evidence predates
-  the revised panic policy.
-- **Desktop evidence retained:** user-reported GTK3/Firefox/KWrite passes;
-  captures establish GTK 3.24.52/GdkWaylandDisplay and Firefox 159.0/Wayland.
-  Earlier Kate typing/field isolation and Escape/pending Ctrl+Backspace remain.
-- **Desktop limits:** private D-Bus/Fcitx IM-module route only; exact Qt runtime,
-  detailed case matrix, AltGr/dead/Compose, Electron/XWayland and KWin routes
-  remain untested/unrecorded. KWrite/Kate word navigation and committed-word
-  deletion remain deferred for v1 at the user's request. No general support claim.
-- **Adapter contract:** active Ctrl+Backspace clears, otherwise forwards;
-  boundaries/navigation/shortcuts commit first. Focus-out belongs to
-  Fcitx/frontend; switching commits once, restrictions/reset discard, contexts
-  never copy raw state. Existing behavior is unchanged.
+- **Implemented:** independent Rust transliteration/composition, C ABI and an
+  experimental C++ Fcitx5 addon with an isolated dispatcher harness.
+- **Combined PR open:** [PR #1](https://github.com/shaadahmmed/jong-bangla-keyboard/pull/1)
+  targets `main` from `ci/release-workflows`. Its current remote head is `e083093`.
+  Review found one ineffective CI whitespace check; the fix is locally validated
+  and awaits explicit commit approval. No merge, push or commit occurred this step.
+- **CI correction:** documentation-job checkout fetches history; whitespace checks
+  compare PRs to their base, main pushes across the full pushed range, and release
+  tags to the tagged commit's first parent. Root commits use an empty tree.
+  See [development checks](development.md#documentation-and-release-tooling).
+- **Hosted CI prior evidence:** both jobs passed for `e083093` in
+  [run 41174787623](https://github.com/shaadahmmed/jong-bangla-keyboard/actions/runs/41174787623).
+  This predates the local fix; its updated hosted run is still pending.
+- **Merge restriction verified:** the active `Protection` ruleset restricts updates
+  to `main` and allows an administrator bypass. PR #1 is mergeable but reports
+  `BLOCKED`; the ruleset requires PRs with zero approving reviewers and currently
+  has no required status-check rule. No bypass or settings change was performed.
+- **Release limits:** tag-triggered draft/API execution remains untested; no version,
+  tag or release was created. Tag protections and immutable-release settings were
+  not inspected this step. See [the release guide](releases.md).
+- **User workflow:** branches and PRs, manual release versions, explicit approval
+  before agent commits. The user requested merging once the PR has no issues;
+  the new fix still needs commit approval, updated hosted CI and resolution of
+  the normal-merge restriction before that authorized merge can proceed.
+- **Active product issue:** intermittent initial আ loss for `amar` in Brave/
+  WhatsApp remains unresolved without a v1 deferral. Kate, Brave's address bar
+  and WhatsApp/Firefox passed user comparisons. The held-Backspace slowdown was
+  withdrawn; runtime/input route and reset hypothesis remain unconfirmed.
+- **Other limits:** installed-route typing and broader desktop routes remain
+  unconfirmed. Kate/KWrite word-editing issues stay deferred; binary packaging
+  remains open. See [desktop evidence](v1.md#fcitx5-local-feasibility-result).
+- **Compatibility prior evidence:** 522,933 parity rows plus 60 Unicode policy
+  rows; no pinned comparison or performance measurement was rerun this step.
 
 ## Latest completed step
 
-- **2026-10-30 — Organize project documentation and contribution entry points.**
-  Replaced the 1,194-line README with a 79-line introduction, experimental status,
-  quick start and documentation index. Moved build/install/reference/measurement
-  commands into focused guides; replaced duplicated rule inventories with links
-  to the existing specification and fixtures. Added selected typing examples.
-- Added `CONTRIBUTING.md`, an `Unreleased` changelog baseline, bug/feature issue
-  templates and a PR template. No published release or broader support is implied.
-  Updated specification links and AGENTS reading guidance for the new locations.
-- **Checks passed:** `python3 /tmp/jong-check-docs.py` checks all repository Markdown
-  local links/anchors (736 across 14 files) and balanced fences, preserves all 12
-  original README shell command blocks, runs `bash -n` on 14 shell examples, and
-  checks issue template metadata. `git diff --check` passed. Commands were syntax-checked and
-  compared with prior instructions, not executed as installation or benchmark work.
-- **Limits:** documentation-only; no Rust/C++ tests, reference comparison,
-  sanitizers, staged/actual installation or performance measurements rerun.
-  Older engineering results above remain explicitly prior evidence.
-- **Next:** user installs the previously checked build, activates it through their
-  existing desktop setup and reports the disposable `ki` then Space smoke result.
+- **2026-10-31 — Review PR #1 and prepare the CI whitespace fix.** Reviewed the
+  full PR against its base `0c04654` and confirmed remote head `e083093`. Reproduced
+  committed whitespace passing the original `git diff --check`: a clean checkout
+  has no uncommitted diff. The workflow now checks explicit committed ranges.
+  Updated development instructions; no engine/adapter behavior changed.
+- **Actual local checks:** `python3 /tmp/jong-pr-ci-whitespace-check.py` passed ten
+  disposable-Git-repository scenarios executing the workflow's actual shell block:
+  clean/dirty PRs, multi-commit main pushes, tagged changes, corrected content and
+  clean/dirty root commits. Earlier whitespace in a multi-commit range is caught;
+  tag checks inspect only the tagged delta. The temporary harness is not shipped.
+- **Other actual commands:** `python3 tools/check-docs.py`,
+  `python3 -m unittest discover -s tools/tests -v`,
+  `/tmp/jong-release-tools/actionlint`, `git diff --check`, and
+  `git diff --check origin/main...HEAD` passed. Nine release-tooling tests passed.
+  Documentation checks were repeated after the handoff edit.
+- **Remote read-only commands:** `gh pr view 1`, `gh pr checks 1`,
+  `gh run view 41174787623` and the GitHub API rules/ruleset reads (all using
+  `shaadahmmed/jong-bangla-keyboard`) confirmed hosted success for the prior head
+  and identified the update restriction. Classic branch protection returned 404;
+  the active protection is a repository ruleset, ID `26262102`.
+- **Prior evidence only:** hosted Rust formatting, Clippy, 377 tests/two doctests,
+  release build, API docs, conversion smoke, native CTest and staged installation
+  passed for `e083093`. These were not rerun locally for this workflow-only fix.
+- **Limits:** updated hosted CI awaits an approved commit/push. No release API,
+  desktop, pinned reference, sanitizer/leak or performance checks were performed.
+  The fix remains uncommitted; the repository's settings remain unchanged.
 
 ## Next small implementation step
 
-1. **User action:** follow the [experimental installation guide](installation.md);
-   restart Fcitx5 through the existing session setup and select Jong Bangla.
-2. Record actual installed-route behavior and any reproducible failure before
-   changing the adapter. Retain existing desktop evidence and deferred limitations.
-3. Before public packaging, confirm display name and package format, review the
-   distribution/license manifest and derive support scope from recorded tests.
-   When a release is actually published, move its notable changes from `Unreleased`
-   to a versioned, dated changelog section.
+1. Obtain approval for `ci: check committed whitespace across workflow events`,
+   commit/push this reviewed fix, then inspect the updated hosted CI results.
+2. Resolve the `main` update restriction through the maintainer's chosen settings
+   or explicitly authorized administrator bypass, then merge the PR after checks
+   pass. Configure required CI checks according to the release guide; do not create
+   a release as part of this work.
+3. Resume Brave runtime/input-route investigation separately when requested.
 
-**Done when:** the user confirms installed-addon typing on their actual route,
-with environment/limitations recorded. Source preparation is complete; actual
-installation remains intentionally unperformed.
+**Done when:** the fix is committed, updated hosted CI passes, and PR #1 is merged
+through an authorized route. Repository protection setup and release-specific
+API validation remain distinct follow-up work.
 
 ## Completed steps
 

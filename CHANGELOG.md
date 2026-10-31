@@ -22,6 +22,11 @@ package version `0.1.0` does not establish a release date or desktop support cla
 - Core latency, adapter resource and lifecycle/leak measurement tooling.
 - Focused typing, installation, development, reference and performance guides,
   contribution instructions, and issue/pull request templates.
+- GitHub CI for documentation/release tooling, Rust workspace and Fcitx5 staged
+  installation checks; version-tag validation, reviewed release-note template,
+  source archives with SHA-256 checksums, and automated draft releases.
+- Weekly GitHub Actions dependency update PR configuration and a documented
+  branch/PR workflow with manual versions and confirmation before agent commits.
 
 ### Behavior decisions
 
