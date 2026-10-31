@@ -9,92 +9,90 @@ Dates use the project's Asia/Dhaka timezone.
 
 ## Current position
 
-- **Implemented:** platform-independent Rust transliteration/composition, a separate
-  C ABI and an experimental C++ Fcitx5 addon with an isolated dispatcher harness.
-- **Active issue:** user reports intermittent loss of the initial আ while typing
-  `amar` in Brave/WhatsApp: `a` displays আ, then `m` leaves only ম. About 70% of
-  attempts work; Kate, Brave's address bar and WhatsApp in Firefox did not
-  reproduce it. Similar OpenBangla behavior is a user observation. Brave/message
-  editor interaction is the remaining investigation scope; an application/frontend
-  reset is a hypothesis, not an established cause.
-  See the [desktop evidence](v1.md#fcitx5-local-feasibility-result).
-- **Backspace correction:** user retested and withdrew the slow held-Backspace
-  report; it works normally everywhere they tested. No fix/performance improvement
-  was made. Brave's first-character loss remains unresolved, without a v1 deferral.
-- **Runtime limit:** installed Brave is 1:1.98.62-1; no Brave main process is visible
-  here. Its actual version, input method/build, launch flags and Wayland/XWayland
-  route need confirmation. No system settings, daemon or application data changed.
-- **Current checks:** documentation checks and diff whitespace passed. Prior triage
-  (`8aae525`) converted `amar` to আমার and `mar` to মার; 20 composition tests and
-  both existing CTest tests passed (existing build without rebuilding). These
-  code checks were not rerun and do not reproduce or resolve the Brave failure.
-- **Installation support (`056792c`, prior evidence):** installed/build-local metadata
-  and three-file install rules passed staged `/usr` and `/opt` loading/removal.
-  Actual installed-route activation remains unconfirmed; see
-  [installation](installation.md#install-the-experimental-addon).
-- **Documentation:** README and [focused guides](../README.md#documentation),
-  [contribution guidance](../CONTRIBUTING.md), changelog and GitHub templates exist.
-  Their full validation was prior evidence, not an implementation change this step.
-- **Compatibility (`d8b701f`, prior evidence):** 522,933 parity rows plus 60 Unicode
-  policy rows (51 deliberate differences, nine agreements), with exact unsupported
-  Unicode preserved. This remains bounded coverage; see
-  [policy](v1.md#unicode-case-preservation-policy).
-- **Panic/resources (prior evidence):** `f914d45` records caught-payload cleanup
-  limits; `00570df`/`8970a9c` record bounded resource/leak checks, which predate the
-  revised panic policy. Rust/system accesses were not sanitizer-instrumented.
-- **Desktop evidence retained:** user-reported GTK3/Firefox/KWrite passes on the
-  private D-Bus/IM-module route, GTK 3.24.52/GdkWaylandDisplay and Firefox 159.0/
-  Wayland captures, plus earlier Kate field isolation and confirmed Escape behavior.
-- **Desktop limits:** exact Qt runtime, detailed case matrix, AltGr/dead/Compose,
-  Electron/XWayland and KWin routes remain untested/unrecorded. KWrite/Kate word
-  navigation and committed-word deletion stay deferred at the user's request.
-- **Adapter contract unchanged:** active Ctrl+Backspace clears, otherwise forwards;
-  boundaries/navigation/shortcuts commit first. Focus-out belongs to Fcitx/frontend;
-  switching commits once, restrictions/reset discard, contexts never copy raw state.
+- **Implemented:** independent Rust transliteration/composition, C ABI and an
+  experimental C++ Fcitx5 addon with an isolated dispatcher harness.
+- **Release setup prepared locally:** PR/main CI, reusable tagged-release checks,
+  source archive/checksums and draft creation, release-note template/categories,
+  weekly Actions update PR configuration, and [release guidance](releases.md).
+  Hosted execution, repository rules and immutable releases are not yet verified
+  or enabled by this work. No version bump, tag or release was created.
+- **User workflow decision (2026-10-31):** features and fixes go through branches
+  and PRs. Finish checks/docs, give a detailed summary, then wait for explicit
+  confirmation before committing. Manual release versions; no automatic publish.
+  The instructions are recorded in AGENTS.md, CONTRIBUTING.md and the specification.
+- **Review state:** the user approved committing the reviewed setup on
+  `ci/release-workflows` on 2026-10-31 and chose one combined PR including the
+  three earlier local documentation commits (`8aae525`, `8c8306a`, `0eaccc5`),
+  which remain intact. Nothing was pushed.
+- **Current validation:** local Rust workspace and fresh Release adapter/staged
+  install checks pass; the same native build checks also pass in a disposable
+  official Arch container. Workflow lint, documentation checks and nine release
+  tooling tests pass. GitHub checkout/release API execution remains untested.
+- **Active product issue:** intermittent initial আ loss while typing `amar` in
+  Brave/WhatsApp remains unresolved, without a v1 deferral. Kate, Brave's address
+  bar and WhatsApp in Firefox passed user comparisons. The held-Backspace slowdown
+  report was withdrawn. Browser runtime/input route and reset hypothesis remain
+  unconfirmed; see [desktop evidence](v1.md#fcitx5-local-feasibility-result).
+- **Other limits:** installed-route desktop activation and the broader toolkit/
+  Wayland/XWayland matrix remain unconfirmed. KWrite/Kate word-navigation and
+  committed-word deletion stay deferred. Public binary packaging remains open.
+- **Compatibility prior evidence:** 522,933 parity rows plus 60 Unicode policy
+  rows; the pinned comparison was not rerun in this workflow step. See
+  [Unicode policy](v1.md#unicode-case-preservation-policy) and
+  [performance evidence](performance.md) for bounded claims and earlier limits.
 
 ## Latest completed step
 
-- **2026-10-30 — Record successful WhatsApp/Firefox comparison and correction.**
-  User reports no `amar` loss in WhatsApp Web in Firefox and retracts the slow
-  held-Backspace report after retesting everywhere. The remaining observed failure
-  is intermittent first-character loss in Brave/WhatsApp; Kate and Brave's address
-  bar also pass. No other ordinary web field in Brave has been reported.
-  Updated the specification/handoff without changing code or settings. The actual
-  browser input route and any reset event remain unconfirmed; upstream reports
-  are investigative context, not a diagnosis or fix.
-- **Prior triage checks (`8aae525`, not rerun for this follow-up):**
-  `cargo run --offline --quiet --example convert -- 'a am ama amar mar amar amar amar'`
-  produced `আ আম আমা আমার মার আমার আমার আমার`;
-  `cargo test --offline --test composition --quiet` passed all 20 tests;
-  `ctest --test-dir target/fcitx5 --output-on-failure` passed 2/2 existing tests
-  (synthetic dispatcher and FFI lifecycle, existing build without a rebuild).
-- Prior triage `pacman -Q` recorded installed Brave/Fcitx/KWin packages; a filtered
-  `/proc` inspection found no visible Brave main process, so it supplied no runtime
-  route. Neither inventory nor process inspection was repeated this follow-up.
-- **Documentation checks:** `python3 /tmp/jong-check-docs.py` passed local links/
-  anchors and fences, preserved command blocks, shell syntax and template metadata;
-  `git diff --check` passed. Only specification/handoff documentation changed.
-- **Limits:** no desktop reproduction, browser event trace, timing measurement,
-  full Rust workspace checks, reference comparison, sanitizer or install check.
-  Earlier complete engineering checks are prior evidence. No behavior fix claimed.
-- **Next:** establish Brave's runtime/input route, then compare an ordinary web
-  field and empty-message versus subsequent-word behavior if investigation proceeds.
+- **2026-10-31 — Prepare PR-based CI and manual-version release drafts.** Added
+  two workflows, release template/categories, Dependabot config, release validator
+  and documentation checker. Updated contribution/agent/PR instructions, README,
+  changelog, development guide and behavioral decision record. No engine, adapter
+  behavior, system input settings, package versions or public support claims changed.
+- **Rust checks passed:** `cargo fmt --all -- --check`;
+  `cargo clippy --offline --locked --workspace --all-targets -- -D warnings`;
+  `cargo test --offline --locked --workspace` (377 tests and two doctests pass;
+  one child helper is ignored in ordinary discovery and exercised by its parent);
+  `cargo build --offline --locked --workspace --release`;
+  `cargo doc --offline --locked --workspace --no-deps`;
+  `cargo run --offline --locked --quiet --example convert -- 'kh12T'` = `খ১২ট`.
+- **Adapter checks passed:** `cmake -S adapters/fcitx5 -B target/ci-fcitx5 -G Ninja
+  -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+  -DFCITX_INSTALL_USE_FCITX_SYS_PATHS=ON`, `cmake --build target/ci-fcitx5`,
+  `ctest --test-dir target/ci-fcitx5 --output-on-failure` (2/2), and
+  `python3 tools/check-install.py target/ci-fcitx5` (three-file staging, ten
+  synthetic suites, missing-library rejection and selective removal).
+- **Container evidence:** native CI commands, workflow lint and initial tooling
+  tests also passed in disposable `archlinux:base-devel`, image digest
+  `sha256:624bdc7fc6615155d67bc34cf7146c0c9fd0e3c92943977da63a630e4ca49c30`.
+  Actual packages: Rust 1:1.99.1-1, Fcitx5 5.1.23-1, GCC 16.2.1,
+  CMake 4.4.5, Ninja 1.13.2, Python 3.14.8, actionlint 1.7.12, ShellCheck 0.11.0.
+  The rolling image/packages do not establish reproducible builds or GUI support.
+- **Tooling/docs passed:** `python3 -m unittest discover -s tools/tests -v` (nine
+  tests on final local tooling), `python3 tools/check-docs.py`,
+  `/tmp/jong-release-tools/actionlint -shellcheck=/tmp/jong-release-tools/shellcheck`,
+  YAML parsing/configuration inspection, and `git diff --check`.
+  `python3 tools/check-release.py v0.1.0` intentionally rejects the undated baseline:
+  `expected one changelog heading: ## 0.1.0 - YYYY-MM-DD`.
+- **Limits:** no hosted Actions/API/PR run, desktop smoke, pinned reference rerun,
+  sanitizer/leak run or performance measurement. The user approved the commit;
+  automatic commit-after-step instructions have been superseded.
 
 ## Next small implementation step
 
-1. Confirm actual Brave version/input route and Jong activation/build. Reuse the
-   successful Kate/address-bar and WhatsApp/Firefox comparisons; the Backspace
-   slowdown report is withdrawn. Firefox is a verified alternative for this case.
-2. Compare another ordinary web field in Brave and
-   empty-message versus subsequent-word behavior using disposable input. If needed,
-   arrange an isolated frontend comparison without changing persistent settings.
-3. Change the adapter only after a reproducible event sequence identifies a defect;
-   preserve reset/focus isolation and editable preedit. Keep browser key loss and
-   the accepted Kate word-editing deferral distinct.
+1. Prepare the combined PR the user selected from `ci/release-workflows`, retaining
+   the three earlier documentation commits alongside the approved setup commit.
+   Keep future feature/fix work on separate branches and await explicit approval
+   before each agent-authored commit.
+2. Verify hosted CI, configure the documented branch/tag rules and immutable
+   releases with repository administration access, then use release PRs to select
+   future versions. This setup does not authorize cutting a release now.
+3. Resume Brave runtime/input-route investigation separately when requested;
+   preserve the successful comparisons and distinguish it from the deferred
+   KWrite/Kate word-editing limitations.
 
-**Done when:** the failing field/input route and a reproducible sequence are known,
-with observed results recorded. Installed-route smoke confirmation and public
-packaging decisions remain outstanding; current checks do not close those tasks.
+**Done when:** the reviewed setup is approved, committed and merged through its
+PR, hosted checks pass, and repository protections are verified. Local files and
+checks are complete and commit approval is recorded; PR/hosted setup remain pending.
 
 ## Completed steps
 

@@ -56,8 +56,9 @@ User instructions take precedence over this guide; update the docs when they cha
 - Share fixture/check tooling where useful while preserving independent expected
   outputs and evidence for every spelling. Use targeted reference checks during
   investigation, then one full required validation run, documentation/handoff
-  update, and commit for the completed batch. Repeat full checks when later edits
-  or failures require them; do not repeat the full cycle for every spelling.
+  update, and review summary for the completed batch. Commit only after the user's
+  explicit confirmation. Repeat full checks when later edits or failures require
+  them; do not repeat the full cycle for every spelling.
 - Walk the user through the result in plain language: what changed, why it matters,
   how it was checked, and what comes next. Explain unfamiliar terms when introduced.
 - Update the three handoff sections in `docs/progress.md` after each coherent
@@ -74,8 +75,15 @@ User instructions take precedence over this guide; update the docs when they cha
   relevant existing commit when useful; do not try to embed a commit's own hash.
 - Keep planned, in-progress, and completed work distinct. Never claim a check or
   milestone is complete without evidence.
-- Commit each completed step after its checks and progress-log update, using a
-  descriptive message that explains the change. Include only that step's work.
+- Implement every new feature and fix on a branch and submit it through a pull
+  request to `main`; do not push these changes directly to `main`.
+- Do not automatically commit completed work. Finish the checks and documentation,
+  then give the user a detailed summary of changes, validation and limitations,
+  propose a descriptive commit message, and wait for explicit confirmation before
+  committing. Include only the reviewed step's work in the approved commit.
+- Keep release versions manual and prepare them through a release pull request.
+  Follow [the release guide](docs/releases.md); automation prepares drafts, while
+  publication remains an explicit maintainer action.
 - Continue within the requested scope without adding routine approval gates.
   Ask concise questions when an unresolved choice materially changes behavior.
 - Keep documentation-only tasks to documentation. Do not scaffold an application

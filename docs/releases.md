@@ -1,0 +1,149 @@
+# Releases
+
+Jong Bangla uses branches and pull requests, manually selected versions, and
+automated draft releases. The automation does not publish releases, merge PRs,
+create version bumps or publish Cargo packages. Both crates remain `publish = false`.
+Start with source releases while public binary packaging remains undecided.
+
+## Everyday changes
+
+1. Create a branch from an up-to-date `main` for each feature or fix. Use the same
+   process for documentation and maintenance changes; keep each PR focused.
+2. Add meaningful regression coverage, relevant docs and notable user-facing
+   entries under `Unreleased` in [the changelog](../CHANGELOG.md).
+3. Run the relevant [development checks](development.md). An assisting agent
+   presents a detailed summary and waits for explicit user confirmation before
+   committing; finishing a task does not authorize a commit.
+4. Push the approved branch and open a PR to `main`. Inspect the actual hosted CI
+   results before merging. Do not push features or fixes directly to `main`.
+
+Use descriptive PR titles and labels: `enhancement`, `bug`, `breaking-change`,
+`documentation` or `dependencies`. The [release-note configuration](../.github/release.yml)
+groups merged PRs by these labels, with a catch-all for other changes.
+`skip-release-notes` excludes an internal-only PR from generated notes; it does
+not remove the change from the source archive or the full Git history.
+
+## Version policy
+
+Select versions manually in a release preparation PR. Keep the core and Fcitx5
+addon at one project version for now, so one tag identifies the complete source.
+Tags use `vX.Y.Z`, or `vX.Y.Z-alpha.N`, `vX.Y.Z-beta.N`, `vX.Y.Z-rc.N` with `N >= 1`.
+The metadata version omits the leading `v`. Other tag forms are rejected.
+
+- `alpha`: experimental releases with explicitly documented missing validation
+  or known defects. `v0.1.0-alpha.1` is the suggested first public release, not a
+  version selected or published by this setup change.
+- `beta`: intended first-release features are implemented and installation and
+  the intended desktop routes have recorded validation; remaining issues are
+  listed for testers.
+- `rc`: a candidate for a declared stable scope with no known blocking defects.
+- Before `1.0`, use a new minor version for incompatible changes to the declared
+  interface or behavior; use patch versions for compatible fixes.
+- `1.0.0` requires a documented API/behavior promise, installation path and
+  tested support scope. After that, use SemVer major/minor/patch rules.
+
+These are project readiness conventions. They do not convert an untested
+desktop route into supported behavior. See [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The current Cargo `0.1.0` baseline is not a published release.
+
+## Prepare a release PR
+
+1. Create a release branch and select the next version. Update `version` in
+   [the core manifest](../Cargo.toml) and [the FFI manifest](../adapters/fcitx5/ffi/Cargo.toml),
+   and `Version` in [the addon metadata](../adapters/fcitx5/jong-bangla.conf.in).
+   Regenerate `Cargo.lock` with `cargo generate-lockfile --offline`; inspect its diff.
+2. Copy [the release template](../.github/RELEASE_TEMPLATE.md) into `CHANGELOG.md`
+   below `Unreleased`. Replace all `{{...}}` placeholders, use an ISO date
+   (`YYYY-MM-DD`), and move the changes being released into this dated section.
+   Keep `Unreleased` available for future work. Do not duplicate its initial
+   "not a published release" baseline description into published notes.
+3. Fill every template section. Use `None` for no fixes/breaking changes. State
+   desktop checks not performed for this release explicitly, and identify older
+   observations as prior evidence. Carry forward applicable known issues,
+   including the unresolved Brave/WhatsApp first-character loss unless resolved
+   or explicitly deferred. A source release does not imply a desktop support claim.
+4. Run the [documented checks](development.md), including the adapter's staged
+   install check. Run the [pinned reference checks](reference-checks.md) for
+   phonetic changes and the appropriate resource checks for new performance claims.
+   Record real desktop results for the exact release candidate; CI covers
+   synthetic tests, not GUI applications. After a changed candidate is merged,
+   repeat any desktop checks needed for the final commit before tagging it.
+5. Run the release validator using your selected version, for example:
+
+   ```sh
+   python3 tools/check-release.py v0.1.0-alpha.1
+   ```
+
+   The example intentionally fails against the unreleased initial baseline.
+   It must pass for the prepared release version. The validator checks both
+   manifests, both lockfile package versions, addon metadata, a unique dated
+   changelog section, required nonempty note sections and unresolved placeholders.
+6. Review the complete diff, get explicit user confirmation before an agent
+   commits, then submit the release PR. Merge only after hosted checks pass.
+
+## Tag and review the draft
+
+Once the release PR is merged, fetch `origin/main`, identify the exact approved
+release commit and rerun the version validator at that commit. Create an annotated
+version tag pointing to that commit and push that tag explicitly. Do not tag
+whatever happens to be the latest local branch commit or push unrelated tags.
+Release tags are maintained by a human; a tag created using a workflow's default
+`GITHUB_TOKEN` will not normally trigger another workflow.
+
+The [release workflow](../.github/workflows/release.yml) runs on `v*` tag pushes:
+
+1. Require the tagged commit to be an ancestor of `origin/main`, then validate
+   metadata and release notes. This checks main-branch membership; GitHub branch
+   rules enforce the PR-only requirement.
+2. Run the same [CI workflow](../.github/workflows/ci.yml) against the tagged commit.
+3. Create `jong-bangla-VERSION.tar.gz` from that commit with a matching
+   `SHA256SUMS`, and prepare a GitHub **draft** with the reviewed changelog notes,
+   a validation-run link and generated PR/contributor notes. Version suffixes
+   automatically set the draft's prerelease flag; drafts are never marked latest.
+
+Review the title, notes, prerequisite/install links, known issues, prerelease
+flag and assets before manually publishing. For stable releases, deliberately
+select whether it should be the latest release. Keep prereleases off latest.
+Verify the downloaded archive with `sha256sum -c SHA256SUMS` in its download folder.
+Checksums detect corrupted downloads; they are not a substitute for provenance.
+
+Rerun a failed workflow at the same tag for transient build/network failures.
+Existing releases are never overwritten by this workflow. If draft creation
+partially succeeds, inspect it and finish or remove that unpublished draft before
+retrying. If source or notes committed to the tag need changing, prepare a new
+version through a PR. Never move/reuse a release tag or replace published assets.
+
+## GitHub repository settings
+
+Workflow files cannot enforce repository branch rules or enable immutable
+releases. An administrator must configure these settings separately; this local
+setup has not changed or verified the hosted settings.
+
+- Add an active branch ruleset for `main` requiring a PR, blocking force pushes
+  and deletion, and requiring the `Documentation and release tooling` and
+  `Rust and Fcitx5` status checks. Select the actual checks after their first
+  successful hosted run; require the branch to be up to date before merging.
+- For a solo maintainer, require PRs with **zero required approving reviewers**:
+  you cannot approve your own PR. Add a required independent reviewer when one
+  is available. Avoid routine bypasses of the branch rules.
+- Add a tag ruleset for `v*` blocking updates and deletion, while allowing
+  maintainers to create new release tags.
+- Enable immutable releases. Assemble all assets in the draft before publishing.
+  Publication then locks the tag/assets; title and notes remain editable.
+- Keep the default Actions token read-only. Only the release draft job requests
+  `contents: write`; PR checks use no release credentials. External actions use
+  full commit SHAs, with weekly Dependabot update PRs.
+- Create the labels listed above and `skip-release-notes` if missing. Ensure
+  GitHub Actions and Dependabot version updates are allowed for the repository.
+
+CI uses an official rolling `archlinux:base-devel` container, upgrades it before
+building, and records package versions in the job summary. This meets the
+documented Fcitx5 prerequisite without claiming bit-for-bit reproducible builds
+or a validated support matrix. Network access is used for tooling installation;
+transliteration and Rust workspace checks remain local/offline.
+
+GitHub references: [rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets),
+[generated notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes),
+[immutable releases](https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases),
+[Dependabot for Actions](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/auto-update-actions),
+[workflow trigger restrictions](https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-when-your-workflow-runs/triggering-a-workflow).
